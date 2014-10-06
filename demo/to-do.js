@@ -161,7 +161,8 @@ App.NewTaskForm = App.Base.extend({
 
         _.defer(function () {
           // With many tasks, point the user to the just appended one.
-          location.hash = '#' + task._cid
+          var el = $('#' + task._cid)[0]
+          el && el.scrollIntoView()
         })
       }
 
