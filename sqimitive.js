@@ -7,7 +7,7 @@
 */
 
 /***
-  Needs Underscore.js and jQuery/Zepto for $().
+  Needs Underscore.js and, optionally, jQuery/Zepto for $().
 
   Fields with names starting with underscores are protected and intended
   for use only inside that class definition and its subclasses.
@@ -410,9 +410,14 @@
       }
     },
 
-    // Determines is obj is a $ collection (jQuery or Zepto).
+    // Determines if obj is a $ collection (like jQuery or Zepto).
+    //
+    //? is$(document.rootElement)   //=> false
+    //? is$($('html'))    //=> true
+    //? is$($('<p>'))     //=> true
+    //? is$(null)         //=> false
     is$: function (obj) {
-      return obj instanceof $ || (Zepto && Zepto.zepto.isZ(obj))
+      return obj instanceof $ || ($.zepto && $.zepto.isZ(obj))
     },
   })
 
@@ -765,9 +770,7 @@
         })
       } else if (key.indexOf('/') == -1) {
         // By event name.
-        var list = this._events[key]
-        delete this._events[key]
-        _.each(list, this._unregHandler, this)
+        _.each(this._events[key], this._unregHandler, this)
       } else {
         // By handler ID.
         this._unregHandler( this._eventsByID[key] )
