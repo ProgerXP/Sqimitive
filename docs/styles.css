@@ -5,14 +5,6 @@ html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:1
   Sqimitive page styles
  ***/
 
-html, nav {
-  border: 3px solid #104167;
-}
-
-html {
-  border-width: 3px 0;
-}
-
 #orphusp .logo { float: right; }
 #orphusp .legend { font-weight: bold; }
 
@@ -26,7 +18,7 @@ html {
 
 #orphusp .hint { margin-bottom: 1em; }
 #orphusp form { padding: 0; margin: 0; border: 0 }
-#orphusp [type=text] { width: 100%; margin: 0.2em 0 }
+#orphusp [type=text] { width: 100%; margin: 0.2em 0 1em; }
 #orphusp .buttons { text-align: center; }
 #orphusp .buttons input { cursor: pointer; }
 #orphusp [type=submit] { font-weight: bold; }
@@ -46,7 +38,6 @@ nav {
   height: 100%;
   overflow: auto;
   background: #fcfcfc;
-  border-width: 3px 0 0;
 }
 
 nav ol {
@@ -131,7 +122,7 @@ h1, h2, h3, h4, h5, #book {
 h1 {
   font-weight: normal;
   line-height: 1.7em;
-  margin: 0.5em 0;
+  margin: 0.5em 0 1em;
 }
 
 @media (max-width: 1090px) {
@@ -161,6 +152,10 @@ li {
   margin-bottom: 0.3em;
 }
 
+.rareline > li {
+  margin-top: 0.5em;
+}
+
 dt {
   font-weight: bold;
 }
@@ -170,7 +165,7 @@ a:hover {
 }
 
 @media not print {
-  a[href^="http://"], a[href^="https://"], a[href^="ftp://"] {
+  article a[href^="http://"], article  a[href^="https://"], article  a[href^="ftp://"] {
     background: no-repeat left 0.7em url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHpEAACAgwAA+ZkAAIWVAABxRQAA8D8AADkKAAAcINqeyMoAAACMSURBVHjaYmRgYGBo3ar0nwENMMIYrVuV/ntqdTEwMDAwbL9WxsAycasH18+/7y+4aJUyXHuxiUFLwo+BgYGBgenT1zeWv5lfqzIwMDBoSfgxbL9WBpFg4n63x1Ori+HKo50M26+VMVR732NkYGBgYPn4kuXXdoYytn9fhZz5uNVOMDDcY6j2vscIGADPGCtKIvYANgAAAABJRU5ErkJggg");
     padding-left: 9px;
   }
@@ -325,4 +320,5 @@ legend { font-weight: bold; }
   #bmotto { margin-left: 20px; }
   #btri { display: none; }
   #bcc { margin-right: 16px; }
+  #history { margin-right: 0; }
 }

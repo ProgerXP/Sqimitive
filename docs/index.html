@@ -5,7 +5,7 @@
 
     <title>Sqimitive.js – The Frontend Primitive | Squizzle.me Toolkit</title>
 
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.png" type="image/png">
     <link href="prism.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet" media="all">
   </head>
@@ -15,9 +15,9 @@
         <li><a href="#">The Beginning</a></li>
 
         <li>
-          <a href="#">GitHub</a>:
-          <a href="#">download</a>,
-          <a href="#">issues</a>
+          <a href="https://github.com/ProgerXP/Sqimitive">GitHub</a>:
+          <a href="https://github.com/ProgerXP/Sqimitive/archive/master.zip">download</a>,
+          <a href="https://github.com/ProgerXP/Sqimitive/issues">issues</a>
         </li>
 
         <li><a href="#vs-backbone">Why not Backbone?</a></li>
@@ -114,6 +114,7 @@
               <a href="#cores-parseEvent" title="parseEvent (str)">parseEvent</a>
               <a href="#cores-fire" title="fire (funcs[, args])">fire</a>
               <a href="#cores-toArray" title="toArray (value)">toArray</a>
+              <a href="#cores-is$" title="is$ (obj)">is$</a>
             </li>
           </ol>
           <a href="#sqimitivei-underscore">+ Underscore methods</a>
@@ -160,20 +161,20 @@
       <p><b>Sqimitive.js</b> is a fat-free implementation of well-known <a href="http://backbonejs.org">Backbone.js</a> JavaScript frontend framework. Sqimitive avoids certain less used (usually project-specific) features while conceptually bringing the rest under one roof.</p>
 
       <p>In particular, Sqimitive:</p>
-      <ul>
-        <li>Removes somewhat <b>artificial separation</b> for Model, Collection and View classes providing single unified "primitive" (<kbd>Sqimitive</kbd>) class. This way Views can use <a href="ov-opt">options</a> (attributes with <a href="#sqimitivei-change_OPT">on-change</a> notifications), <a href="#sqimitivei-underscore">filtering</a> and <a href="#ov-child">nesting</a> (just like Collections) and all other features, shared by all, not imposed on any.</li>
+      <ul class="rareline">
+        <li>Removes somewhat <b>artificial separation</b> for Model, Collection and View classes providing single unified "primitive" (<kbd>Sqimitive</kbd>) class. This way Views can use <a href="#ov-opt">options</a> (attributes with <a href="#sqimitivei-change_OPT">on-change</a> notifications), Underscore.js <a href="#sqimitivei-underscore">filtering</a> and <a href="#ov-child">nesting</a> (just like Collections) and all other features, shared by all, not imposed on any.</li>
         <li>Greatly expands the idea of <a href="#ov-evt">events</a> making <b>inheritance</b> as sensible as it is possible given JavaScript’s idea of OOP.</li>
         <li>Removes <b>server-side communication layer</b> (<kbd>sync</kbd>) while <a href="#sqimitivei-assignChildren">keeping</a> <a href="#sqimitivei-assignResp">routines</a> to smart-update object states. Instead of overriding standard parts as it’s often done with Backbone you implement them yourself just once given your unique project specification.</li>
-        <li>Is <b>half the size of Backbone</b> while being loaded with even more comments. <a href="http://underscorejs.org">Underscore.js</a> is still required to operate while <a href="http://jquery.com">jQuery</a> is optional..</li>
-        <li>Still lets you work <b>the way you used</b> with Backbone – if you wish. You can create base Model, Collection and View, use traditional <kbd>__super__</kbd>-style inheritance, write your specific API sync routines, use Underscore.js <a href="#sqimitivei-underscore">filtering</a> and jQuery/Zepto <a href="#sqimitivei-$">this.el</a> and so on.</li>
+        <li>Is <b>half the size of Backbone</b> while being loaded with even more comments. <a href="http://underscorejs.org">Underscore.js</a> is still required to operate while <a href="http://jquery.com">jQuery</a>/<a href="http://zeptojs.com">Zepto</a> are optional..</li>
+        <li>Still lets you work <b>the way you used</b> with Backbone – if you wish. You can create base Model, Collection and View, use traditional <kbd>__super__</kbd>-style inheritance, write your specific API sync routines, use Underscore.js <a href="#sqimitivei-underscore">filtering</a> and jQuery/Zepto <a href="#sqimitivei-el">this.el</a> and so on.</li>
       </ul>
 
-      <p>While different, Sqimitive will appear very familiar to former Backbone users so just give it a try – <a href="#">this classic To-Do application</a> is a good place to start.</p>
+      <p>While different, Sqimitive will appear very familiar to current Backbone users so just give it a try – <a href="demo/">this classic To-Do application</a> is a good place to start.</p>
 
       <div class="dl">
-        <p><b>Download for</b> <a href="http://#">development</a> / <a href="#">production</a> (minified, 10K)</p>
-        <p>Check out <a href="to-do.html">sample To-Do App</a> and its <a href="http://todomvc.com"><s>ToDo-MVC version</s></a> (under construction)</p>
-        <p><a href="#">Report issues</a>, <a href="#">Fork on GitHub</a></p>
+        <p><b>Download for</b> <a href="http://squizzle.me/js/sqimitive/sqimitive.js">development</a> / <a href="http://squizzle.me/js/sqimitive/sqimitive.min.js">production</a> (minified, 12K)</p>
+        <p>Check out <a href="demo/">sample To-Do App</a> and its <a href="http://todomvc.com"><s>ToDo-MVC version</s></a> (under construction)</p>
+        <p><a href="https://github.com/ProgerXP/Sqimitive/issues">Report issues</a>. <a href="https://github.com/ProgerXP/Sqimitive">Fork on GitHub</a></p>
       </div>
 
       <p><b>See a typo?</b> Select the fragment and press <b>Ctrl+Enter</b>. Help us keep this memo free of vexatious mistakes! (Powered by <a href="http://orphus.ru" id="orphus" target="_blank" rel="nofollow">Orphus.ru</a>.)</p>
@@ -346,7 +347,7 @@ var MyView = Sqimitive.Sqimitive.extend(
 
       <p>This also happens with attribute normalization on Models which for some reason doesn't occur when assigning an API response.</p>
 
-      <p>Sqimitive fires events when things change, period. In case you do have a performance-heavy object you can always implement your own more silent update routines. However, 90% of the time you will rely on <a href="#sqimitivei-nest">nest</a>, <a href="#sqimitivei-unnested">nested</a>, <a href="#sqimitivei-change_OPT">change</a> and others to keep you notified.</p>
+      <p>Sqimitive fires events when things change, period. In case you do have a performance-heavy object you can always implement your own more silent update routines. However, 90% of the time you will rely on <a href="#sqimitivei-nest">nest</a>, <a href="#sqimitivei-unnested">unnested</a>, <a href="#sqimitivei-change_OPT">change</a> and others to keep you notified.</p>
 
       <h3>Cloned instance properties</h3>
 
@@ -371,7 +372,7 @@ alert(second.foo[0])
 
       <p>Anything in Sqimitive is, well, a <em>sqimitive</em> – a combination of "Squizzle" and "primitive", first being what we call "The Squizzle Way" – eliminating superfluous concepts to produce lean and reliable code. See <a href="http://squizzle.me">squizzle.me</a> for other goodness.</p>
 
-      <p>Each <em>sqimitive</em> has three fundamental features that sprout out all of its many use cases: <b><a href="ov-opt">options</a></b>, <b><a href="#ov-child">children</a></b> and <b><a href="#ov-evt">events</a></b>. Below is a quick high-level overview to demonstrate the main idea; remember to proceed to the <a href="#api">detailed API docs</a> if you want to get all of Sqimitive (and there’s as much to learn as there’s text, really).</p>
+      <p>Each <em>sqimitive</em> has three fundamental features that sprout out all of its many use cases: <b><a href="#ov-opt">options</a></b>, <b><a href="#ov-child">children</a></b> and <b><a href="#ov-evt">events</a></b>. Below is a quick high-level overview to demonstrate the main idea; remember to proceed to the <a href="#api">detailed API docs</a> if you want to get all of Sqimitive (and there’s as much to learn as there’s text, really).</p>
 
       <h3 id="ov-opt">Options</h3>
 
@@ -766,52 +767,24 @@ sqim.render = function () {
 
       <h3 id="tt-backbonization">Backbonization</h3>
 
-      <p>The following tricks can be used to make Sqimitive appear more like Backbone API (but not 100% identical):</p>
+      <p>The following tricks can be used to make Sqimitive appear more like Backbone API. It will not make it 100% identical, don't use it in production as it is – it's just to give you a good direction.</p>
 
       <dl>
-        <dt>Model.id</dt>
-        <dd>
-          <p>This code will make <kbd>id</kbd> option ("attribute") readable/writable as <kbd>get('id')</kbd>/<kbd>set('id', X)</kbd> and also readable directly as <kbd>obj.id</kbd> (write attempts won't be caught nor will they change "real" <kbd>id</kbd>):</p>
-          <pre class="language-javascript">
-extend({
-  id: null,   // alias to get('id'); do not write to.
-
-  _opt: {
-    id: null,
-  },
-
-  events: {
-    change_id: function (id) { this.id = id },
-  },
-})
-</pre>
-        </dd>
-
-        <dt>Other compatibility</dt>
+        <dt>General</dt>
         <dd>
           <p>In Backbone, <a href="#corei-_cid">_cid</a> is named <kbd>cid</kbd>, <a href="sqimitivei-el">el</a> is <kbd>$el</kbd> with <kbd>el</kbd> counterpart (native DOM node), <a href="#corei-fire">fire()</a> is named <kbd>trigger()</kbd>, <kbd>listenTo()</kbd> and <kbd>stopListening()</kbd> are <a href="#corei-autoOff">autoOff()</a>  flavours, <kbd>toJSON()</kbd> is basically <a href="#sqimitivei-get">get()</a>, <kbd>attributes</kbd> is the same as <a href="#sqimitivei-_opt">_opt</a>, <kbd>defaults</kbd> are declaration-time <kbd>_opt</kbd>.</p>
-          <p>Collections have <kbd>model</kbd> (class reference) which simply specifies <a href="#sqimitivei-_childClass">_childClass</a>, <kbd>reset()</kbd> is alike to <a href="#sqimitivei-assignChildren">assignChildren</a> (Collection’s <kbd>set()</kbd> is entirely different though), <kbd>push()</kbd>, <kbd>pop()</kbd>, <kbd>shift()</kbd>, <kbd>unshift()</kbd> are shortcuts for <a href="#sqimitivei-nest">nest()</a> and company (there’s no built-in ordering in Sqimitive), <kbd>clone()</kbd> is another shortcut for non-<a href="#sqimitivei-_owning">_owning</a> lists. Models are keyed by their <kbd>id</kbd> attribute value (or <kbd>idAttribute</kbd>) which are like <a href="#sqimitivei-_defaultKey">_defaultKey</a>.</p>
-          <p>Models have <kbd>escape()</kbd>, <kbd>has()</kbd> shortcuts for <a href="#sqimitivei-get">get()</a>.</p>
-          <p>Views have <kbd>setElement()</kbd>, <kbd>delegateEvents()</kbd>, <kbd>undelegateEvents()</kbd> that do similarly what <a href="#sqimitivei-attach">attach()</a> does.</p>
 
           <pre class="language-javascript">
 extend({
   cid: null,    // alias to _cid; do not write to.
-  $el: null,    // alias to el; do not write to.
-  model: null,  // alias to _childClass; do not write to.
-  attributes: {}, // alias to _opt; do not write to.
-  defaults: {},   // alias to initial _opt; do not write to.
 
   events: {
     '-init': function () {
       this.cid = this._cid
-      this.defaults = Sqimitive.Sqimitive.deepClone(this._opt)
     },
 
     init: function () {
-      this.$el = this.el
       this._childClass = this._childClass || this.model
-      this.attributes = this._opt
     },
   },
 
@@ -833,21 +806,17 @@ extend({
       return this.off(event || sqim)
     }
   },
+})
+</pre>
+        </dd>
 
-  toJSON: function () {
-    if (this._childClass) {
-      // This is likely a Collection.
-      return this.invoke('get')
-    } else {
-      // Seems to be a Model.
-      return this.get()
-    }
-  },
+        <dt>Collection</dt>
+        <dd>
+          <p>Collections have <kbd>model</kbd> (class reference) which simply specifies <a href="#sqimitivei-_childClass">_childClass</a>, <kbd>reset()</kbd> is alike to <a href="#sqimitivei-assignChildren">assignChildren</a> (Collection’s <kbd>set()</kbd> is entirely different though), <kbd>push()</kbd>, <kbd>pop()</kbd>, <kbd>shift()</kbd>, <kbd>unshift()</kbd> are shortcuts for <a href="#sqimitivei-nest">nest()</a> and company (there’s no built-in ordering in Sqimitive), <kbd>clone()</kbd> is another shortcut for non-<a href="#sqimitivei-_owning">_owning</a> lists. Models are keyed by their <kbd>id</kbd> attribute value (or <kbd>idAttribute</kbd>) which are like <a href="#sqimitivei-_defaultKey">_defaultKey</a>.</p>
 
-  /***
-    Collection methods
-   ***/
-
+          <pre class="language-javascript">
+extend({
+  model: null,  // alias to _childClass; do not write to.
   el: null,
   idAttribute: 'id',
 
@@ -894,18 +863,49 @@ extend({
     return model
   },
 
+  toJSON: function () {
+    return this.invoke('get')
+  },
+
   clone: function () {
     if (this._owning) { throw 'clone() will clear base instance.' }
     var copy = new this.constructor(this.get())
     this.each(function (child, key) { copy.nest(key, child) })
     return copy
   },
+})
+</pre>
+        </dd>
 
-  /***
-    Model methods
-   ***/
+        <dt>Model</dt>
+        <dd>
+          <p>Models have <kbd>escape()</kbd>, <kbd>has()</kbd> shortcuts for <a href="#sqimitivei-get">get()</a>. <kbd>id</kbd> option ("attribute") is readable/writable as <kbd>get('id')</kbd>/<kbd>set('id', X)</kbd> and also readable directly as <kbd>obj.id</kbd> (write attempts won't be caught nor will they change "real" <kbd>id</kbd>).</p>
 
-  el: null,
+          <pre class="language-javascript">
+extend({
+  attributes: {}, // alias to _opt; do not write to.
+  defaults: {},   // alias to initial _opt; do not write to.
+  id: null,       // alias to get('id'); do not write to.
+
+  _opt: {
+    id: null,
+  },
+
+  events: {
+    '-init': function () {
+      this.defaults = Sqimitive.Sqimitive.deepClone(this._opt)
+    },
+
+    init: function () {
+      this.attributes = this._opt
+    },
+
+    change_id: function (id) { this.id = id },
+  },
+
+  toJSON: function () {
+    return this.get()
+  },
 
   escape: function (opt) {
     return _.escape(this.get(opt))
@@ -914,10 +914,24 @@ extend({
   has: function (opt) {
     return this.get(opt) != null
   },
+})
+</pre>
+        </dd>
 
-  /***
-    View methods
-   ***/
+        <dt>View</dt>
+        <dd>
+          <p>Views have <kbd>setElement()</kbd>, <kbd>delegateEvents()</kbd>, <kbd>undelegateEvents()</kbd> that do similarly what <a href="#sqimitivei-attach">attach()</a> does.</p>
+
+          <pre class="language-javascript">
+extend({
+  el: null,
+  $el: null,    // alias to el; do not write to.
+
+  events: {
+    init: function () {
+      this.$el = this.el
+    },
+  },
 
   setElement: function (el) {
     this.undelegateEvents()
@@ -1700,6 +1714,18 @@ m(function (a1, a2) { alert(a1 + ' ' + a2) }, '')
 
           <p>Does <b>not</b> clone result.</p>
         </dd>
+
+        <dt id="cores-is$">is$ (obj)</dt>
+        <dd>
+          <p>Determines if <b>obj</b> is a $ collection (like jQuery or Zepto).</p>
+
+          <pre class="language-javascript">
+is$(document.rootElement)   //=> false
+is$($('html'))    //=> true
+is$($('&lt;p&gt;'))     //=> true
+is$(null)         //=> false
+</pre>
+        </dd>
       </dl>
 
       <h4 id="corei">Instance properties and methods</h4>
@@ -1747,7 +1773,7 @@ _.bind(function () { return this.fire(event, prependArgs.concat(arguments)) }, s
 
           <p>Also acts as the logging handler itself if first argument is a string – this lets you override default behaviour as a regular event handler.</p>
 
-          <p>Note that methods calls that are not events won't be logged. If this sounds trivial remember that in Sqimitive <a href="ov-evt">methods only become events on demand</a>:</p>
+          <p>Note that methods calls that are not events won't be logged. If this sounds trivial remember that in Sqimitive <a href="#ov-evt">methods only become events on demand</a>:</p>
 
           <pre class="language-javascript">
 var MyBase = Sqimitive.Sqimitive.extend({
@@ -2164,7 +2190,7 @@ var MyListGroup = Sqimitive.Sqimitive.extend({
           <p>Missing keys may or may not be passed through to <kbd>this._opt</kbd> unchanged – this depends on the <b>options.onlyDefined</b> flag of <a href="#sqimitivei-assignResp">assignResp()</a>.</p>
         </dd>
 
-        <dt id="sqimitivei-_el">el</dt>
+        <dt id="sqimitivei-el">el</dt>
         <dd>
           <p>After <a href="#sqimitivei-init">init()</a> has ran is either a DOM node wrapped in <kbd>$()</kbd> or <kbd>null</kbd> if node creation was disabled. Not advised to change directly, treat as read-only.</p>
 
@@ -2842,9 +2868,9 @@ sqim.$('')              //=> $()
 
       <h4 id="sqimitivei-underscore">Underscore.js functions</h4>
 
-      <p>Each <kbd>Sqimitive.Sqimitive</kbd> instance inherits a bunch of <a href="http://underscorejs.org">Underscore.js</a> functions – those used to sort, filter, transform, count, locate, cook, boil, slice up and serve <a href="#sqimitivei-nest">nested</a> children into an object or array.</p>
+      <p>Each <kbd>Sqimitive.Sqimitive</kbd> instance inherits a bunch of <a href="http://underscorejs.org">Underscore.js</a> functions – those used to sort, filter, transform, count, locate, cook, boil, slice up and serve <a href="#sqimitivei-nest">nested</a> children into an object or array: <kbd>sqim.invoke('render')</kbd>.</p>
 
-      <p>The following methods are available (links will take you to Underscore docs in a new tab):</p>
+      <p>The following methods are available (links will take you to Underscore.js docs in a new tab):</p>
 
       <ul>
         <li><a target="_blank" href="http://underscorejs.org/#chain">chain()</a> – wrap list of children into an Underscore object on which you can call other Underscore methods that will modify that list, which you can then retrieve with <kbd>sqim.chain()....().value()</kbd></li>
