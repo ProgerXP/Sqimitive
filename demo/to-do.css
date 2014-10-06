@@ -1,0 +1,143 @@
+* {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: Georgia, "Palatino Linotype", "Book Antiqua3", Palatino, "Garamond Premr Pro",
+               Garamond, Baskerville, "Hoefler Text", "Times New Roman", serif;
+}
+
+body {
+  overflow-y: scroll;
+  background: #D8D8D8;
+}
+
+header {
+  max-width: 600px;
+  margin: 2em auto 0.5em;
+}
+
+#logo {
+  float: left;
+  margin: -0.75em 1.5em -1em 0;
+}
+
+a {
+  color: #104167;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+h1, nav {
+  text-shadow: 1px 1px 1px white;
+}
+
+nav {
+  font-style: italic;
+  font-size: 1.125em;
+}
+
+#motto {
+  color: #555;
+  text-align: center;
+  margin: 2.5em 0 -2em;
+  font-style: italic;
+  clear: both;
+  letter-spacing: 0.25px;
+}
+
+form {
+  background: #eaeaea;
+  border-radius: 10px;
+  padding: 1px 1em;
+  margin: 3.5em auto 0;
+  max-width: 500px;
+}
+
+form h2 {
+  font-size: 1.125em;
+}
+
+form i {
+  color: red;
+}
+
+input, textarea, button {
+  border-radius: 3px;
+  border: 0;
+  resize: vertical;
+  background: white;
+  padding: 0.4em;
+  font-size: 1em;
+}
+
+input, textarea {
+  display: block;
+  margin: 0.5em 0;
+  width: 100%;
+  padding: 0.4em;
+}
+
+[type="checkbox"] {
+  display: inline;
+  width: auto;
+  margin: 0 0.25em;
+}
+
+button {
+  cursor: pointer;
+  padding: 0.2em 0.4em;
+}
+
+button:hover:focus {
+  background: #aaa;
+}
+
+#status {
+  text-align: center;
+  margin: 2em 0;
+}
+
+#purge {
+  margin-left: 0.5em;
+}
+
+#list {
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+#list h2 {
+  font-size: 1.125em;
+  display: inline;
+}
+
+:target {
+  color: red;
+}
+
+.editing input {
+  display: inline;
+  margin: 0;
+}
+
+li {
+  margin-bottom: 3em;
+}
+
+#list button:not(:hover) {
+  background: #e0e0e0;
+}
+
+article {
+  font-style: italic;
+  margin: 0.5em 0;
+}
+
+.done {
+  color: #555;
+}
+
+.done article {
+  text-decoration: line-through;
+}

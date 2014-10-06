@@ -1,0 +1,328 @@
+/*! normalize.css v3.0.1 | MIT License | git.io/normalize */
+html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,strong{font-weight:bold}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-0.5em}sub{bottom:-0.25em}img{border:0}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}pre{overflow:auto}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{height:auto}input[type="search"]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid #c0c0c0;margin:0 2px;padding:.35em .625em .75em}legend{border:0;padding:0}textarea{overflow:auto}optgroup{font-weight:bold}table{border-collapse:collapse;border-spacing:0}td,th{padding:0}
+
+/***
+  Sqimitive page styles
+ ***/
+
+html, nav {
+  border: 3px solid #104167;
+}
+
+html {
+  border-width: 3px 0;
+}
+
+#orphusp .logo { float: right; }
+#orphusp .legend { font-weight: bold; }
+
+#orphusp .fragment {
+  font-family: sans-serif;
+  text-align: center;
+  background: white;
+  margin: 1em -1em;
+  padding: 0.5em 0;
+}
+
+#orphusp .hint { margin-bottom: 1em; }
+#orphusp form { padding: 0; margin: 0; border: 0 }
+#orphusp [type=text] { width: 100%; margin: 0.2em 0 }
+#orphusp .buttons { text-align: center; }
+#orphusp .buttons input { cursor: pointer; }
+#orphusp [type=submit] { font-weight: bold; }
+
+body {
+  font-family: "Trebuchet MS",sans-serif;
+  margin: 0 1rem 0 22%;
+  font-size: 0.875rem;
+  line-height: 1.33em;
+}
+
+nav {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 20%;
+  height: 100%;
+  overflow: auto;
+  background: #fcfcfc;
+  border-width: 3px 0 0;
+}
+
+nav ol {
+  margin: 0.5em 0 0.5em 0.75em;
+  padding: 0;
+  list-style: none;
+}
+
+nav > ol {
+  margin: 1em 0.75em 1em;
+}
+
+nav > ol > li > a:first-child {
+  font-weight: bold;
+}
+
+nav ol + ol { margin-top: 1em; }
+
+nav li li {
+  font-size: 0.9rem;
+}
+
+nav > ol > li:nth-child(2) li { margin: 0; }
+
+nav a {
+  color: #104167;
+  text-decoration: none;
+  display: inline-block;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+nav a.fl::first-letter {
+  color: red;
+  text-transform: uppercase;
+}
+
+nav .sort > a {
+  display: block;
+  height: 1.33em;   /* breaks height on columns output */
+}
+
+nav [type=checkbox] { margin: 0 0 0 0.3em; }
+
+nav [type=checkbox]:not(:checked) ~ ol li {
+  -webkit-column-width: 6em;
+  -moz-column-width: 6em;
+  column-width: 6em;
+}
+
+kbd {
+  background: #FFECC6;
+  color: black;
+  font-size: 0.86em;
+}
+
+.dl {
+  padding: 0.1px 1em;
+  background: #eaeaea;
+  margin: 1em -1rem 1em -0.75em;
+}
+
+.dl p:before {
+  content: "→ ";
+  color: gray;
+}
+
+a.a {
+  visibility: hidden;
+  margin-left: 0.5em;
+}
+
+:hover > a.a { visibility: visible; }
+
+h1, h2, h3, h4, h5, #book {
+  font-family: Georgia,"Palatino Linotype","Book Antiqua3",Palatino,"Garamond Premr Pro",Garamond,Baskerville,"Hoefler Text","Times New Roman",serif;
+  margin: 2em 0 1em 0;
+}
+
+h1 {
+  font-weight: normal;
+  line-height: 1.7em;
+  margin: 0.5em 0;
+}
+
+@media (max-width: 1090px) {
+  h1 { font-size: 1.8em; }
+}
+
+h3 {
+  font-size: 1rem;
+}
+
+h4 {
+  color: #104167;
+}
+
+pre {
+  background: #f5f5f5;
+  font-size: 0.75rem;
+  max-height: 850px;
+  overflow: auto;
+  padding: 0.15em 0.3em 0.15em 1.05em;
+  margin-left: -0.75em;
+  margin-right: -1rem;
+}
+
+li {
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+}
+
+dt {
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+@media not print {
+  a[href^="http://"], a[href^="https://"], a[href^="ftp://"] {
+    background: no-repeat left 0.7em url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHpEAACAgwAA+ZkAAIWVAABxRQAA8D8AADkKAAAcINqeyMoAAACMSURBVHjaYmRgYGBo3ar0nwENMMIYrVuV/ntqdTEwMDAwbL9WxsAycasH18+/7y+4aJUyXHuxiUFLwo+BgYGBgenT1zeWv5lfqzIwMDBoSfgxbL9WBpFg4n63x1Ori+HKo50M26+VMVR732NkYGBgYPn4kuXXdoYytn9fhZz5uNVOMDDcY6j2vscIGADPGCtKIvYANgAAAABJRU5ErkJggg");
+    padding-left: 9px;
+  }
+}
+
+footer {
+  color: gray;
+  margin: 2em 0 0;
+}
+
+footer a { margin-left: 3em; }
+
+article {
+  max-width: 850px;
+}
+
+article a[href*="//underscorejs.org/"],
+article a[href^="#core"], article  a[href^="#sqimitive"] {
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+article a[href*="//underscorejs.org/"] {
+  text-decoration: none;
+  border-bottom: 1px dashed gray;
+  background: none;
+  padding: 0;
+}
+
+table {
+  border: 1px solid #ddd;
+  margin: 1em 0;
+}
+
+caption {
+  background: #f5f5f5;
+  padding: 0.3em;
+  border: 1px solid #ddd;
+  border-bottom: 0;
+}
+
+th, td {
+  padding: 0.2em 0.4em;
+  vertical-align: top;
+}
+
+td > :last-child {
+  margin-bottom: 0;
+}
+
+table pre {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/***
+  Orphos.ru
+ ***/
+
+#orphusp {
+  background: #EAEAEA;
+  border: 1px solid #B4B4B4;
+  box-shadow: 0 0 28px #626262;
+  font-family: sans-serif;
+  padding: 1em;
+  z-index: 10000;
+}
+
+/***
+  Book Banner
+ ***/
+
+#book {
+  position: relative;
+  font-style: italic;
+  overflow: hidden;
+  background: #d8d8d8;
+  padding: 0;
+  margin: 2em -1rem 0 -0.75em;
+  border-radius: 0 0 0 15px;
+}
+
+#btri { margin: 0 28px -0.8em; display: block; }
+#btri + * { page-break-before: always; }
+
+#book > * { display: block; float: left; }
+
+#blogo { margin-bottom: -25px; }
+
+#blogo + p {
+  margin-top: 29px;
+}
+
+#blogo + p b {
+  font-size: 1.75rem;
+  font-style: normal;
+}
+
+#blogo + p i {
+  display: block;
+  font-size: 1.375rem;
+  margin: 20px 0 0 40px;
+}
+
+#bmotto {
+  font-size: 1.125rem;
+  margin: 25px 0 0 50px;
+  line-height: 1.37em;
+}
+
+#bmotto small { display: block; margin: 6px 0 0; }
+
+#bcc {
+  float: right;
+  text-align: right;
+  margin: 10px;
+  font-size: 0.75rem;
+  line-height: 1.3em;
+}
+
+#bcc a {
+  display: block;
+  background: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+}
+
+#history {
+  float: right;
+  margin: 1em -2rem 0 1em;
+  background: #f4f4f4;
+  width: 17em;
+  border-radius: 0 10px 0 10px;
+}
+
+legend { font-weight: bold; }
+
+/* Clearing #history pull. */
+#vs-backbone ~ h3 { clear: right; }
+
+/***
+  Printer Styles
+ ***/
+
+@media print {
+  nav { display: none; }
+  body { margin: 0; }
+  h1 { font-size: 1.6em; }
+  pre { line-height: 1.2em; }
+  a, h4 { color: black; }
+  .token { color: black !important; }
+  #bmotto { margin-left: 20px; }
+  #btri { display: none; }
+  #bcc { margin-right: 16px; }
+}

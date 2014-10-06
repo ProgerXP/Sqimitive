@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Sqimitive.js – Sample To-Do Application</title>
+    <link href="to-do.css" type="text/css" rel="stylesheet" media="all">
+  </head>
+  <body>
+    <header>
+      <img src="../docs/lotus.png" id="logo" alt="Sqimitive Logo">
+      <h1>Simple To-Do App</h1>
+
+      <nav>
+        <a href="http://squizzle.org/js/sqimitive">Sqimitive.js</a> demo
+        • <a href="to-do.js" id="source">View source</a>
+      </nav>
+    </header>
+
+    <p id="motto">Achieving nirvana through simple, mindful web development</p>
+
+    <form id="new">
+      <h2>Create new task</h2>
+      <p>
+        Caption: <i>*</i>
+        <input name="caption" autofocus>
+      </p>
+      <p>
+        Description:
+        <textarea name="description" rows="3"></textarea>
+      </p>
+      <p>
+        <button type="submit">Add</button>
+      </p>
+    </form>
+
+    <p id="status">
+      <input type="checkbox" id="toggle">
+
+      <label for="toggle">
+        You have <span id="done"></span> completed tasks.
+      </label>
+
+      <button id="purge">Delete</button>
+    </p>
+
+    <ul id="list">
+    </ul>
+
+    <script id="item" type="text/template">
+      {{#if editing}}
+        <input name="caption" value="{{ caption }}" required autofocus>
+        <textarea name="description">{{ description }}</textarea>
+      {{else}}
+        <h2>
+          {{ caption }}
+          <input type="checkbox" {{#if done}}checked{{/if}}>
+        </h2>
+
+        <article>{{ description }}</article>
+      {{/if}}
+
+      <p>
+        <button type="button" class="copy">Copy</button>
+        {{#if editing}}
+          <button type="button" class="unedit">Close</button>
+        {{else}}
+          <button type="button" class="edit">Edit</button>
+        {{/if}}
+        <button type="button" class="delete">Delete</button>
+      </p>
+    </script>
+
+    <script type="text/javascript" src="../docs/underscore.js"></script>
+    <!-- This demo uses Zepto instead of jQuery to demonstrate that it's the same. -->
+    <script type="text/javascript" src="zepto.js"></script>
+    <script type="text/javascript" src="../sqimitive.js"></script>
+    <!-- Handlebars is not required for Sqimitive but is used in this demo. -->
+    <script type="text/javascript" src="handlebars.js"></script>
+    <script type="text/javascript" src="to-do.js"></script>
+    <!-- This is just for View soure link to work. -->
+    <script type="text/javascript" src="demo.js"></script>
+  </body>
+</html>
