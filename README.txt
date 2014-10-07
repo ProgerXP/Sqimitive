@@ -11,6 +11,9 @@ Optionally uses jQuery/Zepto.
                 Documentation and the first place to start:
                       http://squizzle.me/js/sqimitive
 
+                 Читаете по-русски? Начните с Хабрахабра:
+                      http://habrahabr.ru/post/239149/
+
 Sqimitive is part of the Squizzle.me Toolkit - http://squizzle.me.
 
 Sqimitive source code is released in public domain. It has been written by
