@@ -22,6 +22,12 @@ Belstone Capital (http://www.belstonecapital.com).
 
 Documentation is released under CC BY (https://creativecommons.org/licenses/by/4.0/).
 
+Ways To Install
+===============
+
+$ bower install sqimitive
+$ npm install sqimitive
+
 ---
 Squizzle ♥ it
 http://squizzle.me
