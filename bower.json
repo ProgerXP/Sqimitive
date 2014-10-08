@@ -1,0 +1,24 @@
+{
+  "name": "sqimitive",
+  "version": "0.1.0",
+  "description": "Frontend primitive. Backbone alternative that is half the size while top the features.",
+  "keywords": [ "backbone", "library" ],
+  "homepage": "http://squizzle.me/js/sqimitive",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ProgerXP/Sqimitive.git"
+  },
+  "authors": [ "Pavel <proger.xp@gmail.com>" ],
+  "moduleType": [ "amd", "node", "globals" ],
+  "main": "sqimitive.js",
+  "dependencies": {
+    "underscore": ">=1.6.0"
+  },
+  "ignore": [
+    "bower_components",
+    "demo",
+    "docs",
+    ".gitattributes"
+  ],
+  "license": "UNLICENSE"
+}
