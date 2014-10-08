@@ -96,6 +96,19 @@ kbd {
   font-size: 0.86em;
 }
 
+#install {
+  font-weight: bold;
+}
+
+#install img {
+  margin: 0 0.25em 0 1em;
+  vertical-align: middle;
+}
+
+#install :first-child {
+  margin-left: 0;
+}
+
 .dl {
   padding: 0.1px 1em;
   background: #eaeaea;

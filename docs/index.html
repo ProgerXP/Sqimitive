@@ -171,6 +171,11 @@
 
       <p>While different, Sqimitive will appear very familiar to current Backbone users so just give it a try – <a href="demo/">this classic To-Do application</a> is a good place to start.</p>
 
+      <p id="install">
+        <img src="data:image/gif;base64,R0lGODlhEgAQALMAAOLe3WhWQfjYL/RUNbWzngDG/+ieJiqyK4FuapVqMUZ9ib5GMVItK52PjoLRLf///yH5BAAAAAAALAAAAAASABAAAASF8ElAUAgIyEn2A8EyjEugAY3SbOA4GMawII9SKJoUuAZBGItG6rYhiEaGi4FGUCg6EoQLGUsgUlDddMoICAFg7XbASAgEsASmtV0szmfD4RBgSMfw8/xgb5gNaIBnDnt1NAAMeXlOFg1ZDQyCcFYTHjplggkMDDmWH42bmyaenghdDZ0eEQA7" alt="bower"> bower install sqimitive
+        <img src="data:image/gif;base64,R0lGODlhKQAQAIAAAP///8s5OCH5BAAAAAAALAAAAAApABAAAAJOjI+py+0Po5wK2GsP3np7kHygIY5BiYUXaaZst55jhri0fOf2bLK0roP9eKqhsCMkyopKnCf5WtZiwKfPKJW4KNxr97v9OkUMlPlcPosKADs" alt="npm"> npm install sqimitive
+      </p>
+
       <div class="dl">
         <p><b>Download for</b> <a href="http://squizzle.me/js/sqimitive/sqimitive.js">development</a> / <a href="http://squizzle.me/js/sqimitive/sqimitive.min.js">production</a> (minified, 12K)</p>
         <p>Check out <a href="demo/">sample To-Do App</a> and its <a href="http://todomvc.com"><s>ToDo-MVC version</s></a> (under construction)</p>
@@ -224,7 +229,7 @@
       <p>Below is just one simple example. Look for more details at the mentioned sections.</p>
 
       <pre class="language-javascript">
-var MyBaseClass = Sqimitive.Sqimitive.extend(
+var MyBaseClass = Sqimitive.Sqimitive.extend({
   complexProp: {
     base: 123,
   },
@@ -232,7 +237,7 @@ var MyBaseClass = Sqimitive.Sqimitive.extend(
   init: function () {
     alert('I init()!')
   },
-))
+})
 
 // _mergeProps is a static property.
 MyBaseClass._mergeProps.push('complexProp')
@@ -283,7 +288,7 @@ alert(obj.complexrop.sub)
       <p>Given this mechanism you can significantly lower your <kbd>render()</kbd> and custom event rates while being much more aware of what has triggered the change so you can perform a lightweight update. And since there’s no distinct separation between Models and Views this universally works for any kind of object you might have.</p>
 
       <pre class="language-javascript">
-var MyView = Sqimitive.Sqimitive.extend(
+var MyView = Sqimitive.Sqimitive.extend({
   _opt: {
     loading: false,
     people: [],   // array of names.
@@ -2296,7 +2301,7 @@ sqim.attach(sqim.get('attachPath'))   // the same
           <p>Don't access <kbd>hits._opt</kbd> directly because you will lose ability to change the "getter" behaviour – e.g. you can read non-existing options or transform them like this:</p>
 
           <pre class="language-javascript">
-var MySetter = Sqimitive.Sqimitive.extend(
+var MySetter = Sqimitive.Sqimitive.extend({
   _opt: {
     foo: 'Foo!',
   },
