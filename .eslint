@@ -1,0 +1,50 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "amd": true
+  },
+
+  "rules": {
+    // Possible Errors
+    "no-cond-assign": 1,
+    "no-console": 1,
+    "no-comma-dangle": 0,
+    "no-empty": 1,
+    "no-extra-boolean-cast": 1,
+    "no-extra-semi": 1,
+    "no-inner-declarations": 0,
+    "no-regex-spaces": 0,
+    "no-reserved-keys": 2,
+
+    // Best Practices
+    "eqeqeq": 0,
+    "no-alert": 1,
+    "no-caller": 0,
+    "no-eq-null": 0,
+    "no-eval": 0,
+    "no-floating-decimal": 2,
+    "no-loop-func": 1,
+    "no-redeclare": 0,
+    "no-return-assign": 1,
+    "no-unused-expressions": 0,
+    "no-void": 2,
+    "wrap-iife": 1,
+    "strict": 0,
+
+    // Other
+    "no-delete-var": 0,
+    "no-unused-vars": [2, {"vars": "all", "args": "none"}],
+    "consistent-this": [1, "self"],
+    "new-parens": 0,
+    "no-lonely-if": 2,
+    "no-underscore-dangle": 0,
+    "quotes": [2, "single", "avoid-escape"],
+    "semi": [1, "never"],
+    "space-after-keywords": [2, "always"],
+    "space-unary-word-ops": 2,
+    "max-len": [1, 90, 2],
+    "max-depth": [1, 5],
+    "max-params": [1, 5]
+  }
+}

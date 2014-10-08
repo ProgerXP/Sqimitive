@@ -54,7 +54,7 @@
     Surrogate.prototype = parent.prototype
     child.prototype = new Surrogate
 
-    if (protoProps) _.extend(child.prototype, protoProps)
+    protoProps && _.extend(child.prototype, protoProps)
     child.__super__ = parent.prototype
     return child
   }
@@ -253,7 +253,8 @@
     //    context: sqim,
     //
     //    //  This is wrong: success' second argument is textStatus which gets pushed
-    //    //  to assignResp(data, options) breaking the latter (options must be an object).
+    //    //  to assignResp(data, options) breaking the latter (options must be an
+    //    //  object).
     //    success: sqim.assignResp,
     //
     //    //  This is correct: we indicate that we are only interested in the first
@@ -474,7 +475,7 @@
       if (this._events.all && event != 'all') {
         var allArgs = arguments.length < 2 ? [] : Core.toArray(args).concat()
         allArgs.unshift(event)
-        var res = Core.fire.call(this, this._events.all, allArgs);
+        var res = Core.fire.call(this, this._events.all, allArgs)
         if (res !== undefined) { return res }
       }
 
@@ -911,7 +912,9 @@
     //? _respToOpt = {ignore: function () { return [false] },
     //                rename: function (value) { return ['foo', value] },
     //                date: function (value) { return ['date', new Date(value)] },
-    //                merge: function (v, k, resp) { return ['foo', resp.a.concat(resp.b) },
+    //                merge: function (v, k, resp) {
+    //                  return ['foo', resp.a.concat(resp.b)
+    //                },
     //                setUndefined: function () { return ['foo', undefined] }}
     //    // in function calls respKey only affects which value is passed as
     //    // the first argument; option key is retrieved from the returned array.
@@ -1051,7 +1054,8 @@
     // the new value was different from the old one or if options.forceFire was
     // set (and so change events were fired).
     //
-    // Note: if you are overriding a "setter" you should override ifSet instead of set() which calls the foremer.
+    // Note: if you are overriding a "setter" you should override ifSet instead of
+    // set() which calls the foremer.
     //
     //? set('key', 'foo')
     //? set('key', 'foo', true)   // fires 'change_key', then 'change'.
@@ -1425,7 +1429,8 @@
     //? assignChildren({ foosh: {key: 'foo'}, barrsh: {key: 'bar'} }, {eqFunc: 'key'})
     //   // identical to the above (resp turned to array, keys ignored).
     //
-    //? assignChildren({ foosh: {key: 'foo'}, barrsh: {key: 'bar'} }, {eqFunc: 'key', keepMissing: true})
+    //? assignChildren({ foosh: {key: 'foo'}, barrsh: {key: 'bar'} },
+    //                 {eqFunc: 'key', keepMissing: true})
     //   // identical to the above but keeps old children.
     //
     //? assignChildren([ {key: 'foo'}, {key: 'bar'} ])
