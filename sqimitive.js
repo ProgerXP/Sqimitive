@@ -344,7 +344,7 @@
     //? parseEvent('-foo.bar___')     //=> ['-', 'foo.bar', '___']
     //? parseEvent('foo.bar')         //=> ['', 'foo.bar', '']
     parseEvent: function (str) {
-      var match = str.match(/^([+\-=]?)([\w\d.:]+?)(_*)$/)
+      var match = str.match(/^([+\-=]?)([\w\d.:+\-=]+?)(_*)$/)
       if (!match) { throw 'Bad event name: ' + str }
       return {prefix: match[1], name: match[2], args: match[3]}
     },
@@ -525,8 +525,9 @@
         // function (event, eventArg1, arg2, ...)
         var info = this._cid
         if (this.el) {
-          info += '\t\t' + this.el[0].tagName + '.' +
-                  this.el[0].className.replace(/ /g, '.')
+          info += '\t\t' + this.el[0].tagName + '.'
+          this.el[0].className && (info +=
+                  (this.el[0].className + '').replace(/ /g, '.'))
         }
 
         console.log(enable + ' (' + (arguments.length - 1) + ') on ' + info)
@@ -1316,7 +1317,7 @@
     // were not hardwired with fuse() and used cx === this).
     //
     // If this._owning is false this is called when unnesting a child via
-    // nest('key', null).
+    // unlist().
     //
     // Can return anything. Not to be called directly.
     unnested: function (sqim) {
@@ -1456,16 +1457,18 @@
       var toRemove = eqFunc ? _.extend({}, this._children) : {}
 
       for (var i = 0; i < resp.length; i++) {
+        var found = false
+
         for (var key in toRemove) {
           if (eqFunc.call(this, toRemove[key], resp[i])) {
             toRemove[key].assignResp(resp[i], options)
             delete toRemove[key]
-            key = true
+            found = true
             break
           }
         }
 
-        if (key !== true) {
+        if (!found) {
           var child = (new this._childClass).assignResp(resp[i], options)
           this.nest(keyFunc.call(this, child), child, options)
         }
