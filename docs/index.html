@@ -2534,9 +2534,9 @@ var MyChild = Sqimitive.Sqimitive.extend({
 
         <dt id="sqimitivei-_forward">_forward (prefix, events, sqim)</dt>
         <dd>
-          <p>Forwards each of events to <b>sqim</b> instance by firing <b>prefix</b> + <b>event_name</b> on this instance (the one <kbd>_forward</kbd> is called on) with <b>sqim</b> pushed in front of original event arguments. This is used to forward <a href="#sqimitivei-_childEvents">_childEvents</a>, with <b>prefix</b> = <kbd>.</kbd>.</p>
+          <p>Forwards each of events to <b>sqim</b> instance by firing <b>prefix</b> + <b>event_name</b> (complete) on this instance (the one <kbd>_forward</kbd> is called on) with <b>sqim</b> pushed in front of original event arguments. This is used to forward <a href="#sqimitivei-_childEvents">_childEvents</a>, with <b>prefix</b> = <kbd>.</kbd>.</p>
 
-          <p>For example, <kbd>origin._forward('dlg-', ['change', 'render'], destination)</kbd> will fire <kbd>dlg-change</kbd> and <kbd>dlg-render</kbd> events on <b>destination</b> (a Sqimitive) whenever <kbd>change</kbd> and <kbd>render</kbd> are fired on <b>origin</b>.</p>
+          <p>For example, <kbd>origin._forward('dlg-', ['change', '-render'], destination)</kbd> will fire <kbd>dlg-change</kbd> and <kbd>dlg--render</kbd> events on <b>destination</b> (a Sqimitive) whenever <kbd>change</kbd> and <kbd>render</kbd> are fired on <b>origin</b>.</p>
         </dd>
 
         <dt id="sqimitivei-unlist">unlist (key)</dt>
@@ -2857,13 +2857,14 @@ child.saveTo = function (ser) { ser.push(this.get()) }
 
         <dt id="sqimitivei-$">$ (path)</dt>
         <dd>
-          <p>Similar to <kbd>this.el.find(path)</kbd> but returns <a href="#sqimitivei-el">el</a> if <b>path</b> is empty or is a dot (<kbd>.</kbd>). If <kbd>this.el</kbd> is <kbd>null</kbd> always returns an empty jQuery collection. If <b>path</b> is a jQuery object or a DOM node – returns <kbd>$(path)</kbd> (note that it may be outside of <kbd>this.el</kbd> or have <kbd>length == 0</kbd>).</p>
+          <p>Similar to <kbd>this.el.find(path)</kbd> but returns <a href="#sqimitivei-el">el</a> if <b>path</b> is empty or is a dot (<kbd>.</kbd>). Special value <kbd>body</kbd> always returns <kbd>document.body</kbd>. If <kbd>this.el</kbd> is <kbd>null</kbd> always returns an empty jQuery collection. If <b>path</b> is a jQuery object or a DOM node – returns <kbd>$(path)</kbd> (note that it may be outside of <kbd>this.el</kbd> or have <kbd>length == 0</kbd>).</p>
 
           <pre class="language-javascript">
 sqim.$()                //=> $(this.el)
 sqim.$('.')             //=> $(this.el)
 sqim.$('a[href]')       //=> $([A, A, ...])
 sqim.$(document.body)   //=> $('body')
+sqim.$('body')          //=> $('body')
 
 sqim.el = null
 sqim.$('')              //=> $()

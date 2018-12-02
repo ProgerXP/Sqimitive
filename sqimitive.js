@@ -524,10 +524,14 @@
       if (typeof enable == 'string') {
         // function (event, eventArg1, arg2, ...)
         var info = this._cid
+
         if (this.el) {
-          info += '\t\t' + this.el[0].tagName + '.'
-          this.el[0].className && (info +=
-                  (this.el[0].className + '').replace(/ /g, '.'))
+          info += '\t\t' + this.el[0].tagName
+          var className = this.el[0].className.trim()
+
+          if (className != '') {
+            info += (' ' + className).replace(/\s+/g, '.')
+          }
         }
 
         console.log(enable + ' (' + (arguments.length - 1) + ') on ' + info)
@@ -1232,11 +1236,11 @@
     owned: Core.stub,
 
     // Forwards each of events to sqim instance by firing prefix + event_name
-    // on this instance with sqim pushed in front of original event arguments.
-    // This is used to forward _childEvents, with prefix = '.'.
+    // (complete) on this instance with sqim pushed in front of original event
+    // arguments. This is used to forward _childEvents, with prefix = '.'.
     //
-    // E.g. origin._forward('dlg-', ['change', 'render'], destination) will
-    // fire 'dlg-change' and 'dlg-render' events on destination (a Sqimitive)
+    // E.g. origin._forward('dlg-', ['change', '-render'], destination) will
+    // fire 'dlg-change' and 'dlg--render' events on destination (a Sqimitive)
     // whenever 'change' and 'render' are fired on origin.
     //
     //? p.on('.render', function (o) { ... })
@@ -1244,7 +1248,7 @@
     //    // now p's .render will get called, with o as the first argument.
     _forward: function (prefix, events, sqim) {
       _.each([].concat(events), function (event) {
-        var name = prefix + Core.parseEvent(event).name
+        var name = prefix + event
         sqim.on(event, function () {
           var args = Array.prototype.slice.call(arguments)
           args.unshift(sqim)
@@ -1557,7 +1561,8 @@
     },
 
     // Similar to this.el.find(path) but returns el if path is empty or is a
-    // dot (.). If this.el is null always returns an empty jQuery collection.
+    // dot (.). Special value 'body' always returns document.body.
+    // If this.el is null always returns an empty jQuery collection.
     // If path is a jQuery object or a DOM node – returns $(path) (note that
     // it may be outside of this.el or have length == 0).
     //
@@ -1565,9 +1570,12 @@
     //? this.$('.')             //=> $(this.el)
     //? this.$('a[href]')       //=> $([A, A, ...])
     //? this.$(document.body)   //=> $('body')
+    //? this.$('body')          //=> $('body')
     $: function (path) {
       if (Core.is$(path) || _.isElement(path)) {
         return $(path)
+      } else if (path == 'body') {
+        return $(document.body)
       } else if (this.el) {
         return (path == '' || path == '.') ? this.el : this.el.find(path)
       } else {
