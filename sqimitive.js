@@ -984,7 +984,7 @@
       }
 
       this[event] = this.firer(event)
-      this[event]._wrapHandler = true
+      this[event]._wrapHandler = event
     },
 
     // Registers event object in index objects so that this handler can be
@@ -1061,15 +1061,15 @@
           list.length || this._eventsByCx.splice(i, 1)
         })
 
-        var index = (this._events[eobj.event] || []).indexOf(eobj)
+        var handlers = this._events[eobj.event] || []
+        var index = handlers.indexOf(eobj)
         if (index >= 0) {
           var args = [index, 1]
+            .concat(_.filter(eobj.supList || [], function (eobj) {
+              return eobj.func !== Core.stub
+            }))
 
-          _.each(eobj.supList, function (eobj) {
-            eobj.func === Core.stub || args.push(eobj)
-          })
-
-          Array.prototype.splice.apply(this._events[eobj.event], args)
+          handlers.splice.apply(handlers, args)
         }
       }
     },
