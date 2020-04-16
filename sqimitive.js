@@ -88,6 +88,10 @@
 
   var Sqimitive = {
     version: '1.1',
+    // Store reference to the utility library in use (particularly when using
+    // modular frameworks so that it's possible to access _() by requiring
+    // Sqimitive alone).
+    _: _,
   }
 
   /***
@@ -1602,6 +1606,11 @@
     //? at(-1)        //=> Sqimitive - identical to last()
     at: function (index) {
       return this.slice(index, 1)[0]
+    },
+
+    // Shorthand to _(sqim.slice()).
+    _: function () {
+      return _(this.slice())
     },
 
     // Similar to unnest() but before unnesting removes this.el from its
