@@ -187,6 +187,16 @@
 
       arguments[0] && child.mixIn(arguments[0])
 
+      // String class path is relative to the base class; instead of searching
+      // all prototypes to find where this property was introduced (without this
+      // all children will reference to them as the base class), we "fixate"
+      // it when declaring the class.
+      // Done here, not in mixIn(), to avoid questions like "is the string,
+      // if given by a mix-in, relative to the mix-in or the target class?".
+      if (typeof child.prototype._childClass == 'string') {
+        child.prototype._childClass = [child, child.prototype._childClass]
+      }
+
       return child
     },
 
@@ -1111,8 +1121,15 @@
     //
     // Ensures _children contains instances of the specified class as long as
     // nest() is used and this property isn't changed on runtime. Is meant to
-    // be a sub/class of Sqimitive (this is not checked though)
-    _childClass: Sqimitive,
+    // be a sub/class of Sqimitive (this is not checked though). Set to
+    // Object to essentially disable the check.
+    //
+    // If an array or string, init() replaces by the class on this path:
+    // [BaseObj, 'Path.To.Class'] or just 'Path.To.Class' (inside this' static
+    // properties). Empty string stops searching (so _childClass of '' maps to
+    // this). Errors if none found. Useful for "forward type declaration" where
+    // the children class is defined after the collection.
+    _childClass: null,
 
     // ** Can be set upon declaration and runtime (affects only new children).
     //
@@ -1221,6 +1238,17 @@
 
       if (this.el && !this.el.length) {
         throw new TypeError('init: Empty el')
+      }
+
+      if (_.isArray(this._childClass)) {
+        var path = this._childClass[1].split(/\./g)
+        this._childClass = this._childClass[0]
+        while (path[0]) {
+          this._childClass = this._childClass[path.shift()]
+        }
+        if (!this._childClass) {
+          throw new ReferenceError('init: _childClass by path not found')
+        }
       }
 
       for (var name in opt) {
