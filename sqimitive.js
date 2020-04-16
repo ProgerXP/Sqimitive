@@ -75,7 +75,12 @@
     if (protoProps && hasOwn.call(protoProps, 'constructor')) {
       child = protoProps.constructor
     } else {
-      child = function () { return parent.apply(this, arguments) }
+      // It seems at least Chrome always shows the original function's value
+      // even with defineProperty() on `'name. It'd be possible to create a
+      // function without eval() or Function() but only in ES6:
+      //   child = {[name]: function ...}[name]
+      //child = Function(name.replace(/\W+/g, '_'), 'return parent.apply(this, arguments)')
+      child = function Sqimitive() { return parent.apply(this, arguments) }
     }
 
     var Surrogate = function () { this.constructor = child }
@@ -315,8 +320,9 @@
     },
 
     // Empty function. Used in multiple places to determine if a method
-    // or event handler is actually implemented.
-    stub: function () { /* Sqimitive.stub */ },
+    // or event handler is actually implemented or it can be safely discarded
+    // (overridden).
+    stub: function Sqimitive_stub() { },
 
     // Generates and returns a number starting from 1 that is guaranteed to be
     // unique among all calls to unique() with the same prefix during this
@@ -1188,7 +1194,9 @@
     // Calls init method/event. Each opt member is given to this.set() to
     // populate this._opt after construction. opt can contain el to override
     // default value of this.el property (see _opt).
-    constructor: function (opt) {
+    //
+    // Giving this function a name so that it's visible in the debugger.
+    constructor: function Sqimitive_Base(opt) {
       Sqimitive.Base.__super__.constructor.apply(this, arguments)
       this.init.apply(this, arguments)
       this.postInit.apply(this, arguments)
