@@ -98,10 +98,25 @@
     // Guaranteed to be a valid identifier of only Latin symbols, i.e. begin with a letter followed by 0 or more letters, digits and underscores.
     this._cid = 'p' + Core.unique('p')
 
-    for (var prop in this) {
-      if (typeof this[prop] == 'object' && !(prop in this.constructor._shareProps)) {
-        this[prop] = Core.deepClone(this[prop])
+    // Typically it's like: var MySqim = Sqimitive.extend({...});
+    // MySqim._shareProps.push(...); - i.e. _shareProps is updated later.
+    // We'd either have to explicitly call some kind of refreshCopyProps()
+    // after complete declaration or do that in the constructor, which is
+    // more convenient and not much slower (it's done only once per class).
+    var copy = this.constructor._copyProps
+
+    if (!copy) {
+      copy = this.constructor._copyProps = []
+      for (var prop in this) {
+        if (typeof this[prop] == 'object' && this[prop] != null &&
+            this.constructor._shareProps.indexOf(prop) == -1) {
+          copy.push(prop)
+        }
       }
+    }
+
+    for (var i = 0; i < copy.length; i++) {
+      this[copy[i]] = Core.deepClone(this[copy[i]])
     }
   }
 
@@ -121,6 +136,12 @@
     //
     // List of names of {object} properties which are not cloned upon construction.
     _shareProps: [],
+
+    // An internal field - list of prototype (instance) properties being
+    // copied in the constructor. Running for..in each time is extremely
+    // expensives (10X). Maintained automatically by extend()/mixIn().
+    // Null causes constructor to collect the props.
+    _copyProps: null,
 
     // function extend( [name,] [protoProps [, staticProps]] )
     //
