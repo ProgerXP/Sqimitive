@@ -1497,6 +1497,25 @@
       }
     },
 
+    // function ( [key,] sqim [, options] )
+    //
+    // Convenient wrapper for nestEx(), which returns sqim and has several
+    // (shorter) call forms. key is a string or number, sqim and options - objects.
+    //
+    // Do not hook this method - it may be bypassed; hook nestEx().
+    nest: function (key, sqim, options) {
+      if (key instanceof Object) {   // function ( sqim [, options] )
+        Array.prototype.splice.call(arguments, 0, 0, this._defaultKey(key))
+      }
+      options = _.extend({}, arguments[2] || {}, {
+        key:    arguments[0],
+        child:  arguments[1],
+      })
+      return this.nestEx(options).child
+    },
+
+    // options must have at least child (a Sqimitive) and key (its key in _children).
+    //
     // Adds new contained Sqimitive instance to self. Unless this._owning is
     // false, one Sqimitive can only have one parent or none thus forming a
     // bi-directional tree. If key is omitted _defaultKey() is called to determine
@@ -1506,48 +1525,57 @@
     // through by assignChildren()).
     //
     // Errors if trying to nest object of wrong class (not _childClass).
-    // Unnests sqim from its former parent, if any. Forwards its events
-    // according to _childEvents. Finally, calls sqim.owned() to notify new
-    // child of the parent change.
+    // Unnests sqim from its former parent, if any. Calls
+    // this.unnested() if the key was previously occupied. Forwards
+    // events of sqim according to _childEvents. Finally, calls sqim.owned()
+    // to notify new child of the parent change.
     //
-    // Returns sqim. Does nothing if it's already contained in this instance
-    // under the same key (re-nests otherwise).
-    nest: function (key, sqim, options) {
-      if (arguments.length == 1) {
-        sqim = key
-        key = this._defaultKey(sqim)
-      }
-
-      if (key == null || typeof key == 'object') {
-        throw new TypeError('nest: bad key given')
-      }
-
-      options || (options = {})
-
-      // Object keys are always strings; _parentKey mismatching actual key will
-      // break indexOf() if it's used on an array like _.keys(this._children()).
-      key += ''
-      var prev = this._children[key]
+    // Does nothing if sqim is already contained in this instance
+    // under the same key (changed is false, previous == child). Else changed is true, and if
+    // this._owning is set sqim is removed from its current parent (which
+    // may be this) beforehand; if non-_owning, sqim is always added and may
+    // even duplicate in _children - to avoid this hook '=nestEx' and call
+    // sup only if !this.contains(sqim).
+    //
+    // When hooking nestEx() to listen for changes (newly added sqimitives),
+    // check changed to avoid triggering your update logic if
+    // sqim was already nested.
+    //
+    // Mutates and returns options: key is converted to a string, previous
+    // (Sqimitive) and changed (bool) added. Old length is previous ?
+    // this.length : this.length - 1.
+    nestEx: function (options) {
+      var sqim = options.child
 
       if (!(sqim instanceof this._childClass)) {
-        throw new TypeError('nest: Nesting Sqimitive of wrong class')
-      } else if (prev !== sqim) {
+        throw new TypeError('nestEx: Nesting Sqimitive of wrong class')
+      } else if (typeof options.key == 'object') {    // object or null.
+        throw new TypeError('nestEx: Bad key given')
+      }
+
+      // Object keys are always strings; _parentKey mismatching actual key will
+      // break indexOf() if it's used on an array like _.keys(this._children).
+      var key = options.key += ''
+      var prev = options.previous = this._children[key]
+
+      if (options.changed = prev !== sqim) {
         if (this._owning) {
           prev && prev.unnest()
           sqim.unnest()
           this._children[key] = sqim
           sqim._parent = this
           sqim._parentKey = key
+          ++this.length
         } else {
           this._children[key] = sqim
+          prev ? this.unnested(prev) : ++this.length
         }
 
-        ++this.length
         this._forward('.', this._childEvents, sqim)
         this._owning && sqim.owned()
       }
 
-      return sqim
+      return options
     },
 
     // Is called when nest() wasn't given an explicit key to determine one.

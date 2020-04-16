@@ -89,7 +89,7 @@ App.Task = App.Base.extend({
   },
 
   // Equivalent to function (value) { return $.trim(value) } - ignores extra
-  // arguments normalize_OPT() are passed.
+  // arguments that normalize_OPT() functions are passed.
   normalize_caption: App.Base.masker($.trim, '.'),
   normalize_description: App.Base.masker($.trim, '.'),
 
@@ -119,9 +119,9 @@ App.Tasks = App.Base.extend({
   _childEvents: ['change'],
 
   events: {
-    '+nest': function (sqim) {
+    '+nestEx': function (res) {
       // attach() without arguments reads sqim.get('attachPath'), if set.
-      sqim.attach().render()
+      res.changed && res.child.attach().render()
     },
   },
 })
@@ -186,7 +186,7 @@ App.Document = App.Base.extend({
       // them all in one go by calling autoOff() without arguments.
       // Here we simply invoke render() whenever a task is added, removed
       // or its attribute changes (e.g. it's renamed).
-      this.autoOff(this.get('tasks'), {'nest, unnested, .change': 'render'})
+      this.autoOff(this.get('tasks'), {'nestEx, unnested, .change': 'render'})
 
       this.attach().render()
     },
