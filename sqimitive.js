@@ -562,20 +562,21 @@
     fire: function (funcs, args) {
       var res
 
+      // No funcs (not even an array) can be e.g. when calling change_XXX.
       if (funcs) {
-        args = arguments.length < 2 ? [] : Core.toArray(args)
+        if (!args) { args = [] }
 
         // Cloning function list because it might change from the outside
         // (e.g. when a handler is removed from the same event as it's being
         // fired; may happen when once() is used).
-        _.each(funcs.concat(), function (eobj) {
-          if ('args' in eobj && eobj.args != args.length) {
+        _.find(funcs.concat(), function (eobj) {
+          if (eobj.args != null && eobj.args != args.length) {
             var thisRes = eobj.sup ? eobj.sup(eobj.cx || this, args) : undefined
           } else {
             if (!eobj.sup && !eobj.res) {
               var thisArgs = args
             } else {
-              var thisArgs = args.slice()
+              var thisArgs = Array.prototype.slice.call(args)
               eobj.sup && thisArgs.unshift(eobj.sup)
               eobj.res && thisArgs.unshift(res)
             }
@@ -585,6 +586,15 @@
 
           if (eobj.ret && thisRes !== undefined) {
             res = thisRes
+          }
+
+          if (eobj.post) {
+            eobj.stop = false
+            // Attention: args may be an array-like object (often an
+            // Arguments), not a real array.
+            res = eobj.post(eobj, res, args)
+            // eobj could be modified by post, including unsetting post.
+            if (eobj.stop) { return true }
           }
         }, this)
       }
@@ -634,10 +644,11 @@
     // Format:    {event: [eventObj, eventObj, ...]
     // eventObj = {
     //    event: 'evtname', func: Function, [cx: obj|null]
-    //    [ args: int ]
+    //    args: int|null,
     //    [ id: 'evtname/123' ]
     //    [ supList: Array, sup: Function|undefined - but not null ]
     //    [ res: true, ] [ ret: true ]
+    //    [ post: Function ]
     // }
     _events: {},
 
@@ -928,10 +939,14 @@
     fuse: function (event, func, cx) {
       func = Core.expandFunc(func)
       event = Core.parseEvent(event)
-      var list = this._events[event.name] || (this._events[event.name] = [])
+      // Don't just _events[name] or name in _events because if name is toString
+      // or other Object.prototype member, this will fail (array won't be
+      // created since 'toString' in _events).
+      var list = hasOwn.call(this._events, event.name)
+        ? this._events[event.name] : (this._events[event.name] = [])
       this._wrapHandler(event.name)
       var eobj = {func: func, cx: cx, event: event.name}
-      event.args && (eobj.args = event.args.length)
+      eobj.args = event.args.length || null
 
       if (event.prefix == '+') {
         eobj.res = eobj.ret = true
@@ -942,11 +957,12 @@
         // function (this, arguments)
         //    sup() itself is removed if present as arguments[0].
         var sup = eobj.sup = function (self, args) {
-          if (_.isArguments(args) && args[0] === sup) {
+          if (Object.prototype.toString.call(args) == '[object Arguments]' &&
+              args[0] === sup) {
             args = Array.prototype.slice.call(args, 1)
           }
 
-          return Core.fire.call(self, eobj.supList, args)
+          return self.constructor.fire.call(self, eobj.supList, args)
         }
       }
 
