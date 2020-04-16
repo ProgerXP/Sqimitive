@@ -3,27 +3,20 @@
   http://squizzle.me/js/sqimitive | Public domain/Unlicense
 */
 
-/***
-  Needs Underscore.js and, optionally, jQuery/Zepto for $().
+/*
+  Mandatory dependency, one of:
+  - NoDash (http://squizzle.me/js/nodash)
+  - underscorejs.org
+  - lodash.com
 
-  Fields with names starting with underscores are protected and intended
-  for use only inside that class definition and its subclasses.
- ***
-
-  var Task = Sqimitive.Sqimitive.extend({
-    el:       {tag: 'li'},
-    _opt:     {caption: '', done: false, editing: false, attachPath: '.'},
-    events:   {change: 'render'},
-    elEvents: {dblclick: function () { this.set('editing', true) }},
-  })
-
-  (new Sqimitive.Sqimitive({el: '#tasks'}))
-    .nest( new Task({caption: 'Foo'}) )
-
- ***/
+  Fields with names starting with '_' are protected and intended
+  for use only inside that class' definition and its subclasses.
+*/
 
 ;(function (factory) {
-  var deps = {underscore: '_', jquery: '$'}
+  // nodash can be replaced by other supported library.
+  // requirejs.config({map: {sqimitive: {nodash: 'lodash'}}});
+  var deps = {nodash: '_'}
   var me = 'Sqimitive'
   // --- Universal Module (squizzle.me) - CommonJS - AMD - window --- IE9+ ---
 
@@ -58,7 +51,7 @@
     if (me.length > 1) { root = by(root, me.shift()) }
     root[me[0]] = factory.apply(this, deps)
   }
-}).call(this, function (_, $) {
+}).call(this, function (_) {
   "use strict";
 
   var hasOwn = Object.prototype.hasOwnProperty
@@ -617,16 +610,6 @@
         return value
       }
     },
-
-    // Determines if obj is a $ collection (like jQuery or Zepto).
-    //
-    //? is$(document.rootElement)   //=> false
-    //? is$($('html'))    //=> true
-    //? is$($('<p>'))     //=> true
-    //? is$(null)         //=> false
-    is$: function (obj) {
-      return obj instanceof $ || ($.zepto && $.zepto.isZ(obj))
-    },
   })
 
   // Instance fields of Sqimitive.Core.
@@ -1023,7 +1006,7 @@
     // value. When unregistering a wrapping handler (=event) its underlying
     // handlers are restored - put in place of the wrapper in the event chain.
     //
-    // $key can be given event name (string), a handler ID (string), context
+    // key can be given event name (string), a handler ID (string), context
     // (object) or an array of any of these values.
     //
     // key = 'evtname' | 'id/123' | {cx} | [key, key, ...]
@@ -1196,25 +1179,17 @@
     //    // the first argument; option key is retrieved from the returned array.
     _respToOpt: {},
 
-    // ** Can be set upon declaration and runtime (only to a valid $() object).
-    //
-    // Holds a DOM node assigned to this object or null. If set to false - no
-    // element is created (this.el will be null) - useful for data structures
-    // aka Models, otherwise is an object of HTML attributes plus the following
-    // special keys:
-    // * tag - string, tag name like 'li'
-    // * className - the same as class (CSS class) to work around the reserved word
-    //
-    // After inherited constructor has ran el is always DOM node wrapped in $()
-    // or null. Not advised to set it directly, treat as read-only.
-    el: {tag: 'div', className: ''},
+    // ** Can be set upon declaration and runtime.
+    el: false,
 
     // ** Can be set upon declaration and runtime.
     //
     // Lists automatically bound DOM event listeners for el. Format is inherited
-    // from Backbone and is an object with keys of click[ .sel .ector] form and
+    // from Backbone and is an object with keys of click[.ns][ .sel #ector] form and
     // values being functions (closures) or strings (method names, resolved when
-    // event occurs so they can be defined later).
+    // event occurs so they can be defined later). The '.ns' part is ignored
+    // but can be used to create unique keys; by convention, the class'
+    // handlers don't have ns while mix-ins do.
     //
     // Listeners are automatically rebound by attach(). See also attachPath.
     // elEvents is listed in _mergeProps so subclasses defining it add to their
@@ -1245,23 +1220,6 @@
     // the constructor, if any. DOM event listeners (elEvents) are bound
     // on render() by attach(), if attachPath option is set.
     init: function (opt) {
-      opt && opt.el && (this.el = opt.el)
-
-      if (this.el && !Core.is$(this.el)) {
-        if (_.isElement(this.el) || typeof this.el == 'string') {
-          this.el = $(this.el)
-        } else {
-          var attrs = _.omit(this.el, 'tag', 'className')
-          attrs['class'] = this.el.className || ''
-          this.el = $( document.createElement(this.el.tag || 'div') )
-            .attr(attrs).data('sqimitive', this)
-        }
-      }
-
-      if (this.el && !this.el.length) {
-        throw new TypeError('init: Empty el')
-      }
-
       if (_.isArray(this._childClass)) {
         var path = this._childClass[1].split(/\./g)
         this._childClass = this._childClass[0]
@@ -1294,39 +1252,7 @@
       return this
     },
 
-    // Appends el to parent (DOM selector or node). If no argument is given
-    // uses attachPath option (if present) to determine the parent. If parent was
-    // changed recursively calls attach() on all children of self to rebind their
-    // DOM listeners (doesn't happen if no parent was found or this.el is already
-    // direct child of the found parent node so performance penalty of subsequent
-    // attach() calls is small). Ultimately, binds event listeners defined in
-    // elEvents.
     attach: function (parent) {
-      parent = arguments.length ? $(parent) : []
-
-      if (!parent[0]) {
-        var path = this.get('attachPath')
-        path && (parent = this._parent ? this._parent.$(path) : $(path))
-      }
-
-      if (parent[0] && parent[0] !== this.el[0].parentNode) {
-        parent.append(this.el)
-        // Notifying children of the mount node change to rebind their DOM listeners.
-        this.invoke('attach')
-      }
-
-      if (this.el) {
-        var namespace = '.sqim-' + this._cid
-        this.el.off(namespace)
-
-        _.each(this.elEvents, function (func, key) {
-          func = Core.expandFunc(func, this)
-          key = key.match(/^\s*(\S+)( .*)?$/)
-          key[1] += namespace
-          key[2] ? this.el.on(key[1], key[2], func) : this.el.on(key[1], func)
-        }, this)
-      }
-
       return this
     },
 
@@ -1755,7 +1681,6 @@
     // on-removal actions like removing event handlers - you can do
     // this.sink('remove').
     remove: function () {
-      this.el && this.el.remove()
       return this.unnest()
     },
 
@@ -1946,29 +1871,6 @@
       fireSelf && this[event] && this[event].apply(this, args)
       this.invoke('sink', event, args, true)
       return this
-    },
-
-    // Similar to this.el.find(path) but returns el if path is empty or is a
-    // dot (.). Special value 'body' always returns document.body.
-    // If this.el is null always returns an empty jQuery collection.
-    // If path is a jQuery object or a DOM node - returns $(path) (note that
-    // it may be outside of this.el or have length == 0).
-    //
-    //? this.$()                //=> $(this.el)
-    //? this.$('.')             //=> $(this.el)
-    //? this.$('a[href]')       //=> $([A, A, ...])
-    //? this.$(document.body)   //=> $('body')
-    //? this.$('body')          //=> $('body')
-    $: function (path) {
-      if (Core.is$(path) || _.isElement(path)) {
-        return $(path)
-      } else if (path == 'body') {
-        return $(document.body)
-      } else if (this.el) {
-        return (path == '' || path == '.') ? this.el : this.el.find(path)
-      } else {
-        return $()
-      }
     },
   })
 

@@ -5,7 +5,7 @@ var App = window.App = {}
 
 // Base Sqimitive class with our app-specific fields that you will get during
 // development - it's a promise. This simple app have none though.
-App.Base = window.Sqimitive.Sqimitive.extend()
+App.Base = window.Sqimitive.jQuery.extend()
 
 /***
   Single Task - objects to be nested in App.Tasks

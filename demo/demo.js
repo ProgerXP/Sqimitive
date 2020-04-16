@@ -1,4 +1,4 @@
-;new (Sqimitive.Sqimitive.extend({
+;new (Sqimitive.jQuery.extend({
   el: {tag: 'a'},
   _contents: null,
   _source: null,
