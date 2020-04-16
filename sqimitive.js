@@ -1633,25 +1633,17 @@
     //? collection.unlist(collection.nested('foo'))   // identical to above
     //? collection.unlist(child)    //=> Sqimitive (child) or undefined
     unlist: function (key) {
-      var sqim
-
-      if (typeof key == 'object') {
-        for (var k in this._children) {
-          if (this._children[k] === key) {
-            sqim = key
-            key = k
-            break
-          }
-        }
-      } else {
-        sqim = this._children[key + '']
+      if (key instanceof Object) {
+        key = this.findKey(key)
       }
+
+      var sqim = this._children[key += '']
 
       if (sqim) {
         if (this._owning) {
           sqim.remove()
         } else {
-          delete this._children[key + '']
+          delete this._children[key]
           --this.length
           this.unnested(sqim)
         }
@@ -1711,10 +1703,8 @@
         // Return undefined - neither keys nor children can be null.
       } else if (!(key instanceof Object)) {
         return this._children[key + '']
-      } else {
-        for (var k in this._children) {
-          if (this._children[k] === key) { return key }
-        }
+      } else if (this.findKey(key) != null) {
+        return key
       }
     },
 
@@ -1728,6 +1718,21 @@
     slice: function (start, length) {
       length > 0 && (arguments[1] += start)
       return Array.prototype.slice.apply(_.values(this._children), arguments)
+    },
+
+    // function (sqim)
+    // function (func[, cx])
+    //
+    // func = function (sqim, key). Compatible with Underscore, etc.
+    findKey: function (func, cx) {
+      var eq = func instanceof Object
+      for (var key in this._children) {
+        if (eq
+            ? (this._children[key] == func)
+            : func.call(cx, this._children[key], key, this._children)) {
+          return key
+        }
+      }
     },
 
     // Similar to slice() but returns individual children, not an array.
