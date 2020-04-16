@@ -1,9 +1,6 @@
 /*!
-  Sqimitive.js - The Frontend Primitive
-  Lightweight library to build concrete applications
-  Part of Squizzle.me Toolkit  -  http://squizzle.me
-  In public domain | by Proger_XP | http://proger.me
-  $Id$
+  Sqimitive.js - a JavaScript primitive
+  http://squizzle.me/js/sqimitive | Public domain/Unlicense
 */
 
 /***
