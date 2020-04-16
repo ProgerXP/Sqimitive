@@ -91,7 +91,7 @@ App.Task = App.Base.extend({
   // Equivalent to function (value) { return $.trim(value) } - ignores extra
   // arguments normalize_OPT() are passed.
   normalize_caption: App.Base.masker($.trim, '.'),
-  normalize_desc: App.Base.masker($.trim, '.'),
+  normalize_description: App.Base.masker($.trim, '.'),
 
   copy: function (parent) {
     parent = parent || this._parent
