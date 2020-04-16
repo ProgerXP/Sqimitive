@@ -357,7 +357,7 @@
     picker: function (prop, args) {
       args = Core.toArray(args)
       return function (obj) {
-        if (_.isObject(obj) && prop in obj) {
+        if (obj instanceof Object && prop in obj) {
           return typeof obj[prop] == 'function'
             ? obj[prop].apply(obj, args)
             : obj[prop]
@@ -599,9 +599,9 @@
     //? toArray([5, 'foo'])   //=> [5, 'foo']
     //? toArray(5)            //=> [5]
     toArray: function (value) {
-      if (_.isArguments(value)) {
+      if (Object.prototype.toString.call(value) == '[object Arguments]') {
         return Array.prototype.slice.call(value)
-      } else if (!_.isArray(value)) {
+      } else if (!Array.isArray(value)) {
         return [value]
       } else {
         return value
@@ -710,7 +710,7 @@
     },
 
     // Triggers an event giving args as parameters to all registered listeners.
-    // First fires a special all event and if its return value was anything but
+    // First fires a special 'all' event and if its return value was anything but
     // undefined - returns it bypassing handlers of event entirely. all gets event
     // put in front of other args (e.g. ['eventName', 'arg1', 2, ...]). It's
     // safe to add/remove new listeners during the event - they will be in effect
@@ -824,7 +824,7 @@
     //? on({'set___, nest': 'render'})
     //? on('change', this.render, this)
     on: function (event, func, cx) {
-      if (typeof event == 'object') {
+      if (event instanceof Object) {
         for (var name in event) {
           var names = name.split(', ')
           for (var i = 0, l = names.length; i < l; ++i) {
@@ -1017,14 +1017,14 @@
       if (_.isArray(key)) {
         // List of identifiers of some kind.
         _.each(key, this.off, this)
-      } else if (typeof key == 'object') {
+      } else if (key instanceof Object) {
         // By context.
         this._cxHandlers(key, function (list, i) {
           _.each(this._eventsByCx.splice(i, 1)[0].slice(1), this._unregHandler, this)
         })
       } else if (key.indexOf('/') == -1) {
         // By event name.
-        _.each(this._events[key], this._unregHandler, this)
+        _.each(this._events[key] || [], this._unregHandler, this)
       } else {
         // By handler ID.
         this._unregHandler( this._eventsByID[key] )
@@ -1038,7 +1038,7 @@
     _unregHandler: function (eobj) {
       if (eobj && eobj.id) {
         delete this._eventsByID[eobj.id]
-        eobj.func = Core.stub
+        eobj.func = Core.stub   // in case it's used in some sup list.
 
         this._cxHandlers(eobj.cx, function (list, i) {
           list.splice(list.indexOf(eobj), 1)
@@ -1077,8 +1077,8 @@
     // * el: {tag: 'p', ...} (only when given to the constructor)
     _opt: {},
 
-    // Not meant for tampering. Used internally to reverse set()-produced events.
-    // See _fireSet() for explanation.
+    // Not meant for tampering with. Used internally to reverse set()-produced
+    // events. See _fireSet() for explanation.
     _firingSet: null,
 
     // References a sqimitive that owns this object. If there's none is set to
@@ -1100,8 +1100,8 @@
     // of the parent's node).
     //
     // It's recommended to access children using nested() and other methods
-    // instead of manipulating _children directly. Both _owning sqimitives and
-    // not list their children here.
+    // instead of manipulating _children directly. _owning and non-_owning
+    // sqimitives list their children here.
     //
     // Format:    {key: Sqimitive}
     _children: {},
@@ -1216,6 +1216,10 @@
     //
     // Giving this function a name so that it's visible in the debugger.
     constructor: function Sqimitive_Base(opt) {
+      // Ensuring the argument is always an object removes the need for (opt && opt.foo) and allows init/postInit hooks to propagate changes in user-given opt to other handlers.
+      // Mere arguments[0] = {} won't work because if arguments.length == 0,
+      // this won't update length and so apply() will assume arguments is still empty (0) even though index 0 has been set.
+      opt || Array.prototype.splice.call(arguments, 0, 1, {})
       Sqimitive.Base.__super__.constructor.apply(this, arguments)
       this.init.apply(this, arguments)
       this.postInit.apply(this, arguments)
@@ -1254,6 +1258,8 @@
       }
 
       for (var name in opt) {
+        // By convention, el is given as options to replace the default value of
+        // this class, but el isn't a real option.
         name == 'el' || this.set(name, opt[name])
       }
     },
@@ -1361,7 +1367,7 @@
     //? get()       //=> {opt: 'value', key: 123, ...} (shallow copy)
     //? get('key')  //=> 123
     get: function (opt) {
-      return arguments.length ? this._opt[opt] : _.clone(this._opt)
+      return arguments.length ? this._opt[opt] : _.extend({}, this._opt)
     },
 
     // Same as ifSet() but returns 'this' instead of true/false indicating if
@@ -1369,7 +1375,7 @@
     // set (and so change events were fired).
     //
     // Note: if you are overriding a "setter" you should override ifSet instead of
-    // set() which calls the foremer.
+    // set() which calls the former.
     //
     //? set('key', 'foo')
     //? set('key', 'foo', true)   // fires 'change_key', then 'change'.
@@ -1383,6 +1389,9 @@
     // throw an error on wrong format too. options is an object with contents
     // originally given to set() or ifSet(). There is no global normalization
     // function but you can override ifSet() for this purpose.
+    //
+    // Remember: when defined in events, return value is ignored unless '=' or
+    // '+' prefixes are used: '+normalize_my'.
     //
     //normalize_OPT: function (value, options) { return _.trim(value) },
 
@@ -1401,14 +1410,14 @@
 
     // Writes one option (this._opt). First calls normalize_OPT on value, then
     // fires change and change_OPT events if the normalized value was different
-    // (not _.isEqual()) or if options.forceFire was set. Returns true if events
+    // (as reported by _.isEqual()) or if options.forceFire was set. Returns true if events
     // were fired (value differs or options.forceFire given).
     //
     // options can be used to propagate custom data to event listeners on
     // normalize_OPT(), change_OPT() and change().
     //
-    // It is safe to write more options from within <b>ifSet()</b>, normalize or
-    // change handlers - they are written immediately but consequent normalize or
+    // It is safe to write more options from within ifSet(), normalize or
+    // change handlers - they are written immediately but subsequent normalize and
     // change events are deferred in FIFO fashion (first set - first fired).
     //
     //? ifSet('key', 123)         //=> false
@@ -1556,12 +1565,11 @@
     //  o._forward('.', ['render'], p)
     //    // now p's .render will get called, with o as the first argument.
     _forward: function (prefix, events, sqim) {
-      _.each([].concat(events), function (event) {
+      _.each(events.concat(), function (event) {
         var name = prefix + event
         sqim.on(event, function () {
-          var args = Array.prototype.slice.call(arguments)
-          args.unshift(sqim)
-          return this.fire(name, args)
+          Array.prototype.unshift.call(arguments, sqim)
+          return this.fire(name, arguments)
         }, this)
       }, this)
 
@@ -1656,8 +1664,8 @@
       if (!arguments.length) {
         return _.extend({}, this._children)
       } else if (key == null) {
-        // return undefined
-      } else if (typeof key != 'object') {
+        // Return undefined - neither keys nor children can be null.
+      } else if (!(key instanceof Object)) {
         return this._children[key + '']
       } else {
         for (var k in this._children) {
@@ -1841,11 +1849,15 @@
 
     // Sends an event with arguments upstream - triggers it on this._parent,
     // then on that parent's parent and so on. If fireSelf is true fires
-    // this event on this instance beforehand (by default it isn't).
-    // Since it calls methods, not necessary events, you you "recursively"
+    // this event on this instance beforehand (by default it doesn't).
+    // Since it calls methods, not necessary events, you can "recursively"
     // call methods as well.
     // This is very much like DOM's event bubbling except that it happens
     // on sqimitives, not their el's.
+    //
+    // While should not be abused because it makes the execution flow less
+    // obvious, it's indispensible for propagating generic signals like errors
+    // to whoever is on top.
     //
     //? bubble('render', [], true)
     //    // causes self and all parent sqimitives to be rendered.
@@ -1859,7 +1871,7 @@
     // all nested sqimitives of those sqimitives, to their children and so
     // on. If fireSelf is true also fires this event on this instance
     // beforehand. Note that it might get quite intense with heavy nesting.
-    // Since it calls methods, not necessary events, you you "recursively"
+    // Since it calls methods, not necessary events, you can "recursively"
     // call methods as well.
     //
     //? sink('render', []. true)
