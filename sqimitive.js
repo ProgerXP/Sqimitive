@@ -305,7 +305,7 @@
     },
 
     // Returns a function that expects one argument (an object) that, when called,
-    // checks if given object has prop property and if it does – returns its
+    // checks if given object has prop property and if it does - returns its
     // value (if it's a method then it's called with args (array) and the result
     // returned), otherwise returns undefined (for non-objects or objects with
     // no prop).
@@ -499,7 +499,7 @@
     //? parseEvent('foo.bar')         //=> ['', 'foo.bar', '']
     parseEvent: function (str) {
       var match = str.match(/^([+\-=]?)([\w\d.:+\-=]+?)(_*)$/)
-      if (!match) { throw 'Bad event name: ' + str }
+      if (!match) { throw new SyntaxError('Bad event name: ' + str) }
       return {prefix: match[1], name: match[2], args: match[3]}
     },
 
@@ -668,7 +668,7 @@
 
     // Triggers an event giving args as parameters to all registered listeners.
     // First fires a special all event and if its return value was anything but
-    // undefined – returns it bypassing handlers of event entirely. all gets event
+    // undefined - returns it bypassing handlers of event entirely. all gets event
     // put in front of other args (e.g. ['eventName', 'arg1', 2, ...]). It's
     // safe to add/remove new listeners during the event - they will be in effect
     // starting with the next fire() call (even if it's nested).
@@ -792,7 +792,7 @@
       } else if (arguments.length >= 2) {
         return this._regHandler( this.fuse(event, func, cx) )
       } else {
-        throw 'on: Bad arguments'
+        throw new TypeError('on: Bad arguments')
       }
     },
 
@@ -818,7 +818,7 @@
 
         return id
       } else {
-        throw 'once: Bad arguments'
+        throw new TypeError('once: Bad arguments')
       }
     },
 
@@ -829,7 +829,7 @@
     // when this is about to be destroyed so that events on other objects to which
     // it had any connections won't trigger its old stale handlers. Returns sqim.
     //
-    // events, if given, is an object – event map where keys are event references
+    // events, if given, is an object - event map where keys are event references
     // (comma notation supported) and values are their handlers. cx is the context
     // in which handlers will be called (defaults to this, the object on which
     // autoOff() was called). cx can be explicitly set to null to keep sqim's
@@ -957,7 +957,7 @@
       }
     },
 
-    // Undoes the effect of on() – removes event listener(s) unless they were
+    // Undoes the effect of on() - removes event listener(s) unless they were
     // fuse'd (permanent). Returns this. Does nothing if no matching  events,
     // contexts or handlers were found. off() is safe to be called multiple
     // times - it will do nothing if there are no registered handlers for given
@@ -969,7 +969,7 @@
     //
     // key = 'evtname' | 'id/123' | {cx} | [key, key, ...]
     off: function (key) {
-      if (arguments.length < 1) { throw 'off: Bad arguments' }
+      if (arguments.length < 1) { throw new TypeError('off: Bad arguments') }
 
       if (_.isArray(key)) {
         // List of identifiers of some kind.
@@ -1187,7 +1187,7 @@
       }
 
       if (this.el && !this.el.length) {
-        throw 'init: Empty el'
+        throw new TypeError('init: Empty el')
       }
 
       for (var name in opt) {
@@ -1390,7 +1390,7 @@
       }
 
       if (key == null || typeof key == 'object') {
-        throw 'nest: bad key given'
+        throw new TypeError('nest: bad key given')
       }
 
       options || (options = {})
@@ -1401,7 +1401,7 @@
       var prev = this._children[key]
 
       if (!(sqim instanceof this._childClass)) {
-        throw 'nest: Nesting Sqimitive of wrong class'
+        throw new TypeError('nest: Nesting Sqimitive of wrong class')
       } else if (prev !== sqim) {
         if (this._owning) {
           prev && prev.unnest()
@@ -1597,7 +1597,7 @@
     // updating existing nested sqimitives, adding new and removing unlisted
     // ones. New sqimitives are created as _childClass.
     //
-    // If resp is an object with data key – uses its value (Python's Flask
+    // If resp is an object with data key - uses its value (Python's Flask
     // wraps array response into an object to prevent a JS attack). If resp
     // (or resp.data) were not arrays uses _.values() to turn it into one
     // (ignoring keys).
@@ -1768,7 +1768,7 @@
     // Similar to this.el.find(path) but returns el if path is empty or is a
     // dot (.). Special value 'body' always returns document.body.
     // If this.el is null always returns an empty jQuery collection.
-    // If path is a jQuery object or a DOM node – returns $(path) (note that
+    // If path is a jQuery object or a DOM node - returns $(path) (note that
     // it may be outside of this.el or have length == 0).
     //
     //? this.$()                //=> $(this.el)
