@@ -29,14 +29,14 @@
 ;(function (root, init) {
   if (typeof define == 'function' && define.amd) {
     define(['exports', 'underscore', 'jquery'], function (exports, _, $) {
-      init(root, exports, _, $)
+      init(exports, _, $)
     })
   } else if (typeof exports !== 'undefined') {
-    init(root, exports, require('underscore'), require('jquery'))
+    init(exports, require('underscore'), require('jquery'))
   } else {
-    init(root, root.Sqimitive || {}, root._, root.$)
+    root.Sqimitive = _.extend(root.Sqimitive || {}, init(root._, root.$))
   }
-})(this, function (root, global, _, $) {
+})(this, function (_, $) {
   // Subclass extension method, taken from Backbone.
   var extend = function (protoProps, staticProps) {
     var parent = this
@@ -59,9 +59,7 @@
     return child
   }
 
-  // Make Sqimitive available as window.Sqimitive too even when used with
-  // required.js or other, just in case.
-  root.Sqimitive = global
+  var global = {}
   global.version = '1.0'
 
   /***
@@ -1620,4 +1618,6 @@
       }
     }
   })
+
+  return global
 });
