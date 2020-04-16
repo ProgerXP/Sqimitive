@@ -59,36 +59,43 @@
     root[me[0]] = factory.apply(this, deps)
   }
 }).call(this, function (_, $) {
+  "use strict";
+
+  var hasOwn = Object.prototype.hasOwnProperty
+
   // Subclass extension method, taken from Backbone.
-  var extend = function (protoProps, staticProps) {
-    var parent = this
+  //
+  // protoProps - only 'constructor' (if present) is used. Assign
+  // instance/static fields manually later (note that static fields are not
+  // inherited with prototype, so you need to copy them from parent
+  // explicitly).
+  function extend(name, parent, protoProps) {
     var child
 
-    if (protoProps && _.has(protoProps, 'constructor')) {
+    if (protoProps && hasOwn.call(protoProps, 'constructor')) {
       child = protoProps.constructor
     } else {
       child = function () { return parent.apply(this, arguments) }
     }
 
-    _.extend(child, parent, staticProps)
-
     var Surrogate = function () { this.constructor = child }
     Surrogate.prototype = parent.prototype
     child.prototype = new Surrogate
 
-    protoProps && _.extend(child.prototype, protoProps)
     child.__super__ = parent.prototype
     return child
   }
 
-  var global = {}
-  global.version = '1.0'
+  var Sqimitive = {
+    version: '1.1',
+  }
 
   /***
     Sqimitive.Core - Basic Event/Inheritance
    ***/
 
-  var Core = global.Core = function () {
+  var Core = Sqimitive.Core = function () {
+    // Guaranteed to be a valid identifier of only Latin symbols, i.e. begin with a letter followed by 0 or more letters, digits and underscores.
     this._cid = 'p' + Core.unique('p')
 
     for (var prop in this) {
@@ -115,44 +122,171 @@
     // List of names of {object} properties which are not cloned upon construction.
     _shareProps: [],
 
+    // function extend( [name,] [protoProps [, staticProps]] )
+    //
     // Hardwires events into class definition. Merges redefined object properties
     // with those in parent prototype.
-    extend: function (protoProps, staticProps) {
+    //
+    // protoProps may contain special keys (see `'mixIn()). `'staticProps
+    // argument is applied before `'protoProps' `'staticProps (typically you'd
+    // give only one of them).
+    //
+    // name is an optional convenience string displayed in debuggers (as
+    // function/constructor - "class" names). Defaults to "Sqimitive".
+    //
+    // Any argument can be null.
+    extend: function (name, protoProps, staticProps) {
       // this = base class.
-      var child = extend.apply(this, arguments)
+      // Only works in strict mode which disconnects parameter vars from
+      // members of arguments.
+      name = typeof arguments[0] == 'string' && Array.prototype.shift.call(arguments)
 
-      protoProps || (protoProps = {})
+      var child = extend(name || 'Sqimitive', this, arguments[0])
+      // Since base class has its own __super__, make sure child's (set up
+      // by extend() above) isn't overwritten.
+      _.extend(child, this, arguments[1], {__super__: child.__super__})
+
       child._mergeProps || (child._mergeProps = this._mergeProps)
       child._shareProps || (child._shareProps = this._shareProps)
 
-      for (var i = 0, l = child._mergeProps.length; i < l; ++i) {
-        var prop = child._mergeProps[i]
-        if (prop in protoProps) {
-          if (_.isArray(this.prototype[prop])) {
-            Array.prototype.unshift.apply(child.prototype[prop], this.prototype[prop])
-          } else {
-            for (var key in this.prototype[prop]) {
-              if (!(key in child.prototype[prop])) {
-                child.prototype[prop][key] = this.prototype[prop][key]
-              }
-            }
-          }
-        }
-      }
+      // Function.prototype.length confuses "isArrayLike" functions.
+      // Just `[delete Core.length`] doesn't work.
+      Object.defineProperty(child, 'length', {value: 'NotAnArray'})
 
-      protoProps = child.prototype
+      name && Object.defineProperty(child, 'name', {value: name})
 
-      if ('events' in protoProps) {
-        protoProps._events = _.extend({}, protoProps._events)
-        for (var event in protoProps._events) {
-          protoProps._events[event] = protoProps._events[event].slice()
-        }
-
-        protoProps.on.call(protoProps, protoProps.events)
-        delete protoProps.events
-      }
+      arguments[0] && child.mixIn(arguments[0])
 
       return child
+    },
+
+    // this = class which receives new "mixed-in" fields ("child").
+    // options allow creating parametrized mix-ins (basically, generics).
+    //
+    // newClass - the mix-in object. It's similar to `'extend(); an object with keys:
+    //> staticProps object - static fields made available as newClass.something
+    //> events object - event listeners
+    //  `* keys are isolated, meaning if both `'this and `'newClass have
+    //     `'foo key, both hooks are set up
+    //> finishMixIn function `- called before returning, `'this = `'newClass,
+    //  arguments = child prototype (of the updated class) and options
+    //> mixIns array `- member is a mixed-in class or [class, options]
+    //> * - everything else is an instance field, `'protoProps of `'extend()
+    //  `* `'_mergeProps is respected, but of `'this (not `'newClass)
+    //  `* a string form of `'_childClass is only allowed in `'extend(), not
+    //     here; other forms (array, object) are allowed in both places
+    //
+    // `'this is modified in-place; no new class is created. If you want a base
+    // class without the mix-in, and a sub-class with the mix-in, first
+    // `'extend() the base class and then mix into the new sub-class.
+    //
+    // On name collision, properties from `'newClass overwrite ones in `'this.
+    // To avoid this, set such properties in `'init or in `'finishMixIn.
+    //
+    // elEvents are merged but unlike events keys may get overridden - use '.ns' suffix.
+    //
+    //[
+    //   var MixIn = {
+    //     staticProps: {
+    //       staticMethod: function () { ... },
+    //     },
+    //     events: {
+    //       '-init': function () {
+    //         // (1) Define a property only if it's not defined yet.
+    //         this._someProp = this._someProp || 'buzz'
+    //       },
+    //     },
+    //     finishMixIn: function (targetProto) {
+    //       alert("I'm now mixed into " + targetProto.toString())
+    //
+    //       // (2) Or could do it here, more performance-efficient since ran
+    //       // only once for each mixed-in class, not once for each such class
+    //       // instantiation:
+    //       //targetProto._someProp = targetProto._someProp || 'buzz'
+    //       //targetProto.constructor.someStatic = 123
+    //     },
+    //     _opt: {
+    //       correctly: 'merged',
+    //     },
+    //     instanceMethod: function () { ... },
+    //   }
+    //
+    //   var Base1 = Sqimitive.Sqimitive.extend({})
+    //
+    //   var Base2 = Sqimitive.Sqimitive.extend({
+    //     _opt: {
+    //      a: 'base',
+    //    },
+    //     // Not overriden by MixIn.
+    //     _someProp: 123,
+    //   })
+    //
+    //   Base1.mixIn(MixIn)   // alerts
+    //     //=> _someProp = 'buzz'
+    //     //=> opt = {correctly: 'merged'}
+    //
+    //   Base2.mixIn(MixIn)   // alerts again
+    //     //=> _someProp = 123
+    //     //=> opt = {a: 'base', correctly: 'merged'}
+    //]
+    //
+    // mixIns is applied before other properties allowing "mix-in inheritance". This is different from calling mixIn() in finishMixIn().
+    //
+    //[
+    //   var ParentMixIn = {
+    //     someEvent: function () { /* parent */ },
+    //   ]
+    //   var ChildMixIn = {
+    //     mixIns: [ParentMixIn],
+    //     events: {
+    //       someEvent: function () { /* child */ },
+    //     },
+    //   }
+    //
+    //   // MyClass has now someEvent firer, with two handlers: of parent and of child.
+    //   MyClass.mixIn(ChildMixIn)
+    //]
+    //
+    // If ChildMixIn was defined as follows then MyClass would have someEvent as a non-firer, with parent's function, because it overrode ChildMixIn's.
+    //
+    //[
+    //   var ChildMixIn = {
+    //     finishMixIn: function (newClass) {
+    //       newClass.mixIn(ParentMixIn)
+    //     },
+    //     events: {
+    //       someEvent: function () { /* child */ },
+    //     },
+    //   }
+    //]
+    //
+    // This will also overwrite the handler in the class declaration:
+    //
+    //[
+    //   var MixIn = {
+    //     some: function () { },
+    //   }
+    //   var Class = Sqimitive.extend({
+    //     events: {
+    //       some: function () { },
+    //     }
+    //   })
+    //   Class.mixIn(MixIn)
+    //]
+    // But this will work:
+    //[
+    //   var MixIn = {
+    //     some: function () { },
+    //   }
+    //   var Class = Sqimitive.extend({
+    //     mixIns: [MixIn],
+    //     events: {
+    //       some: function () { },
+    //     }
+    //   })
+    //]
+    mixIn: function (newClass, options) {
+      return this.prototype.mixIn(newClass, options)
     },
 
     // Empty function. Used in multiple places to determine if a method
@@ -199,14 +333,14 @@
     // (or this if omitted). In other cases returns func as is if obj is omitted
     // or _.bind(func, obj) otherwise.
     //
-    //?  var func = Sqimitive.Sqimitive.expandFunc('meth')
+    //?  var func = Sqimitive.Base.expandFunc('meth')
     //    // returned function will call this.meth(arguments, ...).
     //
     //  var obj = {meth: function (s) { alert(s) }}
     //  func.call(obj, 123)
     //    // alerts 123.
     //
-    //? var func = Sqimitive.Sqimitive.expandFunc('meth-.', obj)
+    //? var func = Sqimitive.Base.expandFunc('meth-.', obj)
     //    // this function works in obj context, calling meth with just one
     //    // argument (2nd it was given) - see masker().
     //
@@ -264,7 +398,7 @@
     // Masking is a way to work around the "Danger of args__" described here
     // and avoid writing simple callback functions which reorder arguments.
     // It is common to alias a shorted reference like var m =
-    // Sqimitive.Sqimitive.masker and use it in your code since its main
+    // Sqimitive.Base.masker and use it in your code since its main
     // point is to be easy to call.
     //
     //? $.ajax({
@@ -279,12 +413,12 @@
     //
     //    //  This is correct: we indicate that we are only interested in the first
     //    //  argument which is passed through to assignResp().
-    //    success: Sqimitive.Sqimitive.masker('assignResp', '.'),
+    //    success: Sqimitive.Base.masker('assignResp', '.'),
     //  })
     //
-    //? var m = Sqimitive.Sqimitive.masker
+    //? var m = Sqimitive.Base.masker
     //
-    //  var MyModel = Sqimitive.Sqimitive.extend({
+    //  var MyModel = Sqimitive.Base.extend({
     //    _opt: {
     //      caption: '',
     //    },
@@ -346,11 +480,11 @@
     deepClone: function (obj) {
       if (obj && typeof obj == 'object') {
         if (_.isArray(obj)) {
-          obj = _.map(obj.slice(), arguments.callee)
+          obj = _.map(obj.slice(), Core.deepClone)
         } else {
           obj = _.extend({}, obj)
           for (var prop in obj) {
-            obj[prop] = arguments.callee(obj[prop])
+            obj[prop] = Core.deepClone(obj[prop])
           }
         }
       }
@@ -481,6 +615,57 @@
     // If set this is that event handler's ID.
     _logEventID: null,
 
+    // Run-time mix-in.
+    mixIn: function (newClass, options) {
+      // Don't expose internal inheritance fields on the final classes.
+      var merged = {mixIns: undefined, finishMixIn: undefined, staticProps: undefined, events: undefined}
+
+      _.each(newClass.mixIns || [], function (mixIn) {
+        this.mixIn.apply(this, [].concat(mixIn))
+      }, this)
+
+      _.each(this.constructor._mergeProps, function (prop) {
+        if ((prop in this) && (prop in newClass)) {
+          if (_.isArray(newClass[prop])) {
+            merged[prop] = this[prop].concat(newClass[prop])
+          } else {
+            merged[prop] = _.extend({}, this[prop], newClass[prop])
+          }
+        }
+      }, this)
+
+      _.extend(this, newClass, merged)
+      _.extend(this.constructor, newClass.staticProps || {})
+
+      if (newClass.events) {
+        // Core has no __super__ but it doesn't use mix-ins either so no check for null.
+        // This condition will evaluate to true except when a class has mix-ins (via mixIns property or mixIn() method) - we could clone it in the second case too but this would be a waste.
+        //
+        // Warning: this operates under assumption that the base class is finalized (all mix-ins applied) before any of its sub-classes is created.
+        //
+        //   var Base = Sqimitive.extend()
+        //   Base.mixIn(...)    // fine
+        //   var Child = Base.extend()
+        //   Base.mixIn(...)    // wrong
+        //
+        // Adding mix-ins after Child was declared may have unexpected side effects - if the mix-in adds an event and if Child had its own events block, then Child won't receive new mix-in's events. This is an implementation detail - "officially", adding mix-ins after declaring a subclass leads to undefined behaviour and should never be used.
+        if (this._events == this.constructor.__super__._events) {
+          // Could use deepClone but it's more intense - we don't clone eobj's
+          // which theoretically could be changed before instanatiation but we
+          // ignore this possibility.
+          this._events = _.extend({}, this._events)
+
+          for (var ev in this._events) {
+            this._events[ev] = this._events[ev].concat()
+          }
+        }
+
+        this.on(newClass.events)
+      }
+
+      newClass.finishMixIn && newClass.finishMixIn(this, options)
+    },
+
     // Triggers an event giving args as parameters to all registered listeners.
     // First fires a special all event and if its return value was anything but
     // undefined – returns it bypassing handlers of event entirely. all gets event
@@ -495,11 +680,11 @@
       if (this._events.all && event != 'all') {
         var allArgs = arguments.length < 2 ? [] : Core.toArray(args).concat()
         allArgs.unshift(event)
-        var res = Core.fire.call(this, this._events.all, allArgs)
+        var res = this.constructor.fire.call(this, this._events.all, allArgs)
         if (res !== undefined) { return res }
       }
 
-      return Core.fire.call(this, this._events[event], args)
+      return this.constructor.fire.call(this, this._events[event], args)
     },
 
     // Returns a function that, once called, will call fire(event, args) in context
@@ -560,7 +745,7 @@
         this.off(this._logEventID)
         this._logEventID = null
       } else if (console && console.log && !this._logEventID) {
-        this._logEventID = this.on('all', arguments.callee)
+        this._logEventID = this.on('all', Core.logEvents)
       }
 
       return this
@@ -713,8 +898,8 @@
 
         // function (this, arguments)
         //    sup() itself is removed if present as arguments[0].
-        eobj.sup = function (self, args) {
-          if (_.isArguments(args) && args[0] === arguments.callee) {
+        var sup = eobj.sup = function (self, args) {
+          if (_.isArguments(args) && args[0] === sup) {
             args = Array.prototype.slice.call(args, 1)
           }
 
@@ -832,11 +1017,11 @@
   })
 
   /***
-    Sqimitive.Sqimitive - The Actual Building Block
+    Sqimitive.Base - The Actual Building Block
    ***/
 
-  // Instance fields of Sqimitive.Sqimitive.
-  var Sqimitive = global.Sqimitive = Core.extend({
+  // Instance fields of Sqimitive.Base.
+  Sqimitive.Base = Core.extend({
     // ** Can be set upon declaration and runtime.
     //
     // List of options or attributes (as in Backbone.Model) of this instance.
@@ -979,7 +1164,7 @@
     // populate this._opt after construction. opt can contain el to override
     // default value of this.el property (see _opt).
     constructor: function (opt) {
-      Sqimitive.__super__.constructor.apply(this, arguments)
+      Sqimitive.Base.__super__.constructor.apply(this, arguments)
       this.init.apply(this, arguments)
       this.postInit.apply(this, arguments)
     },
@@ -1605,10 +1790,10 @@
   })
 
   // Reference to self in the instance property.
-  Sqimitive.prototype._childClass = Sqimitive
-  // Static fields of Sqimitive.Sqimitive.
-  Sqimitive._mergeProps.push('_opt', 'elEvents')
-  Sqimitive._shareProps.push('_childClass')
+  Sqimitive.Base.prototype._childClass = Sqimitive.Base
+  // Static fields of Sqimitive.Base.
+  Sqimitive.Base._mergeProps.push('_opt', 'elEvents')
+  Sqimitive.Base._shareProps.push('_childClass')
 
   /***
     Adding Underscore.js functions to Sqimitive.Sqimitive instance methods
@@ -1627,13 +1812,13 @@
 
   _.each(underscoreMethods, function (name) {
     if (underscoreMethods.indexOf(name) < underscoreArray) {
-      Sqimitive.prototype[name] = function () {
+      Sqimitive.Base.prototype[name] = function () {
         var args = Array.prototype.slice.call(arguments)
         args.unshift(this._children)
         return _[name].apply(_, args)
       }
     } else {
-      Sqimitive.prototype[name] = function () {
+      Sqimitive.Base.prototype[name] = function () {
         var args = Array.prototype.slice.call(arguments)
         args.unshift(_.values(this._children))
         return _[name].apply(_, args)
@@ -1641,5 +1826,6 @@
     }
   })
 
-  return global
+  Sqimitive.Sqimitive = Sqimitive.Base
+  return Sqimitive
 });
