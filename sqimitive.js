@@ -1308,6 +1308,47 @@
       return this
     },
 
+    // function ( toGet [, toSet [, toReturn]] [, func[, cx]] )
+    //
+    //> toGet array`, string
+    //> toSet null`, array`, string `- if not given, is set to `'toGet
+    //> toReturn null`, array`, string `- if not given, is set to `'toSet
+    //> func `- given G arguments (G = toGet.length), returns an array (if toSet is an array; result length must be <= toSet.length, missing toSet's members are not set) or a single value
+    //    `* if func is missing sets each toSet[N] to toGet[N]; toSet.length must be <= toGet
+    //> cx
+    //
+    //= array of values if `'toReturn is an array`, mixed single value
+    //
+    // Calling without arguments (without toGet) is an error.
+    //
+    //?`[
+    //   var newMoney = getSet(['money', 'income'], 'money', function (money, income) {
+    //     return money + income
+    //   })
+    //]`?
+    getSet: function (toGet, toSet, toReturn, func, cx) {
+      var args = Core.toArray(arguments)
+      for (var i = 0; i <= 2; i++) {
+        if (typeof args[i] == 'function') {
+          args.splice(i, 0, args[i - 1])
+        } else if (args[i] == null) {
+          args[i] = args[i - 1]
+        }
+        args['a' + i] = _.isArray(args[i]) ? args[i] : [args[i]]
+      }
+      var got = _.map(args.a0, this.get, this)
+      if (args[3]) {
+        got = args[3].apply(args[4], got)
+        if (!_.isArray(args[1])) { got = [got] }
+      }
+      _.each(got, function (value, index) {
+        this.set(args.a1[index], got[index])
+      }, this)
+      return _.isArray(args[2])
+        ? _.map(args[2], this.get, this)
+        : this.get(args[2])
+    },
+
     // Reads one option named opt or, if there are no arguments - shallow-copies
     // and returns all options (_opt) - it's safe to change the object itself (
     // add/remove properties) but changing its values will indirectly change
