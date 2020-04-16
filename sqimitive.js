@@ -1761,7 +1761,8 @@
 
     // Merges external "response" object/array resp into _children by
     // updating existing nested sqimitives, adding new and removing unlisted
-    // ones. New sqimitives are created as _childClass.
+    // ones. New sqimitives are created as options.childClass (an object,
+    // a function - called with the response data, or null - this._childClass).
     //
     // If resp is an object with data key - uses its value (Python's Flask
     // wraps array response into an object to prevent a JS attack). If resp
@@ -1829,7 +1830,8 @@
 
       resp.data && (resp = resp.data)
       _.isArray(resp) || (resp = _.values(resp))
-      var toRemove = eqFunc ? _.extend({}, this._children) : {}
+      var toRemove = eqFunc ? this.nested() : {}
+      var nested = []
 
       for (var i = 0; i < resp.length; i++) {
         var found = false
@@ -1844,13 +1846,23 @@
         }
 
         if (!found) {
-          var child = (new this._childClass).assignResp(resp[i], options)
-          this.nest(keyFunc.call(this, child), child, options)
+          // It's hard/impossible to tell apart a regular function and a
+          // constructor so if you want to specify a class, create a function
+          // that just returns that class. In ES6 that's simply () => MyClass.
+          var cls = options.classFunc
+            ? options.classFunc.call(this, resp[i]) : this._childClass
+          var child = (new cls).assignResp(resp[i], options)
+          var res = this.nestEx(_.extend({}, options, {
+            key:    keyFunc.call(this, child),
+            child:  child,
+          }))
+          // Can't use _parentKey if not _owning.
+          nested.push(res)
         }
       }
 
       options.keepMissing || _.each(toRemove, this.unlist, this)
-      return this
+      return [nested, toRemove]
     },
 
     // Filters and/or transforms external input (e.g. API response) into
@@ -1877,6 +1889,7 @@
     // },
     assignResp: function (resp, options) {
       options || (options = {})
+      options.assignResp = true
 
       for (var key in resp) {
         var value = resp[key]
@@ -1885,7 +1898,7 @@
         opt === true && (opt = key)
 
         if (typeof opt == 'function') {
-          opt = opt.call(this, value, key, resp, options)
+          opt = opt.call(this, value, key, resp, options) || []
           value = opt[1]
           opt = opt[0]
         }
