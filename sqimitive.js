@@ -62,6 +62,7 @@
   "use strict";
 
   var hasOwn = Object.prototype.hasOwnProperty
+  var objectAssign = Object.assign || _.extend    // not in IE.
 
   // Subclass extension method, taken from Backbone.
   //
@@ -519,11 +520,12 @@
     // Returns a recursive copy of the argument so that any modification to either
     // obj or returned value (obj copy) won't affect its counterpart.
     deepClone: function (obj) {
-      if (obj && typeof obj == 'object') {
-        if (_.isArray(obj)) {
-          obj = _.map(obj.slice(), Core.deepClone)
+      // This method has big impact on performance because it's called in each Sqimitive constructor so we avoid using _'s methods and access built-in methods directly (saving 10% of time on each access).
+      if (typeof obj == 'object' && obj != null) {
+        if (Array.isArray(obj)) {
+          obj = obj.map(Core.deepClone)
         } else {
-          obj = _.extend({}, obj)
+          obj = objectAssign({}, obj)
           for (var prop in obj) {
             obj[prop] = Core.deepClone(obj[prop])
           }
