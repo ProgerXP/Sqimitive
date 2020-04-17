@@ -1306,6 +1306,8 @@
     // the "getter" behaviour - e.g. you can read non-existing options or
     // transform them.
     //
+    // Attention: JavaScript objects are unordered. See the note in _children.
+    //
     //? get()       //=> {opt: 'value', key: 123, ...} (shallow copy)
     //? get('key')  //=> 123
     get: function (opt) {
@@ -1448,7 +1450,7 @@
     // it, which by default returns sqim._cid (unique instance identifier).
     // Updates sqim._parent and _parentKey. options are currently unused but can
     // be used to propagate custom data to event listeners (it's also passed
-    // through by assignChildren()).
+    // through by assignChildren()). For example, an ordered sqimitive can receive insertion order via options.
     //
     // Errors if trying to nest object of wrong class (not _childClass).
     // Unnests sqim from its former parent, if any. Calls
@@ -1611,9 +1613,11 @@
       }
     },
 
-    // Returns all nested sqimitives if key is not given, or a child by its key
+    // Returns all nested sqimitives (in arbitrary order) if key is not given, or a child by its key
     // (_parentKey, case-sensitive) or its object instance. Returns undefined if
     // given key/object key isn't nested in this instance or key is null or undefined.
+    //
+    // Attention: JavaScript objects are unordered. See the note in _children.
     //
     //? sqim.nested()   //=> {childKey1: Sqimitive, ...}
     //? sqim.nested('childKey1')    //=> Sqimitive
@@ -1634,16 +1638,34 @@
       }
     },
 
-    // Regular Array.slice(), treats this instance's children as an ordered
-    // array instead of {key: Sqimitive} object.
+    // Similar to Array's slice(); treats this instance's children as an
+    // ordered array instead of {key: Sqimitive} object as returned by nested().
     //
-    //? slice(1, 1)   // get 2nd child as an array
-    //? slice(0, -1)  // get last child as an array; last() is more convenient
-    //? slice(5, 3)   // get 6th, 7th and 8th children as an array
-    //? slice(0, 0)   //=> [] - empty array
-    slice: function (start, length) {
-      length > 0 && (arguments[1] += start)
-      return Array.prototype.slice.apply(_.values(this._children), arguments)
+    // Attention: end index is not included into result. If start == end, an
+    // empty array is always returned.
+    //
+    //? slice(1, 2)   // get 2nd child as an array
+    //? slice(-1)     // get last child as an array; last() is more convenient
+    //? slice(5, 8)   // get 6th and 7th children as an array; no 8th!
+    //? slice(0, 0)   // start == end - always empty array
+    //? slice(1, -1)  // get all except first and last children
+    //
+    // Attention: JavaScript objects are unordered so this may return
+    // entries in arbitrary order. See the note in _children. Use either
+    // Ordered mix-in or override this method with one that sorts result
+    // based on some criteria (may be slower than Ordered that maintains sort
+    // order as children come and go). slice() is used by all other functions
+    // converting accessing _children as an array, so each(), etc. are
+    // affected.
+    //
+    //? '=slice': function (sup, start, end) {
+    //    var sorter = function (a, b) { return a.get('pos') - b.get('pos') }
+    //    return _.values(this._children).sort(sorter).slice(start, end)
+    //  }
+    slice: function (start, end) {
+      // _.values(), _.toArray(), Object.keys(), etc. return values in
+      // arbitrary order. The default Sqimitive is unordered.
+      return _.values(this._children).slice(start, end)
     },
 
     // function (sqim)
@@ -1659,15 +1681,6 @@
           return key
         }
       }
-    },
-
-    // Similar to slice() but returns individual children, not an array.
-    //
-    //? at(0)         //=> Sqimitive
-    //? at(999)       //=> undefined
-    //? at(-1)        //=> Sqimitive - identical to last()
-    at: function (index) {
-      return this.slice(index, 1)[0]
     },
 
     // Shorthand to _(sqim.slice()).
@@ -1692,7 +1705,8 @@
     // If resp is an object with data key - uses its value (Python's Flask
     // wraps array response into an object to prevent a JS attack). If resp
     // (or resp.data) were not arrays uses _.values() to turn it into one
-    // (ignoring keys).
+    // (ignoring keys) - remember that JavaScript objects are unordered, so
+    // if order of assignment is important - pass the array.
     //
     // If options.eqFunc is null or omitted removes all children thus
     // resetting the list. options.eqFunc can be a string (option name) given
@@ -1793,7 +1807,8 @@
     // Filters and/or transforms external input (e.g. API response) into
     // this._opt using defined rules (see _respToOpt). Calls set() to assign
     // resulting values one by one, normalizing them and firing corresponding
-    // change events.
+    // change events. The order of set() calls is undefined because JavaScript
+    // objects are unordered.
     //
     // If options.onlyDefined is set then keys in resp that are missing from
     // _respToOpt are ignored, if it's unset they are passed through as if
@@ -1880,34 +1895,277 @@
   Sqimitive.Base._mergeProps.push('_opt', 'elEvents', '_respToOpt')
   Sqimitive.Base._shareProps.push('_childClass')
 
-  /***
-    Adding Underscore.js functions to Sqimitive.Sqimitive instance methods
-   ***/
+  // A mix-in. MySqim.mixIn(Sqimitive.Ordered).
+  //
+  // JavaScript objects are unordered, even if it appears to work the way
+  // you expect. Example: Object.keys({9: 0, 1: 0}) is [1, 9].
+  //
+  // Sqimitives are unordered by default; this affects nested(), toArray()
+  // and many other functions. Ordered sqimitives are slower.
+  //
+  // Can be made non-_owning.
+  //
+  // If _owning, duplicates are never allowed, else they are allowed by
+  // default - to disallow wrap '=nestEx' in a contains() check (see a
+  // note in nestEx()).
+  Sqimitive.Ordered = {
+    // Same as _children but in specific order as determined by _sorter().
+    // Is kept in sync with _children.
+    //
+    // Is an array of entries, each entry being an object with these keys:
+    // - child - a Sqimitive in _children
+    // - key - child's key in _children
+    // - pos - option value from nest()'s options.pos
+    _ordered: [],
 
-  var underscoreMethods = [
-    'each', 'map', 'reduce', 'reduceRight', 'find', 'filter',
-    'reject', 'every', 'some', 'contains', 'invoke', 'pluck', 'where',
-    'findWhere', 'max', 'min', 'sortBy', 'groupBy', 'indexBy', 'countBy',
-    'keys', 'pairs', 'pick', 'omit', 'toArray', 'chain',
-    // Array functions follow:
-    'first', 'initial', 'rest', 'last', 'without', 'partition', 'difference',
-    'indexOf', 'shuffle', 'sample', 'lastIndexOf', 'sortedIndex'
-  ]
-  var underscoreArray = underscoreMethods.indexOf('first')
+    events: {
+      // options may have pos key to specify the position relative to other
+      // children. This key may be used by _sorter().
+      //
+      // Returned options have index key - actual position of the new child
+      // in _ordered, and oldIndex key - only if !changed, to see if child
+      // was moved to another _ordered position without changing its key.
+      //
+      // If re-nesting the same child on the same key, _ordered position is
+      // updated if old and new pos are different (!_.isEqual()).
+      '+nestEx': function (res) {
+        var changed = res.changed
+        if (changed && res.previous && !this._owning) {
+          this._removeFromOrdered(res.key, res.previous)
+        }
+        if (!changed) {
+          res.oldIndex = this._indexOf(res.key, res.child)
+          changed = !_.isEqual(res.pos, this._ordered[res.oldIndex].pos)
+          changed && this._ordered.splice(res.oldIndex, 1)
+        }
+        if (changed) {
+          res.index = this._indexFor(res)
+          // pick() removes other keys which may reference objects
+          // preventing their GC and clones options to avoid indirect changes
+          // by the caller (nestEx() returns the object as is).
+          this._ordered.splice(res.index, 0, _.pick(res, 'child', 'key', 'pos'))
+        }
+      },
 
-  _.each(underscoreMethods, function (name) {
-    if (underscoreMethods.indexOf(name) < underscoreArray) {
-      Sqimitive.Base.prototype[name] = function () {
-        var args = Array.prototype.slice.call(arguments)
-        args.unshift(this._children)
-        return _[name].apply(_, args)
+      unnested: function (sqim) {
+        // Owning Ordered sqimitives can never have duplicates so no matter
+        // from where unnesting is called, we don't need any more info than
+        // the sqim itself to locate its correct entry in _ordered.
+        //
+        // For a non-_owning duplicating sqimitive we do need sqim's former
+        // key. Unnesting can happen either in nestEx() (when replacing old
+        // sqim with another sqimitive) or in unlist() (when removing a
+        // particular sqim). In both cases we have the needed info but it's
+        // there in those methods so removal from _ordered is handled there.
+        if (this._owning) {
+          // _parentKey is not available at this point.
+          var entry = _.find(this._ordered, function (entry) {
+            return entry.child == sqim
+          })
+          this._removeFromOrdered(entry.key, sqim)
+        }
+      },
+
+      // Non-_owning duplicating Ordered's unlist() removes all occurrences
+      // of a child if given an object or a particular one if given a string
+      // (key).
+      '+unlist': function (sqim, key) {
+        if (!this._owning) {
+          if (sqim == key) {    // object given.
+            this._ordered = this._ordered.filter(function (entry) {
+              return entry.child != sqim
+            })
+          } else {      // string given.
+            this._removeFromOrdered(key, sqim)
+          }
+        }
+      },
+
+      // Returned array has guaranteed order. Object keys are lost (if this is non-_owning).
+      '=slice': function (sup, start, end) {
+        return _.pluck(this._ordered.slice(start, end), 'child')
+      },
+    },
+
+    _removeFromOrdered: function (key, sqim) {
+      var index = this._indexOf(key, sqim)
+      if (index < 0) {
+        throw new TypeError('Broken nesting: sqimitive missing from _ordered')
       }
-    } else {
-      Sqimitive.Base.prototype[name] = function () {
-        var args = Array.prototype.slice.call(arguments)
-        args.unshift(_.values(this._children))
-        return _[name].apply(_, args)
-      }
+      this._ordered.splice(index, 1)
+    },
+
+    // If sqim is missing, it's read from _children (in this case _indexOf()
+    // should not be called after sqim was already unnested).
+    _indexOf: function (key, sqim) {
+      key += ''
+      sqim = sqim || this._children[key]
+      return _.findIndex(this._ordered, function (entry) {
+        // Technically only comparing keys would suffice (since
+        // _children can't have 2 members with the same key) but
+        // comparing objects first is faster.
+        return entry.child == sqim && entry.key == key
+      })
+    },
+
+    // entry - object with child/key/pos keys.
+    // Gets called assuming entry.child is not yet nested in this.
+    // pos is coming from nest()'s options.
+    _indexFor: function (entry) {
+      return this.constructor.indexFor(this._ordered, entry, this._sorter, this)
+    },
+
+    // See indexFor() for invokation format. Default implementation compares
+    // pos (given to nest()) or keys (given _defaultKey(), these are _cid's).
+    //
+    // a and b are _ordered entries (objects). During nestEx() one of them
+    // may be missing from _ordered but present in _children; during resort()
+    // both are present in _ordered. b is null on the first iteration.
+    //
+    // If using pos, make sure to supply correct types: 10 is > 2 (or '10'
+    // or '2') but '10' is < '2'.
+    _sorter: function (a, b, posB) {
+      a = a.pos == null ? a.key : a.pos
+      return arguments.length == 1 ? a
+        // Not simply a - posB to work with non-numeric key/pos.
+        : (a > posB ? +1 : (a < posB ? -1 : 0))
+    },
+
+    // Re-sorts the entire _ordered. Useful if sorting was temporary disabled or if some option was changed that affects sort order.
+    // Disabling is useful during mass assignment:
+    //
+    // var hook = this.on('=_indexFor', Sqimitive.stub)
+    // try {
+    //   this.assignChildren(data)
+    // } finally {
+    //   this.off(hook)
+    //   this.resort()
+    // }
+    //
+    // _opt: {
+    //   invert: false,
+    // },
+    // events: {
+    //   '=_sorter': function (sup) {
+    //     var res = sup(this, arguments)
+    //     return -res || res
+    //   },
+    //   change_invert: 'resort',
+    // },
+    resort: function () {
+      this._ordered.sort(function (a, b) {
+        // function (a, b, posB) - obtain that posB (simulating first
+        // iteration of indexFor()).
+        return this._sorter(a, b, this._sorter(b))
+      }.bind(this))
+      return this
+    },
+
+    //= object entry in _ordered
+    //
+    // Returns detailed info about a child by its index in _ordered (this
+    // index is given to utility functions like each()). Do not change the
+    // returned object.
+    //
+    // This object's format conveniently matches that accepted by nestEx().
+    //
+    //? at(0)         //=> {child: Sqimitive, key: 'foo', pos: 3}
+    //? at(999)       //=> undefined (if length <= 999)
+    //? at(-1)        //=> always undefined
+    //? this.groupBy(function (sqim, i) { return this.at(i).pos })
+    //? clone.nestEx(orig.at(i))
+    at: function (index) {
+      return this._ordered[index]
+    },
+
+    staticProps: {
+      // Adapted by Underscore's sortedIndex().
+      // Supports two sort function styles: relative (a, b) and weight-based (a).
+      //
+      // func is called first with 1 argument to return value's weight (which is
+      // stored for later calls), then called repeatedly to compare it against
+      // other members (returning < 0 if b must go before a, > 0 if after, == 0
+      // if their sort order is the same and either can go in front of another).
+      //
+      // Relative func ignores the first call, otherwise is the same as with
+      // standard sort():
+      //   indexFor(a, v, function (a, b) {
+      //     return a > b ? +1 : (a < b ? -1 : 0)
+      //     // This would fail without a check because b may be null:
+      //     return b && (a.prop - b.prop)
+      //   })
+      //
+      // Weight-based func uses all 3 arguments:
+      //   indexFor(a, v, function (a, b, posB) {
+      //     var posA = a.someWeightProp    // assuming it's a number.
+      //     return arguments.length == 1 ? posA : (posA - posB)
+      //   })
+      indexFor: function (array, value, func, cx) {
+        var pos = array.length && func.call(cx, value)
+        for (var low = 0, high = array.length, rel = 1; low < high; rel) {
+          var mid = Math.floor((low + high) / 2)
+          rel = -func.call(cx, array[mid], value, pos)
+          // Exiting immediately if rel == 0 (found a member with the same sort
+          // order) - low remains next to current index so order of ? : is
+          // important.
+          rel < 0 ? (high = mid) : (low = mid + 1)
+        }
+        return low
+      },
+    },
+  }
+
+  // Adding utility functions as instance methods on Sqimitive.Base.
+  // Their availability and behaviour depends on the library in use (NoDash,
+  // etc.).
+  //
+  // For portability avoid shortcut iterator syntaxes - it's only
+  // supported in Underscore (iteratee() - not in NoDash, LoDash or built-in
+  // Array/Object methods). The only exception are pick()/omit() where it
+  // may be list of property names (in LoDash it must be that).
+  //
+  // Attention: JavaScript objects are unordered so each(), etc. can iterate in any order, find(), etc. can return any of the matching children, etc.
+  // In particular, reduceRight() may not strictly iterate from the end, first(), etc. - return that particular child, indexOf(), etc. - have stable result.
+  //
+  // Sqimitive.Ordered adds iteration order guarantee.
+
+  // iterator = function (Sqimitive child, string parentKey)
+  var objectUtils =
+    'pick omit keys'
+
+  // iterator = function (Sqimitive child, int index); for non-Ordered,
+  // index is an arbitrary sequential number in this particular utility
+  // call; for Ordered, it's stable and can be given to at()
+  // toArray() is part of this, not objectUtils so that it uses Sqimitive's
+  // slice() to preserve the order.
+  var arrayUtils =
+    'each map find filter reject reduce every some contains invoke pluck' +
+    ' max min sortBy groupBy indexBy countBy chunk shuffle sample' +
+    ' partition toArray without union intersection difference'
+
+  // iterator = function (Sqimitive child, int index)
+  var orderedUtils =
+    'reduceRight first initial last rest indexOf lastIndexOf' +
+    ' findIndex findLastIndex'
+
+  _.each(objectUtils.split(' '), function (name) {
+    Sqimitive.Base.prototype[name] = function () {
+      Array.prototype.unshift.call(arguments, this._children)
+      return _[name].apply(_, arguments)
+    }
+  })
+
+  _.each(arrayUtils.split(' '), function (name) {
+    Sqimitive.Base.prototype[name] = function () {
+      Array.prototype.unshift.call(arguments, this.slice())
+      return _[name].apply(_, arguments)
+    }
+  })
+
+  _.each(orderedUtils.split(' '), function (name) {
+    Sqimitive.Ordered[name] = function () {
+      Array.prototype.unshift.call(arguments, this.slice())
+      return _[name].apply(_, arguments)
     }
   })
 
