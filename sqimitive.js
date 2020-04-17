@@ -1877,7 +1877,7 @@
   // Reference to self in the instance property.
   Sqimitive.Base.prototype._childClass = Sqimitive.Base
   // Static fields of Sqimitive.Base.
-  Sqimitive.Base._mergeProps.push('_opt', 'elEvents')
+  Sqimitive.Base._mergeProps.push('_opt', 'elEvents', '_respToOpt')
   Sqimitive.Base._shareProps.push('_childClass')
 
   /***
