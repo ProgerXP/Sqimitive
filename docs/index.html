@@ -281,7 +281,7 @@ alert(obj.complexrop.sub)
 
       <p>This can be used to create event observation spots too. Suppose that you have an object that’s loading some data from the server. Since it’s asynchronous you don't know when (or if) it will finish. Usually you would either create a callback property and call it or use a custom event (jQuery or Backbone) and call it once loading is done. In Sqimitive, you simply introduce some <kbd>_opt.loading</kbd>, set it to <kbd>false</kbd> and then once done – set it to <kbd>true</kbd>. Observers listen to <kbd>change_loading</kbd> event having the <a href="#corei-on">full</a> <a href="#corei-once">set</a> <a href="#corei-fuse">of</a> <a href="#corei-off">event</a> <a href="#corei-autoOff">handling</a> <a href="#corei-logEvents">routines</a> at their disposal instead of introducing <kbd>isLoading()</kbd>, <kbd>abortLoading()</kbd>, <kbd>onLoading()</kbd>, etc.</p>
 
-      <p>Now this works the other way too: an external object can <kbd>set('loading', true)</kbd> to force refreshing of the data. Better still – the loading object itself can set this option to trigger its own loading routine – naturally, avoiding code duplication.</p>
+      <p>Now this also works in another way: an external object can <kbd>set('loading', true)</kbd> to force refreshing of the data. Better still – the loading object itself can set this option to trigger its own loading routine – naturally, avoiding code duplication.</p>
 
       <p>Moreover, since options are not accessed directly you can always listen for their access with <kbd>get</kbd> or add custom behaviour with <kbd>set</kbd>. This leads to more stable code base.</p>
 
@@ -959,7 +959,7 @@ extend({
 
       <h3 id="tt-nestmodels">Babysitting Models</h3>
 
-      <p>One of the most common problems when developing a complex client-side app is keeping track of multiple Models or a Collection connected to a particular View. When a new Model appears you need to create and display a new nested View; when it’s removed – its View should go away you; when Model attributes change the View should be updated (this case is often but not always handled by that Model’s View).</p>
+      <p>One of the most common problems when developing a complex client-side app is keeping track of multiple Models or a Collection connected to a particular View. When a new Model appears you need to create and display a new nested View; when it’s removed – its View should go away; when Model attributes change the View should be updated (this case is often but not always handled by that Model’s specific View).</p>
 
       <p>On top of that, when parent View acquires another Collection it should properly detach itself from the previously assigned Collection, attach to the new object and repopulate itself.</p>
 
@@ -1076,7 +1076,7 @@ col.nested(1).set('smth', 'foo')
 
       <p>With its concept of "functions as first-class citizens", JavaScript lacks any kind of "class name" references in instantinated objects. The best we can afford is duck-typing where we see if object X has properties Y and Z and if it does – it’s <em>probably</em> that kind of object (i.e. "class").</p>
 
-      <p>Sometimes (or rather quite often while debugging) we need to figure what’s the object we see. If your app has all Sqimitive classes defined under a certain object (like <kbd>window</kbd> – which is a bad practice – or <kbd>window.MyApp</kbd>) you can go through all prototypes on start up and add <b>sqClassName</b> property holding string reference to that prototype.</p>
+      <p>Sometimes (or rather quite often while debugging) we need to figure what’s the object we see. If your app has all Sqimitive classes defined under a certain object (like <kbd>window</kbd> – which is a bad practice – or <kbd>window.MyApp</kbd>) you can go through all prototypes on start-up and add <b>sqClassName</b> property holding string reference to that prototype.</p>
 
       <p>First, let’s override <a href="#cores-extend">extend()</a> with our own that will mark each produced prototype so we know we're looking at something we have created:</p>
 
@@ -1101,7 +1101,7 @@ BaseSqimitive.extend = function (protoProps, staticProps) {
 }
 </pre>
 
-      <p>Now on start up we go through all classes and add <b>sqClassName</b> like <kbd>View.Cart</kbd>:</p>
+      <p>Now on start-up we go through all classes and add <b>sqClassName</b> like <kbd>View.Cart</kbd>:</p>
 
       <pre class="language-javascript">
 // Define classes above or wrap the following into $().
@@ -1761,6 +1761,14 @@ is$(null)         //=> false
 
           <p>Note that <b>all</b> event is only triggered for actual events so if, for example, <a href="#sqimitivei-render">render()</a> isn't overriden it will be called as a regular member function without triggering an event.</p>
 
+          <p>To override <b>fire()</b>, don't use the usual <a href="#corei-on">on('fire')</a> as it will lead to recursion (even <kbd>=fire</kbd> form). Use the old-school prototype overriding:</p>
+                    <pre class="language-javascript">
+fire: function (event, args) {
+  // Do your stuff...
+  return MyClass.__super__.fire.apply(this, arguments)
+},
+</pre>
+
           <p>See also static method <a href="#cores-fire">fire()</a>.</p>
         </dd>
 
@@ -2138,7 +2146,7 @@ var MyToDoList = Sqimitive.Sqimitive.extend({
 
         <dt id="sqimitivei-_childEvents">_childEvents</dt>
         <dd>
-          <p>Can be overriden in subclasses to automatically <a href="#sqimitivei-forward">forward()</a> events occurring in any of <a href="#sqimitivei-_children">_children</a> to this instance, with event name prefixed with a dot (e.g. <kbd>render</kbd> → <kbd>.render</kbd>). Identical to manually calling <a href="#sqimitivei-on">on()</a> and <a href="#sqimitivei-off">off()</a> so can even specify methods that will be <a href="#ov-evt">turned into</a> events. Event handlers receive the child instance as first argument.</p>
+          <p>Can be overriden in subclasses to automatically <a href="#sqimitivei-_forward">_forward()</a> events occurring in any of <a href="#sqimitivei-_children">_children</a> to this instance, with event name prefixed with a dot (e.g. <kbd>render</kbd> → <kbd>.render</kbd>). Identical to manually calling <a href="#sqimitivei-on">on()</a> and <a href="#sqimitivei-off">off()</a> so can even specify methods that will be <a href="#ov-evt">turned into</a> events. Event handlers receive the child instance as first argument.</p>
 
           <p>Don't list <a href="#sqimitivei-unnest">unnest()</a> here – <a href="#sqimitivei-_parent">_parent</a> will <a href="#sqimitivei-off">off()</a> itself before that and never receive the notification. Use <a href="#sqimitivei-unnested">unnested()</a> instead or <kbd>-unnest</kbd> (but in this case if an exception occurs during unnesting your handler won't know this and will be called before the view is removed).</p>
 
@@ -2149,7 +2157,7 @@ var MyList = Sqimitive.Sqimitive.extend()
   _childEvents: ['-change'],
 
   events: {
-    '.change': function (sqim, name) {
+    '.-change': function (sqim, name) {
       alert('Option ' + name + ' is about to change on ' + sqim._cid)
     },
   },
@@ -2215,7 +2223,8 @@ var MyListGroup = Sqimitive.Sqimitive.extend({
         <dd>
           <p>Lists automatically bound DOM event listeners for <a href="#sqimitivei-el">el</a>. Format is inherited from Backbone and is an object with keys of <kbd>click[ .sel .ector]</kbd> form and values being functions (closures) or strings (method names, resolved when event occurs so they can be defined later, optionally masked like <kbd>func-..1</kbd> - see <a href="#cores-expandFunc">expandFunc()</a>). In the latter case be aware of the "Danger of args__" described <a href="#corei-on">here</a> – it’s called as <kbd>function (eventObject)</kbd>.</p>
           <p>Listeners are automatically rebound by <a href="#sqimitivei-attach">attach()</a>. See also <a href="#sqimitive-_opt">attachPath</a>.</p>
-          <p><b>elEvents</b> is listed in <a href="#cores-_mergeProps">_mergeProps</a> so subclasses defining it add to their parents' events instead of overwriting them entirely.</p>
+          <p><b>elEvents</b> is listed in <a href="#cores-_mergeProps">_mergeProps</a> so subclasses defining it add to their parents' events instead of overwriting them entirely (but identical keys are still overwritten).</p>
+          <p><b>Attention:</b> do not use ES6 arrow functions as values because their <b>this</b> would be fixed to the context of the caller of <a href="#cores-extend">extend()</a>.</p>
 
           <pre class="language-javascript">
 var MyView = Sqimitive.Sqimitive.extend()
@@ -2656,7 +2665,7 @@ sqim.slice(0, 0)   //=> [] - empty array
 
         <dt id="sqimitivei-at">at (index)</dt>
         <dd>
-          <p>Similar to <a href="#sqimitivei-slice">slice()</a> but returns individual children, not an array.</p>
+          <p>Similar to <a href="#sqimitivei-slice">slice()</a> but returns a single child as an object, not as an array.</p>
 
           <pre class="language-javascript">
 sqim.at(0)         //=> Sqimitive
@@ -2816,7 +2825,8 @@ sqim.get() == {date: Date('2000-01-01'), id_key: '123'}
 
         <dt id="sqimitivei-bubble">bubble (event, args, fireSelf)</dt>
         <dd>
-          <p>Sends <b>event</b> with arguments <b>args</b> upstream – triggers it on <a href="#sqimitivei-_parent">this._parent</a>, then on that parent’s parent and so on. If <b>fireSelf</b> is <kbd>true</kbd> fires <b>event</b> on <b>this</b> beforehand (by default it isn't). Since it calls methods, not necessary events, you you "recursively" call methods as well. This is very much like DOM’s event bubbling except that it happens on sqimitives, not their <a href="#sqimitivei-el">el</a>’s. Returns <b>this</b>. See also <a href="#sqimitivei-sink">sink()</a> that works the opposite direction.</p>
+          <p>Sends <b>event</b> with arguments <b>args</b> upstream – triggers it on <a href="#sqimitivei-_parent">this._parent</a>, then on that parent’s parent and so on. If <b>fireSelf</b> is <kbd>true</kbd> fires <b>event</b> on <b>this</b> beforehand (by default it doesn't). Since it calls methods, not necessary events, you can "recursively" call methods as well. This is very much like DOM’s event bubbling except that it happens on sqimitives, not their <a href="#sqimitivei-el">el</a>’s. Returns <b>this</b>. See also <a href="#sqimitivei-sink">sink()</a> that works in the opposite direction.</p>
+          <p>While should not be abused because it makes the execution flow less obvious, it's indispensible for propagating generic signals like errors to whoever is on top.</p>
 
           <pre class="language-javascript">
 // Causes self and all parent sqimitives to be rendered:
@@ -2836,7 +2846,7 @@ parent.on('giveMeData', function (out) { out.data = 'here goes' })
 
         <dt id="sqimitivei-sink">sink (event, args, fireSelf)</dt>
         <dd>
-          <p>Propagates <b>event</b> with arguments <b>args</b> to all nested sqimitives, to all nested sqimitives of those sqimitives, to their children and so on. If <b>fireSelf</b> is true also fires <b>event</b> on <b>this</b> beforehand. Note that it might get quite intense with heavy nesting. Returns <b>this</b>. Since it calls methods, not necessary events, you you "recursively"  See also <a href="#sqimitivei-bubble">bubble()</a> that works the opposite direction.</p>
+          <p>Propagates <b>event</b> with arguments <b>args</b> to all nested sqimitives, to all nested sqimitives of those sqimitives, to their children and so on. If <b>fireSelf</b> is true also fires <b>event</b> on <b>this</b> beforehand. Note that it might get quite intense with heavy nesting. Returns <b>this</b>. Since it calls methods, not necessary events, you can "recursively" call methods as well. See also <a href="#sqimitivei-bubble">bubble()</a> that works in the opposite direction.</p>
 
           <pre class="language-javascript">
 // Recursively causes all nested views and self to be rendered.
@@ -2914,7 +2924,7 @@ sqim.$('')              //=> $()
         <li><a target="_blank" href="http://underscorejs.org/#some">some(predicate[, cx])</a> – return <kbd>true</kbd> if for any child <kbd>predicate(sqim, parentKey)</kbd> was positive</li>
         <li><a target="_blank" href="http://underscorejs.org/#sortBy">sortBy(iterator[, cx])</a> – sort and return all children by ranking them with <kbd>iterator(sqim, parentKey)</kbd> from lowest to highest</li>
         <li><a target="_blank" href="http://underscorejs.org/#sortedIndex">sortedIndex(sqim[, iterator[, cx]])</a> – determine index for item insertion that will maintain certain list sorting</li>
-        <li><a target="_blank" href="http://underscorejs.org/#toArray">toArray()</a> – return all children as an array copy – similar to <a href="#sqimitivei-nested">nested()</a> with no arguments but without keys</li>
+        <li><a target="_blank" href="http://underscorejs.org/#toArray">toArray()</a> – return all children as an array copy – similar to <a href="#sqimitivei-nested">nested()</a> with no arguments but without keys; alike to Underscore's <b>values()</b></li>
         <li><a target="_blank" href="http://underscorejs.org/#where">where(props)</a> – return only children that have equal properties; don't use this to compare <a href="#sqimitivei-_opt">_opt</a> for the same reason as with <b>pluck()</b> above</li>
         <li><a target="_blank" href="http://underscorejs.org/#without">without(sqim[, sqim, ...])</a> – all children except those given as arguments</li>
       </ul>
