@@ -17,6 +17,7 @@
   "files": [
     "sqimitive.js",
     "sqimitive.min.js",
+    "sqimitive.min.js.map",
     "sqimitive-async.js",
     "sqimitive-jquery.js",
     "README.txt",

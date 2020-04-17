@@ -15,6 +15,8 @@ The motto is: do not over-engineer.
   * no complicated solutions
   * simplicity is key
 
+Size: 20K minified, 6K gzipped.
+
 
 Dependencies
 ============
