@@ -6,7 +6,7 @@
 /*
   Mandatory dependency, one of:
   - NoDash (http://squizzle.me/js/nodash)
-  - underscorejs.org
+  - underscorejs.org (>=1.9.0)
   - lodash.com
 
   Fields with names starting with '_' are protected and intended

@@ -1,29 +1,44 @@
-Sqimitive.js - The Frontend Primitive
+Sqimitive.js - a JavaScript primitive
 =====================================
 
-                                                      Achieving nirvana through
-                                                        mindful web development
+Sqimitive is a lightweight framework of several classes for modular, event-based
+programming on top of native ES5 JavaScript.
+
+  * Ubiquitous events - reactive programming and inheritance without "super"
+  * Unlimited nesting of objects - powerful collections out of the box
+  * Tight integration with the DOM - working with data objects, not nodes
+
+The motto is: do not over-engineer.
+
+  * no transpilers
+  * no trove of classes
+  * no complicated solutions
+  * simplicity is key
 
 
-Sqimitive is a lightweight frontend library that lets you build concrete
-applications with bare minimum of technologies. Depends on Underscore.js.
-Optionally uses jQuery/Zepto.
+Dependencies
+============
+
+Mandatory, one of:
+
+  * NoDash (http://squizzle.me/js/nodash)
+  * underscorejs.org
+  * lodash.com
+
+Optional (for Sqimitive.jQuery only), one of:
+
+  * jquery.com
+  * zeptojs.com
 
 
-                Documentation and the first place to start:
-                      http://squizzle.me/js/sqimitive
+Documentation
+=============
 
-                 Читаете по-русски? Начните с Хабрахабра:
-                      http://habrahabr.ru/post/239149/
+The awfully detailed reference:
+http://squizzle.me/js/sqimitive
 
-
-Sqimitive is part of the Squizzle.me Toolkit - http://squizzle.me.
-
-Sqimitive source code is released in public domain. It has been written by
-Proger_XP (http://proger.me) while working in the awesome place called
-Belstone Capital (http://www.belstonecapital.com).
-
-Documentation is released under CC BY (https://creativecommons.org/licenses/by/4.0/).
+An introductory article in Russian:
+https://habr.com/ru/post/239149/
 
 
 Ways To Install
@@ -31,6 +46,13 @@ Ways To Install
 
 $ bower install sqimitive
 $ npm install sqimitive
+
+
+License
+=======
+
+Public domain.
+http://unlicense.org
 
 
 ---

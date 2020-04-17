@@ -1,7 +1,7 @@
 {
   "name": "sqimitive",
   "main": "sqimitive.js",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "homepage": "http://squizzle.me/js/sqimitive",
   "repository": {
     "type": "git",
@@ -11,23 +11,26 @@
     "url": "https://github.com/ProgerXP/Sqimitive/issues"
   },
   "author": "Proger_XP <proger.xp@gmail.com> (http://proger.me)",
-  "description": "Frontend primitive. Backbone alternative that is half the size while top the features.",
+  "description": "A JavaScript primitive. Events, collections, inheritance, DOM integration based on a universal paradgm.",
   "dependencies": {
-    "underscore": ">=1.4.4"
   },
   "files": [
     "sqimitive.js",
     "sqimitive.min.js",
+    "sqimitive-jquery.js",
     "README.txt",
     "LICENSE.txt"
   ],
   "keywords": [
     "library",
+    "jquery",
+    "zepto",
+    "nodash",
+    "underscore",
+    "lodash",
     "backbone",
     "squizzle",
-    "jquery",
-    "underscore",
-    "zepto",
+    "reactive",
     "MVC"
   ],
   "license": "Unlicense"
