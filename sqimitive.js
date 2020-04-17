@@ -245,9 +245,9 @@
     //     instanceMethod: function () { ... },
     //   }
     //
-    //   var Base1 = Sqimitive.Sqimitive.extend({})
+    //   var Base1 = Sqimitive.Base.extend({})
     //
-    //   var Base2 = Sqimitive.Sqimitive.extend({
+    //   var Base2 = Sqimitive.Base.extend({
     //     _opt: {
     //      a: 'base',
     //    },
@@ -1889,7 +1889,8 @@
     },
   })
 
-  // Reference to self in the instance property.
+  // Reference to self in the instance property. Can't be set when extending
+  // because the target member doesn't exist yet.
   Sqimitive.Base.prototype._childClass = Sqimitive.Base
   // Static fields of Sqimitive.Base.
   Sqimitive.Base._mergeProps.push('_opt', 'elEvents', '_respToOpt')
@@ -2179,6 +2180,5 @@
     }
   })
 
-  Sqimitive.Sqimitive = Sqimitive.Base
   return Sqimitive
 });
