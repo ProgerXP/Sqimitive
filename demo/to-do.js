@@ -7,6 +7,12 @@ var App = window.App = {}
 // development - it's a promise. This simple app have none though.
 App.Base = window.Sqimitive.jQuery.extend()
 
+App.ValidationError = function (msg) {
+  this.message = msg
+}
+
+App.ValidationError.prototype = new Error
+
 /***
   Single Task - objects to be nested in App.Tasks
  ***/
@@ -33,13 +39,15 @@ App.Task = App.Base.extend({
     change: 'render',
 
     init: function () {
+      // Allow linking to a particular task as #anchor.
       this.el.attr('id', this._cid)
     },
 
     render: function () {
       // get() without arguments returns all _opt (options) so the template
       // can use them. Somewhat like Backbone's toJSON() but a shallow copy.
-      this.el.html( this._template(this.get()) )
+      var vars = _.extend(this.get(), {id: this._cid})
+      this.el.html(this._template(vars))
     },
 
     change_done: function (value) {
@@ -68,19 +76,43 @@ App.Task = App.Base.extend({
     },
 
     'blur [name]': function (e) {
-      this.set(e.target.name, e.target.value)
+      try {
+        this.set(e.target.name, e.target.value)
+      } catch (ex) {
+        // Can't save - bad value (empty caption). Let the user re-enter it.
+        alert(ex.message)
+        e.target.value = this.get(e.target.name)
+        _.defer(function () {
+          e.target.select()
+          e.target.focus()
+        })
+      }
     },
 
-    // Calls this['remove'] when matching event is triggered.
+    // Calls this['remove'] when a matching event is triggered.
     'click .delete': 'remove',
 
     // Calls this.copy() but ignores all arguments because of the trailing
-    // hash - read about masker() to know better. If we included the
+    // dash - read about masker() to know better. If we included the
     // argument then copy(parent) will become copy(event) - and will break.
     'click .copy': 'copy-',
 
     'click .edit, .unedit': function (e) {
       this.set('editing', e.target.className.indexOf('unedit') == -1)
+    },
+
+    'keydown [name="caption"]': function (e) {
+      if (e.keyCode == 27) {  // Escape quits editing without saving caption.
+        this.set('editing', false)
+      } else if (e.keyCode == 13) {   // Enter tries to save caption, then quits.
+        try {
+          this.set(e.target.name, e.target.value)
+          // Only quit editing on no exception in set().
+          this.set('editing', false)
+        } catch (ex) {
+          // Ignore validation errors, keep the input focused.
+        }
+      }
     },
 
     dblclick: function () {
@@ -90,8 +122,18 @@ App.Task = App.Base.extend({
 
   // Equivalent to function (value) { return $.trim(value) } - ignores extra
   // arguments that normalize_OPT() functions are passed.
-  normalize_caption: App.Base.masker($.trim, '.'),
+  // Shorter with ES6: (s) => $.trim(s).
   normalize_description: App.Base.masker($.trim, '.'),
+
+  // normalize_OPT() doubles as a validation routine.
+  normalize_caption: function (now) {
+    now = $.trim(now)
+    if (now == '') {
+      throw new App.ValidationError('Cannot assign empty caption to a Task.')
+    } else {
+      return now
+    }
+  },
 
   copy: function (parent) {
     parent = parent || this._parent
@@ -99,7 +141,9 @@ App.Task = App.Base.extend({
     if (parent) {
       return parent.nest( new this.constructor(this.get()) )
     } else {
-      throw 'Cannot copy a Task to no parent.'
+      // Throwing objects rather than strings is better as they have stack
+      // trace and other useful properties.
+      throw new TypeError('Cannot copy a Task to no parent.')
     }
   },
 })
@@ -109,6 +153,10 @@ App.Task = App.Base.extend({
  ***/
 
 App.Tasks = App.Base.extend({
+  // Sqimitive's internal _children property is an object and JavaScript's
+  // objects are unordered. This mix-in transparently maintains proper order.
+  mixIns: [window.Sqimitive.Ordered],
+
   // Makes sure we don't occasionally nest a wrong class.
   _childClass: App.Task,
 
@@ -118,7 +166,41 @@ App.Tasks = App.Base.extend({
   // as they appear and go away.
   _childEvents: ['change'],
 
+  _opt: {
+    // If null, the list is sorted by _cid (essentially later added appear last),
+    // else is a string - property name of Task to sort by.
+    order: 'caption',
+  },
+
   events: {
+    // The caller may override sort order for a particular Task by setting
+    // options.pos given to nestEx(). If pos is null then 'order' is used.
+    '=_sorter': function (sup, a, b, posB) {
+      var posA = a.pos == null ? a.child.get(this.get('order')) : a.pos
+      return arguments.length == 2 ? posA
+        : (posA > posB ? +1 : (posA < posB ? -1
+            // If properties match - sort stably by unique and constant _cid's.
+            : (a.child._cid - b.child._cid)))
+    },
+
+    // When the property we're sorting by is changed, update that child's pos.
+    '.change': function (sqim, option, now, old) {
+      // Re-nesting an already nested child simply changes its pos.
+      option == this.get('order') && this.nest(sqim, {pos: now})
+    },
+
+    // When changing the sort order, re-sort the entire list.
+    change_order: 'resort',
+
+    // Is called when child has changed pos. The order inside this sqimitive
+    // is updated automatically but not el positions in the DOM.
+    _repos: function (child, index) {
+      index >= this.length - 1
+        ? child.el.appendTo(this.el)
+        : child.el.insertBefore(this.el.children()[index])
+    },
+
+    // When adding a new child
     '+nestEx': function (res) {
       // attach() without arguments reads sqim.get('attachPath'), if set.
       res.changed && res.child.attach().render()
@@ -153,9 +235,16 @@ App.NewTaskForm = App.Base.extend({
         description:  this.$('[name="description"]').val(),
       }
 
-      var task = new App.Task(attrs)
+      var task
+      try {
+        task = new App.Task(attrs)
+      } catch (e) {
+        if (!(e instanceof App.ValidationError)) {
+          throw e
+        }
+      }
 
-      if (task.get('caption') != '') {
+      if (task) {   // validation succeeded.
         this.get('tasks').nest(task)
         this.$('[name]').val('')
 
@@ -211,7 +300,12 @@ App.Document = App.Base.extend({
 
     'click #purge': function () {
       // Removes all tasks marked as "done" - matching filter(sqim.get('done')).
-      this.get('tasks').chain().filter(App.Base.picker('get', 'done')).invoke('remove')
+      var doneTasks = this.get('tasks').filter(App.Base.picker('get', 'done'))
+      _.invoke(doneTasks, 'remove')
+    },
+
+    'change #order': function (e) {
+      this.get('tasks').set('order', e.target.value || null)
     },
   },
 })
@@ -232,7 +326,7 @@ App.Document = App.Base.extend({
     tasks: tasks,
   })
 
-  var app = new App.Document({
+  var app = window.app = new App.Document({
     el: document.body,
     tasks: tasks,
   })
@@ -252,6 +346,6 @@ App.Document = App.Base.extend({
     // (array of options that are turned into new Sqimitive's).
     tasks.assignChildren( $.parseJSON(decodeURIComponent(data[2])) )
   } catch (e) {
-    // Ignore JSON parse errors.
+    // Ignore JSON parse errors or different serialization format.
   }
 })();

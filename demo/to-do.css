@@ -102,6 +102,12 @@ button:hover:focus {
   margin-left: 0.5em;
 }
 
+#order {
+  display: block;
+  margin: .5em auto 0;
+  font-size: 1em;
+}
+
 #list {
   margin: 0 auto;
   max-width: 500px;
@@ -126,7 +132,7 @@ li {
 }
 
 #list button:not(:hover) {
-  background: #e0e0e0;
+  background: #eaeaea;
 }
 
 article {

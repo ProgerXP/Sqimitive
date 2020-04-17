@@ -1927,7 +1927,8 @@
       // was moved to another _ordered position without changing its key.
       //
       // If re-nesting the same child on the same key, _ordered position is
-      // updated if old and new pos are different (!_.isEqual()).
+      // updated if old and new pos are different (!_.isEqual()); changed
+      // remains false (detect this case by comparing index and oldIndex).
       '+nestEx': function (res) {
         var changed = res.changed
         if (changed && res.previous && !this._owning) {
@@ -1944,6 +1945,7 @@
           // preventing their GC and clones options to avoid indirect changes
           // by the caller (nestEx() returns the object as is).
           this._ordered.splice(res.index, 0, _.pick(res, 'child', 'key', 'pos'))
+          this._repos(res.child, res.index)
         }
       },
 
@@ -2058,8 +2060,16 @@
         // iteration of indexFor()).
         return this._sorter(a, b, this._sorter(b))
       }.bind(this))
+      this.each(this._repos, this)
       return this
     },
+
+    // Called for newly nested and changed children.
+    // Not called for removed children.
+    //
+    //* sqim object - the child that has changed position
+    //* index int - sqim's index (see `#at())
+    _repos: Core.stub,
 
     //= object entry in _ordered
     //
@@ -2079,7 +2089,7 @@
     },
 
     staticProps: {
-      // Adapted by Underscore's sortedIndex().
+      // Adapted from Underscore's sortedIndex().
       // Supports two sort function styles: relative (a, b) and weight-based (a).
       //
       // func is called first with 1 argument to return value's weight (which is

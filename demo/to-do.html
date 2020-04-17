@@ -11,7 +11,7 @@
       <h1>Simple To-Do App</h1>
 
       <nav>
-        <a href="http://squizzle.org/js/sqimitive">Sqimitive.js</a> demo
+        A <a href="http://squizzle.org/js/sqimitive">Sqimitive.js</a> demo
         • <a href="to-do.js" id="source">View source</a>
       </nav>
     </header>
@@ -41,6 +41,12 @@
       </label>
 
       <button id="purge">Delete</button>
+
+      <select id="order">
+        <option value="caption">Sort by caption</option>
+        <option value="done">Sort by done state</option>
+        <option value="">Sort by creation order</option>
+      </select>
     </p>
 
     <ul id="list">
@@ -54,18 +60,19 @@
         <h2>
           {{ caption }}
           <input type="checkbox" {{#if done}}checked{{/if}}>
+          <a href="#{{ id }}">#</a>
         </h2>
 
         <article>{{ description }}</article>
       {{/if}}
 
       <p>
-        <button type="button" class="copy">Copy</button>
         {{#if editing}}
-          <button type="button" class="unedit">Close</button>
+          <button type="button" class="unedit">Save</button>
         {{else}}
           <button type="button" class="edit">Edit</button>
         {{/if}}
+        <button type="button" class="copy">Copy</button>
         <button type="button" class="delete">Delete</button>
       </p>
     </script>
