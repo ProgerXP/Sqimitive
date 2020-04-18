@@ -574,6 +574,10 @@
               eobj.res && thisArgs.unshift(res)
             }
 
+            // A benchmark avoiding Function's apply() was done on Chrome,
+            // instead using a direct call construct from EventEmitter3:
+            // switch (args.len) {  case 0: f();  case 1: f(args[0]);  ... }
+            // It made no differences at all in performance.
             var thisRes = eobj.func.apply(eobj.cx || this, thisArgs)
           }
 
@@ -688,7 +692,7 @@
         // Adding mix-ins after Child was declared may have unexpected side effects - if the mix-in adds an event and if Child had its own events block, then Child won't receive new mix-in's events. This is an implementation detail - "officially", adding mix-ins after declaring a subclass leads to undefined behaviour and should never be used.
         if (this._events == this.constructor.__super__._events) {
           // Could use deepClone but it's more intense - we don't clone eobj's
-          // which theoretically could be changed before instanatiation but we
+          // which theoretically could be changed before instantiation but we
           // ignore this possibility.
           this._events = _.extend({}, this._events)
 
@@ -950,6 +954,20 @@
       }
 
       event.prefix == '-' ? list.unshift(eobj) : list.push(eobj)
+
+      // A benchmark with optimized event handlers was done on Chrome:
+      // it was discovered that in a certain application 60% of fire() calls
+      // were on events with 1 handler so I made it bypass fire() if there were
+      // no handlers (replaced the wrapped method, firer() with stub) or 1
+      // handler (replaced with direct call to it); this was also maintained
+      // on event handler changes (on()/off()).
+      //
+      // However, performance savings from this optimization were ~5% (on
+      // 30k fire() calls) while the added complexity was significant (due to
+      // different eobj properties like cx and post which implementation needed
+      // to be duplicated in both fire() and the fire()-less wrapper) so it was
+      // discarded.
+
       return eobj
     },
 
@@ -1129,7 +1147,7 @@
     // [BaseObj, 'Path.To.Class'] or just 'Path.To.Class' (inside this' static
     // properties). Empty string stops searching (so _childClass of '' maps to
     // this). Errors if none found. Useful for "forward type declaration" where
-    // the children class is defined after the collection.
+    // the child class is defined after the collection.
     _childClass: null,
 
     // ** Can be set upon declaration and runtime (affects only new children).
@@ -1676,8 +1694,8 @@
       var eq = func instanceof Object
       for (var key in this._children) {
         if (eq
-            ? (this._children[key] == func)
-            : func.call(cx, this._children[key], key, this._children)) {
+              ? (this._children[key] == func)
+              : func.call(cx, this._children[key], key, this._children)) {
           return key
         }
       }
@@ -2065,8 +2083,11 @@
       return this
     },
 
-    // Called for newly nested and changed children.
-    // Not called for removed children.
+    // Called for newly nested and changed children. Not called for removed
+    // children. resort() calls it for all children even if some didn't change
+    // positions (this is hard to determine) - note Array's forEach() implications
+    // (in ascending order from child #0 to last; if _repos() mutates children
+    // then some of them are skipped).
     //
     //* sqim object - the child that has changed position
     //* index int - sqim's index (see `#at())
