@@ -88,7 +88,7 @@
   var Sqimitive = {
     version: '1.1',
     // Store reference to the utility library in use (particularly when using
-    // modular frameworks so that it's possible to access _() by requiring
+    // modular frameworks so that it's possible to access _ by requiring
     // Sqimitive alone).
     _: _,
   }
@@ -772,8 +772,9 @@
         var info = this._cid
 
         if (this.el) {
-          info += '\t\t' + this.el[0].tagName
-          var className = this.el[0].className.trim()
+          var el = this.el.nodeType ? this.el : this.el[0] // jQuery.
+          info += '\t\t' + el.tagName
+          var className = el.className.trim()
 
           if (className != '') {
             info += (' ' + className).replace(/\s+/g, '.')
@@ -1088,10 +1089,6 @@
     // Methods/events get()/set() are meant to be used to access this data.
     //
     // Format:    {name: value}
-    //
-    // Standard options:
-    // * attachPath: '.' (this.el) | '.sel [ector]'
-    // * el: {tag: 'p', ...} (only when given to the constructor)
     _opt: {},
 
     // Not meant for tampering with. Used internally to reverse set()-produced
@@ -1170,7 +1167,7 @@
     //
     // Specifies the way external input object (e.g. API response) is transformed
     // into options when assignResp() is called. set() is used to assign new values
-    // so normalization and change events take place as usual.
+    // so normalization and change events take place as usual. Part of _mergeProps.
     // Format: {respKey: optValue}.
     //
     // optValue:
@@ -1209,9 +1206,11 @@
     // but can be used to create unique keys; by convention, the class'
     // handlers don't have ns while mix-ins do.
     //
-    // Listeners are automatically rebound by attach(). See also attachPath.
     // elEvents is listed in _mergeProps so subclasses defining it add to their
     // parents' events instead of overwriting them entirely.
+    //
+    // If using Sqimitive.jQuery, listeners are automatically rebound by attach().
+    // See also Sqimitive.jQuery's attachPath opt.
     //
     // Format:    {'click[ .sel .ector]': Function|'methodName'}
     elEvents: {},
@@ -1235,7 +1234,9 @@
     },
 
     // Creates this.el, if necessary. Sets this._opt from object passed to
-    // the constructor, if any. DOM event listeners (elEvents) are bound
+    // the constructor, if any.
+    //
+    // Sqimitive.jQuery-specific: DOM event listeners (elEvents) are bound
     // on render() by attach(), if attachPath option is set.
     init: function (opt) {
       if (_.isArray(this._childClass)) {
@@ -1262,9 +1263,9 @@
     postInit: Core.stub,
 
     // Placeholder for populating this.el with the actual contents of this
-    // instance (View). Default implementation re-inserts all nested Sqimitive
-    // under their corresponding attachPath's under this.el with attach().
-    // It doesn't render them.
+    // instance (View). Default implementation of Sqimitive.jQuery re-inserts
+    // all nested Sqimitive under their corresponding attachPath's under this.el
+    // with attach(). It doesn't render them.
     render: function () {
       this.invoke('attach')
       return this
@@ -1701,13 +1702,14 @@
       }
     },
 
-    // Shorthand to _(sqim.slice()).
+    // Shorthand to _(sqim.slice()), instead of _.chain(). Only works if
+    // supported by your utility library (Underscore/LoDash but not NoDash).
     _: function () {
       return _(this.slice())
     },
 
     // Similar to unnest() but before unnesting removes this.el from its
-    // parent DOM node. Note that this doesn't recursively remove all nested
+    // parent (DOM) node. Note that this doesn't recursively remove all nested
     // _children as it might not be desired and slow; if they need to do some
     // on-removal actions like removing event handlers - you can do
     // this.sink('remove').

@@ -52,6 +52,11 @@
   //! +cl=Sqimitive.jQuery:Sqimitive.Base
   // Makes Sqimitive's `'el a jQuery node, maintains DOM event listeners, etc.
   //
+  // New standard options (_opt):
+  // * attachPath: '.' (parent's el) | '.sel [ector]' - resolved with parent.$()
+  // * el (only when given to the constructor, not to set() or sqim.el = ...):
+  //   {tag: 'p', ...} | '.sel' (resolved with global $())
+  //
   //# Quick-start example
   //[
   //   var Task = Sqimitive.jQuery.extend({
@@ -139,7 +144,7 @@
     // Similar to `[this.el.find(path)`] but returns `*el`* if `*path`* is empty or is a
     // dot (`[.`]). Special value `*body`* always returns `[document.body`].
     // If `[this.el`] is `*null`* always returns an empty jQuery collection.
-    // If `*path`* is a jQuery object or a DOM node – returns `[$(path)`] (note that
+    // If `*path`* is a jQuery object or a DOM node - returns `[$(path)`] (note that
     // it may be outside of `*this.el`* or have length == 0).
     //
     // Note: attach() calls $() on _parent (if it's set); even if child's attachPath is a globally-reachable selector (html,head,body) - if _parent's el is false, it will never match. Work around this by setting attachPath to document.rootElement (html), document.head or document.body.
