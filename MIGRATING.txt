@@ -1,0 +1,188 @@
+Migrating from 1.0 to 1.2
+=========================
+
+(1.1 is a transitive version and should not be used.)
+
+1.2 is a mature release with multiple breaking changes. demo/to-do.* were
+updated to reflect most important ones (the introduction of Ordered).
+
+Improvements and bug fixes:
+
+  * Reworked the innards of instantiation mechanism (extend())
+  * Improved performance of instantiation (constructor, deepClone()) and events
+  * No longer requiring Underscore.js - can be replaced with NoDash or LoDash
+  * Properly isolated from window and supporting AMD and CommonJS thanks to
+    Universal Module Header (umh.js)
+  * Enabled strict mode for all scripts, avoided arguments.callee and such
+  * Fixed hooking events (fuse()) with standard method names like 'toString'
+  * Fixed improper length calculation if not _owning and nesting over an
+    existing key (replacing)
+
+New features:
+
+  * Added mix-ins (Sqimitive.Core's static and instance mixIn() methods)
+  * Added nestEx() method (nest() calls it) with more convenient semantics for
+    hooking (single argument format and detailed return value)
+  * Allowed _childClass to be indirect reference (array or string)
+  * Improved assignChildren()/assignResp():
+    * added options.childClass instead of always using _childClass
+    * now returning array of nested and removed sqimitives
+    * assignResp() now setting options.assignResp
+    * _respToOpt function may now return non-array
+  * Added Base.getSet(), findKey() methods
+  * Event handlers can now specify post-action callback (eobj.post property)
+  * Added Base.chunk() and Ordered.findIndex()/findLastIndex() helper methods
+  * Added Sqimitive._, Sqimitive.jQuery.$ properties, Sqimitive.Base._() method
+  * Added ability to give names to constructors (extend()) to aid in debugging
+  * Added Sqimitive.Async class as an alternative to "promises"
+
+Breaking changes:
+
+  * Removed Sqimitive.Sqimitive (used to be an alias of Sqimitive.Base)
+    => instead of:
+           var MyClass = Sqimitive.Sqimitive.extend(...)
+       do:
+           var MyClass = Sqimitive.Base.extend(...)
+
+  * Extracted DOM-related behaviour from Sqimitive.Base to Sqimitive.jQuery
+    => instead of:
+           var MyClass = Sqimitive.Sqimitive.extend(...)
+       do:
+           var MyClass = Sqimitive.jQuery.extend(...)
+
+  * Moved away from "optimistically ordered" Sqimitive to new Ordered mix-in:
+    => if your sqimitive's children must have stable order, do:
+           var MyOrdered = Sqimitive.Base.extend({
+             mixIns: [Sqimitive.Ordered],
+             ...
+           })
+       or (outside of class declaration at any time):
+           MyOrdered.mixIn(Sqimitive.Ordered)
+
+    * Sqimitive.Base.slice() used to treat length parameter as end index; this
+      was fixed to conform to standard Array's slice()
+      => instead of (sqim with 3 children):
+             sqim.slice(2, 1) returning [child3]
+         do:
+             sqim.slice(2, 3)
+
+    * at() moved from Base to Ordered and return value changed
+      => don't rely on children positions in sqimitives without Ordered mix-in
+         in Ordered, instead of:
+             osqim.at(2) returning [child3]
+         do:
+             osqim.at(2).child
+
+    * Helper methods moved from Base to Ordered:
+      first(), initial(), last(), rest(), indexOf(), lastIndexOf()
+
+    * reduceRight() moved from Base to Ordered and made operating on array
+      => instead of:
+             osqim.reduceRight(function (memo, child, key, children) { ... })
+         do:
+             osqim.reduceRight(function (memo, child, index, array) {
+               var key = this.at(index).key
+               var children = this.nested()
+               ...
+             }, 0, osqim)
+
+  * Helper methods now operate on array (Base.slice()), not object (_children):
+    each(), map(), reduce(), find(), filter(), reject(), every(), some(), max(),
+    min(), sortBy(), groupBy(), indexBy(), countBy()
+    => see above for reduceRight() (omit first argument, memo):
+           osqim.each(function (child, index, array) {
+             var key = this.at(index).key
+             ...
+           }, osqim)
+
+  * Removed Underscore-specific helper methods:
+
+    * where()
+      => instead of:
+             sqim.where({length: 1, _some: 2}) returning array of children objects
+         do:
+             sqim.filter(function (child) {
+               return child.length == 1 && child._some == 2
+             })
+
+    * findWhere()
+      => instead of:
+             sqim.findWhere({length: 1}) returning any one matched children
+         do:
+             sqim.filter(function (child) { return child.length == 1 })
+
+    * pairs()
+      => instead of:
+             sqim.pairs() returning [ ['k1', child1], ['k2', child2], ... ]
+         do:
+             sqim.map(function (child) {
+               return [this.findKey(child), child]
+             }, sqim)
+
+    * chain()
+      => instead of:
+             sqim.chain().filter(...).invoke(...)
+         do:
+             sqim._().filter(...).invoke(...)
+         or (if your library doesn't support _() like NoDash):
+             _.invoke(sqim.filter(...), ...)
+         or even:
+             _.invoke(_.filter(sqim.toArray(), ...), ...)
+
+    * sortedIndex()
+      => use the Ordered mix-in to transparently maintain proper order
+
+  * Returning info array in assignChildren(), not this
+    => instead of:
+           sqim.assignChildren(...).somethingMore...
+       do:
+           sqim.assignChildren(...); sqim.somethingMore...
+
+  * attach() is using _parent's $(), not repeating look-up if given parent
+    parameter matched no node, not passing '.ns' part to jQuery.on() (elEvents)
+    => these can almost be qualified as bugs; Sqimitive.jQuery must always use
+       '.sqim-'_cid as a namespace - if you need your own '.ns', do it yourself:
+           events: {
+             attach: function () { this.el.on('click.my', ...) },
+             change_something: function () { this.el.off('.my') },
+           }
+
+  * Not treating 'body' path specially in $()
+    => instead of:
+           _opt: { attachPath: 'body' }
+           sqim.attach('body')
+           sqim.$('body')
+       use global $() or document.body:
+           _opt: { attachPath: $('body') } or _opt: { attachPath: document.body }
+           sqim.attach($('body')) or sqim.attach(document.body)
+           $('body') or document.body
+       note: document.body is null if executing within <head> before onload:
+           <head> <script>alert(document.body)</script> </head>
+       this doesn't affect constructor (opt.el) since it's using global $():
+           new Sqimitive.jQuery({el: 'body'}) is fine, same as:
+           new Sqimitive.jQuery({el: $('body')})
+
+  * Added _respToOpt to default Sqimitive.Base._mergeProps
+    => if you had 2 classes:
+           var C1 = Sqimitive.Sqimitive.extend({ _respToOpt: {foo: true} })
+           var C2 = C1.extend({ _respToOpt: {bar: false} })
+       then C2._respToOpt was {bar: false} but is now {foo: true, bar: false}
+       either remove _respToOpt from your class' _mergeProps:
+           var C2 = ...
+           C2._mergeProps = _.without(C2._mergeProps, '_respToOpt')
+       or change _respToOpt in constructor (worse performance):
+           var C2 = C1.extend({
+             init: function () { delete this._respToOpt.foo },
+           })
+
+  * Minimal Underscore.js version increased from 1.4.4 to 1.8.0 or 1.9.0 (if
+    using chunk() helper)
+
+  * window.Sqimitive is replaced entirely, no longer merged if predefined before
+    script inclusion
+    => no workaround - extending Sqimitive is not recommended
+
+
+---
+Squizzle ♥ it
+http://squizzle.me
