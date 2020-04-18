@@ -235,9 +235,8 @@ App.NewTaskForm = App.Base.extend({
         description:  this.$('[name="description"]').val(),
       }
 
-      var task
       try {
-        task = new App.Task(attrs)
+        var task = new App.Task(attrs)
       } catch (e) {
         if (!(e instanceof App.ValidationError)) {
           throw e
