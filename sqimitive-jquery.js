@@ -50,12 +50,15 @@
   var _ = Sqimitive._
 
   //! +cl=Sqimitive.jQuery:Sqimitive.Base
-  // Makes Sqimitive's `'el a jQuery node, maintains DOM event listeners, etc.
+  // Makes Sqimitive's `'el (`@Base.el`@) a jQuery (`@jq:`@) node, maintains DOM
+  // event listeners, etc.
   //
-  // New standard options (_opt):
-  // * attachPath: '.' (parent's el) | '.sel [ector]' - resolved with parent.$()
-  // * el (only when given to the constructor, not to set() or sqim.el = ...):
-  //   {tag: 'p', ...} | '.sel' (resolved with global $())
+  // New standard options (`@Base._opt`@):
+  //> attachPath: '.' (parent's `'el) | `['.sel [ector]'`] - resolved with
+  //  parent's `[$()`]
+  //> el: `[{tag: 'p', ...}`] or `['.sel'`] (resolved with global `[$()`])
+  //  `- only processed when given to the constructor, not to `#set() or
+  //     `[sqim.el = ...`]
   //
   //# Quick-start example
   //[
@@ -70,15 +73,16 @@
   //     .nest( new Task({caption: 'Foo'}) )
   //]
   return Sqimitive.Base.extend('Sqimitive.jQuery', {
-    // Holds a DOM node assigned to this object or `*null`*. If set to `*false`* - no
+    // Holds a DOM node assigned to this object or `'null. If set to `'false - no
     // element is created (`[this.el`] will be null) - useful for data structures
-    // aka Models, otherwise is an object of HTML attributes plus the following
+    // aka "models", otherwise is an object of HTML attributes plus the following
     // special keys:
-    // `* tag - string, tag name like `*li`*
-    // `* className - the same as `*class`* (a CSS class) to work around the reserved word
+    //> tag: string `- tag name like `'li
+    //> className `- the same as `'class key (a CSS `'class) to work around the
+    //  reserved word
     //
-    // After inherited constructor has ran `*el`* is always DOM node wrapped in `[$()`]
-    // or `*null`*. Not advised to set it directly, treat as read-only.
+    // After inherited constructor has ran `'el is always DOM node wrapped in
+    // `[$()`] or `'null. Not advised to set it directly, treat as read-only.
     //
     // If changing on runtime, only set to an `[is$()`] object.
     el: {tag: 'div', className: ''},
@@ -103,13 +107,13 @@
         }
       },
 
-      // Appends `*el`* to parent (DOM selector or node). If no argument is given
-      // uses `*attachPath`* option (if present) to determine the parent. If parent was
-      // changed calls `[attach()`] on all children of self to rebind their
+      // Appends `#el to parent (DOM selector or node). If no argument is given
+      // uses `'attachPath `#_opt (if present) to determine the parent. If parent was
+      // changed, calls `#attach() on all children of self to rebind their
       // DOM listeners (doesn't happen if no parent was found or `[this.el`] is already
       // direct child of the found parent node so performance penalty of subsequent
-      // `[attach()`] calls is small). Ultimately, binds event listeners defined in
-      // `*elEvents`*.
+      // `#attach() calls is small). Ultimately, binds event listeners defined in
+      // `#elEvents.
       attach: function (parent) {
         arguments.length || (parent = this.get('attachPath'))
 
@@ -141,13 +145,18 @@
       },
     },
 
-    // Similar to `[this.el.find(path)`] but returns `*el`* if `*path`* is empty or is a
-    // dot (`[.`]). Special value `*body`* always returns `[document.body`].
-    // If `[this.el`] is `*null`* always returns an empty jQuery collection.
-    // If `*path`* is a jQuery object or a DOM node - returns `[$(path)`] (note that
-    // it may be outside of `*this.el`* or have length == 0).
+    // Similar to `[this.el.find(path)`] but returns `#el if `'path is empty or is a
+    // dot (`[.`]). Special value `'body always returns `[document.body`].
+    // If `#el is `'null always returns an empty jQuery collection (`@jq:`@).
+    // If `'path is a jQuery object or a DOM node - returns `[$(path)`],
+    // `@jq:jQuery`@ (note that it may be outside of `[this.el`] or have
+    // `'length == 0).
     //
-    // Note: attach() calls $() on _parent (if it's set); even if child's attachPath is a globally-reachable selector (html,head,body) - if _parent's el is false, it will never match. Work around this by setting attachPath to document.rootElement (html), document.head or document.body.
+    // Note: `#attach() calls `[$()`] on `#_parent (if it's set); even if
+    // child's `'attachPath `#_opt is a globally-reachable selector
+    // (`[html,head,body`]) - if `'_parent's `#el is `'false, it will never
+    // match. Work around this by setting `'attachPath to `[document.rootElement`]
+    // (`'html), `[document.head`] or `[document.body`].
     //
     //[
     //   this.$()                //=> $(this.el)
@@ -168,7 +177,7 @@
   }, {
     $: $,
 
-    // Determines if `*obj`* is a `[$`] collection (like jQuery or Zepto).
+    // Determines if `'obj is a `[$`] collection (like jQuery `@jq:`@ or Zepto).
     //
     //[
     //   is$(document.rootElement)   //=> false

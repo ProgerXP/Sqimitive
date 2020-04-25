@@ -40,20 +40,24 @@
   var _ = Sqimitive._
   var unique = {}
 
+  //! +cl=Sqimitive.Async:Sqimitive.Base
   return Sqimitive.Base.extend('Sqimitive.Async', {
-    // Use -Infinity and Infinity to specify min/max priority.
+    // Max absolute number (+/-) accepted by `#whenComplete() and others,
+    // clamped to the nearest value.
+    //
+    // Use `'-Infinity and `'Infinity to specify min/max priority.
     MAX_PRIORITY: 2,
 
     _childClass: '',
     _childEvents: ['complete', '=exception'],
     _ordered: {complete: Infinity, error: Infinity, success: Infinity},
 
+    //> status null not started or not finished`, true/false succeeded/failed
+    //  `- reflects both this own instance's status and of its children
+    //> ignoreError bool `- if set, this instance will be considered a success
+    //  even if status is false
     _opt: {
-      // Reflects both this own instance's status and of its children.
-      // null - not started or not finished, true/false - succeeded/failed.
       status: null,
-      // If set, this instance will be considered a success even if status is
-      // false.
       ignoreError: false,
     },
 
@@ -100,6 +104,7 @@
       },
     },
 
+    //! +ig
     // Separate events for separate priorities are used instead of a single
     // event because Sqimitive doesn't support ordered handlers and because such
     // set-up doesn't require sorting (or inserting handlers in correct positions).
@@ -165,30 +170,40 @@
       return this
     },
 
-    // Unlike on('event') func gets fired immediately if the condition is
-    // already met (in this case priority is ignored).
+    // Unlike with `[on('event')`] (`#on()) `'func gets called immediately if
+    // the condition is already met (in this case `'priority is ignored).
+    // See also `#MAX_PRIORITY.
     //
-    // Warning: the following won't work because func may be called immediately,
-    // before result is assigned to req:
+    // Warning: the following won't work because `'func may be called immediately,
+    // before the result is assigned to `'req:
+    //[
     //   var req = reqs.whenComplete(function ...)
+    //]
     whenComplete: function (func, cx, priority) {
       return this._when(func, cx, priority, !this.isLoading(), 'complete')
     },
 
+    // See `#whenComplete().
     whenError: function (func, cx, priority) {
       return this._when(func, cx, priority, this.isSuccessful() == false, 'error')
     },
 
+    // See `#whenComplete().
     whenSuccess: function (func, cx, priority) {
       return this._when(func, cx, priority, this.isSuccessful() == true, 'success')
     },
 
+    // Sets `'status (`#_opt) to `'true if have no children and not `#isLoading().
+    //= null if not empty or is loading`, boolean result of `@Base.set()`@
     doneIfEmpty: function () {
       if (!this.length && this.isLoading()) {
         return this.set('status', true)
       }
     },
 
+    // Removes event listeners for `#success()/`#error()/`#complete(),
+    // Calls `#abort() and `#remove() on `#_children and sets `'status (`#_opt)
+    // to `'null.
     clear: function () {
       _.each(['success', 'error', 'complete'], function (e) { this.off(e) }, this)
       this.invoke('abort')
@@ -197,29 +212,39 @@
       return this
     },
 
-    // Returns null when still loading (status unknown), else - boolean.
+    //= null when still loading (`'status unknown)`, boolean
     isSuccessful: function () {
       var s = this.get('status')
       return s == null ? null : !!(this.get('ignoreError') || s)
     },
 
+    //= true still loading (`'status unknown)
     isLoading: function () {
       return this.get('status') == null
     },
 
+    //! +fn=success +ig
+    //
     // These get fired when all requests have finished loading. Each handler is
     // called at most once. If a handler changes status, others are skipped
     // until status changes again.
     //
-    // Even though call order is deterministic (Async.nest() acts as on()
-    // because of _childEvents/_forward()) it's usually more convenient to use
-    // specific priority levels which don't depend on the order of nest()/on()
-    // calls: on('success') is called after 'success-3' but before 'success2'.
+    // Even though call order is deterministic (`'Async's `#nest()`] acts as `#on()
+    // because of `#_childEvents/`#_forward()) it's usually more convenient to use
+    // specific priority levels which don't depend on the order of `'nest()/`'on()
+    // calls: `[on('success')`] is called after `[success-3`] but before
+    // `[success2`].
     success: Sqimitive.Core.stub,
+
+    //! +fn=error +ig
+    // See `#success().
     error: Sqimitive.Core.stub,
+
+    //! +fn=complete +ig
+    // See `#success().
     complete: Sqimitive.Core.stub,
 
-    // Gets called on an exception in any of the above 3 handlers.
+    // Gets called on an exception in `#success(), `#error() or `#complete().
     // This is in contrast with conventional "promises" - here, an error in
     // handing the "promise" can't mark that promise failed if its underlying
     // action (e.g. an AJAX call) has succeeded.
@@ -227,14 +252,15 @@
     // Note: this isn't called on request failure unless error has thrown an
     // exception.
     //
-    // There's no whenException() because already occurred errors are not
-    // stored. Only future exceptions can be listened to, via the usual on().
-    // It's not affected by clear() either.
+    // There's no "whenException()" because already occurred errors are not
+    // stored. Only future exceptions can be listened to, via the usual `#on().
+    // It's not affected by `#clear() either.
     exception: function (e) {
       throw e
     },
 
-    // sink('abort') to abort all.
+    //! +fn=abort +ig
+    // Do `[sink('abort')`] (`#sink()) to abort everything recursively.
     abort: Sqimitive.Core.stub,
   })
 });
