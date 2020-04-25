@@ -153,7 +153,8 @@
     })()
     </script>
 
-    <script src="orphusm.js"></script>
+    <script>orphus = {action: 'https://proger.me/orphus.php'}</script>
+    <script src="https://proger.me/orphus.js"></script>
 
     <article>
       <h1><b>Sqimitive.js</b> – Lightweight library to build concrete applications</h1>
@@ -281,7 +282,7 @@ alert(obj.complexrop.sub)
 
       <p>This can be used to create event observation spots too. Suppose that you have an object that’s loading some data from the server. Since it’s asynchronous you don't know when (or if) it will finish. Usually you would either create a callback property and call it or use a custom event (jQuery or Backbone) and call it once loading is done. In Sqimitive, you simply introduce some <kbd>_opt.loading</kbd>, set it to <kbd>false</kbd> and then once done – set it to <kbd>true</kbd>. Observers listen to <kbd>change_loading</kbd> event having the <a href="#corei-on">full</a> <a href="#corei-once">set</a> <a href="#corei-fuse">of</a> <a href="#corei-off">event</a> <a href="#corei-autoOff">handling</a> <a href="#corei-logEvents">routines</a> at their disposal instead of introducing <kbd>isLoading()</kbd>, <kbd>abortLoading()</kbd>, <kbd>onLoading()</kbd>, etc.</p>
 
-      <p>Now this also works in another way: an external object can <kbd>set('loading', true)</kbd> to force refreshing of the data. Better still – the loading object itself can set this option to trigger its own loading routine – naturally, avoiding code duplication.</p>
+      <p>Now this works the other way too: an external object can <kbd>set('loading', true)</kbd> to force refreshing of the data. Better still – the loading object itself can set this option to trigger its own loading routine – naturally, avoiding code duplication.</p>
 
       <p>Moreover, since options are not accessed directly you can always listen for their access with <kbd>get</kbd> or add custom behaviour with <kbd>set</kbd>. This leads to more stable code base.</p>
 
@@ -1860,7 +1861,7 @@ var MyLoggee = Sqimitive.Sqimitive.extend({
           <dl>
             <dt>on( {events} [, cx] )</dt>
             <dd>
-              <p>Fuses <b>multiple event handlers</b> into current object state meaning that they cannot be unbound with <a href="corei-off">off()</a>. Returns <b>this</b>. Similar to <a href="#corei-fuse">fuse()</a> with added event comma notation.</p>
+              <p>Fuses <b>multiple event handlers</b> into current object state meaning that they cannot be unbound with <a href="#corei-off">off()</a>. Returns <b>this</b>. Similar to <a href="#corei-fuse">fuse()</a> with added event comma notation.</p>
 
               <p><b>events</b> is an object with one or more event references as keys (e.g. <kbd>=over.ride__</kbd> – see below) and event handlers as values. Multiple references are separated with <kbd>, </kbd> (comma and a <b>space</b>; this is identical to registering them one-by-one). Handlers are either functions (closures) or strings (method names of the object to which listeners are added; resolved on call time so don't have to exist when binding the handler)</p>
 
@@ -2502,7 +2503,7 @@ sqim.nest('key', new MySqimitive)
         <dd>
           <p>Is called when <a href="#sqimitivei-nest">nest()</a> wasn't given an explicit key to determine one. <b>sqim</b> is the sqimitive that is about to be nested into this instance. Similar to Backbone’s <kbd>idAttribute</kbd>.</p>
 
-          <p>If you're trying to index children by some "ID" attribute (like Backbone’s Collection) note that <a href="sqimitivei-_parentKey">_parentKey</a> will <b>not</b> be auto updated if that attribute changes. You should react to the change yourself, for example:</p>
+          <p>If you're trying to index children by some "ID" attribute (like Backbone’s Collection) note that <a href="#sqimitivei-_parentKey">_parentKey</a> will <b>not</b> be auto updated if that attribute changes. You should react to the change yourself, for example:</p>
 
           <pre class="language-javascript">
 var MyCollection = Sqimitive.Sqimitive.extend({
