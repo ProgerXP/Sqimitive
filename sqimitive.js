@@ -101,7 +101,7 @@
 
   //! +cl=Sqimitive.Core
   //
-  // ` `#evt Events play fundamental role in Sqimitive – so fundamental that half
+  // ` `#evt Events play fundamental role in Sqimitive - so fundamental that half
   // of its code implements just that. For this reason Sqimitive per se is split
   // into two classes: `'Core and `#Base (both reside under common `@\Sqimitive\`@
   // namespace).
@@ -114,20 +114,20 @@
   //
   //# Basic conventions
   //
-  //* `*Protected class fields begin with underscore (`'_)`* – such fields (data
+  //* `*Protected class fields begin with underscore (`'_)`* - such fields (data
   //  properties and methods) are only meant to be read or written by the class
   //  they are defined in, or by any of its subclasses. It’s bad practice to try
-  //  to access them from an ancestor or, mind you, from a disconnected class –
+  //  to access them from an ancestor or, mind you, from a disconnected class -
   //  this is only justified, if ever, by really severe optimizations (such as
   //  tons of `@Base._opt`@ calls).
   //
-  //* `*Underscores separating camelCase`* – when an identifier (`'oneId) needs
+  //* `*Underscores separating camelCase`* - when an identifier (`'oneId) needs
   //  to be mixed into another (`'TwoId) it simply becomes `'oneId_twoId instead
   //  of `'oneIdTwoId, `'one_id_two_id or something else dictated by "pretty
   //  printing" rules. For example, event identifier for a `'change event of an
   //  `'attrName option is simply `'change_attrName.
   //
-  //* `*Semicolon-free zone`* – you don't have to follow this hype but the
+  //* `*Semicolon-free zone`* - you don't have to follow this hype but the
   //  author believes that such a code is cleaner and faster to type with a few
   //  insignificant drawbacks. No need to pay more where you don't have to, right?
 
@@ -176,7 +176,7 @@
     // No need to include parent's _mergeProps there (they are always merged).
     //
     // `'_mergeProps lists properties (only instance) that you want to merge
-    // rather than overwrite when subclassing a Sqimitive – exactly as
+    // rather than overwrite when subclassing a Sqimitive - exactly as
     // `[_.extend(parentProp, subclassProp)`]. In human language, this means
     // that if subclass defines a merging property and inside it has a key that
     // also exists in the base class' property then subclass overwrites that,
@@ -222,7 +222,7 @@
     //
     // ` `*In Backbone`*, when you extend a parent class with a property that
     // it already has you end up with a completely new property. This makes
-    // sense but not always – for example, if a class has its own
+    // sense but not always - for example, if a class has its own
     // `@bb:View-events`@ then what you really need is merge its own (base)
     // events with the events of new subclass. Same thing with
     // `@bb:Model-attributes`@ and `@bb:Model-defaults`@, `@bb:Router-routes`@
@@ -268,12 +268,12 @@
     //
     // In Sqimitive, every non-scalar property gets cloned upon object
     // instantination. If you don't want this overhead (usually it’s miniscule)
-    // – simply assign all complex values in the constructor, `#init() or
+    // - simply assign all complex values in the constructor, `#init() or
     // `#postInit() or list such properties (only instance) in `'_shareProps.
     // Be safe by default.
     //
     // One particular case to be aware of is when you are assigning classes to
-    // properties, like `[extend({_model: MyApp.MyModel})`] – it will be
+    // properties, like `[extend({_model: MyApp.MyModel})`] - it will be
     // recursively copied resulting in a broken prototype. Do this instead:
     //[
     //   var MyView = Sqimitive.Base.extend({
@@ -306,7 +306,7 @@
     //   MySqimitive._shareProps.push('prop1', 'prop2', ...)
     //]
     //
-    // ` `#_shareProps inheritance works exactly the same way as `#_mergeProps' –
+    // ` `#_shareProps inheritance works exactly the same way as `#_mergeProps' -
     // see its description for more examples.
     _shareProps: [],
 
@@ -333,7 +333,7 @@
     //
     // Lets you create a new subclass of the given class. `'protoProps are new
     // instance fields (properties or methods; can include `#events
-    // pseudo-property) while `'staticProps are new static fields – i.e. the
+    // pseudo-property) while `'staticProps are new static fields - i.e. the
     // ones called as `[MyClass.staticSomething()`] as opposed to `[(new
     // MyClass).instanceSomething()`]. Most of the time you will use just
     // `'protoProps.
@@ -565,7 +565,7 @@
     // (overridden).
     //
     // An empty function that returns `'undefined. Used in places where you
-    // don't want to supply any implementation – this lets Sqimitive optimize
+    // don't want to supply any implementation - this lets Sqimitive optimize
     // things when it knows that a function can simply be discarded.
     // Technically if you are not a performance purist you can just use
     // `[function () {}`] or `[new Function`] to achieve the same effect.
@@ -601,7 +601,7 @@
     //! `, +fna=function ( prop [, args] )
     //
     // Returns a function that expects one argument (an object) that, when
-    // called, checks if given object has `'prop property and if it does –
+    // called, checks if given object has `'prop property and if it does -
     // returns its value (if it’s a method then it’s called with `'args (array)
     // and the result returned), otherwise returns `'undefined (for non-objects
     // or objects with no `'prop).
@@ -898,7 +898,7 @@
     // function `'arguments become an array, arrays are returned as is while
     // anything else is wrapped into an array to become its sole member and
     // returned. This means that even `'null and `'undefined result in
-    // `[[value]`] – not `[[]`].
+    // `[[value]`] - not `[[]`].
     //
     // Does `*not`* clone result.
     //
@@ -927,7 +927,7 @@
     //
     // Guaranteed to be a valid identifier of only Latin symbols, i.e. begin with a letter followed by 0 or more letters, digits and underscores.
     //
-    // Historically expands to "`[C`]lient `[Id`]entifier" – a term originating
+    // Historically expands to "`[C`]lient `[Id`]entifier" - a term originating
     // from Backbone `@bb:`@ but probably not holding much meaning at this
     // point.
     _cid: '',
@@ -963,11 +963,11 @@
     // An internal object holding all current event bindings. Note that it
     // includes both "fused" and dynamic events (fused are produced by
     // `#extend'ing a class so that subclass' event handlers cannot be removed
-    // on runtime). It’s not advised to deal with this object directly – use
+    // on runtime). It’s not advised to deal with this object directly - use
     // `#on(), `#once(), `#off() and `#fire() instead.
     //
     // `'_events keys are event names without any prefixes or suffixes
-    // (`'render, `'remove and so on), values – arrays of event registration
+    // (`'render, `'remove and so on), values - arrays of event registration
     // objects of internal structure (study code comments for details). These
     // value arrays are given to `#fire() when an event occurs.
     _events: {},
@@ -1181,7 +1181,7 @@
     //]
     //
     // If you want to log some extra info or replace `'logEvent’s logging with
-    // your own – use regular Sqimitive inheritance:
+    // your own - use regular Sqimitive inheritance:
     //[
     //   var MyLoggee = Sqimitive.Base.extend({
     //    events: {
@@ -1272,7 +1272,7 @@
     // with added event comma notation.
     //
     // `'events is an object with one or more event references as keys (e.g.
-    // `[=over.ride__`] – see below) and event handlers as values. Multiple
+    // `[=over.ride__`] - see below) and event handlers as values. Multiple
     // references are separated with `[, `] (comma and a `*space`*; this is
     // identical to registering them one-by-one). Handlers are either functions
     // (closures) or strings (method names of the object to which listeners are
@@ -1311,7 +1311,7 @@
     //
     // Because of their dynamic nature, such event handlers are slightly less
     // efficient than fused so usually if your handler is meant to stay with
-    // the object for its lifetime – consider using `[on({event: func}, cx)`]
+    // the object for its lifetime - consider using `[on({event: func}, cx)`]
     // or `#fuse().
     //
     //#evtref
@@ -1319,19 +1319,19 @@
     //
     //> prefix `- optional; changes the way event handler is bound and called
     //  as explained in the following table
-    //> event `- event name (alphanumeric symbols, dots and colons) – exactly
+    //> event `- event name (alphanumeric symbols, dots and colons) - exactly
     //  what is given to `#fire() when triggering an event.
-    //> args `- Zero or more underscores (`'_) – if present, the handler gets
+    //> args `- Zero or more underscores (`'_) - if present, the handler gets
     //  called only if event was given that number of arguments (it’s not
     //  possible to match zero arguments). For example, `'eve__ registers a
     //  handler that is called for `[fire('eve', [1, 2])`] but is not for
     //  `[fire('eve', [1])`] or `[fire('eve', [1, 2, 3])`]. In case of `'=event
     //  (overriding handler), if argument count differs then all handlers
-    //  superseded by this one get called while the superseding handler itself –
+    //  superseded by this one get called while the superseding handler itself -
     //  does not (equivalent to doing `[return sup(this, arguments)`]).
     //
     //  Generally, usage of `'args is frowned upon because of its unintuitive
-    //  nature – see the note below for details.
+    //  nature - see the note below for details.
     //
     //# Event prefixes
     //> none: evArgs... `- No prefix adds new handler `*after`* existing ones
@@ -1343,13 +1343,13 @@
     //  otherwise identical to "no prefix".
     //> +   `*res`*, evArgs... `- Adds it `*after`* existing handlers but is
     //  passed current `*event return value`* `'res, and if this handler returns
-    //  anything but `'undefined – replaces event result with that value.
+    //  anything but `'undefined - replaces event result with that value.
     //> =   `*sup`*, evArgs... `- `*Wraps around`* existing handlers by
     //  removing them and passing a single callable `'sup of form `[function
-    //  (this, args)`] – first argument corresponds to the object which
+    //  (this, args)`] - first argument corresponds to the object which
     //  initiated the event, second is `'array of arguments that were passed
     //  with the event (can be modified to give underlying handlers different
-    //  set of data). `'args can also be `'arguments that the handler received –
+    //  set of data). `'args can also be `'arguments that the handler received -
     //  in this case first parameter (`'sup) is removed and the rest is given to
     //  underlying handlers.
     //  `[
@@ -1654,7 +1654,7 @@
     // value. When unregistering a wrapping handler (`'=event) its underlying
     // handlers are restored - put in place of the wrapper in the event chain.
     //
-    // `'key can be given event name (string like `'render or other – all listeners are removed), a handler ID (string as returned by `#on() - removes that particular handler from that particular event), context
+    // `'key can be given event name (string like `'render or other - all listeners are removed), a handler ID (string as returned by `#on() - removes that particular handler from that particular event), context
     // (object, that `'cx to which handlers are bound - all with the identical context are removed) or an array of any of these values including more arrays.
     //
     // key = 'evtname' | 'id/123' | {cx} | [key, key, ...]
@@ -1717,12 +1717,12 @@
   // Instance fields of Sqimitive.Base.
 
   // While `#Core implements the fundamental `#evt event framework, this class
-  // implements what makes Sqimitive `*the`* Sqimitive – `#opt options, `#el and
+  // implements what makes Sqimitive `*the`* Sqimitive - `#opt options, `#el and
   // `#elEvents, `#chld children and `#util filtering and a bit extra.
   //
   // `'Sqimitive has no static fields. The class is accessible globally as
   // `@Sqimitive\Base`@ but since it’s usually the only class you need (and
-  // you probably want a shorter name too) – start your project with something
+  // you probably want a shorter name too) - start your project with something
   // like this:
   //[
   //   var MyApp = {...}
@@ -1738,11 +1738,11 @@
     //
     // Format:    {name: value}
     //
-    // Defines initial object `#opt options – similar to
+    // Defines initial object `#opt options - similar to
     // `@bb:Model-attributes`@ in `[Backbone.Model`]. When any option value is
     // changed `'change:OPTION and `'change events occur but before that occurs
     // `'normalize_OPTION. This object can be initially set with `#extend() but
-    // it’s not advised to access it directly – use `#get() and `#set() instead
+    // it’s not advised to access it directly - use `#get() and `#set() instead
     // or you will bypass normalization and event triggering.
     //
     // `'_opt is an object where keys are option names and values are anything,
@@ -1765,7 +1765,7 @@
 
     // When this object is owned `#_owning by another sqimitive this property is set to
     // the key under which it's listed in its parent's `#_children and which can
-    // be given to `#nested() and others. This is always a string or, for non-owned sqimitives – `'null
+    // be given to `#nested() and others. This is always a string or, for non-owned sqimitives - `'null
     // along with their `#_parent.
     _parentKey: null,
 
@@ -1881,10 +1881,10 @@
     //> false `- Input item is skipped regardless of options.onlyDefined.
     //> true `- Assign as `'respKey (same key in `[this._opt`]). Input item becomes value for the option by the same name.
     //> string `- Rename and assign respKey under this option name. Same as `'true but changes the option’s name.
-    //> function (respValue, key, resp, options) `- Flexible transformation – is called in this object’s context and must return `[['optToSet', value]`]. `'_respToOpt’s key only determines `'respValue given to this function; the latter can access entire `'resp for other data (`'key argument holds the original `'_respToOpt’s key), `'options is the object given to `#assignResp(). If `'optToSet is returned as `'false – the input item is skipped, otherwise it’s option name to set `'value to. `'value can be anything.
+    //> function (respValue, key, resp, options) `- Flexible transformation - is called in this object’s context and must return `[['optToSet', value]`]. `'_respToOpt’s key only determines `'respValue given to this function; the latter can access entire `'resp for other data (`'key argument holds the original `'_respToOpt’s key), `'options is the object given to `#assignResp(). If `'optToSet is returned as `'false - the input item is skipped, otherwise it’s option name to set `'value to. `'value can be anything.
     //
     // Missing keys may or may not be passed through to `[this._opt`] unchanged
-    // – this depends on the `[options.onlyDefined`] flag of `#assignResp().
+    // - this depends on the `[options.onlyDefined`] flag of `#assignResp().
     //
     //? _respToOpt = {setAsIs: true, setAsFoo: 'Foo'}
     //    // assignResp({setAsIs: 123, setAsFoo: 'xyz'}) - adds
@@ -1909,7 +1909,7 @@
     // Lists automatically bound DOM event listeners for `#el. Format is inherited
     // from Backbone and is an object with keys of `[click[.ns][ .sel #ector]`] form and
     // values being functions (closures) or strings (method names, resolved when
-    // event occurs so they can be defined later, optionally masked like `[func-..1`] - see `#expandFunc()). In the latter case be aware of the "Danger of args__" described in `#on() – it’s called as `[function (eventObject)`]. The `'.ns part is ignored
+    // event occurs so they can be defined later, optionally masked like `[func-..1`] - see `#expandFunc()). In the latter case be aware of the "Danger of args__" described in `#on() - it’s called as `[function (eventObject)`]. The `'.ns part is ignored
     // but can be used to create unique keys; by convention, the class'
     // handlers don't have ns while mix-ins do.
     //
@@ -1953,10 +1953,10 @@
     // Just like `[$(...).length`] or `[(new Backbone.Collection).length`].
     length: 0,
 
-    // Triggers `#Core’s constructor which assigns `#_cid, clones all but `#_shareProps, `#fire()s `#init which creates `[this.el`], assigns jQuery `[el.data('sqimitive', this)`] (so you can reverse-lookup a Sqimitive instance from its DOM node – a deplorable practice) and calls `#set() on each member of `'opt (object, if given) to replace default values of `#_opt. Finally fires `#postInit which you should override instead of `'constructor to put your object initialization logic into. Both events receive the same arguments as the constructor was given, which in turn gets them from the `'new operator.
+    // Triggers `#Core’s constructor which assigns `#_cid, clones all but `#_shareProps, `#fire()s `#init which creates `[this.el`], assigns jQuery `[el.data('sqimitive', this)`] (so you can reverse-lookup a Sqimitive instance from its DOM node - a deplorable practice) and calls `#set() on each member of `'opt (object, if given) to replace default values of `#_opt. Finally fires `#postInit which you should override instead of `'constructor to put your object initialization logic into. Both events receive the same arguments as the constructor was given, which in turn gets them from the `'new operator.
     //
     // `'opt can contain `'el to override
-    // default value of `[this.el`] property (see `#_opt; for `@jQuery`@ can be a DOM node or a selector but not an object of attributes). Note that `'el is not automatically attached anywhere after it’s created, nor are its `#elEvents bound – call `#attach() for this.
+    // default value of `[this.el`] property (see `#_opt; for `@jQuery`@ can be a DOM node or a selector but not an object of attributes). Note that `'el is not automatically attached anywhere after it’s created, nor are its `#elEvents bound - call `#attach() for this.
     //
     // Giving this function a name so that it's visible in the debugger.
     constructor: function Sqimitive_Base(opt) {
@@ -2166,7 +2166,7 @@
     // or `#ifSet(). See also `#change() that gets called after any change
     // (after corresponding `'change_OPT).
     //
-    // If you refer to the handler by its string name as in the example below –
+    // If you refer to the handler by its string name as in the example below -
     // be aware of the "Danger of args__" described in `#on().
     //[
     //   var MyNorm = Sqimitive.Base.extend({
@@ -2391,10 +2391,10 @@
     //]
     //
     // ` `*When listening to nest as an event`* and if you need to retrieve the
-    // nested object – use `'+nest or `'=nest event forms (`#on()). This will
-    // pass result returned by `'nest() – the child – as the callback’s first
+    // nested object - use `'+nest or `'=nest event forms (`#on()). This will
+    // pass result returned by `'nest() - the child - as the callback’s first
     // argument. With `'nest or `'-nest first argument will be whatever was
-    // given to `#nest() – which might be `'sqim but might also be `'key.
+    // given to `#nest() - which might be `'sqim but might also be `'key.
     //
     //[
     //   sqim.on('+nest', function (nested) {

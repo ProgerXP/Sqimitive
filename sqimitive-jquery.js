@@ -78,7 +78,7 @@
     //  element) or a DOM node.
     //
     //  ` `*If a string this will have no effect on non-nested (non-`#_owning)
-    //  sqimitives`* since access to the parent’s `'$() is required – even if a
+    //  sqimitives`* since access to the parent’s `'$() is required - even if a
     //  global selector such as `['body'`] is used; if so you can set
     //  `'attachPath to `[document.bodyElement`] or `[$('body')`] even on
     //  non-owned sqimitives.
@@ -94,7 +94,7 @@
     _opt: {},
 
     // Holds a DOM node assigned to this object or `'null. When `#extend'ing can be set to `'false (no
-    // element is created, `[this.el`] will be `'null – useful for data structures
+    // element is created, `[this.el`] will be `'null - useful for data structures
     // aka "models"), a string (DOM selector) or an object of HTML attributes plus the following
     // special keys:
     //
