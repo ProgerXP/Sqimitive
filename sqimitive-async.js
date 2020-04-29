@@ -183,12 +183,12 @@
       return this._when(func, cx, priority, !this.isLoading(), 'complete')
     },
 
-    // See `#whenComplete().
+    //#-whenComplete()
     whenError: function (func, cx, priority) {
       return this._when(func, cx, priority, this.isSuccessful() == false, 'error')
     },
 
-    // See `#whenComplete().
+    //#-whenComplete()
     whenSuccess: function (func, cx, priority) {
       return this._when(func, cx, priority, this.isSuccessful() == true, 'success')
     },
@@ -229,7 +229,7 @@
     // called at most once. If a handler changes status, others are skipped
     // until status changes again.
     //
-    // Even though call order is deterministic (`'Async's `#nest()`] acts as `#on()
+    // Even though call order is deterministic (`'Async's `#nest() acts as `#on()
     // because of `#_childEvents/`#_forward()) it's usually more convenient to use
     // specific priority levels which don't depend on the order of `'nest()/`'on()
     // calls: `[on('success')`] is called after `[success-3`] but before
@@ -237,11 +237,13 @@
     success: Sqimitive.Core.stub,
 
     //! +fn=error +ig
-    // See `#success().
+    //
+    //#-success()
     error: Sqimitive.Core.stub,
 
     //! +fn=complete +ig
-    // See `#success().
+    //
+    //#-success()
     complete: Sqimitive.Core.stub,
 
     // Gets called on an exception in `#success(), `#error() or `#complete().
