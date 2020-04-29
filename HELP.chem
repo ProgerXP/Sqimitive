@@ -1,0 +1,1218 @@
+`! lic=unlicense
+`! `,+ vim: et sts=-1 sw=2 ai
+`! fd=0
+
+
+`! +pg=start +pgo=-1
+
+`# Introduction
+
+`## Sqimitive.js – A Universal JavaScript Primitive
+
+Sqimitive.js is a fat-free implementation of well-known `@bb:`@ Backbone.js JavaScript frontend framework. Sqimitive avoids certain less used (usually project-specific) features while conceptually bringing the rest under one roof.
+
+In particular, Sqimitive:
+
+`* Removes somewhat `*artificial separation`* for Model, Collection and View classes providing a single unified "primitive" (the "sqimitive"). This way Views can use `#opt options (attributes with `#change_OPT on-change notifications), Underscore.js `#util and `#chld nesting (just like Collections) and all other features, shared by all, not imposed on any.
+
+`* Greatly expands the idea of `#evt events making `*inheritance`* as sensible as it is possible given JavaScript’s idea of OOP.
+
+`* Removes `*server-side communication layer`* (`@bb:Model-sync`@) while `#assignChildren() keeping `#assignResp() routines to smart-update object states. Instead of overriding standard parts as it’s often done with Backbone you implement them yourself just once given your unique project specification.
+
+`* Is under 20K (minified) and is excessively commented. Requires only a compatible unility library (NoDash, `@un:`@ Underscore.js or LoDash) and, optionally, `@jq:`@ jQuery or Zepto for DOM manipulation.
+
+`* Still lets you work `*the way you used`* with Backbone – if you wish. You can create base Model, Collection and View, use traditional `'__super__-style inheritance, write your specific API sync routines, use Underscore.js `#util filtering and jQuery/Zepto `[this.el`] (`@jQuery.el`@) and so on.
+
+While different, Sqimitive will appear very familiar to current Backbone users so just give it a try – `@demo/`@ this classic To-Do application is a good place to start.
+
+`## Get The Code
+
+`* `<img src="data:image/gif;base64,R0lGODlhEgAQALMAAOLe3WhWQfjYL/RUNbWzngDG/+ieJiqyK4FuapVqMUZ9ib5GMVItK52PjoLRLf///yH5BAAAAAAALAAAAAASABAAAASF8ElAUAgIyEn2A8EyjEugAY3SbOA4GMawII9SKJoUuAZBGItG6rYhiEaGi4FGUCg6EoQLGUsgUlDddMoICAFg7XbASAgEsASmtV0szmfD4RBgSMfw8/xgb5gNaIBnDnt1NAAMeXlOFg1ZDQyCcFYTHjplggkMDDmWH42bmyaenghdDZ0eEQA7" alt="bower"`> bower install sqimitive
+`* `<img src="data:image/gif;base64,R0lGODlhKQAQAIAAAP///8s5OCH5BAAAAAAALAAAAAApABAAAAJOjI+py+0Po5wK2GsP3np7kHygIY5BiYUXaaZst55jhri0fOf2bLK0roP9eKqhsCMkyopKnCf5WtZiwKfPKJW4KNxr97v9OkUMlPlcPosKADs" alt="npm"`> npm install sqimitive
+`* Download for `@https://github.com/ProgerXP/Sqimitive/blob/master/sqimitive.js`@ development / `@https://github.com/ProgerXP/Sqimitive/blob/master/sqimitive.min.js`@ production (minified)
+`* Check out `@demo/`@ sample To-Do App
+`* `@https://github.com/ProgerXP/Sqimitive/issues`@ Report issues
+`* `@https://github.com/ProgerXP/Sqimitive`@ Fork on GitHub
+
+` `*See a typo?`* Select the fragment and press `*Ctrl+Enter`*. Help us keep this memo free of vexatious mistakes! (Powered by `@https://github.com/ProgerXP/Orphus`@ Orphus.js.)
+
+
+`! +pg=vsbb +pgo=9
+
+`# Comparing With Backbone
+
+There are already dozens of client-side frameworks. Why create yet another one? Simply enough – Sqimitive strives to fill in some gaps that Backbone implementation and others have left wide open.
+
+`## OOP with a human face
+
+In Backbone and other JS frameworks inheritance (overriding of parent properties and methods) is painful.
+
+` `*With properties`*, if it’s a complex object that you would rather extend (append to) rather than replace entirely – as it is the case with Model attributes, defaults, View events (DOM bindings) and others – you have to add them in the constructor because if you define such a property in the child class you will `*entirely overwrite the inherited value`*. Moreover, if at some point base class that did not have that property decided to define it – all its subclasses overwrite it without notice... Unless you remember to update them, which we humans often do not.
+
+` `*With methods`*, you have to hardcode base class reference – that’s not to mention the entire construct which is already ugly: `[My.Class.__super__.baseMethod.apply(this, arguments)`]. So if you later rename base class or move this subclass under another parent, or rename the method, or just make a typo – the entire inheritance chain for this method is broken. You may or may not get an error, too.
+
+This is the price for trying to push classic OOP into JavaScript prototype model.
+
+Sqimitive solves both problems by using `#_mergeProps for listing which properties should be merged together on extension. For methods, there is a fantastic `#evt event-driven inheritance that makes JavaScript OO coding a breeze. Any method can be turned into an event without altering the base class.
+
+At the same time, the `'__super__ way of doing this is still available if you are feeling a bit masochistic.
+
+Below is just one simple example. Look for more details at the mentioned sections.
+
+`[
+  var MyBaseClass = Sqimitive.Sqimitive.extend({
+    complexProp: {
+      base: 123,
+    },
+
+    init: function () {
+      alert('I init()!')
+    },
+  })
+
+  // _mergeProps is a static property.
+  MyBaseClass._mergeProps.push('complexProp')
+
+  var MySubclass = MyBaseClass.extend({
+    complexProp: {
+      sub: 'foo',
+    },
+
+    events: {
+      init: function () {
+        alert('Now I init() too!')
+      },
+    },
+  })
+
+  var obj = new MySubclass
+    // 1. alert: I init()!
+    // 2. alert: Now I init() too!
+  alert(obj.complexrop.base)
+    // alert: 123
+  alert(obj.complexrop.sub)
+    // alert: foo
+`]
+
+`## Built-in nesting
+
+Backbone offers no nested views out of the box. There are plugis such as `@https://github.com/marionettejs/backbone.babysitter`@ Babysitter (from Marionette.js) but they don't provide a complete solution.
+
+In Sqimitive, nested views are native. When used, they are automatically managed: elements and `#autoOff() event listeners removed when coresponding view is removed, DOM events rebound and root element `#attach() reinserted when root element is moved (e.g. on `#render()), it is possible to filter (`#util) nested views using Underscore methods (just like Collection contents in Backbone), notifications about newly nested/unnested/changed views and so on.
+
+No more need for `'delegateEvents(), `[off(null, null, this)`] or `[return this`] (when overriding `'render()).
+
+See more details and examples in the `#vw Views overview section.
+
+`## Change-driven behaviour
+
+In Backbone and other frameworks, you have to track changes to your data and view states. Backbone eases this task by providing standard events like `[change:attr`] event for Models. However, this approach must be explored even further to take its full advantage.
+
+In Sqimitive, you get a special object property – `@Base._opt`@ ("options") – that is a pool of trackable states, similar to Backbone’s Model attributes. Items in this pool are read with `#get() and written with `#set(). When a new and different value is written a bunch of events occur. Within these events you can cancel or normalize the change (`#normalize_OPT()) or perform an action (`#change_OPT() and `#change()). For parent sqimitives, they can optionally be forwarded (`#_childEvents).
+
+This can be used to create event observation spots too. Suppose that you have an object that’s loading some data from the server. Since it’s asynchronous you don't know when (or if) it will finish. Usually you would either create a callback property and call it or use a custom event (jQuery or Backbone) and call it once loading is done. In Sqimitive, you simply introduce some `[_opt.loading`], set it to `'false and then once done – set it to `'true. Observers listen to `'change_loading event having the `#on full `#once set `#fuse of `#off event `#autoOff handling `#logEvents routines at their disposal instead of introducing `'isLoading(), `'abortLoading(), `'onLoading(), etc.
+
+Now this works the other way too: an external object can `[set('loading', true)`] to force refreshing of the data. Better still – the loading object itself can set this option to trigger its own loading routine – naturally, avoiding code duplication.
+
+Moreover, since options are not accessed directly you can always listen for their access with `'get or add custom behaviour with `'set. This leads to more stable code base.
+
+Given this mechanism you can significantly lower your `'render() and custom event rates while being much more aware of what has triggered the change so you can perform a lightweight update. And since there’s no distinct separation between Models and Views this universally works for any kind of object you might have.
+
+`[
+  var MyView = Sqimitive.Sqimitive.extend({
+    _opt: {
+      loading: false,
+      people: [],   // array of names.
+    },
+
+    // We will keep jqXHR object here to be able to abort the request.
+    _loadingXHR: null,
+
+    events: {
+      init: function () {
+        // Wait 300 msec and then start fetching server data.
+        _.delay(_.bind(this.set, this, 'loading', true), 300)
+      },
+
+      // Loading was either cancelled or started.
+      change_loading: function (value) {
+        // Update class name of our DOM element.
+        this.el.toggleClass('loading', value)
+        // Abort old request, if any.
+        this._loadingXHR && this._loadingXHR.abort()
+
+        if (value) {
+          // Fetch the data, pass to _load().
+          this._loadingXHR = $.getJSON('some/long/process', _.bind(this._load, this))
+        }
+      },
+
+      // _opt.people changed - update names.
+      change_people: '_updatePeople',
+
+      render: function () {
+        // Retrieve all _opt to pass them to the template.
+        var vars = this.get()
+        // Overwrite with new HTML.
+        this.el.html(_.template($('#MyViewTemplate').text(), vars))
+        // Add peoples' names.
+        this._updatePeople()
+      },
+    },
+
+    _updatePeople: function () {
+      var el = this.$('.people').empty()
+
+      _.each(this.get('people'), function (name) {
+        $('<em>').text(name).appendTo(el)
+      })
+    },
+
+    _load: function (resp) {
+      // Do something with resp, then finally:
+      this.set('loading', false)
+    },
+  })
+`]
+
+`## Events do occur on events. No cheating
+
+If you have used Backbone’s `'add, `'remove and `'change events then you probably know that they do not occur `*always`*. For example, if you `'reset() a Collection it won't fire `'add for new Models, `'remove for gone or `'change for existing Models that were updated.
+
+This smells like an optimization – after all, firing hundreds of events when resetting a huge Collection might be slow. However, this case is very rare and yet the availability of `'reset() makes it not trivial to track the updates because often you will end up with your own routine bound to `'reset as an event that will figure the difference between old Collection contents and new one.
+
+This also happens with attribute normalization on Models which for some reason doesn't occur when assigning an API response.
+
+Sqimitive fires events when things change, period. In case you do have a performance-heavy object you can always implement your own more silent update routines. However, 90% of the time you will rely on `#nest, `#unnested, `#change and others to keep you notified.
+
+`## Cloned instance properties
+
+In JavaScript, when you create a prototype with non-scalar values (like objects or arrays) what you actually create are `*shared instance properties`*. If at runtime you modify (but not reassign) such a property this operation will affect all objects where that property is defined, unless its value was overwritten with a new object.
+
+Backbone inherits this behaviour which most of the time leads to very confusing results (from the human’s perspective). Consider this short snippet (`@http://jsfiddle.net/Proger/vwqk67h8/`@ JSFiddle):
+
+`[
+  var MyView = Backbone.View.extend({foo: []})
+  var first = new MyView
+  var second = new MyView
+  first.foo.push(123)
+  alert(second.foo[0])
+  // alert: 123
+`]
+
+The only way around is to assign such properties in the constructor, which you should first override using the crazy `[My.Class.__super__.baseMethod.apply(this, arguments)`] construct. This gives your code -50 points in the ability to save kittens on this planet.
+
+Sqimitive eliminates this problem by automatically `#deepClone deep cloning all complex values upon new object instantination. Of course, sometimes this is not desired – for this you can always assign them in the constructor just like before or list in `#_shareProps to prevent auto cloning.
+
+
+`! +pg=ov
+
+`# Anatomy Of A Sqimitive
+
+Anything in Sqimitive is, well, a sqimitive – a combination of "Squizzle" and "primitive", first being what we call "The Squizzle Way" – eliminating superfluous concepts to produce lean and reliable code. See `@http://squizzle.me`@ for other goodness.
+
+Each sqimitive has three fundamental features that sprout out all of its many use cases: `*`#opt options`*, `*`#chld children`* and `*`#evt events`*. Below is a quick high-level overview to demonstrate the main idea; remember to proceed to the `#Base detailed API docs if you want to get all of Sqimitive (and there’s as much to learn as there’s text, really).
+
+`##opt Options
+
+` `*Options`* are `*attributes`* in Backbone’s terms – set of key/value pairs which trigger events on change or access, can be normalized and can be virtual (i.e. you can write your accessor that won't correspond to a "physical", listed option). They are solely accessed via `'set() and `'get() methods to create a sort-of public object interface.
+
+Sample code below defines a class with two options – `'isCompleted (boolean) and `'caption (string). When one of them is changed associated DOM node is updated.
+
+`[
+  var MyToDoItem = Sqimitive.Sqimitive.extend({
+    _opt: {
+      isCompleted: true,
+      caption: 'Do me at home!',
+    },
+
+    events: {
+      // When task becomes complete or incomplete its DOM element gets that
+      // class added or removed on the fly.
+      change_isCompleted: function (newValue) {
+        this.el.toggleClass('done', newValue)
+      },
+
+      change_caption: 'render',
+    },
+
+    // HTML template for this node's contents as used below.
+    _tpl: '<h3><%- caption %></h3>',
+
+    normalize_isCompleted: function (value) {
+      // Turn whatever is given as a new value for isCompleted into a boolean.
+      // If the result is identical to the current value – change is not fired.
+      return !!value
+    },
+
+    // Trim whitespace around the caption.
+    normalize_caption: _.trim,
+
+    render: function () {
+      // Retrieve map of all options/values and pass to the template.
+      var vars = this.get()   // = {isCompleted: false, caption: 'foo'}
+      this.el.html(_.template(this._tpl, vars))
+    },
+  })
+`]
+
+`##chld Children
+
+` `*Children`* are zero or more "sqimitives" nested into one parent "sqimitive". Their events may be forwarded to parent – but only while they are still part of that parent; upon removal they are automatically unbound. When a children is added or removed its parent, if any, gets notified. Also, all standard `@un:`@ Underscore.js methods are available to filter or transform them into a native array or object.
+
+Parent sqimitives can be of two types: `*owning`* (by default) and `*non-owning`*. First represent a typical tree where each child has exactly one parent and you can traverse the tree in either direction starting from any node. If you nest one children into another parent it’s automatically removed from the former owner. Second type is more of a list where you can only traverse from the outside because a child doesn't know in what other sqimitives it might be listed in, if at all. No automatic removal is done either.
+
+Sample code below defines a to-do list that is meant for storing `'MyToDoItem’s. Note that in Backbone you would have at least two classes: one Collection for storing the list of to-do items and one View for displaying that collection. Or, to be 100% correct, you would create four classes: Model holding single to-do item data, View to display it, Collection to hold to-do items and another View to hold the Collection to hold the Models – and you still have to link each Model to its View and keep track of their events and DOM elements.
+
+In Sqimitive you can still do that but let’s be honest – such pure concepts are good for academics and very large projects but most of the time you would rather have something slightly more dirty but more practical. Sqimitive gives you this choice since everything is ultimately a primitive and can be purified to the point you need.
+
+This kind of nesting doesn't necessary reflect the DOM – children can have their elements under their parent’s `@jQuery.el`@ or elsewhere, or not have DOM elements at all.
+
+`[
+  var MyToDoList = Sqimitive.Sqimitive.extend({
+    // Add extra protection against accidental foreign class being added as a child.
+    _childClass: MyToDoItem,
+    // Leading dash means "listen before" - see next section about events.
+    _childEvents: ['-change', 'change'],
+
+    events: {
+      // To avoid collisions between children-generated and self events
+      // those forwarded from children get prepended with a period. If you
+      // have another parent that is forwarding its child's children events
+      // then another period appears - e.g. '..change'. Think of this as of
+      // regular '../../path' notation where each period means "one level above".
+      '.-change': function (sqim, optName, newValue, currentValue) {
+        // Outputs something like "To-do item's caption ... from foo to bar".
+        console.log('To-do item\'s ' + optName +' is about to be changed' +
+                    ' from ' + currentValue + ' to ' + newValue)
+      },
+
+      '.change': function (sqim, optName, newValue, currentValue) {
+        console.log(optName + ' has changed to ' + newValue)
+      },
+    },
+
+    postInit: function () {
+      var itemOptions = {isCompleted: false, caption: 'Dummy item'}
+      var sqim = this.nest(new MyToDoItem(itemOptions))
+      sqim.set('caption', 'fire them!')
+      // Because of forwarded events two new messages have appeared in the console.
+
+      // Can also assign an explicit name (if omitted _cid is used).
+      this.nest('childName', new this._childClass)
+      // Can retrieve the object like this:
+      var sqim = this.nested('childName')
+      sqim.unnest()
+    },
+
+    // Use Underscore to retireve only children with isCompleted being false.
+    getIncomplete: function () {
+      // picker() gets inherited from Sqimitive.Core and is simply a
+      // function calling a method on the given object with given parameters.
+      // In other words, equivalent to: function (o) { return o.get('isCompleted') }
+      return this.reject(MyToDoList.picker('get', 'isCompleted'))
+    },
+  })
+`]
+
+`##evt Events
+
+` `*Events`* are Squimitive’s Swiss Army Knife to deal with everything from inheritance (OOP style) and prototyping (JavaScript-native style) to dynamic property morphing and dispatching notifications in an Observer-like fashion. When defined upon class declaration handlers are "fused" into the class (hence introducing no performance overhead at all), otherwise they work as regular event listeners that can be removed on runtime (this happens automatically once a nested sqimitive is unnested, for instance).
+
+When you try to listen to an event and there is a method of the same name, Sqimitive turns that method into an event slot and the method itself becomes its first listener. This way every method is potentially an event which you can manipulate on runtime as well as upon declaration. This way you can use "normal" OOP as found in languages like C and PHP while still utilizing the power of dynamic object manipulation as it’s meant with JavaScript.
+
+Likewise, if there is no method when you define an event – Sqimitive creates it so that calling it actually triggers the event. This way you can always invoke a method without knowing if it’s a real function or an event trampoline.
+
+Sample code below shows side-by-side how traditional and Sqimitive inheritance correlate with each other.
+
+`[
+  var MyBase = Sqimitive.Sqimitive.extend({
+    effect: function (arg) {
+      console.log('MyBase.effect(' + arg + ')')
+      return this
+    },
+  })
+
+  // Traditional JS-OOP inheritance.
+  var JsOopSubclassing = Sqimitive.Sqimitive.extend({
+    // This way you would override former method with yours, entirely.
+    effect: function (arg) {
+      return 'foo'
+    },
+
+    // ...optionally calling the inherited implementation.
+    effect: function (arg) {
+      console.log('pre-actions')
+      // We have to hardcode current class name and the whole call is quite long.
+      var result = JsOopSubclassing.__super__.effect.apply(this, arguments)
+      console.log('post-actions')
+      return result
+    },
+  })
+
+  // Event-oriented Sqimitive inheritance.
+  var SqimitiveSubclassing = Sqimitive.Sqimitive.extend({
+    events: {
+      // This is how you override the entire method in Sqimitive.
+      '=effect': function (sup, arg) {
+        return 'foo'
+      },
+
+      // ...and this is how you call the inherited implementation.
+      '=effect': function (sup, arg) {
+        console.log('pre-actions')
+        // No hardcoded class reference, concise calling format.
+        var result = sup(this, arguments)
+        console.log('post-actions')
+        return result
+      },
+
+      // However, full override is rarely needed - most often you need just
+      // to do something after the original method and keep its return value.
+      // This one is identical to the above but without 'pre-actions'.
+      effect: function (arg) {
+        console.log('post-actions')
+      },
+
+      // Sometimes we need to do just 'pre-actions' - this is how.
+      '-effect': function (arg) {
+        console.log('pre-actions')
+      },
+
+      // Yet at other times we need to call the original code and perhaps
+      // change or read its return value.
+      '+effect': function (result, arg) {
+        console.log('post-actions')
+
+        if (result === this) {
+          // Return something other than the original code produced.
+          return new That(arg)
+        }
+
+        // Returning undefined or not returning at all retains initial result.
+        // These are identical:
+        //return undefined
+        //return
+      },
+    },
+  })
+`]
+
+Code below demonstrates the usage of dynamic event binding and method overriding.
+
+`[
+  var DynamicEvents = Sqimitive.Sqimitive.extend({
+    events: {
+      slotA: function () {
+        console.log('slotA')
+        return 'slotA'
+      },
+    },
+
+    slotB: function () {
+      return 'slotB'
+    },
+
+    // Just a property that isn't a function.
+    notASlot: 123,
+
+    listeners: function () {
+      // When slotA is fired, it outputs "slotA" and "post-effect" to the
+      // console and returns 'slotA'. Exactly the same would be with slotB
+      // even though it was't explicitly declared as an event - it becomes
+      // one as soon as a first handler is attached.
+      this.on('slotA', function () {
+        console.log('post-effect')
+      })
+
+      // Nobody said we can't create events out of thin air without defining
+      // them anywhere first. Note that since it's an event handler and not
+      // class method it cannot return any value (it is ignored). This way no
+      // disruption is caused if the class suddenly acquires native method
+      // of the same name (this handler will be called after it).
+      this.on('slotC', function () {
+        console.log('post-effect')
+        return 'ignored'
+      })
+
+      this.slotC()
+      this.fire('slotC')  // equivalent.
+
+      // Of course, events can have prefixes seen in the previous sample.
+      this.on('+slotC', function (result) {
+        console.log('post-effect')
+        return 'new result'
+      },
+
+      this.on('-slotC', function () {
+        console.log('pre-effect')
+        return 'ignored'
+      })
+
+      // You can do a full override as well - and the beauty is that later
+      // you can off() it and former (sup) method will be put back in place.
+      this.on('=slotC', function (sup) {
+        console.log('pre-effect')
+        var result = sup(this, arguments)
+        console.log('post-effect')
+        return result
+      })
+
+      // However, if you try to turn a non-method into an event nothing
+      // will break - you will add event listener all right but doing
+      // notASlot() won't fire the event - only access that property.
+      this.on('notASlot', function () {
+        alert('Boo!')
+      })
+
+      alert(this.notASlot)    // alerts 123.
+      this.fire('notASlot')   // alerts Boo!
+    },
+
+    dynamic: function () {
+      var handler = function () { };
+      var context = new SomeObject;
+
+      // Each event handler unless it's "fused" on class declaration time gets
+      // a unique ID that can be used to very quickly unbind it later.
+      // Contrary to common approach, Sqimitive offers no event namespaces
+      // (such as my.handler) used to unbind group of events - by-context lookup
+      // covers most cases and is available 9see below).
+      var id = this.on('event', handler)
+      this.off(id)
+
+      // You are free to use dots and colons in event names for your needs.
+      this.on('com.myapi.proc:group', handler)
+
+      // Slower but removes all bindings to the given context object among all
+      // events of this object in one go.
+      this.on('withContext', handler, context)
+      this.off(context)
+
+      // You can also clear all listeners to a particular event.
+      this.on('wipeEvent', handler)
+      this.off('wipeEvent')
+    },
+  })
+`]
+
+`#vw Opening The Views
+
+Options, children and events are 90% of what a sqimitive is. However, they all are mostly about the logic and data; to make the user happy we should interact with him and present information in a good way. This is when Views, in MVC and Backbone terminology, come into play.
+
+By default, each sqimitive possesses a `*DOM element`* – that familiar `[this.el`] – which is any jQuery/Zepto/other DOM-like object. This can be disabled for pure-data classes (like Models or Collections) but if it’s not, such a node is automatically created upon the sqimitive construction and assigned to its `@jQuery.el`@. It can utilize automatic binding of DOM events via `#elEvents property, as well as convenient methods like `[this.$('sel.ector')`], `[bubble('eventForAllParents')`] and `[sink('eventForChildren')`].
+
+Sample code below creates a simple login form. It stores data in its own options but, as you must know by now, Sqimitive allows you to separate it into another Model-like object if you need more abstraction in your application.
+
+`[
+  var MyFormView = Sqimitive.Sqimitive.extend({
+    // If omitted will create just a plain <div>.
+    el: {tag: 'form', action: '#', className: 'login-form'},
+
+    _opt: {
+      login: '',
+      password: '',
+      remember: false,
+    },
+
+    elEvents: {
+      submit: function () {
+        var data = this.el.serializeArray()
+        $.each(data, _.bind(this.set, this))
+
+        $.ajax({
+          url: 'login',
+          type: 'POST',
+          data: data,
+          context: this,
+          success: this.loggedIn,
+          error: function () {
+            this.addClass('error')
+          },
+        })
+
+        return false
+      },
+
+      'change [name=remember]': function (e) {
+        this.set('remember', e.target.checked)
+      },
+    },
+
+    render: function () {
+      this.el.empty()
+        .append('<input name=login autofocus>')
+        .append('<input name=password type=password>')
+        .append('<input name=remember type=checkbox>')
+        .append('<button type=submit>Log In</button>')
+
+      this.update()
+      return this
+    },
+
+    update: function () {
+      this.$('[name=login]').val(this.get('login'))
+      this.$('[name=password]').val(this.get('password'))
+      this.$('[name=remember]')[0].checked = this.get('remember')
+    },
+
+    // stub() is just a function that returns undefined (nothing).
+    // When it's used in place of a method and if that method becomes
+    // an event (and gets a listener) then there's a small optimization -
+    // Sqimitive will remove the old method entirely not putting it
+    // as a listener for that event.
+    // Alternatively, you could just leave this undefined and always use
+    // fire('loggedIn') but it's more tricky and less obvious if you ever
+    // get a loggedIn() method that for any reason does something else.
+    loggedIn: Sqimitive.Sqimitive.stub,
+  })
+`]
+
+Given the above class we can use it as follows:
+
+`[
+  // A typical use case - just create new form object along with a DOM element:
+  var sqim = new MyFormView({login: 'default@login'})
+
+  // Or if we have a ready-made container element - use it:
+  var sqim = new MyFormView({login: 'default@login', el: '#loginForm'})
+
+  // Then we can listen to new sqimitive's events as:
+  sqim.on('loggedIn', function () { alert('Hello, ' + this.get('login')) })
+
+  // ...or morph it dynamically - just like good old JavaScript but better:
+  sqim.on('=render', function (sup) {
+    if (location.protocol != 'https:') {
+      this.el.text('Your connection is not secure!')
+    } else {
+      sup(this, arguments)
+    }
+  })
+
+  // This is not Sqimitive-way as it is long-winded and will override whatever is
+  // already defined as render() including all events (if 'render' is an event slot)
+  // and hardcodes class name and return value but if you don't mind - go ahead.
+  sqim.render = function () {
+    if (location.protocol != 'https:') {
+      this.el.text('Your connection is not secure!')
+      return this
+    } else {
+      return MyFormView.render.apply(this, arguments)
+    }
+  }
+`]
+
+
+`! +pg=ex
+
+`# Examples, Tips & Tricks
+
+`## Backbonization
+
+The following tricks can be used to make Sqimitive appear more like Backbone API. It will not make it 100% identical, don't use it in production as it is – it's just to give you a good direction.
+
+`### General
+
+In Backbone, `#_cid is named `@bb:Model-cid`@, `@jQuery.el`@ is `@bb:View-$el`@ with `@bb:View-el`@ counterpart (native DOM node), `#fire() is named `@bb:Events-trigger`@(), `@bb:Events-listenTo`@() and `@bb:Events-stopListening`@() are `#autoOff()  flavours, `@bb:Model-toJSON`@() is basically `#get(), `@bb:Model-attributes`@ is the same as `@Base._opt`@, `@bb:Model-defaults`@ are declaration-time `'_opt.
+
+`[
+  extend({
+    cid: null,    // alias to _cid; do not write to.
+
+    events: {
+      '-init': function () {
+        this.cid = this._cid
+      },
+
+      init: function () {
+        this._childClass = this._childClass || this.model
+      },
+    },
+
+    trigger: function (event, arg_1) {
+      return this.fire(event, _.rest(arguments))
+    },
+
+    listenTo: function (sqim, event, func) {
+      this.autoOff(sqim, _.object([[event, func]]))
+      return this
+    },
+
+    stopListening: function (sqim, event, func) {
+      if (!arguments.length) {
+        return this.autoOff()
+      } else if (func || (sqim && event)) {
+        throw 'Unsupported stopListening() call.'
+      } else {
+        return this.off(event || sqim)
+      }
+    },
+  })
+`]
+
+`### Collection
+
+Collections have `@bb:Collection-model`@ (class reference) which simply specifies `#_childClass, `@bb:Collection-reset`@() is alike to `#assignChildren (`'Collection’s `@bb:Collection-set`@() is entirely different though), `@bb:Collection-push`@(), `@bb:Collection-pop`@(), `@bb:Collection-shift`@(), `@bb:Collection-unshift`@() are shortcuts for `#nest() and company (there’s no built-in ordering in Sqimitive), `@bb:Model-clone()`@ is another shortcut for non-`#_owning lists. Models are keyed by their `@bb:Model-id`@ attribute value (or `@bb:Model-idAttribute`@) which are like `#_defaultKey.
+
+`[
+  extend({
+    model: null,  // alias to _childClass; do not write to.
+    el: null,
+    idAttribute: 'id',
+
+    events: {
+      '=assignChildren': function (sup, resp, options) {
+        options = _.extend({eqFunc: this.idAttribute}, options)
+        return sup(this, [resp, options])
+      },
+    },
+
+    _defaultKey: function (model) {
+      return model.get(this.idAttribute)
+    },
+
+    reset: function (models, options) {
+      if (!arguments.length) {
+        this.invoke('remove')
+        return this
+      } else {
+        return this.assignChildren(models, {
+          eqFunc: this.idAttribute || 'id',
+          keepMissing: !('remove' in options) || !options.remove,
+        })
+      }
+    },
+
+    push: function (model) {
+      this.nest(model)
+    },
+
+    unshift: function (model) {
+      this.nest(model)
+    },
+
+    pop: function () {
+      var model = this.last()
+      model && model.remove()
+      return model
+    },
+
+    shift: function () {
+      var model = this.first()
+      model && model.remove()
+      return model
+    },
+
+    toJSON: function () {
+      return this.invoke('get')
+    },
+
+    clone: function () {
+      if (this._owning) { throw 'clone() will clear base instance.' }
+      var copy = new this.constructor(this.get())
+      this.each(function (child, key) { copy.nest(key, child) })
+      return copy
+    },
+  })
+`]
+
+`### Model
+
+Models have `@bb:Model-escape`@(), `@bb:Model-has`@() shortcuts for `#get(). `@bb:Model-id`@ option ("attribute") is readable/writable as `[get('id')`]/`[set('id', X)`] and also readable directly as `[obj.id`] (write attempts won't be caught nor will they change "real" `'id).
+
+`[
+  extend({
+    attributes: {}, // alias to _opt; do not write to.
+    defaults: {},   // alias to initial _opt; do not write to.
+    id: null,       // alias to get('id'); do not write to.
+
+    _opt: {
+      id: null,
+    },
+
+    events: {
+      '-init': function () {
+        this.defaults = Sqimitive.Sqimitive.deepClone(this._opt)
+      },
+
+      init: function () {
+        this.attributes = this._opt
+      },
+
+      change_id: function (id) { this.id = id },
+    },
+
+    toJSON: function () {
+      return this.get()
+    },
+
+    escape: function (opt) {
+      return _.escape(this.get(opt))
+    },
+
+    has: function (opt) {
+      return this.get(opt) != null
+    },
+  })
+`]
+
+`### View
+
+Views have `@bb:View-setElement`@(), `@bb:View-delegateEvents`@(), `@bb:View-undelegateEvents`@() that do similarly what `#attach() does.
+
+`[
+  extend({
+    el: null,
+    $el: null,    // alias to el; do not write to.
+
+    events: {
+      init: function () {
+        this.$el = this.el
+      },
+    },
+
+    setElement: function (el) {
+      this.undelegateEvents()
+      this.el = this.$el = el
+      return this.attach()
+    },
+
+    delegateEvents: function (events) {
+      this.elEvents = events
+      return this.attach()
+    },
+
+    undelegateEvents: function () {
+      this.el.off('.sqim-' + this._cid)
+    },
+  })
+`]
+
+`### Babysitting Models
+
+One of the most common problems when developing a complex client-side app is keeping track of multiple Models or a Collection connected to a particular View. When a new Model appears you need to create and display a new nested View; when it’s removed – its View should go away; when Model attributes change the View should be updated (this case is often but not always handled by that Model’s specific View).
+
+On top of that, when parent View acquires another Collection it should properly detach itself from the previously assigned Collection, attach to the new object and repopulate itself.
+
+Things get even more complex with asynchronous operations – sometimes the user gets ahead of his connection and you don't want the interface to tangle up.
+
+Sqimitive addresses these challenges with a full set of methods:
+
+`* Attach/detach event handlers to the tracked Collection with `#autoOff() or `[off(collection)`] (`#off).
+`* Keep that Collection as an option (`@Base._opt`@) so once it changes you receive `[change_collection(newCol, oldCol)`] event (`#change_OPT).
+`* Make sure only proper Collections are assigned by checking value-to-be-set in `[normalize_collection(newCol)`] (`#normalize_OPT).
+`* Listen to new/gone Models with `[on('+nest')`] (`#on()) and `['unnested'`].
+`* Listen to changed Models with `#_childEvents = `[['change']`] and `[on('.change')`].
+`* Automatically manage nested Views' DOM connection with `'attachPath (`@Base._opt`@) and `#attach(). Quite often there’s no need for `#render() at all.
+
+Sample code below demonstrates these methods in practice. It’s a good idea to make an abstract base class and reuse it throughout your project.
+
+`[
+  var ParentView = Sqimitive.Sqimitive.extend({
+    _childEvents: ['change'],
+    _childClass: NestedView,
+
+    _opt: {
+      collection: null,   // Collection.Foo.
+    },
+
+    normalize_collection: function (newCol) {
+      if (!(newCol instanceof Collection.Foo)) {
+        throw 'Bad collection type.'
+      } else {
+        return newCol
+      }
+    },
+
+    change_collection: function (newCol, oldCol) {
+      // Unbind self from the old collection, if any.
+      oldCol && oldCol.off(this)
+
+      // Clear existing nested Views, if any.
+      this.invoke('remove')
+
+      // Set up new collection link.
+      if (newCol) {
+        this.autoOff(newCol, {
+          // Note the leading + which makes _modelAdded's first argument to be
+          // nest()'s return value which is the new child. Without it if key
+          // (optional nest()'s first argument) is present it will be _modelAdded's
+          // first argument instead of the child.
+          '+nest': '_modelAdded',
+          unnested: '_modelRemoved',
+          '.change': '_modelChanged',
+        })
+
+        // Populate with the existing models.
+        newCol.each(this._modelAdded, this)
+      }
+    },
+
+    _modelAdded: function (model) {
+      // This is the place when new nested View gets created and linked to the model.
+      // First argument to nest() is view's parent key by which it can be retrieved
+      // later. ID is usually unique so it's a good candidate. If this key already
+      // existed such a View will be removed and replaced by the new View.
+      var view = this.nest(model.get('id'), new this._childClass({
+        model: model,
+        attachPath: '.models',
+      }))
+
+      // Append view.el to this.el.find('.models') and bind its DOM event listeners.
+      // This won't render() the View but it might listen to attach() and render
+      // automatically.
+      view.attach()
+      // ...if it doesn't auto-render - no big deal:
+      view.render()
+    },
+
+    _modelRemoved: function (model) {
+      var view = this.nested(model.get('id'))
+      if (view) {
+        // Removes its element from this.el and then unnests from the list of
+        // this View's children, removing its event listeners on the parent View.
+        view.remove()
+      } else {
+        console.warn('Removed a Model with no nested View.')
+      }
+    },
+
+    _modelChanged: function (model) {
+      // Update something when model options change...
+    },
+  })
+`]
+
+Given the above code it can be used like this:
+
+`[
+  var col = new Collection.Foo
+  col.nest(new Model.Foo({id: 1}))
+
+  new ParentView({collection: col, attachPath: 'body'})
+    // Gets created with one nested View. Parent view was appended to <body>.
+
+  col.nest(new Model.Foo({id: 2}))
+    // New View nested.
+
+  col.nested(2).remove()
+    // Just nested View got removed.
+
+  col.nested(1).set('smth', 'foo')
+    // '.change' event got fired on the parent View.
+`]
+
+`## Figuring "class name"
+
+With its concept of "functions as first-class citizens", JavaScript lacks any kind of "class name" references in instantinated objects. The best we can afford is duck-typing where we see if object X has properties Y and Z and if it does – it’s `*probably`* that kind of object (i.e. "class").
+
+Sometimes (or rather quite often while debugging) we need to figure what’s the object we see. If your app has all Sqimitive classes defined under a certain object (like `'window – which is a bad practice – or `[window.MyApp`]) you can go through all prototypes on start-up and add `'sqClassName property holding string reference to that prototype.
+
+First, let’s override `#extend() with our own that will mark each produced prototype so we know we're looking at something we have created:
+
+`[
+  var BaseSqimitive = Sqimitive.Sqimitive.extend()
+
+  BaseSqimitive.extend = function (protoProps, staticProps) {
+    var child = Sqimitive.Sqimitive.extend.apply(this, arguments)
+    child.sqIsClass = true
+
+    // If your classes are defined like AppRoot, AppRoot.View, AppRoot.View.Cart
+    // the following code will skip subclasses when extending a class:
+    //   AppRoot.OtherBaseView = AppRoot.View.extend()
+    // Without it OtherBaseView would get AppRoot.View.Cart as OtherBaseView.Cart.
+    for (var prop in this) {
+      if (/^[A-Z]/.test(prop) && typeof this[prop] == 'function' && this[prop].sqIsClass) {
+        delete child[prop]
+      }
+    }
+
+    return child
+  }
+`]
+
+Now on start-up we go through all classes and add `'sqClassName like `[View.Cart`]:
+
+`[
+  // Define classes above or wrap the following into $().
+  ;(function (cls, prefix) {
+    for (var key in cls) {
+      var member = cls[key]
+      if (/[A-Z]/.test(key[0]) && typeof member == 'function' && member.sqIsClass) {
+        member.prototype.sqClassName = prefix + key
+        arguments.callee(member, prefix + key + '.')
+      }
+    }
+  })(window.MyAppRoot, '')
+  // Replace MyAppRoot reference with your root.
+`]
+
+Here’s an example of what you get:
+
+`* `*`[MyAppRoot.BaseView`]`*`[.sqClassName = 'BaseView'`]
+`* `*`[MyAppRoot.BaseView.SubView`]`*`[.sqClassName = 'BaseView.SubView'`]
+`* `*`[MyAppRoot.BaseModel`]`*`[.sqClassName = 'BaseModel'`]
+
+`## Countdown
+
+Sometimes you get a number of actions to be completed before performing a specific task. For example, you need to preload a bunch of images and work on them once they are all ready.
+
+This synchronization task can be carried out with this simple class:
+
+`[
+  var Countdown = Sqimitive.Sqimitive.extend({
+    el: false,
+
+    _opt: {
+      count: 0,
+      cx: null,
+    },
+
+    events: {
+      init: function (opt, onDone) {
+        // This way dec() and inc() calls will always happen on this object instance.
+        _.bindAll(this, 'dec', 'inc')
+        onDone && (this.done = onDone)
+      },
+    },
+
+    done: Sqimitive.Sqimitive.stub,
+    error: Sqimitive.Sqimitive.stub,
+
+    dec: function () {
+      if (--this._opt.count == 0) {
+        this.done.call(this.get('cx') || this)
+      } else if (this._opt.count < 0) {
+        console && console.warn('Countdown below zero.')
+      }
+
+      return this
+    },
+
+    inc: function () {
+      ++this._opt.count
+      return this
+    },
+  })
+`]
+
+Usage is straightforward:
+
+`[
+  var images = ['pic1.jpg', 'pic2.jpg']
+
+  var countdown = new Countdown({count: images.length}, function () {
+    // Ran when all images have been loaded.
+  });
+
+  // Start loading images.
+  _.each(images, function (path) {
+    var img = new Image
+    // dec() is bound to the instance so can be called with free context.
+    img.onload = countdown.dec
+    img.src = path
+  })
+`]
+
+`## Activity Pipeline
+
+At other times, you would ran into a complex synchronization routine with multiple stages that in addition should have those stages easy to override, e.g. in a subclass.
+
+For example, imagine a `'Page class. Its objects occupy all available window space and when switched from one to another must perform a visual effect (e.g. slide or fade). Effect can be changed in specific `'Page subclass, there are various actions to perform when it's done (e.g. freeing of data), and there are also conditions when pages should not be changed - e.g. when it's busy or asking for confirmation. And it must be singular - we don't want effects or other phases overlap.
+
+Below is a helper class that represents a pipeline of actions: begins with `'prereq(), then `'passthru(), then `'transition() and finally `'done(). If the action has been stopped `'cancel() occurs at any point. They are all methods but can be turned into events by overriding with `#on() according to Sqimitive's `#evt event model.
+
+One instance can be only active once at a time - ignores consequent `'start() calls until `'done() or `'cancel() are reached. `'done callbacks given during one run are all retained and called upon completion.
+
+`[
+  var Activity = Sqimitive.Sqimitive.extend({
+    el: false,
+    _done: [],
+    cx: null,   // autoset to _opt.cx.
+
+    _opt: {
+      cx: null,
+      active: false,
+    },
+
+    events: {
+      change_cx: function (value) {
+        this.cx = value
+      },
+    },
+
+    // (1) Proceed to 'passthru' if the activity can be performed (e.g. if
+    // popup window can be closed without explicit user choice), otherwise
+    // proceed to 'cancel'.
+    prereq: function () {
+      this.passthru()
+    },
+
+    // (2) Proceed to 'transition' if need to perform any action (e.g. if
+    // a window is visible, not hidden) or to 'done'.
+    passthru: function () {
+      this.transition()
+    },
+
+    // (3) Proceed to 'done' when all actions are finished.
+    transition: function () {
+      this.done()
+    },
+
+    // (4) Invokes all pending callbacks.
+    done: function () {
+      var funcs = this._done.splice(0, this._done.length)
+      this.set('active', false)
+      this._invoke(funcs)
+    },
+
+    // (2) Remove all on-done callbacks (not possible to perform the activity).
+    cancel: function () {
+      this._done = []
+      this.set('active', false)
+    },
+
+    _invoke: function (list) {
+      _.each(list, function (item) {
+        try {
+          item[0].call(item[1])
+        } catch (e) {
+          console && console.error('Activity callback exception: ' + e)
+        }
+      })
+    },
+
+    // If currently active func will be called upon completion. If not active
+    // the activity will be started and func called when it's done.
+    start: function (func, cx) {
+      this.enqueue(func, cx, true)
+      this.ifSet('active', true) && this.prereq()
+      return this
+    },
+
+    // Unlike start() doesn't run the activity but instead calls func if it's
+    // currnetly active or calls func right away if not, without starting up.
+    enqueue: function (func, cx, always) {
+      cx = cx || this.cx || this
+      if (_.isFunction(func)) {
+        ;(always || this.get('active')) ? this._done.push([func, cx]) : func.call(cx)
+      }
+      return this
+    },
+  })
+`]
+
+When you want to start running a new activity use `'start() with an optional callback:
+
+`[
+  var MyPage = Sqimitive.Sqimitive.extend({
+    _activity: null,
+
+    elEvents: {
+      'click .close': function () {
+        this._activity.start(function () {
+          alert('Completely went away...')
+        })
+      },
+    },
+
+    events: {
+      init: function () {
+        this._activity = new Activity({
+          // Since Activity's event handlers are called within activity's
+          // context we can use this.cx or this.get('cx') to access this page.
+          cx: this,
+        })
+
+        // You don't have to implement every method down here, this is just a sample.
+        this._activity.on({
+          passthru: function () {
+            if (this.el(':visible')) {
+              this.transition()
+            } else {
+              this.done()
+            }
+          },
+
+          transition: function () {
+            this.cx.el.fadeOut(_.bind(this.done, this))
+          },
+
+          done: function () {
+            this.cx.remove()
+          },
+        })
+      },
+    },
+  })
+
+  var MyAskingPage = MyPage.extend({
+    events: {
+      init: function () {
+        this._activity.on('prereq', function () {
+          if (confirm('Really close this page?')) {
+            this.passthru()
+          } else {
+            this.cancel()
+          }
+        })
+      },
+    },
+  })
+`]
+
+When you want to have your callback fired right away without startign the activity and postpone if it is active - use `'enqueue():
+
+`[
+  (new MyPage)._activity.enqueue(function () {
+    // At this point it's guaranteed that the activity is no more/was not running.
+  })
+`]
+
+
+`! +pg=util
+
+`# Underscore.js functions
+
+Each `[Sqimitive.Sqimitive`] instance inherits a bunch of `@un:`@ Underscore.js functions – those used to sort, filter, transform, count, locate, cook, boil, slice up and serve `#nest'ed children into an object or array: `[sqim.invoke('render')`].
+
+The following methods are available (links will take you to Underscore.js docs in a new tab):
+
+`* `@un:chain`@() – wrap list of children into an Underscore object on which you can call other Underscore methods that will modify that list, which you can then retrieve with `[sqim.chain()....().value()`]
+`* `@un:contains`@(sqim) – return `'true if there’s a nested `'sqim instance
+`* `@un:countBy`@(iterator[, cx]) – same as `'groupBy() but returns count of children instead of lists: `[{gr1: 3, seco: 1, ...}`]
+`* `@un:difference`@([sqim, sqim, ...]) – same as `'without() but accepts one or more arrays
+`* `@un:each`@(iterator[, cx]) – call `[iterator(sqim, parentKey)`] on each children
+`* `@un:every`@(predicate[, cx]) – return `'true if for every child `[predicate(sqim, parentKey)`] was positive
+`* `@un:filter`@(predicate[, cx]) – return an array of all children for which `[predicate(sqim, parentKey)`] was positive (similar to `'pick() that returns an object)
+`* `@un:find`@(predicate[, cx]) – return the first child for which `[predicate(sqim, parentKey)`] was positive or `'undefined if none matched
+`* `@un:findWhere`@(props) – return the first child that have equal properties; don't use this to compare `@Base._opt`@ for the same reason as with `'pluck() above
+`* `@un:first`@() – first nested child or `'undefined
+`* `@un:groupBy`@(iterator[, cx]) – put each child under the object’s key named after `[iterator(sqim, parentKey)`] (`'iterator can be a string – property name) and return that object: `[{gr1: [Sqimitive], seco: [...]}`]
+`* `@un:indexBy`@(iterator[, cx]) – same as `'groupBy() but for unique groups; returns `[{gr1: Sqimitive, seco: Sqimitive, ...}`]
+`* `@un:indexOf`@(sqim) – determine the ordinal number of `'sqim or -1 if it’s not nested
+`* `@un:initial`@([n]) – all but last `'n (1) children
+`* `@un:invoke`@(method[, arg1, arg2, ...]) – call `'method on each child, giving it passed arguments, put each result into an array and return it (similar to `'map())
+`* `@un:keys`@() – array of all childrens' `#_parentKey’s
+`* `@un:last`@() – last nested child or `'undefined
+`* `@un:lastIndexOf`@(sqim) – same as `'indexOf() but counts from the end
+`* `@un:map`@(iterator[, cx]) – call `[iterator(sqim, parentKey)`] on each children, push result onto an array and return them
+`* `@un:max`@(iterator[, cx]) – rank all children by calling `[iterator(sqim, parentKey)`] and return the "highest" one
+`* `@un:min`@(iterator[, cx]) – same as `'max() but returns the "lowest" child
+`* `@un:omit`@(key[, key, ...]) – the opposite of `'pick()
+`* `@un:pairs`@() – array of `[[parentKey, sqim]`] items for all children
+`* `@un:partition`@(predicate) – split all children into two groups (first matching `'predicate, second – not); return both as an array
+`* `@un:pick`@(key[, key, ...]) – all children with `#_parentKey’s matching any given argument; `'key can also be a single array of keys or a `[function (sqim, parentKey)`] returning `'true for items to be put into result (this form is similar to `'filter() that returns an array). `*Attention:`* parent keys are always string; doing `[sqim.pick(1)`] will never return results – do `[sqim.pick('1')`] instead
+`* `@un:pluck`@(prop) – picks `'prop property out of every child, push it onto an array and return them. You shouldn't use this to get `@Base._opt`@ – use `[picker('get', 'opt')`] (`#picker()) and `'map(), or `[get('opt')`] (`#get()) and `'invoke() instead
+`* `@un:reduce`@(iterator, memo[, cx]) – reduce the list of children to a single value by calling `[iterator(memo, sqim, parentKey)`]
+`* `@un:reduceRight`@(iterator, memo[, cx]) – same as `'reduceRight() but goes from the end
+`* `@un:reject`@(predicate[, cx]) – the opposite of `'filter()
+`* `@un:rest`@([n]) – all but first `'n (1) children
+`* `@un:sample`@([n]) – return random `'n children as an array or just one as it is if `'n isn't given
+`* `@un:shuffle`@() – get shuffled array of children instances
+`* `@un:some`@(predicate[, cx]) – return `'true if for any child `[predicate(sqim, parentKey)`] was positive
+`* `@un:sortBy`@(iterator[, cx]) – sort and return all children by ranking them with `[iterator(sqim, parentKey)`] from lowest to highest
+`* `@un:sortedIndex`@(sqim[, iterator[, cx]]) – determine index for item insertion that will maintain certain list sorting
+`* `@un:toArray`@() – return all children as an array copy – similar to `#nested() with no arguments but without keys; alike to Underscore's `'values()
+`* `@un:where`@(props) – return only children that have equal properties; don't use this to compare `@Base._opt`@ for the same reason as with `'pluck() above
+`* `@un:without`@(sqim[, sqim, ...]) – all children except those given as arguments
