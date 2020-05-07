@@ -5630,7 +5630,8 @@
   var arrayUtils =
     'each map find filter reject reduce every some contains invoke pluck' +
     ' max min sortBy groupBy indexBy countBy chunk shuffle sample' +
-    ' partition toArray without union intersection difference'
+    // contains() is an Underscore alias of includes().
+    ' partition toArray without union intersection difference includes'
 
   // iterator = function (Sqimitive child, int index)
   var orderedUtils =
