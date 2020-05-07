@@ -4,31 +4,38 @@ Migrating from 1.0 to 1.2
 (1.1 is a transitive version and should not be used.)
 
 1.2 is a mature release with multiple breaking changes. demo/to-do.* were
-updated to reflect most important ones (the introduction of Ordered).
+updated to reflect the most important one (the introduction of Ordered).
 
 Improvements and bug fixes:
 
   * Reworked the innards of instantiation mechanism (extend())
   * Improved performance of instantiation (constructor, deepClone()) and events
   * No longer requiring Underscore.js - can be replaced with NoDash or LoDash
-  * Properly isolated from window and supporting AMD and CommonJS thanks to
+  * Properly isolated from window, supporting AMD and CommonJS thanks to
     Universal Module Header (umh.js)
   * Enabled strict mode for all scripts, avoided arguments.callee and such
-  * Fixed hooking events (fuse()) with standard method names like 'toString'
+  * Fixed hooking events (fuse()) with names of standard properties: 'toString'
   * Fixed improper length calculation if not _owning and nesting over an
     existing key (replacing)
+  * Fixed cloning of _mergeProps and _shareProps by extend()
+  * Fixed sqim._() returning _.chain(), not just _()
 
 New features:
 
   * Added mix-ins (Sqimitive.Core's static and instance mixIn() methods)
-  * Added nestEx() method (nest() calls it) with more convenient semantics for
+  * Added nestEx() method (nest() calls it) with a more convenient semantics for
     hooking (single argument format and detailed return value)
-  * Allowed _childClass to be indirect reference (array or string)
-  * Improved assignChildren()/assignResp():
+  * Allowed _childClass to be an indirect reference (array or string)
+  * Improved assignChildren():
     * added options.childClass instead of always using _childClass
     * now returning array of nested and removed sqimitives
-    * assignResp() now setting options.assignResp
-    * _respToOpt function may now return non-array
+    * removed handling of resp.data:
+      https://flask.palletsprojects.com/en/1.1.x/security/#json-security
+  * Improved assignResp():
+    * now setting options.assignResp
+    * added options.schema instead of always using _respToOpt
+    * added special _respToOpt[''] key
+    * _respToOpt function values may now return non-array
   * Added Base.getSet(), findKey() methods
   * Event handlers can now specify post-action callback (eobj.post property)
   * Added Base.chunk() and Ordered.findIndex()/findLastIndex() helper methods
@@ -50,6 +57,12 @@ Breaking changes:
        do:
            var MyClass = Sqimitive.jQuery.extend(...)
 
+  * If listening to nest() - now listen to nestEx() which is called by the former
+    => instead of:
+           events: {'+nest': function (newChild) { ... }}
+       do:
+           events: {'+nestEx': function (res) { var newChild = res.child; ... }}
+
   * Moved away from "optimistically ordered" Sqimitive to new Ordered mix-in:
     => if your sqimitive's children must have stable order, do:
            var MyOrdered = Sqimitive.Base.extend({
@@ -58,18 +71,20 @@ Breaking changes:
            })
        or (outside of class declaration at any time):
            MyOrdered.mixIn(Sqimitive.Ordered)
+       or (for a particular object instance only):
+           myObj.mixIn(Sqimitive.Ordered)
 
     * Sqimitive.Base.slice() used to treat length parameter as end index; this
       was fixed to conform to standard Array's slice()
-      => instead of (sqim with 3 children):
-             sqim.slice(2, 1) returning [child3]
+      => instead of (sqim having 3 children):
+             sqim.slice(2, 1)   that was returning [child3]
          do:
              sqim.slice(2, 3)
 
     * at() moved from Base to Ordered and return value changed
       => don't rely on children positions in sqimitives without Ordered mix-in
          in Ordered, instead of:
-             osqim.at(2) returning [child3]
+             osqim.at(2)        that was returning child3
          do:
              osqim.at(2).child
 
@@ -78,8 +93,8 @@ Breaking changes:
 
     * reduceRight() moved from Base to Ordered and made operating on array
       => instead of:
-             osqim.reduceRight(function (memo, child, key, children) { ... })
-         do:
+             osqim.reduceRight(function (memo, child, key,   children) { ... })
+         do:                                          ^^^    ^^^^^^^^
              osqim.reduceRight(function (memo, child, index, array) {
                var key = this.at(index).key
                var children = this.nested()
@@ -89,7 +104,7 @@ Breaking changes:
   * Helper methods now operate on array (Base.slice()), not object (_children):
     each(), map(), reduce(), find(), filter(), reject(), every(), some(), max(),
     min(), sortBy(), groupBy(), indexBy(), countBy()
-    => see above for reduceRight() (omit first argument, memo):
+    => see above for reduceRight() (omit the first argument, memo):
            osqim.each(function (child, index, array) {
              var key = this.at(index).key
              ...
@@ -99,7 +114,8 @@ Breaking changes:
 
     * where()
       => instead of:
-             sqim.where({length: 1, _some: 2}) returning array of children objects
+             sqim.where({length: 1, _some: 2})
+         that was returning array of children objects
          do:
              sqim.filter(function (child) {
                return child.length == 1 && child._some == 2
@@ -107,13 +123,15 @@ Breaking changes:
 
     * findWhere()
       => instead of:
-             sqim.findWhere({length: 1}) returning any one matched children
+             sqim.findWhere({length: 1})
+         that was returning any one matched children
          do:
              sqim.filter(function (child) { return child.length == 1 })
 
     * pairs()
       => instead of:
-             sqim.pairs() returning [ ['k1', child1], ['k2', child2], ... ]
+             sqim.pairs()
+         that was returning [ ['k1', child1], ['k2', child2], ... ]
          do:
              sqim.map(function (child) {
                return [this.findKey(child), child]
@@ -121,9 +139,9 @@ Breaking changes:
 
     * chain()
       => instead of:
-             sqim.chain().filter(...).invoke(...)
+             sqim.chain().filter(...).invoke(...).value()
          do:
-             sqim._().filter(...).invoke(...)
+             sqim._().filter(...).invoke(...).value()
          or (if your library doesn't support _() like NoDash):
              _.invoke(sqim.filter(...), ...)
          or even:
@@ -138,6 +156,12 @@ Breaking changes:
        do:
            sqim.assignChildren(...); sqim.somethingMore...
 
+  * Not handling object parameter with data specially
+    => instead of:
+           sqim.assignChildren({data: [child, child, ...]})
+       do:
+           sqim.assignChildren([child, child, ...])
+
   * attach() is using _parent's $(), not repeating look-up if given parent
     parameter matched no node, not passing '.ns' part to jQuery.on() (elEvents)
     => these can almost be qualified as bugs; Sqimitive.jQuery must always use
@@ -150,17 +174,25 @@ Breaking changes:
   * Not treating 'body' path specially in $()
     => instead of:
            _opt: { attachPath: 'body' }
+           new Sqimitive.Sqimitive({attachPath: 'body'})
            sqim.attach('body')
            sqim.$('body')
        use global $() or document.body:
            _opt: { attachPath: $('body') } or _opt: { attachPath: document.body }
+           new Sqimitive.jQuery({attachPath: $('body') or document.body})
            sqim.attach($('body')) or sqim.attach(document.body)
-           $('body') or document.body
+           $('body') or $(document.body)
        note: document.body is null if executing within <head> before onload:
            <head> <script>alert(document.body)</script> </head>
        this doesn't affect constructor (opt.el) since it's using global $():
            new Sqimitive.jQuery({el: 'body'}) is fine, same as:
            new Sqimitive.jQuery({el: $('body')})
+
+  * Using declaration-time value of el.class if el.className is falsy
+    => if you had:
+           el: {class: 'one', className: ''}
+       then el's class would be always '' disregarding the class key
+       now el's class is 'one'
 
   * Added _respToOpt to default Sqimitive.Base._mergeProps
     => if you had 2 classes:
@@ -170,10 +202,17 @@ Breaking changes:
        either remove _respToOpt from your class' _mergeProps:
            var C2 = ...
            C2._mergeProps = _.without(C2._mergeProps, '_respToOpt')
-       or change _respToOpt in constructor (worse performance):
+       or change _respToOpt in constructor (less optimal in performance):
            var C2 = C1.extend({
              init: function () { delete this._respToOpt.foo },
            })
+
+  * _mergeProps and _shareProps were not previously cloned
+    => this is a bug but may impact existing classes (unlikely):
+           var Sub = Sqimitive.Base.extend()
+           Sqimitive.Base._mergeProps.length //=> 3
+           Sub._mergeProps.push('new')
+           Sqimitive.Base._mergeProps.length //=> 4
 
   * Minimal Underscore.js version increased from 1.4.4 to 1.8.0 or 1.9.0 (if
     using chunk() helper)

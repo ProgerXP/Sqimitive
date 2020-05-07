@@ -41,21 +41,179 @@
   var unique = {}
 
   //! +cl=Sqimitive.Async:Sqimitive.Base
+  //
+  // Asynchronous operation manager - a "promise" on steroids.
+  //
+  // ` `#Async is "native" Sqimitive's re-implementation of JavaScript's `'Promise.
+  // It provides a unified wrapper around asynchronous operations such as remote requests.
+  // Unlike `'Promise, `#Async may contain `#nest'ed operations (the parent only
+  // completes when all children complete, recursively), allows the usual (`#evt)
+  // event listeners and can be `#abort()ed.
+  //
+  // ` `#Async's state is stored in the `'status `#_opt'ion (`'true when succeeded,
+  // `'false if failed, `'null if still incomplete). On change `#Async fires
+  // `#success or `#error and, always, `#complete:
+  //* Listeners may be prioritized relative to others (see `#MAX_PRIORITY).
+  //* `#exception's during an event handler do not mark `#Async as failed
+  //  (unlike with `'Promise).
+  //* If `'status changes during `#error or `#success then remaining handlers
+  //  are skipped and handlers of the new `'status (`#success or `#error)
+  //  are called. `#complete is always triggered in the end, once `'status stops changing.
+  //
+  //  `[
+  //    var async = new Sqimitive.Async
+  //
+  //    async.whenSuccess(function () {
+  //      if (Math.random() > 0.5) { async.set('status', false) }
+  //    }, this, -1)
+  //
+  //    // This one will run after the previous handler where we've given a
+  //    // smaller priority (-1):
+  //    async.whenSuccess(function () {
+  //      alert('You win!')
+  //    })
+  //
+  //    async.whenError(function () {
+  //      alert('No luck :<')
+  //    })
+  //
+  //    async.set('status', true)
+  //      // will show either of the alert messages
+  //  `]
+  //
+  // Other notes:
+  //* Nested `#Async's may be `#nest'ed at any time and their `'status may be any
+  //  (loading, failed or succeeded) - the parent's `'status will be updated
+  //  accordingly.
+  //* The operation may start at any time: usually from `@Base.init()`@ if you're
+  //  subclassing `#Async, or by a method like `'start() called from the
+  //  outside, or for "ad-hoc" `#Async's - some time after `'new.
+  //
+  //? A subclass that wraps around JavaScript's `'Image (representing the
+  //  `[<img>`] tag) for preloading graphical resources.
+  //  `[
+  //   var AsyncImage = Sqimitive.Async.extend({
+  //     _opt: {
+  //       src: null,   // relative to current location
+  //       img: null,   // JavaScript's Image
+  //     },
+  //
+  //     events: {
+  //       init: function () {
+  //         var img = new Image
+  //         img.onload  = () => this.set('status', true)
+  //         img.onerror = () => this.set('status', false)
+  //         this.set('img', img)
+  //         img.src = this.get('src')
+  //       },
+  //
+  //       // Stops image loading (if supported by the browser).
+  //       abort: function () {
+  //         this.img() && (this.img().src = 'javascript:void 0')
+  //       },
+  //     },
+  //
+  //     img: function () {
+  //       return this.get('img')
+  //     },
+  //
+  //     width: function () {
+  //       return this.img() && this.img().width
+  //     },
+  //
+  //     height: function () {
+  //       return this.img() && this.img().height
+  //     },
+  //   })
+  //  `]
+  //  Using `'AsyncImage to load a single image:
+  //  `[
+  //    var async = new AsyncImage({src: 'pic.jpg'})
+  //    async.whenSuccess(() => alert(async.width()))
+  //
+  //    // Similar to:
+  //    var img = new Image
+  //    img.src = 'pic.jpg'
+  //    img.onload = () => alert(img.width)
+  //  `]
+  //  Loading multiple `'AsyncImage's:
+  //  `[
+  //    var container = new Sqimitive.Async
+  //    container.nest(new AsyncImage({src: 'foo.png'}))
+  //    container.nest(new AsyncImage({src: 'bar.bmp'}))
+  //    container.whenSuccess(function () {
+  //      alert('Loaded ' + container.invoke('get', 'src').join())
+  //    })
+  //    container.whenError(function () {
+  //      // Since Async is the usual Sqimitive.Base, we have all the utility methods:
+  //      var failed = this.reject(a => a.isSuccessful())
+  //      alert('Failed to load: ' + failed.map(a => a.get('src')).join())
+  //    })
+  //  `]
+  //  The above `'container in turn could be part of another `#Async:
+  //  `[
+  //    var resourcePreloader = new Sqimitive.Async
+  //    resourcePreloader.nest(imagePreloader)
+  //    resourcePreloader.nest(dataPreloader)
+  //    resourcePreloader.whenSuccess(() => game.start())
+  //  `]
+  //  ...With `'dataPreloader defined "ad-hoc" (without a specialized class):
+  //  `[
+  //    var dataPreloader = new Sqimitive.Async
+  //
+  //    $.loadJSON('map.json', function (data) {
+  //      dataPreloader.set('data', data)
+  //      dataPreloader.set('status', true)
+  //    })
+  //
+  //    dataPreloader.whenSuccess(function () {
+  //      var data = dataPreloader.get('data')
+  //      // ...
+  //    })
+  //  `]
   return Sqimitive.Base.extend('Sqimitive.Async', {
-    // Max absolute number (+/-) accepted by `#whenComplete() and others,
-    // clamped to the nearest value.
+    // The maximum number (absolute, i.e. positive) accepted by `#whenComplete()
+    // and others; out of range priority is clamped to the nearest value.
     //
-    // Use `'-Infinity and `'Infinity to specify min/max priority.
+    //? Use `'-Infinity and `'Infinity to specify minimum and maximum priority.
+    //  `[
+    //   // This function is called before listeners to 'success' with a
+    //   // larger priority (which is 0 by default).
+    //   async.whenSuccess(function () { ... }, this, -Infinity)
+    //  `]
     MAX_PRIORITY: 2,
 
     _childClass: '',
     _childEvents: ['complete', '=exception'],
-    _ordered: {complete: Infinity, error: Infinity, success: Infinity},
 
-    //> status null not started or not finished`, true/false succeeded/failed
-    //  `- reflects both this own instance's status and of its children
-    //> ignoreError bool `- if set, this instance will be considered a success
-    //  even if status is false
+    // New standard options (`@Base._opt`@):
+    //> status operation null not started or not finished`,
+    //  true operation succeeded`, false operation failed
+    //  `- reflects both this instance's own status and status of its children
+    //
+    //  When an operation wrapped by this `#Async finishes and assuming it has no `#_children, `#set() `'status to
+    //  either `'true (`#isSuccessful) or `'false. This instance will stop
+    //  being `#isLoading(); this should be a permanent condition - don't
+    //  change `'status once it's becomes non-`'null until `#clear().
+    //
+    //> ignoreError bool `- if set, this instance will be considered succeeded
+    //  by `#isSuccessful() even if `'status is `'false
+    //
+    //  Don't change this value when this instance is no longer
+    //  `#isLoading() because the expected handlers won't be called:
+    //  `[
+    //    async.set('status', false)
+    //    async.whenSuccess(...)
+    //    async.set('ignoreError', true)
+    //      // whenSuccess' func is not executed despire isSuccessful() returning true
+    //
+    //    // Best practice is to give ignoreError to the constructor:
+    //    var async = new Sqimitive.Async({ignoreError: true})
+    //    // ...or to extend():
+    //    var MyAsync = Sqimitive.Async.extend({
+    //      _opt: {ignoreError: true},
+    //    })
+    //  `]
     _opt: {
       status: null,
       ignoreError: false,
@@ -88,11 +246,31 @@
       change_status: function () {
         if (!this.isLoading()) {
           var ex1 = this._callPriorities(this.isSuccessful() ? 'success' : 'error', [])
-          var ex2 = this._callPriorities('complete', [])
-          if (ex1 || ex2) { this.exception(ex2 || ex1) }
+          // Don't call complete if status has changed during success/error
+          // since after change_status returns, change_status will be triggered
+          // again and complete will run then.
+          var ex2 = ex1 === true || this._callPriorities('complete', [])
+          if (typeof ex1 == 'object') {
+            this.exception(ex1)
+          } else if (typeof ex2 == 'object') {
+            this.exception(ex2)
+          }
         }
       },
 
+      //! +fn=toString
+      // Returns a debugger-friendly summary of this object:
+      //[
+      //   The.Class.Name [length] ~¹ STATUS²
+      //]
+      //   `&sup1 `[~`] is output if the `'ignoreError `#_opt is set.
+      //
+      //   `&sup2 `[STATUS`] is either "LOADING", "DONE" or "ERROR"
+      //
+      // For example:
+      //[
+      //   AsyncImage [2]  DONE
+      //]
       '=toString': function () {
         return [
           this.constructor.name,
@@ -107,7 +285,8 @@
     //! +ig
     // Separate events for separate priorities are used instead of a single
     // event because Sqimitive doesn't support ordered handlers and because such
-    // set-up doesn't require sorting (or inserting handlers in correct positions).
+    // set-up doesn't require sorting (or inserting handlers in specific positions).
+    //= object Error if catched`, true if quit due to status change`, false
     _callPriorities: function (event, args) {
       var max = this.MAX_PRIORITY
       var ex
@@ -120,22 +299,22 @@
           ex = ex || e
         }
       }
-      return ex
+      return ex || res === unique
     },
 
     fuse: function (event, func, cx) {
       var eobj = Sqimitive.Base.prototype.fuse.apply(this, arguments)
-      if (this._ordered[event] === Infinity) {
+      if (event.match(/^(success|error|complete)(-?\d+)?$/)) {
         eobj.post = function (eobj, res) {
           // Call handlers only once.
           eobj.func = Sqimitive.Core.stub
           eobj.post = undefined
           // Skip calling next handlers if the condition no more holds (e.g. if
-          // current handler has nested a new async).
-          eobj.stop = event === 'complete'
+          // current handler has nested a new Sqimitive.Async).
+          eobj.stop = event[0] == 'c'
             ? this.isLoading()
-            : (this.isSuccessful() !== (event === 'success'))
-          return res
+            : (this.isSuccessful() !== (event[0] == 's'))
+          return eobj.stop ? unique : res
         }.bind(this)
       }
       return eobj
@@ -170,99 +349,239 @@
       return this
     },
 
-    // Unlike with `[on('event')`] (`#on()) `'func gets called immediately if
-    // the condition is already met (in this case `'priority is ignored).
-    // See also `#MAX_PRIORITY.
+    // Fire `'func whenever this instance stops being `#isLoading() - see `#complete.
     //
-    // Warning: the following won't work because `'func may be called immediately,
+    //?`[
+    //   $('#spinner').show()
+    //   var async = new MyAsync({...})
+    //   async.whenComplete(function () {
+    //     $('#spinner').hide()
+    //   })
+    //
+    //   // As if:
+    //   $('#spinner').show()
+    //   try {
+    //     do_async()
+    //   } finally {
+    //     $('#spinner').hide()
+    //   }
+    // `]
+    //
+    //#completeDesc
+    // Unlike with a simple `[on('event')`] (`#on()) `'func gets called immediately if
+    // the condition is already met (then `'priority is ignored).
+    // Otherwise `'func is executed before all handlers registered with a larger
+    // `'priority, among (in any order) those with the same and after those
+    // with a lower. The value is clamped to the `#MAX_PRIORITY range.
+    //
+    // Warning: the following is incorrect use because `'func may be called immediately,
     // before the result is assigned to `'req:
     //[
-    //   var req = reqs.whenComplete(function ...)
+    //   var req = (new Sqimitive.Async).whenComplete(function () {
+    //     // WRONG: req may be undefined:
+    //     req.foo()
+    //   })
+    //
+    //   // CORRECT: assign to the variable first:
+    //   var req = new Sqimitive.Async
+    //   req.whenComplete(...)
     //]
     whenComplete: function (func, cx, priority) {
       return this._when(func, cx, priority, !this.isLoading(), 'complete')
     },
 
-    //#-whenComplete()
+    // Fire `'func whenever this instance's operation has failed - see `#error.
+    //
+    //?`[
+    //   async.whenError(function () {
+    //     alert("Met an error :'(")
+    //   })
+    // `]
+    //
+    //#-completeDesc
     whenError: function (func, cx, priority) {
       return this._when(func, cx, priority, this.isSuccessful() == false, 'error')
     },
 
-    //#-whenComplete()
+    // Fire `'func whenever this instance's operation has succeeded - see `#success.
+    //
+    //?`[
+    //   async.whenSuccess(app.start)
+    // `]
+    //
+    //#-completeDesc
     whenSuccess: function (func, cx, priority) {
       return this._when(func, cx, priority, this.isSuccessful() == true, 'success')
     },
 
-    // Sets `'status (`#_opt) to `'true if have no children and not `#isLoading().
-    //= null if not empty or is loading`, boolean result of `@Base.set()`@
+    // Sets the `'status `#_opt to `'true if have no `#_children and is still `#isLoading().
+    //
+    //= undefined if not empty or is not loading`, true
+    //
+    //?`[
+    //   _.each(filesToLoad, function (url) {
+    //     async.nest(new MyAsync({src: url}))
+    //   })
+    //
+    //   async.whenComplete(allLoaded)
+    //   async.doneIfEmpty()
+    //     //=> true
+    //     // if there were no filesToLoad then mark async as complete right away
+    //   async.doneIfEmpty()
+    //     //=> undefined - already complete, call ignored
+    // `]
     doneIfEmpty: function () {
       if (!this.length && this.isLoading()) {
-        return this.set('status', true)
+        this.set('status', true)
+        return true
       }
     },
 
-    // Removes event listeners for `#success()/`#error()/`#complete(),
-    // Calls `#abort() and `#remove() on `#_children and sets `'status (`#_opt)
-    // to `'null.
+    // Prepares this instance for new use.
+    //
+    // It's recommended to create a new `#Async instance for every new batch of
+    // tasks. However, `#clear() may improve performance when thousands of
+    // objects need to be created but some could be reused.
+    //
+    // Removes event listeners for `#success/`#error/`#complete (but not
+    // for `#exception),
+    // calls `#abort() on self and on `#_children (non-recursively), calls `@Base.remove()`@ on children and sets `'status (`#_opt)
+    // to `'null (`#isLoading()).
     clear: function () {
       _.each(['success', 'error', 'complete'], function (e) { this.off(e) }, this)
+      this.abort()
       this.invoke('abort')
       this.invoke('remove')
       this.set('status', null)
       return this
     },
 
-    //= null when still loading (`'status unknown)`, boolean
+    //= null when still `#isLoading()`,
+    //  true if `'status `#_opt is `'true or `'ignoreError `#_opt is set`,
+    //  false
+    //
+    // `'ignoreError affects all methods using `#isSuccessful(), in particular
+    // `#whenSuccess() and `#whenError():
+    //[
+    //   async.set('status', false)   // fail it
+    //   async.isSuccessful()         //=> false
+    //   async.set('ignoreError', true)
+    //   async.isSuccessful()         //=> true
+    //   async.whenSuccess(() => alert('fired!'))
+    //     // alerts
+    //]
+    //
+    // However, changing `'ignoreError on run-time is not recommended - see `#_opt.
     isSuccessful: function () {
       var s = this.get('status')
       return s == null ? null : !!(this.get('ignoreError') || s)
     },
 
-    //= true still loading (`'status unknown)
+    //= true when still loading (`'status `#_opt is `'null)`,
+    //  false when failed or succeeded (`#isSuccessful)
     isLoading: function () {
       return this.get('status') == null
     },
 
     //! +fn=success +ig
     //
-    // These get fired when all requests have finished loading. Each handler is
-    // called at most once. If a handler changes status, others are skipped
-    // until status changes again.
+    // Called when this instance and children have succeeded.
     //
-    // Even though call order is deterministic (`'Async's `#nest() acts as `#on()
-    // because of `#_childEvents/`#_forward()) it's usually more convenient to use
-    // specific priority levels which don't depend on the order of `'nest()/`'on()
-    // calls: `[on('success')`] is called after `[success-3`] but before
+    //#sec
+    // ` `#success, `#error and `#complete are
+    // called when this and nested operations have finished (resources loaded, etc.). Consider this analogy with exception handling:
+    //[
+    //   try {
+    //     ...                    // Async.success()
+    //   } catch (exception) {
+    //     ...                    // Async.error()
+    //   } finally {
+    //     ...                    // Async.complete()
+    //   }
+    //]
+    //
+    // But note that "real" exceptions thrown by listeners are handled by `#exception() outside of the normal pipeline (`#error's are expected conditions, exceptions are not).
+    //
+    // Each handler is
+    // called at most once as if it was bound with `#once(). If a handler changes the `'status `#_opt, others are skipped and events are re-fired.
+    //
+    //? In most cases you need to use `#whenSuccess(), `#whenError() and `#whenComplete() rather than subscribing via `#on() because if the instance's status changes between its construction and your subscription - your handler will not be called:
+    //  `[
+    //   var async = new MyAsync({...})
+    //   // If async is already complete before we call on() - our handler will
+    //   // not be triggered:
+    //   async.on('success', function () { ... })
+    //   // So you want to do this:
+    //   async.whenSuccess(function () { ... })
+    //  `]
+    //
+    // The call order of handlers is deterministic (`#Async's `#nest() acts as `#on()
+    // because of `#_childEvents/`#_forward()) but it's usually more convenient to use
+    // specific priority levels to not depend on the order of `#nest()/`#on()
+    // calls: `[on('success')`] is guaranteed to be called after `[success-3`] but before
     // `[success2`].
     success: Sqimitive.Core.stub,
 
     //! +fn=error +ig
     //
-    //#-success()
+    // Called when this instance or one of its children has failed.
+    //
+    // By default, `#Async doesn't store any error information because it is
+    // operation-agnostic; you may use `#_opt for this.
+    //
+    //#-sec
     error: Sqimitive.Core.stub,
 
     //! +fn=complete +ig
     //
-    //#-success()
+    // Called when this instance stops being `#isLoading().
+    //
+    //#-sec
     complete: Sqimitive.Core.stub,
 
-    // Gets called on an exception in `#success(), `#error() or `#complete().
-    // This is in contrast with conventional "promises" - here, an error in
-    // handing the "promise" can't mark that promise failed if its underlying
+    // Called when an exception was thrown during `#success, `#error or `#complete.
+    //
+    //?`[
+    //  async.on('exception', e => console.error(e.message))
+    // `]
+    //
+    // In contrast with JavaScript's `'Promise an error in
+    // handing the "promise" (`#Async) doesn't mark that promise failed if its underlying
     // action (e.g. an AJAX call) has succeeded.
     //
-    // Note: this isn't called on request failure unless error has thrown an
-    // exception.
+    // If an exception is thrown during an `#error or `#success handler then
+    // remaining handlers are skipped, `#complete is triggered
+    // and the exception is re-thrown.
+    // An exception during `#complete also remaining handlers of `#complete and is
+    // re-thrown unless there was an exception during `#error or `#success.
     //
-    // There's no "whenException()" because already occurred errors are not
-    // stored. Only future exceptions can be listened to, via the usual `#on().
-    // It's not affected by `#clear() either.
+    // Other notes:
+    //* `#exception's event listeners are not affected by `#clear().
+    //* `#Async replaces the `#exception() handler of its children so that
+    //  the exception is thrown on the top-level `#Async (whose `#_parent is
+    //  not another `#Async).
+    //* The above also means that it's enough to override just the top-level
+    //  `#exception() to affect the entire tree.
+    //* The usual events have "whenXXX()" (`#whenComplete(), etc.) but
+    //  there's no "whenException()" because no info about already occurred errors is
+    //  stored (like `'status is stored in `#_opt). Only future exceptions can be listened to, with the usual `#on().
+    //* `#exception isn't called on request failure unless you throw an exception from `#error
+    //  (because `#Async doesn't know about your operation's details).
+    //* The default implementation throws the argument.
     exception: function (e) {
       throw e
     },
 
     //! +fn=abort +ig
-    // Do `[sink('abort')`] (`#sink()) to abort everything recursively.
+    // Aborts the operation of this instance.
+    //
+    //? `#abort() doesn't affect own `#_children - call `#sink()
+    //  to abort everything recursively:
+    //  `[
+    //     async.sink('abort')
+    //  `]
+    //
+    // The default implementation does nothing (is a `#stub).
     abort: Sqimitive.Core.stub,
   })
 });
