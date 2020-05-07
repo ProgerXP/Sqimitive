@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html data-root="../" data-entity='{"type":"class","id":31,"name":"Sqimitive.Async","start":{"line":42,"column":2,"offset":1393},"end":{"line":617,"column":2,"offset":22382},"forced":true,"modifiers":[],"file":"sqimitive-async.js"}'>
+<html data-root="../" data-entity='{"type":"class","id":31,"name":"Sqimitive.Async","start":{"line":42,"column":2,"offset":1393},"end":{"line":617,"column":2,"offset":22391},"forced":true,"modifiers":[],"file":"sqimitive-async.js"}'>
   <head>
     <meta charset="utf-8">
     <title>Async (in Sqimitive) – Sqimitive</title>
     <link rel="stylesheet" href="../styles.css">
-
   </head>
   <body>
     <script>orphus = {action: 'https://proger.me/orphus.php'}</script>
@@ -48,7 +47,7 @@
 
       <p class="entity-info__file">
         Defined in:
-        sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/f5fbebce0e50cbcef89d0de280a224a6be9116c5/sqimitive-async.js#L43-L43" target="_blank">line 43</a>      </p>
+        sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/d6526e61b14d7c3b5b1065e2f4e9039c96d9488f/sqimitive-async.js#L43-L43" target="_blank">line 43</a>      </p>
 
           </div>
 
@@ -63,7 +62,7 @@ such as remote requests. Unlike <code class="chemdoc__id">Promise</code>, <a hre
 operations (the parent only completes when all children complete,
 recursively), allows the usual (<a href="../p_ov.html#-evt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="5 chemdoc__link-entity-cur">evt</a>) event listeners and can be
 <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifabort" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">abort()</a>ed.</p><p><a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">Async</a>’s state is stored in the <code class="chemdoc__id">status</code> <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="31 chemdoc__link-entity-cur">_opt</a>’ion (<code class="chemdoc__id">true</code> when
-succeeded, <code class="chemdoc__id">false</code> if failed, <code class="chemdoc__id">null</code> if still incomplete). On change
+succeeded, <code class="chemdoc__id">false</code> if failed, <code class="chemdoc__id">null</code> if still incomplete). On change,
 <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">Async</a> fires <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">success</a> or <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">error</a> and, always, <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">complete</a>:</p><ul><li>Listeners may be prioritized relative to others (see <a href="../Sqimitive/c_Async.html#Sqimitive-Async--icMAX_PRIORITY" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_const mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">MAX_PRIORITY</a>).</li><li><a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifexception" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">exception</a>’s during an event handler do not mark <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">Async</a> as failed
 (unlike with <code class="chemdoc__id">Promise</code>).</li><li>If <code class="chemdoc__id">status</code> changes during <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">error</a> or <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">success</a> then remaining handlers
 are skipped and handlers of the new <code class="chemdoc__id">status</code> (<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">success</a> or <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">error</a>) are
@@ -169,7 +168,7 @@ dataPreloader.whenSuccess(function () {
           Constants        </h2>
         <dl>
                       <dt id="Sqimitive-Async--icMAX_PRIORITY"
-                data-entity='{"type":"const","id":32,"name":"MAX_PRIORITY","start":{"line":187,"column":4,"offset":6781},"end":null,"forced":null,"modifiers":[],"file":"sqimitive-async.js"}'
+                data-entity='{"type":"const","id":32,"name":"MAX_PRIORITY","start":{"line":187,"column":4,"offset":6782},"end":null,"forced":null,"modifiers":[],"file":"sqimitive-async.js"}'
                 class="cp-member__header">
               <b>MAX_PRIORITY</b>
                           </dt>
@@ -183,7 +182,7 @@ async.whenSuccess(function (async) { ... }, this, -Infinity)</code></pre></field
                                           <p class="cp-member__file def-snip__hdr"
                  id="Sqimitive-Async--icMAX_PRIORITY---code">
                 Defined in:
-                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/f5fbebce0e50cbcef89d0de280a224a6be9116c5/sqimitive-async.js#L188-L188" target="_blank">line 188</a>                                  &bull; <a href="#Sqimitive-Async--icMAX_PRIORITY---code" class="def-snip__toggler">Show code</a>
+                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/d6526e61b14d7c3b5b1065e2f4e9039c96d9488f/sqimitive-async.js#L188-L188" target="_blank">line 188</a>                                  &bull; <a href="#Sqimitive-Async--icMAX_PRIORITY---code" class="def-snip__toggler">Show code</a>
                               </p>
                                               <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">MAX_PRIORITY: 2,</code></pre>
                           </dd>
@@ -193,7 +192,7 @@ async.whenSuccess(function (async) { ... }, this, -Infinity)</code></pre></field
           Properties        </h2>
         <dl>
                       <dt id="Sqimitive-Async--iv_opt"
-                data-entity='{"type":"var","id":35,"name":"_opt","start":{"line":222,"column":4,"offset":8252},"end":{"line":225,"column":4,"offset":8310},"forced":null,"modifiers":["protected"],"file":"sqimitive-async.js"}'
+                data-entity='{"type":"var","id":35,"name":"_opt","start":{"line":222,"column":4,"offset":8253},"end":{"line":225,"column":4,"offset":8311},"forced":null,"modifiers":["protected"],"file":"sqimitive-async.js"}'
                 class="cp-member__header">
               <b>_opt</b>
                           </dt>
@@ -234,7 +233,7 @@ var MyAsync = Sqimitive.Async.extend({
                                           <p class="cp-member__file def-snip__hdr"
                  id="Sqimitive-Async--iv_opt---code">
                 Defined in:
-                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/f5fbebce0e50cbcef89d0de280a224a6be9116c5/sqimitive-async.js#L223-L226" target="_blank">lines 223-226</a> (4 lines)                                  &bull; <a href="#Sqimitive-Async--iv_opt---code" class="def-snip__toggler">Show code</a>
+                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/d6526e61b14d7c3b5b1065e2f4e9039c96d9488f/sqimitive-async.js#L223-L226" target="_blank">lines 223-226</a> (4 lines)                                  &bull; <a href="#Sqimitive-Async--iv_opt---code" class="def-snip__toggler">Show code</a>
                               </p>
                                               <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">_opt: {
   status: null,
@@ -247,7 +246,7 @@ var MyAsync = Sqimitive.Async.extend({
           Methods        </h2>
         <dl>
                       <dt id="Sqimitive-Async--ifabort"
-                data-entity='{"type":"func","id":56,"name":"abort","start":{"line":606,"column":4,"offset":22049},"end":{"line":615,"column":4,"offset":22290},"forced":true,"modifiers":[],"file":"sqimitive-async.js"}'
+                data-entity='{"type":"func","id":56,"name":"abort","start":{"line":606,"column":4,"offset":22058},"end":{"line":615,"column":4,"offset":22299},"forced":true,"modifiers":[],"file":"sqimitive-async.js"}'
                 class="cp-member__header">
               <b>abort</b>
                               (
@@ -261,10 +260,10 @@ everything recursively:
                                           <p class="cp-member__file "
                  id="Sqimitive-Async--ifabort---code">
                 Defined in:
-                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/f5fbebce0e50cbcef89d0de280a224a6be9116c5/sqimitive-async.js#L607-L607" target="_blank">line 607</a>                              </p>
+                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/d6526e61b14d7c3b5b1065e2f4e9039c96d9488f/sqimitive-async.js#L607-L607" target="_blank">line 607</a>                              </p>
                           </dd>
                       <dt id="Sqimitive-Async--ifclear"
-                data-entity='{"type":"func","id":49,"name":"clear","start":{"line":468,"column":4,"offset":16665},"end":{"line":475,"column":4,"offset":16896},"forced":null,"modifiers":[],"file":"sqimitive-async.js"}'
+                data-entity='{"type":"func","id":49,"name":"clear","start":{"line":468,"column":4,"offset":16667},"end":{"line":475,"column":4,"offset":16898},"forced":null,"modifiers":[],"file":"sqimitive-async.js"}'
                 class="cp-member__header">
               <b>clear</b>
                               (
@@ -280,7 +279,7 @@ objects need to be created but some could be reused.</p><p>Removes event listene
                                           <p class="cp-member__file def-snip__hdr"
                  id="Sqimitive-Async--ifclear---code">
                 Defined in:
-                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/f5fbebce0e50cbcef89d0de280a224a6be9116c5/sqimitive-async.js#L469-L476" target="_blank">lines 469-476</a> (8 lines)                                  &bull; <a href="#Sqimitive-Async--ifclear---code" class="def-snip__toggler">Show code</a>
+                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/d6526e61b14d7c3b5b1065e2f4e9039c96d9488f/sqimitive-async.js#L469-L476" target="_blank">lines 469-476</a> (8 lines)                                  &bull; <a href="#Sqimitive-Async--ifclear---code" class="def-snip__toggler">Show code</a>
                               </p>
                                               <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">clear: function () {
   _.each(['success', 'error', 'complete'], function (e) { this.off(e) }, this)
@@ -292,7 +291,7 @@ objects need to be created but some could be reused.</p><p>Removes event listene
 },</code></pre>
                           </dd>
                       <dt id="Sqimitive-Async--ifcomplete"
-                data-entity='{"type":"func","id":54,"name":"complete","start":{"line":561,"column":4,"offset":20094},"end":{"line":565,"column":4,"offset":20198},"forced":true,"modifiers":[],"file":"sqimitive-async.js"}'
+                data-entity='{"type":"func","id":54,"name":"complete","start":{"line":561,"column":4,"offset":20096},"end":{"line":565,"column":4,"offset":20200},"forced":true,"modifiers":[],"file":"sqimitive-async.js"}'
                 class="cp-member__header">
               <b>complete</b>
                               (
@@ -329,10 +328,10 @@ after <code>success-3</code> but before <code>success2</code>.</p></div>
                                           <p class="cp-member__file "
                  id="Sqimitive-Async--ifcomplete---code">
                 Defined in:
-                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/f5fbebce0e50cbcef89d0de280a224a6be9116c5/sqimitive-async.js#L562-L562" target="_blank">line 562</a>                              </p>
+                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/d6526e61b14d7c3b5b1065e2f4e9039c96d9488f/sqimitive-async.js#L562-L562" target="_blank">line 562</a>                              </p>
                           </dd>
                       <dt id="Sqimitive-Async--ifdoneIfEmpty"
-                data-entity='{"type":"func","id":48,"name":"doneIfEmpty","start":{"line":451,"column":4,"offset":15983},"end":{"line":456,"column":4,"offset":16121},"forced":null,"modifiers":[],"file":"sqimitive-async.js"}'
+                data-entity='{"type":"func","id":48,"name":"doneIfEmpty","start":{"line":451,"column":4,"offset":15985},"end":{"line":456,"column":4,"offset":16123},"forced":null,"modifiers":[],"file":"sqimitive-async.js"}'
                 class="cp-member__header">
               <b>doneIfEmpty</b>
                               (
@@ -365,7 +364,7 @@ async.doneIfEmpty()
                                           <p class="cp-member__file def-snip__hdr"
                  id="Sqimitive-Async--ifdoneIfEmpty---code">
                 Defined in:
-                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/f5fbebce0e50cbcef89d0de280a224a6be9116c5/sqimitive-async.js#L452-L457" target="_blank">lines 452-457</a> (6 lines)                                  &bull; <a href="#Sqimitive-Async--ifdoneIfEmpty---code" class="def-snip__toggler">Show code</a>
+                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/d6526e61b14d7c3b5b1065e2f4e9039c96d9488f/sqimitive-async.js#L452-L457" target="_blank">lines 452-457</a> (6 lines)                                  &bull; <a href="#Sqimitive-Async--ifdoneIfEmpty---code" class="def-snip__toggler">Show code</a>
                               </p>
                                               <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">doneIfEmpty: function () {
   if (!this.length && this.isLoading()) {
@@ -375,7 +374,7 @@ async.doneIfEmpty()
 },</code></pre>
                           </dd>
                       <dt id="Sqimitive-Async--iferror"
-                data-entity='{"type":"func","id":53,"name":"error","start":{"line":551,"column":4,"offset":19800},"end":{"line":558,"column":4,"offset":20049},"forced":true,"modifiers":[],"file":"sqimitive-async.js"}'
+                data-entity='{"type":"func","id":53,"name":"error","start":{"line":551,"column":4,"offset":19802},"end":{"line":558,"column":4,"offset":20051},"forced":true,"modifiers":[],"file":"sqimitive-async.js"}'
                 class="cp-member__header">
               <b>error</b>
                               (
@@ -413,10 +412,10 @@ after <code>success-3</code> but before <code>success2</code>.</p></div>
                                           <p class="cp-member__file "
                  id="Sqimitive-Async--iferror---code">
                 Defined in:
-                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/f5fbebce0e50cbcef89d0de280a224a6be9116c5/sqimitive-async.js#L552-L552" target="_blank">line 552</a>                              </p>
+                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/d6526e61b14d7c3b5b1065e2f4e9039c96d9488f/sqimitive-async.js#L552-L552" target="_blank">line 552</a>                              </p>
                           </dd>
                       <dt id="Sqimitive-Async--ifexception"
-                data-entity='{"type":"func","id":55,"name":"exception","start":{"line":602,"column":4,"offset":21997},"end":{"line":604,"column":4,"offset":22041},"forced":null,"modifiers":[],"file":"sqimitive-async.js"}'
+                data-entity='{"type":"func","id":55,"name":"exception","start":{"line":602,"column":4,"offset":22006},"end":{"line":604,"column":4,"offset":22050},"forced":null,"modifiers":[],"file":"sqimitive-async.js"}'
                 class="cp-member__header">
               <b>exception</b>
                               (
@@ -426,11 +425,11 @@ after <code>success-3</code> but before <code>success2</code>.</p></div>
                                             <div class="fmt"><p>Called when an exception was thrown during <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">success</a>, <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">error</a> or
 <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">complete</a>.</p><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">async.on('exception', e =&gt; console.error(e.message))</code></pre></fieldset><p>In contrast with JavaScript’s <code class="chemdoc__id">Promise</code> an error in handling the
 “promise” (<a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">Async</a>) doesn’t mark that promise failed if its underlying
-action (e.g. an AJAX call) has succeeded.</p><p>If an exception is thrown during an <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">error</a> or <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">success</a> handler then
+action (e.g. an AJAX call) has succeeded.</p><p>If an exception is thrown during an <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">error</a> or <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">success</a> handlers then
 remaining handlers are skipped, <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">complete</a> is triggered and the
-exception is re-thrown. An exception during <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">complete</a> also remaining
-handlers of <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">complete</a> and is re-thrown unless there was an exception
-during <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">error</a> or <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">success</a>.</p><p>Other notes:</p><ul><li><a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifexception" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">exception</a>’s event listeners are not affected by <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifclear" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">clear()</a>.</li><li><a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">Async</a> replaces the <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifexception" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">exception()</a> handler of its children so that
+exception is re-thrown. An exception during <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">complete</a> also skips
+remaining handlers of <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">complete</a> and is re-thrown unless there was an
+exception during <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">error</a> or <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">success</a>.</p><p>Other notes:</p><ul><li><a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifexception" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">exception</a>’s event listeners are not affected by <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifclear" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">clear()</a>.</li><li><a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">Async</a> replaces the <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifexception" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">exception()</a> handler of its children so that
 the exception is thrown on the top-level <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">Async</a> (whose <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_parent" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="121 chemdoc__link-entity-cur">_parent</a> is
 not another <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">Async</a>).</li><li>The above also means that it’s enough to override just the top-level
 <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifexception" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">exception()</a> to affect the entire tree.</li><li>The usual events have “whenXXX()” (<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifwhenComplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">whenComplete()</a>, etc.) but there’s
@@ -443,14 +442,14 @@ operation’s details).</li><li>The default implementation throws the argument.<
                                           <p class="cp-member__file def-snip__hdr"
                  id="Sqimitive-Async--ifexception---code">
                 Defined in:
-                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/f5fbebce0e50cbcef89d0de280a224a6be9116c5/sqimitive-async.js#L603-L605" target="_blank">lines 603-605</a> (3 lines)                                  &bull; <a href="#Sqimitive-Async--ifexception---code" class="def-snip__toggler">Show code</a>
+                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/d6526e61b14d7c3b5b1065e2f4e9039c96d9488f/sqimitive-async.js#L603-L605" target="_blank">lines 603-605</a> (3 lines)                                  &bull; <a href="#Sqimitive-Async--ifexception---code" class="def-snip__toggler">Show code</a>
                               </p>
                                               <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">exception: function (e) {
   throw e
 },</code></pre>
                           </dd>
                       <dt id="Sqimitive-Async--ifisLoading"
-                data-entity='{"type":"func","id":51,"name":"isLoading","start":{"line":501,"column":4,"offset":17788},"end":{"line":503,"column":4,"offset":17857},"forced":null,"modifiers":[],"file":"sqimitive-async.js"}'
+                data-entity='{"type":"func","id":51,"name":"isLoading","start":{"line":501,"column":4,"offset":17790},"end":{"line":503,"column":4,"offset":17859},"forced":null,"modifiers":[],"file":"sqimitive-async.js"}'
                 class="cp-member__header">
               <b>isLoading</b>
                               (
@@ -471,14 +470,14 @@ false when failed or succeeded (<a href="../Sqimitive/c_Async.html#Sqimitive-Asy
                                           <p class="cp-member__file def-snip__hdr"
                  id="Sqimitive-Async--ifisLoading---code">
                 Defined in:
-                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/f5fbebce0e50cbcef89d0de280a224a6be9116c5/sqimitive-async.js#L502-L504" target="_blank">lines 502-504</a> (3 lines)                                  &bull; <a href="#Sqimitive-Async--ifisLoading---code" class="def-snip__toggler">Show code</a>
+                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/d6526e61b14d7c3b5b1065e2f4e9039c96d9488f/sqimitive-async.js#L502-L504" target="_blank">lines 502-504</a> (3 lines)                                  &bull; <a href="#Sqimitive-Async--ifisLoading---code" class="def-snip__toggler">Show code</a>
                               </p>
                                               <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">isLoading: function () {
   return this.get('status') == null
 },</code></pre>
                           </dd>
                       <dt id="Sqimitive-Async--ifisSuccessful"
-                data-entity='{"type":"func","id":50,"name":"isSuccessful","start":{"line":494,"column":4,"offset":17532},"end":{"line":497,"column":4,"offset":17662},"forced":null,"modifiers":[],"file":"sqimitive-async.js"}'
+                data-entity='{"type":"func","id":50,"name":"isSuccessful","start":{"line":494,"column":4,"offset":17534},"end":{"line":497,"column":4,"offset":17664},"forced":null,"modifiers":[],"file":"sqimitive-async.js"}'
                 class="cp-member__header">
               <b>isSuccessful</b>
                               (
@@ -508,7 +507,7 @@ async.whenSuccess(() =&gt; alert('fired!'))
                                           <p class="cp-member__file def-snip__hdr"
                  id="Sqimitive-Async--ifisSuccessful---code">
                 Defined in:
-                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/f5fbebce0e50cbcef89d0de280a224a6be9116c5/sqimitive-async.js#L495-L498" target="_blank">lines 495-498</a> (4 lines)                                  &bull; <a href="#Sqimitive-Async--ifisSuccessful---code" class="def-snip__toggler">Show code</a>
+                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/d6526e61b14d7c3b5b1065e2f4e9039c96d9488f/sqimitive-async.js#L495-L498" target="_blank">lines 495-498</a> (4 lines)                                  &bull; <a href="#Sqimitive-Async--ifisSuccessful---code" class="def-snip__toggler">Show code</a>
                               </p>
                                               <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">isSuccessful: function () {
   var s = this.get('status')
@@ -516,7 +515,7 @@ async.whenSuccess(() =&gt; alert('fired!'))
 },</code></pre>
                           </dd>
                       <dt id="Sqimitive-Async--ifsuccess"
-                data-entity='{"type":"func","id":52,"name":"success","start":{"line":505,"column":4,"offset":17865},"end":{"line":548,"column":4,"offset":19713},"forced":true,"modifiers":[],"file":"sqimitive-async.js"}'
+                data-entity='{"type":"func","id":52,"name":"success","start":{"line":505,"column":4,"offset":17867},"end":{"line":548,"column":4,"offset":19715},"forced":true,"modifiers":[],"file":"sqimitive-async.js"}'
                 class="cp-member__header">
               <b>success</b>
                               (
@@ -553,10 +552,10 @@ after <code>success-3</code> but before <code>success2</code>.</p></div>
                                           <p class="cp-member__file "
                  id="Sqimitive-Async--ifsuccess---code">
                 Defined in:
-                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/f5fbebce0e50cbcef89d0de280a224a6be9116c5/sqimitive-async.js#L506-L506" target="_blank">line 506</a>                              </p>
+                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/d6526e61b14d7c3b5b1065e2f4e9039c96d9488f/sqimitive-async.js#L506-L506" target="_blank">line 506</a>                              </p>
                           </dd>
                       <dt id="Sqimitive-Async--iftoString"
-                data-entity='{"type":"func","id":40,"name":"toString","start":{"line":267,"column":6,"offset":10090},"end":{"line":279,"column":6,"offset":10460},"forced":true,"modifiers":[],"file":"sqimitive-async.js"}'
+                data-entity='{"type":"func","id":40,"name":"toString","start":{"line":267,"column":6,"offset":10091},"end":{"line":279,"column":6,"offset":10461},"forced":true,"modifiers":[],"file":"sqimitive-async.js"}'
                 class="cp-member__header">
               <b>toString</b>
                               (
@@ -570,10 +569,10 @@ Returns a debugger-friendly summary of this object:
                                           <p class="cp-member__file "
                  id="Sqimitive-Async--iftoString---code">
                 Defined in:
-                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/f5fbebce0e50cbcef89d0de280a224a6be9116c5/sqimitive-async.js#L268-L268" target="_blank">line 268</a>                              </p>
+                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/d6526e61b14d7c3b5b1065e2f4e9039c96d9488f/sqimitive-async.js#L268-L268" target="_blank">line 268</a>                              </p>
                           </dd>
                       <dt id="Sqimitive-Async--ifwhenComplete"
-                data-entity='{"type":"func","id":45,"name":"whenComplete","start":{"line":402,"column":4,"offset":14569},"end":{"line":404,"column":4,"offset":14694},"forced":null,"modifiers":[],"file":"sqimitive-async.js"}'
+                data-entity='{"type":"func","id":45,"name":"whenComplete","start":{"line":402,"column":4,"offset":14571},"end":{"line":404,"column":4,"offset":14696},"forced":null,"modifiers":[],"file":"sqimitive-async.js"}'
                 class="cp-member__header">
               <b>whenComplete</b>
                               (
@@ -595,7 +594,7 @@ try {
   $('#spinner').hide()
 }</code></pre></fieldset><p><a id="-completeDesc" class="chemdoc__anchor chemdoc__anchor_token" href="#-completeDesc">completeDesc</a>Unlike with a simple <code>on('event')</code> (<a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="84 chemdoc__link-entity-cur">on()</a>) <code class="chemdoc__id">func</code> gets called
 immediately if the condition is already met (then <code class="chemdoc__id">priority</code> is
-ignored). Otherwise <code class="chemdoc__id">func</code> is executed before all handlers registered
+ignored). Otherwise, <code class="chemdoc__id">func</code> is executed before all handlers registered
 with a larger <code class="chemdoc__id">priority</code>, among (in any order) those with the same and
 after those with a lower. The value is clamped to the <a href="../Sqimitive/c_Async.html#Sqimitive-Async--icMAX_PRIORITY" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_const mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">MAX_PRIORITY</a>
 range. In any case, <code class="chemdoc__id">func</code> is given <code class="chemdoc__id">this</code> (the <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">Async</a> instance).</p><p>Warning: the following is incorrect use because <code class="chemdoc__id">func</code> may be called
@@ -615,14 +614,14 @@ req.whenComplete(function () { ... })
                                           <p class="cp-member__file def-snip__hdr"
                  id="Sqimitive-Async--ifwhenComplete---code">
                 Defined in:
-                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/f5fbebce0e50cbcef89d0de280a224a6be9116c5/sqimitive-async.js#L403-L405" target="_blank">lines 403-405</a> (3 lines)                                  &bull; <a href="#Sqimitive-Async--ifwhenComplete---code" class="def-snip__toggler">Show code</a>
+                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/d6526e61b14d7c3b5b1065e2f4e9039c96d9488f/sqimitive-async.js#L403-L405" target="_blank">lines 403-405</a> (3 lines)                                  &bull; <a href="#Sqimitive-Async--ifwhenComplete---code" class="def-snip__toggler">Show code</a>
                               </p>
                                               <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">whenComplete: function (func, cx, priority) {
   return this._when(func, cx, priority, !this.isLoading(), 'complete')
 },</code></pre>
                           </dd>
                       <dt id="Sqimitive-Async--ifwhenError"
-                data-entity='{"type":"func","id":46,"name":"whenError","start":{"line":415,"column":4,"offset":14930},"end":{"line":417,"column":4,"offset":15060},"forced":null,"modifiers":[],"file":"sqimitive-async.js"}'
+                data-entity='{"type":"func","id":46,"name":"whenError","start":{"line":415,"column":4,"offset":14932},"end":{"line":417,"column":4,"offset":15062},"forced":null,"modifiers":[],"file":"sqimitive-async.js"}'
                 class="cp-member__header">
               <b>whenError</b>
                               (
@@ -633,7 +632,7 @@ req.whenComplete(function () { ... })
   alert("Met an error :'(")
 })</code></pre></fieldset><p class="chemdoc__anchor-inclusion"><span>from <a href="../Sqimitive/c_Async.html#-completeDesc" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="31 chemdoc__link-entity-cur">completeDesc</a></span></p><p>Unlike with a simple <code>on('event')</code> (<a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="84 chemdoc__link-entity-cur">on()</a>) <code class="chemdoc__id">func</code> gets called
 immediately if the condition is already met (then <code class="chemdoc__id">priority</code> is
-ignored). Otherwise <code class="chemdoc__id">func</code> is executed before all handlers registered
+ignored). Otherwise, <code class="chemdoc__id">func</code> is executed before all handlers registered
 with a larger <code class="chemdoc__id">priority</code>, among (in any order) those with the same and
 after those with a lower. The value is clamped to the <a href="../Sqimitive/c_Async.html#Sqimitive-Async--icMAX_PRIORITY" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_const mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">MAX_PRIORITY</a>
 range. In any case, <code class="chemdoc__id">func</code> is given <code class="chemdoc__id">this</code> (the <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">Async</a> instance).</p><p>Warning: the following is incorrect use because <code class="chemdoc__id">func</code> may be called
@@ -653,14 +652,14 @@ req.whenComplete(function () { ... })
                                           <p class="cp-member__file def-snip__hdr"
                  id="Sqimitive-Async--ifwhenError---code">
                 Defined in:
-                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/f5fbebce0e50cbcef89d0de280a224a6be9116c5/sqimitive-async.js#L416-L418" target="_blank">lines 416-418</a> (3 lines)                                  &bull; <a href="#Sqimitive-Async--ifwhenError---code" class="def-snip__toggler">Show code</a>
+                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/d6526e61b14d7c3b5b1065e2f4e9039c96d9488f/sqimitive-async.js#L416-L418" target="_blank">lines 416-418</a> (3 lines)                                  &bull; <a href="#Sqimitive-Async--ifwhenError---code" class="def-snip__toggler">Show code</a>
                               </p>
                                               <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">whenError: function (func, cx, priority) {
   return this._when(func, cx, priority, this.isSuccessful() == false, 'error')
 },</code></pre>
                           </dd>
                       <dt id="Sqimitive-Async--ifwhenSuccess"
-                data-entity='{"type":"func","id":47,"name":"whenSuccess","start":{"line":427,"column":4,"offset":15253},"end":{"line":429,"column":4,"offset":15386},"forced":null,"modifiers":[],"file":"sqimitive-async.js"}'
+                data-entity='{"type":"func","id":47,"name":"whenSuccess","start":{"line":427,"column":4,"offset":15255},"end":{"line":429,"column":4,"offset":15388},"forced":null,"modifiers":[],"file":"sqimitive-async.js"}'
                 class="cp-member__header">
               <b>whenSuccess</b>
                               (
@@ -670,7 +669,7 @@ req.whenComplete(function () { ... })
                                             <div class="fmt"><p>Fire <code class="chemdoc__id">func</code> whenever this instance’s operation has succeeded – see
 <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">success</a>.</p><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">async.whenSuccess(app.start)</code></pre></fieldset><p class="chemdoc__anchor-inclusion"><span>from <a href="../Sqimitive/c_Async.html#-completeDesc" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="31 chemdoc__link-entity-cur">completeDesc</a></span></p><p>Unlike with a simple <code>on('event')</code> (<a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="84 chemdoc__link-entity-cur">on()</a>) <code class="chemdoc__id">func</code> gets called
 immediately if the condition is already met (then <code class="chemdoc__id">priority</code> is
-ignored). Otherwise <code class="chemdoc__id">func</code> is executed before all handlers registered
+ignored). Otherwise, <code class="chemdoc__id">func</code> is executed before all handlers registered
 with a larger <code class="chemdoc__id">priority</code>, among (in any order) those with the same and
 after those with a lower. The value is clamped to the <a href="../Sqimitive/c_Async.html#Sqimitive-Async--icMAX_PRIORITY" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_const mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">MAX_PRIORITY</a>
 range. In any case, <code class="chemdoc__id">func</code> is given <code class="chemdoc__id">this</code> (the <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="31 chemdoc__link-entity-cur">Async</a> instance).</p><p>Warning: the following is incorrect use because <code class="chemdoc__id">func</code> may be called
@@ -690,7 +689,7 @@ req.whenComplete(function () { ... })
                                           <p class="cp-member__file def-snip__hdr"
                  id="Sqimitive-Async--ifwhenSuccess---code">
                 Defined in:
-                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/f5fbebce0e50cbcef89d0de280a224a6be9116c5/sqimitive-async.js#L428-L430" target="_blank">lines 428-430</a> (3 lines)                                  &bull; <a href="#Sqimitive-Async--ifwhenSuccess---code" class="def-snip__toggler">Show code</a>
+                sqimitive-async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/d6526e61b14d7c3b5b1065e2f4e9039c96d9488f/sqimitive-async.js#L428-L430" target="_blank">lines 428-430</a> (3 lines)                                  &bull; <a href="#Sqimitive-Async--ifwhenSuccess---code" class="def-snip__toggler">Show code</a>
                               </p>
                                               <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">whenSuccess: function (func, cx, priority) {
   return this._when(func, cx, priority, this.isSuccessful() == true, 'success')
@@ -720,7 +719,6 @@ req.whenComplete(function () { ... })
   </span>
 </footer>
     <script src="../scripts.js"></script>
-
 
           <link rel="stylesheet" href="../prism.css">
       <script src="../prism.js"></script>

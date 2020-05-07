@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html data-root="" data-entity='{"type":"page","id":6,"name":"ex","start":{"line":1089,"column":-1,"offset":49646},"end":{"line":1371,"column":-1,"offset":59417},"forced":null,"modifiers":[],"file":"HELP.chem"}'>
+<html data-root="" data-entity='{"type":"page","id":6,"name":"ex","start":{"line":1089,"column":-1,"offset":49643},"end":{"line":1371,"column":-1,"offset":59416},"forced":null,"modifiers":[],"file":"HELP.chem"}'>
   <head>
     <meta charset="utf-8">
     <title>Examples, tips &amp; tricks – Sqimitive</title>
     <link rel="stylesheet" href="styles.css">
-
   </head>
   <body>
     <script>orphus = {action: 'https://proger.me/orphus.php'}</script>
@@ -29,7 +28,7 @@
 
   <div class="up">
           <article class="fmt">
-        <h1 id="A11410a0612" class="chemdoc__h1">Examples, tips &amp; tricks</h1><p>This section is a collection of practical snippets and recipes demonstrating how Sqimitive addresses real-world, day-to-day problems.</p><h2 id="A082b706864" class="chemdoc__h2">Figuring “class name”</h2><p>With its concept of “functions as first-class citizens”, JavaScript lacks any kind of “class name” references in instantiated objects. The best we can afford is duck-typing: if we see an object X having properties Y and Z the we <b>suspect</b> it’s that kind of object (i.e. of that “class”).</p><p>Quite often while debugging we need to figure what’s the object we see, <b>reliably</b>. If your app has all Sqimitive classes defined under a certain object (like <code class="chemdoc__id">window</code> – which is a bad practice – or <code>window.MyApp</code>) you can go through all prototypes on start-up and add some property, let’s say “sqClassName”, holding string reference to that prototype, like <code>MyApp.Collections.FooBar</code>.</p><p>First, let’s override <a href="Sqimitive/c_Core.html#Sqimitive-Core--sfextend" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="84 chemdoc__link-entity-cur">Core::extend()</a> with our own version that will mark each produced prototype so we know we’re looking at something we have created:</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var BaseSqimitive = Sqimitive.jQuery.extend()
+        <h1 id="A11410a0612" class="chemdoc__h1">Examples, tips &amp; tricks</h1><p>This section is a collection of practical snippets and recipes demonstrating how Sqimitive addresses real-world, day-to-day problems.</p><h2 id="A082b706864" class="chemdoc__h2">Figuring “class name”</h2><p>With its concept of “functions as first-class citizens”, JavaScript lacks any kind of “class name” references in instantiated objects. The best we can afford is duck-typing: if we see an object X having properties Y and Z the we <b>suspect</b> it’s that kind of object (i.e. of that “class”).</p><p>Quite often, while debugging we need to figure what’s the object we see, <b>reliably</b>. If your app has all Sqimitive classes defined under a certain object (like <code class="chemdoc__id">window</code> – which is a bad practice – or <code>window.MyApp</code>) you can go through all prototypes on start-up and add some property, let’s say “sqClassName”, holding string reference to that prototype, like <code>MyApp.Collections.FooBar</code>.</p><p>First, let’s override <a href="Sqimitive/c_Core.html#Sqimitive-Core--sfextend" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="84 chemdoc__link-entity-cur">Core::extend()</a> with our own version that will mark each produced prototype so we know we’re looking at something we have created:</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var BaseSqimitive = Sqimitive.jQuery.extend()
 
 BaseSqimitive.extend = function () {
   var child = Sqimitive.jQuery.extend.apply(this, arguments)
@@ -57,7 +56,7 @@ BaseSqimitive.extend = function () {
     }
   }
 })(window.MyAppRoot, '')
-// Replace MyAppRoot reference with your root.</code></pre></p><p>Here’s an example of what you get:</p><ul><li><b><code>MyAppRoot.BaseView</code></b><code>.sqClassName = 'BaseView'</code></li><li><b><code>MyAppRoot.BaseView.SubView</code></b><code>.sqClassName = 'BaseView.SubView'</code></li><li><b><code>MyAppRoot.BaseModel</code></b><code>.sqClassName = 'BaseModel'</code></li></ul><p>This technique allows attaching custom info to every class (prototype) but is farly slow to enable in production. It’s recommended that you pass your “class name” (or other string) directly to <a href="Sqimitive/c_Core.html#Sqimitive-Core--sfextend" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="84 chemdoc__link-entity-cur">Core::extend()</a> – it’s zero-overhead and will appear in debugger too:
+// Replace MyAppRoot reference with your root.</code></pre></p><p>Here’s an example of what you get:</p><ul><li><b><code>MyAppRoot.BaseView</code></b><code>.sqClassName = 'BaseView'</code></li><li><b><code>MyAppRoot.BaseView.SubView</code></b><code>.sqClassName = 'BaseView.SubView'</code></li><li><b><code>MyAppRoot.BaseModel</code></b><code>.sqClassName = 'BaseModel'</code></li></ul><p>This technique allows attaching custom info to every class (prototype) but is fairly slow to enable in production. It’s recommended that you pass your “class name” (or other string) directly to <a href="Sqimitive/c_Core.html#Sqimitive-Core--sfextend" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="84 chemdoc__link-entity-cur">Core::extend()</a> – it’s zero-overhead and will appear in debugger too:
 <pre><code class="chemdoc__block prism language-javascript match-braces">MyAppRoot.BaseView.SubView = MyAppRoot.BaseView.extend('BaseView.SubView', {
   // ...
 })
@@ -242,7 +241,7 @@ var MyAskingPage = MyPage.extend({
     <div class="entity-info">
       <p class="entity-info__file">
         Defined in:
-        HELP.chem, <a href="https://github.com/ProgerXP/Sqimitive/blob/f5fbebce0e50cbcef89d0de280a224a6be9116c5/HELP.chem#L1090-L1372" target="_blank">lines 1090-1372</a> (283 lines)      </p>
+        HELP.chem, <a href="https://github.com/ProgerXP/Sqimitive/blob/d6526e61b14d7c3b5b1065e2f4e9039c96d9488f/HELP.chem#L1090-L1372" target="_blank">lines 1090-1372</a> (283 lines)      </p>
     </div>
   </div>
 
@@ -267,7 +266,6 @@ var MyAskingPage = MyPage.extend({
   </span>
 </footer>
     <script src="scripts.js"></script>
-
 
           <link rel="stylesheet" href="prism.css">
       <script src="prism.js"></script>
