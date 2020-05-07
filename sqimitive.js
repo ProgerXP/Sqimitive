@@ -360,7 +360,7 @@
     //= array of string `- property names
     //
     // Unlisted instance properties are cloned (using `#deepClone()) upon new object
-    // instantiation (in `#constructor). If you don't want this overhead for some property (even though it’s usually tiny)
+    // instantiation (in `#constructor). If you don't want this overhead for some property (even though it's usually tiny)
     // then list it in `#_shareProps or assign its value in `@Base.init()`@ or
     // `#postInit().
     //
@@ -412,7 +412,7 @@
     //   alert(y.foo.bar)
     //]
     //
-    // Can you guess the alert message? It’s `[123`]!
+    // Can you guess the alert message? It's `[123`]!
     _shareProps: [],
 
     //! +ig
@@ -1163,7 +1163,7 @@
     // Note that `'_events
     // includes both `#fuse()d and dynamic events (fused are produced when
     // `#extend()ing a class so that subclass' event handlers cannot be removed
-    // on run-time). It’s not advised to deal with this object directly - instead use
+    // on run-time). It's not advised to deal with this object directly - instead use
     // `#on(), `#once(), `#off(), `#fire(), `#fuse(), `#_forward(), etc.
     //
     // Keys of `'_events are event names without any prefixes or suffixes
@@ -1797,7 +1797,7 @@
     //> event `- Event name (alphanumeric symbols, dots and colons) - exactly
     //  what is given to `#fire() when triggering an event.
     //> args `- Zero or more underscores (`'_); if present, the handler gets
-    //  called only if `'event was given that exact number of arguments (it’s not
+    //  called only if `'event was given that exact number of arguments (it's not
     //  possible to match zero arguments).
     //
     //  For example, `'eve__ registers a
@@ -3496,7 +3496,7 @@
     // (as reported by `@un:isEqual`@()) or if `[options.forceFire`] was set
     // - fires `#change_OPT event, then `#change.
     //
-    //? You can take advantage of `#ifSet()’s return value to perform
+    //? You can take advantage of `#ifSet()'s return value to perform
     //  interlocking operations saving a call to `#get() (although of course it's not truly atomic):
     //  `[
     //   if (sqim.ifSet('eventsBound', true)) {
@@ -3515,7 +3515,7 @@
     // Other notes:
     //* Use `#set() which returns `'this if you don't care for the return value but want method chaining.
     //* Use `#getSet() if you want to update options based on other options (e.g. increment a value).
-    //* There’s no `'set() version that writes multiple options at
+    //* There's no `'set() version that writes multiple options at
     //  once as you would do in some kind of "sync" operation. You might be looking for `#assignResp() (useful when assigning an
     //  API response) or just do plain simple `[$.each(opts, model.set.bind(model))`].
     //* It is safe to change `#_opt from within `#normalize_OPT or
@@ -3727,7 +3727,7 @@
     //  `]
     //
     // Other notes:
-    //* There’s no `'nest() version that adds multiple children at
+    //* There's no `'nest() version that adds multiple children at
     //  once as you would do in some kind of "sync" operation. You might be looking for `#assignChildren() (useful when assigning an
     //  API response).
     //* As with other `'options-accepting methods (e.g. `#ifSet()), the `'options object may
@@ -4501,8 +4501,8 @@
     // If you need specific order then pass `'resp as an array instead of object.
     //
     //# Other notes
-    //* There’s no `'assignChildren() version that takes ready-made
-    //  objects (like Backbone’s `@bb:Collection-set`@()) because many questions
+    //* There's no `'assignChildren() version that takes ready-made
+    //  objects (like Backbone's `@bb:Collection-set`@()) because many questions
     //  arise: do you need to keep old duplicate children or replace them with
     //  supplied objects and what to do with event listeners on the old children
     //  if you do replace them, or with listeners on the new if you don't; what to consider
