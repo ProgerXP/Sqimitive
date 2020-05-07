@@ -50,65 +50,170 @@
   var _ = Sqimitive._
 
   //! +cl=Sqimitive.jQuery:Sqimitive.Base
-  // Makes Sqimitive's `'el (`@Base.el`@) a jQuery (`@jq:`@) node, maintains DOM
-  // event listeners, etc.
+  // A Sqimitive with a DOM representation via the jQuery interface (`@jq:`@).
   //
-  //# Quick-start example
-  //[
-  //   var Task = Sqimitive.jQuery.extend({
-  //     el:       {tag: 'li'},
-  //     _opt:     {caption: '', done: false, editing: false, attachPath: '.'},
-  //     events:   {change: 'render'},
-  //     elEvents: {dblclick: function () { this.set('editing', true) }},
-  //   })
+  // ` `@Sqimitive\jQuery`@ is the base class used in a typical web application. It
+  // turns `#el into a jQuery node, keeps it attached to `#_parent's `#el, maintains `#el's
+  // event listeners in DOM, etc.
   //
-  //   ;(new Sqimitive.jQuery({el: '#tasks'}))
-  //     .nest( new Task({caption: 'Foo'}) )
-  //]
+  // This class can also work with libraries imitating jQuery API like Zepto
+  // since this is a thin interface to jQuery and very few of its features are
+  // actually used.
+  //
+  // See the included sample To-Do application for a "real-world" example.
+  //
+  //#jqex
+  //? `[
+  //     var Task = Sqimitive.jQuery.extend({
+  //       el: {tag: 'li'},
+  //
+  //       _opt: {
+  //         // Keep el appended to the parent's el.
+  //         attachPath: '.',
+  //         // Define the default attributes of Task:
+  //         caption: '',
+  //         done: false,
+  //       },
+  //
+  //       events: {
+  //         // Update the visual presentation whenever any _opt changes:
+  //         change: 'render',
+  //
+  //         render: function () {
+  //           this.el.text(this.get('caption'))
+  //             .toggleClass('done', this.get('done'))
+  //         },
+  //       },
+  //
+  //       elEvents: {
+  //         // Listen for double clicks on this.el to change the done state:
+  //         dblclick: function () {
+  //           this.set('done', !this.get('done'))
+  //         },
+  //       },
+  //     })
+  //
+  //     // Create a parent container for our to-do items (Task's) which
+  //     // is placed into the DOM at $('#tasks'):
+  //     var list = new Sqimitive.jQuery({el: '#tasks'})
+  //
+  //     // Create a new item, add it to list's _children:
+  //     list.nest( new Task({caption: 'Ready steady go!'}) )
+  //     // ...append to list's el and render for the first time:
+  //       .attach().render()
+  //
+  //     // Double click on Task's element in the window to change its className.
+  //  `]
   return Sqimitive.Base.extend('Sqimitive.jQuery', {
     // New standard options (`@Base._opt`@):
     //
-    //> attachPath: `'. (parent's `'el) | `['.sel [ector]'`] `- Resolved with
-    //  parent's `[$()`].
+    //> attachPath: string selector, object DOM or jQuery
+    //  `- Default root to where this `#el is appended, resolved via `#_parent's `[$()`] or, if there's no parent, via global `[$()`]. Used when `#attach() is called without arguments (happens when `#_parent's `#attach() or `#render() is called).
     //
-    //  Specifies where this object’s `#el will get appended to when its
-    //  `#_parent is rendered or `#attach() is called with no arguments. Value
-    //  can be anything accepted by parent’s `[$()`], like a string (selector
-    //  (`[.list > :last-child`]) or `'. (period) to specify the parent’s
-    //  element) or a DOM node.
+    //  Usually the value is a string selector like `[form > .filters`]
+    //  or a period `[.`] (special case when have a `#_parent, gets its `#el).
     //
-    //  ` `*If a string this will have no effect on non-nested (non-`#_owning)
-    //  sqimitives`* since access to the parent’s `'$() is required - even if a
-    //  global selector such as `['body'`] is used; if so you can set
-    //  `'attachPath to `[document.bodyElement`] or `[$('body')`] even on
-    //  non-owned sqimitives.
-    //
-    //> el: `[{tag: 'p', ...}`] or `['.sel'`] (resolved with global `[$()`])
-    //  `- only processed when given to the constructor, not to `#set() or
-    //  `[sqim.el = ...`]
-    //
-    //  There is no such option but if `'el is given to the constructor as
-    //  part of the option object it replaces default value of the `#el property
-    //  (but it cannot be an object of attributes, only a DOM node, selector or
-    //  `'false).
+    //> el: string`, object `- There is no such option but if `'el is given to
+    //  `'new as part of `'options then it replaces the declaration-time value
+    //  of the `#el property - see `#el for details.
     _opt: {},
 
-    // Holds a DOM node assigned to this object or `'null. When `#extend'ing can be set to `'false (no
-    // element is created, `[this.el`] will be `'null - useful for data structures
-    // aka "models"), a string (DOM selector) or an object of HTML attributes plus the following
-    // special keys:
+    //! +prop=el +ig=3
     //
-    //> tag: string `- Tag name like `'li. Defaults to `'div.
-    //> className `- the same as `'class key (a CSS `'class) to work around the
-    //  reserved word
+    //#-setOnDecl
     //
-    // After inherited constructor (see `#init()) has ran `'el is either a DOM node wrapped in
-    // `'$() or `'null if node creation was disabled. Not advised to set it directly, treat as read-only.
+    // Holds a DOM node assigned to this object or `'null.
     //
-    // If changing on runtime, only set to an `[is$()`] object.
+    //? `[
+    //     // Set this.el by selector; becomes $(document.body):
+    //     new Sqimitive.jQuery({el: 'body'})
+    //     // Set this.el to a jQuery node:
+    //     new Sqimitive.jQuery({el: $('body')})
+    //     // Set this.el by a DOM node; becomes wrapped into $() by init():
+    //     new Sqimitive.jQuery({el: document.body})
+    //     // Create new element via string specification for $():
+    //     new Sqimitive.jQuery({el: '<p class=text>'})
+    //     // Create new element <p class="text"> by object:
+    //     new Sqimitive.jQuery({el: {tag: 'p', className: 'text'}})
+    //     // Cancel node creation, el becomes null:
+    //     new Sqimitive.jQuery({el: false})
     //
-    // See `#vw Views overview for the high-level idea.
+    //     // WRONG: when changing after construction el must always be a
+    //     // jQuery node, only and ever:
+    //     sqim.el = '<p class=text>'
+    //     // WRONG: result is a DOM node, not a jQuery node:
+    //     sqim.el = document.createElement('p')
+    //     // CORRECT: result is a jQuery node:
+    //     sqim.el = $('<p class=text>')
+    //  `]
+    //
+    // ` `#el's value is special during construction: first, `'init() takes
+    // the value of either the `'el key from `'new's `'options or, if missing,
+    // of this property, then sets `#el's property value according to it:
+    //> false `- assumes `'null `#el; no DOM node is created or assigned - useful for pure data structures aka "models" (but then you might not need `@Sqimitive\jQuery`@ at all, use the lighter `#Base)
+    //> string `- a `[se #lec > .tor`] (errors if no node matched) or a `[<new node=spec>`] as handled by the global `'$()
+    //> object that passes `'is$() `- assumes this ready-made DOM or jQuery node
+    //> object other `- Creates a new DOM node with these HTML attributes and
+    //  calls `[el.data('sqimitive', this)`]. Special keys: `'tag (defaults to `'div) and `'className  (overrides `'class unless falsy to work around the reserved word).
+    //
+    //  `'data() allows you to reverse-lookup a Sqimitive instance from its DOM node. However, not only this is a generally deplorable practice but also not supported by some builds of Zepto.
+    //
+    // In any case, `#el after `'init() is either `'null or a jQuery node with a non-zero `'length.
+    //
+    // ` `#el is not automatically attached anywhere after construction, nor are
+    // its `#elEvents bound - call `#attach() for this. `@Base.render()`@ also
+    // calls `#attach() but it does nothing if the `'attachPath `#_opt'ion is
+    // not set.
+    //
+    // This property is not advised to change directly after `'init()
+    // but if you do then only set it to an `[is$()`] object.
+    //
+    // See Views overview (`#vw) for the high-level idea.
     el: {tag: 'div', className: ''},
+
+    //elEvents: {},
+    //! +prop=elEvents
+    //
+    //#-baseElEvents
+    //
+    // See also the `'attachPath `#_opt.
+    //
+    //?`[
+    //   var MyView = Sqimitive.jQuery.extend({
+    //     el: {tag: 'form'},
+    //
+    //     elEvents: {
+    //       // Attach listener to this object's el:
+    //       submit: function (e) {
+    //         return false
+    //           // as with regular jQuery event handlers, returning false
+    //           // implies e.stopPropagation() and e.preventDefault()
+    //       },
+    //
+    //       // React on change originating from an element with specific name attribute:
+    //       'change [name="login"]': function () {
+    //         this.$('[name="password"]').val('')
+    //       },
+    //
+    //       // Call render() whenever value of an element with the name attribute changes:
+    //       'change [name]': 'render',
+    //
+    //       // Masked callback - only gives first argument to _linkClicked():
+    //       'click a': '_linkClicked.',
+    //
+    //       // Similar but the '.zyx' namespace creates a second handler,
+    //       // avoiding key collision with 'click a':
+    //       'click.zyx a': 'track',
+    //     },
+    //   })
+    //
+    //   var MyView2 = MyView.extend({
+    //     elEvents: {
+    //       // Overrides the '_linkClicked.' handler but keeps 'track'.
+    //       'click a': ...,
+    //     },
+    //   })
+    // `]
 
     events: {
       '-init': function (opt) {
@@ -119,7 +224,7 @@
             this.el = $(this.el)
           } else {
             var attrs = _.omit(this.el, 'tag', 'className')
-            attrs['class'] = this.el.className || ''
+            this.el.className && (attrs['class'] = this.el.className)
             this.el = $( document.createElement(this.el.tag || 'div') )
               .attr(attrs).data('sqimitive', this)
           }
@@ -132,20 +237,45 @@
 
       //!`,+fna=function ( [parent] )
       //
-      // Appends `#el to `'parent (DOM selector or node). If no argument is given
-      // uses `'attachPath `#_opt (if present) to determine the parent (use this option to keep element always attached to a point in the DOM). If parent was
-      // changed, calls `'attach() on all children of self to rebind their
-      // DOM listeners (doesn't happen if no parent was found or `[this.el`] is already
-      // direct child of the found parent node so performance penalty of subsequent
-      // `'attach() calls is small). Ultimately, clears existing event listeners and binds those defined in
-      // `#elEvents, adding the `[.sqim-CID`] jQuery namespace to them.
-      //[
+      // Appends `#el to a DOM node and binds `#elEvents if changed parents.
+      //
+      //> parent string selector`, object DOM or jQuery node`,
+      //  no argument use the `'attachPath `#_opt
+      //
+      // ` `#attach() adds `#el using `@jq:appendTo`@() to `'parent resolved with
+      // `#_parent's `[$()`] or global
+      // `[$()`] (if no `#_parent), calls `#attach() on all children of self (to let
+      // them rebind their DOM listeners - but doesn't `#render() them) and, unless `#el is `'null, clears all
+      // existing `#el event listeners and binds those defined in
+      // `#elEvents under the `[.sqim-CID`] jQuery namespace (ignoring `'.ns
+      // possibly present in `#elEvents keys - that one is for key collision
+      // avoidance during inheritance, not for jQuery).
+      //
+      //?`[
       //   sqim.attach('#nav')   //= sqim.el.appendTo('#nav')
-      //   sqim.attach('<div>')  //= sqim.el.appendTo($('<div>')) or just appendTo('<div>')
+      //   sqim.attach('<div>')  //= appends to a new <div> node
       //   sqim.attach('#nothinghereever!')      // does nothing
-      //   sqim.attach()         // uses sqim._opt.attachPath, if available
+      //   sqim.attach(null)                     // does nothing
+      //   sqim.attach()         // uses sqim._opt.attachPath, if set
       //   sqim.attach(sqim.get('attachPath'))   // the same
+      // `]
+      //
+      // Note: if `#_parent is set then its `[$()`] is used meaning that
+      // even if `'parent is a globally-reachable selector
+      // (like `[html,head,body`]) it will never match if `'_parent's `#el is unset or if it's not a parent of that node (to match `[head`] `#el must be `[$('html')`]).
+      // Work around this by setting `'attachPath to a DOM node:
+      //[
+      //   el: document.rootElement,    // for <html>
+      //   el: document.head,           // for <head>
+      //   el: document.body,           // for <body>
+      //     // warning: body is not available if script is executing from <head>
       //]
+      //
+      // ` `#attach() does nothing if no `'parent was found (`#el is not un-attached) or if `[this.el`] was already
+      // a direct child of that node (i.e. found the same parent) so performance penalty of subsequent
+      // `#attach() calls is small.
+      //
+      //#-baseAttach
       attach: function (parent) {
         arguments.length || (parent = this.get('attachPath'))
 
@@ -155,7 +285,7 @@
 
         if ((parent || {}).length && parent[0] !== this.el[0].parentNode) {
           parent.append(this.el)
-          // Notifying children of the mount node change to rebind their DOM listeners.
+          // Notifying children of the "mount" node change to rebind their DOM listeners.
           this.invoke('attach')
         }
 
@@ -172,34 +302,54 @@
         }
       },
 
+      //! +fn=remove
+      //
+      // Removes own `#el from DOM and `#unnest()s `'this from `#_parent.
+      //
+      // ` `#remove() calls `@jq:remove`@() on `#el (if set) to drop it from DOM, then the
+      // inherited `@Base.remove()`@ calls `#unnest() to remove this sqimitive
+      // from its `#_parent (if any).
+      //
+      // ` `#remove() doesn't recursively `#remove() all nested
+      // `#_children as it might be undesired and slow (in DOM
+      // removing the parent node automatically unbinds events of all children).
+      // If children do need to do some
+      // clean-up actions when their parent is removed - do
+      // `[this.sink('remove')`] (`#sink() is recursive) or let them subscribe to `#_parent's `'remove when `#owned.
+      //
+      //#-baseRemove
       '-remove': function () {
         this.el && this.el.remove()
       },
     },
 
-    // Similar to `[this.el.find(path)`] but returns `#el if `'path is empty or is a
-    // dot (`[.`]). Special value `'body always returns `[document.body`].
-    // If `'this.`#el is `'null always returns an empty jQuery collection (`@jq:`@).
-    // If `'path is a jQuery object or a DOM node - returns `[$(path)`],
-    // `@jq:jQuery`@ (note that it may be outside of `[this.el`] or have
-    // `[length == 0`]).
+    // Finds node(s) within own `#el.
     //
-    // Note: `#attach() calls `[$()`] on `#_parent (if it's set); even if
-    // child's `'attachPath `#_opt is a globally-reachable selector
-    // (`[html,head,body`]) - if `'_parent's `#el is `'false, it will never
-    // match. Work around this by setting `'attachPath to `[document.rootElement`]
-    // (`'html), `[document.head`] or `[document.body`].
+    //= object `- a `@jq:jQuery`@ node
     //
-    //[
-    //   this.$()                //=> $(this.el)
+    // Possible `'path's:
+    //> object that is `[is$()`] to return the `'path itself`,
+    //  a DOM node to wrap and return `[$(path)`]
+    //  `- returned collection may be empty or its members may be outside of `[this.el`]
+    //> string empty or just `[.`] to return own `#el`,
+    //  selector to return `[this.el.find(path)`] - see `@jq:find`@()
+    //  `- if `'this.`#el is unset then always returns a jQuery node with zero
+    //  `'length
+    //
+    //?`[
+    //   this.$()                //=> $(this.el) - but better use this.el
+    //   this.$('')              //=> $(this.el)
     //   this.$('.')             //=> $(this.el)
     //   this.$('a[href]')       //=> $([A, A, ...])
     //   this.$(document.body)   //=> $('body')
-    //   this.$('body')          //=> $('body')
+    //   this.$($('body'))       // same
+    //   this.$('body')          // empty collection unless this.el is <html>
     //
     //   this.el = null
     //   this.$('')              //=> $()
-    //]
+    //   this.$('body')          //=> $()
+    //   this.$(document.body)   //=> $('body')
+    // `]
     $: function (path) {
       if (this.constructor.is$(path) || _.isElement(path)) {
         return $(path)
@@ -212,16 +362,25 @@
   }, {
     //! +clst
 
-    // The global `[$`].
-    $: $,
-
-    // Determines if `'obj is a `'$ collection (like jQuery `@jq:`@ or Zepto).
+    // Holds reference to the global `[$`] object.
     //
     //[
-    //   is$(document.rootElement)   //=> false
-    //   is$($('html'))    //=> true
-    //   is$($('<p>'))     //=> true
-    //   is$(null)         //=> false
+    //   var body = Sqimitive.jQuery.$('body')
+    //   var p = Sqimitive.jQuery.$('<p class=text>')
+    //]
+    //
+    // A similar global property `[Sqimitive._`]  holds reference to the utility
+    // library in use.
+    $: $,
+
+    // Determines if `'obj is a `'$ node (`@jq:jQuery`@ or Zepto).
+    //
+    //[
+    //   Sqimitive.jQuery.is$(document.rootElement)   //=> false
+    //   Sqimitive.jQuery.is$($('html'))    //=> true
+    //   Sqimitive.jQuery.is$($('<p>'))     //=> true
+    //   Sqimitive.jQuery.is$($())          //=> true
+    //   Sqimitive.jQuery.is$(null)         //=> false
     //]
     is$: function (obj) {
       return obj instanceof $ || ($.zepto && $.zepto.isZ(obj))
