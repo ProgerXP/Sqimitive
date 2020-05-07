@@ -2778,7 +2778,7 @@
     //
     //= object {respKey: optValue}.
     //
-    // ` `#_respToOpt's keys are input object's keys and values are one of the following (`'optValue):
+    // ` `#_respToOpt's keys are input object's keys (except the special `[''`]) and values are one of the following (`'optValue):
     //> false `- Skip input item regardless of `[options.onlyDefined`] as given to `#assignResp().
     //> true `- Assign input item's value to the option named `'respKey (i.e. keys of the option and the input object are the same).
     //> string `- Assign input item's value to the option by this name.
@@ -2790,6 +2790,24 @@
     //  The `'key argument equals `'respKey (i.e. is the key's name under which the function is listed in `'_respToOpt), `'options is the object given to `#assignResp().
     //
     //  If `'optToSet is `'false then the input item is skipped and `'value is unused, otherwise it's the option name to set `'value to (`'value can be of any type). It's similar to calling `#set() but more declarative and future-proof.
+    //
+    // The special key `[''`] (empty string) must be a function `[(resp, options)`] returning object `[{optToSet: value}`] or `'null (equivalent to `[{}`]). It's called in the beginning of `#assignResp() and, as other keys, if `'resp has an empty string key - check `[arguments.length`] if you expect it. This key is useful for unserializing fields that match multiple options or vice-versa:
+    //[
+    //   Sqimitive.Base.extend({
+    //     _respToOpt: {
+    //       '': function (resp) {
+    //         return {personsName: resp.firstName + ' ' + resp.secondName}
+    //           // same as set('personsName', '<firstName> <secondName>')
+    //       }
+    //
+    //       // The opposite of the above - if there are two options in one input key.
+    //       '': function (resp) {
+    //         var name = resp.personsName.split(' ')
+    //         return {firstName: name[0], secondName: name[1]}
+    //       }
+    //     },
+    //   })
+    //]
     //
     //?`[
     //   Sqimitive.Base.extend({
@@ -4447,6 +4465,12 @@
     // In particular, `#assignChildren() calls `#assignResp(), `#set()/`#ifSet(), `#nestEx()
     // firing `#normalize_OPT, `#change_OPT and `#change, as well as `#nestEx-produced events.
     //
+    //[
+    //   sqim.assignChildren({a: 1, b: 2}, {schema: api3, forceFire: true})
+    //     // passes schema to assignResp() instead of _respToOpt and
+    //     // passes forceFire to set() to always fire change events
+    //]
+    //
     // Additionally, this method sets `[options.assignChildren`] to `'true
     // so you can determine when an option is being set as a result of this method call:
     //[
@@ -4548,14 +4572,16 @@
     //
     // Unserializes options: updates own `#_opt based on a data object of arbitrary format.
     //
-    // ` `#set()s own `#_opt based on transformation rules (`#_respToOpt) for
+    // ` `#assignResp() calls `[options.schema`]'s empty key and then
+    // `#set()s own `#_opt based on transformation rules (`[options.schema`]) for
     // the external input `'resp (e.g. an API response).
     // `'resp is an object where one member usually represents one option
     // (but this is not a requirement).
     //
     // `'options keys used by this method:
+    //> schema null/omitted to use `#_respToOpt`, object in `#_respToOpt format
     //> onlyDefined null/omitted to call `#set(key) for every key in `'resp not listed
-    //  in `#_respToOpt`, true to ignore such keys
+    //  in `'schema`, true to ignore such keys
     //
     //= `'this
     //
@@ -4565,8 +4591,11 @@
     //  and `'onlyDefined is unset `#assignResp() acts as a "multi-`#set()":
     //  `[
     //  sqim.assignResp({date: '2000-01-01', id_key: '123'})
-    //    // without _respToOpt and onlyDefined is equivalent to:
+    //    // without _respToOpt, schema and onlyDefined is equivalent to:
     //    // sqim.set('date', '2000-01-01').set('id_key', '123')
+    //
+    //  // Works the same regardless of sqim's _respToOpt.
+    //  sqim.assignResp({date: '2000-01-01', id_key: '123'}, {schema: {}})
     //  `]
     //
     //#assignrespvs
@@ -4612,6 +4641,30 @@
     //   // date was turned into a Date object thanks to the transformation function in _respToOpt.
     //   // id_key was turned into a number thanks to normalize_id_key.
     //   // bazzz was assigned too because we didn't pass {onlyDefined: true}.
+    //  `]
+    //
+    //? If you have several API routes with different formats but logically the same data (so they unserialize to the same object), pass `[options.schema`] without changing `#_respToOpt on run-time:
+    //  `[
+    //    sqim.assignResp(apiResp1, {schema: {id: 'id_key'}})
+    //      // set('id_key', apiResp1.id) and set other keys as is
+    //
+    //    var schema = _.extend({extra: s => ['info', JSON.parse(s)]}, sqim._respToOpt)
+    //    sqim.assignResp(apiResp2, {schema})
+    //      // set('extra', JSON.parse(apiResp2.info)) and
+    //      // handle other keys according to sqim._respToOpt
+    //  `]
+    //
+    //  `'schema is not meant for changing `'resp's shape, e.g. from
+    //  array `[[['opt', 'name'], ...]`] to object `[{opt: 'name', ...}`] -
+    //  declare a specialized public method instead of making your consumers
+    //  pass `'schema or know how to treat the data:
+    //  `[
+    //    assignBillingResponse: function (resp) {
+    //      this.assignResp(_.object(resp), {
+    //        schema: this._billingRespToOpt,
+    //        onlyDefined: true,
+    //      })
+    //    }
     //  `]
     //
     // Having `[options.onlyDefined`] unset is similar to having all keys in `'resp
@@ -4714,9 +4767,9 @@
     //  as expected but `[set('date', new Date)`] results in `[_opt.date`]
     //  becoming `[new Date(new Date)`].
     //
-    // It's also likely that in the future `#assignResp() will allow switching
-    // "unserialization profiles" by specifying the set of rules in `'options
-    // rather than strictly in `#_respToOpt.
+    // Additionally, `#assignResp() allows different
+    // "unserialization profiles" by passing rules in `[options.schema`]
+    // rather than defining them in `#_respToOpt.
     //
     //#-unordered
     // ` `#assignResp() may process `'resp and call `#set() in any order.
@@ -4727,9 +4780,13 @@
       options || (options = {})
       options.assignResp = true
 
+      var schema = options.schema || this._respToOpt
+      var set = schema[''] && schema[''].call(this, resp, options)
+      _.each(set || {}, function (v, k) { this.set(k, v, options) }, this)
+
       for (var key in resp) {
         var value = resp[key]
-        var opt = this._respToOpt[key]
+        var opt = schema[key]
         opt === undefined && (opt = !options.onlyDefined)
         opt === true && (opt = key)
 
