@@ -91,9 +91,8 @@
 
     // Reference to the utility library in use.
     //
-    // Particularly useful when
-    // using modular frameworks so that it's possible to access _ by requiring
-    // Sqimitive alone).
+    // Particularly useful when using modular frameworks so that it's possible
+    // to access _ by requiring Sqimitive alone).
     //
     //= NoDash`, Underscore`, LoDash
     _: _,
@@ -105,14 +104,16 @@
 
   //! +cl=Sqimitive.Core
   //
-  // Implements inheritance and event system without
-  // any other Sqimitive (`#Base) functionality.
+  // Implements inheritance and event system without any other Sqimitive
+  // (`#Base) functionality.
   //
-  // In a typical scenario you don't need to use `#Core directly - use `[Sqimitive.Base`] instead.
+  // In a typical scenario you don't need to use `#Core directly - use
+  // `[Sqimitive.Base`] instead.
   //
-  // In special cases, since `'Core lacks any specialized functionality it can be used as a base
-  // class for your classes that need better inheritance and/or events (like a more elaborate
-  // alternative to `@https://github.com/primus/eventemitter3`@)...
+  // In special cases, since `'Core lacks any specialized functionality it can
+  // be used as a base class for your classes that need better inheritance
+  // and/or events (like a more elaborate alternative to
+  // `@https://github.com/primus/eventemitter3`@)...
   //[
   //   var MyEventAwareClass = Sqimitive.Core.extend({
   //     doFoo: function () {
@@ -152,19 +153,18 @@
 
   //! +fn=constructor
   // Assigns new unique `#_cid (a string: `'p + unique number) and clones all
-  // instance
-  // properties of self that are not listed in `#_shareProps. Cloning puts a stop
-  // to accidental static sharing of properties among all instances of a class
-  // where those properties are defined.
+  // instance properties of self that are not listed in `#_shareProps. Cloning
+  // puts a stop to accidental static sharing of properties among all instances
+  // of a class where those properties are defined.
   var Core = Sqimitive.Core = function () {
     //! +ig
     this._cid = 'p' + Core.unique('p')
 
     // Typically it's like: var MySqim = Sqimitive.extend({...});
-    // MySqim._shareProps.push(...); - i.e. _shareProps is updated later.
-    // We'd either have to explicitly call some kind of refreshCopyProps()
-    // after complete declaration or do that in the constructor, which is
-    // more convenient and not much slower (it's done only once per class).
+    // MySqim._shareProps.push(...); - i.e. _shareProps is updated later. We'd
+    // either have to explicitly call some kind of refreshCopyProps() after
+    // complete declaration or do that in the constructor, which is more
+    // convenient and not much slower (it's done only once per class).
     var copy = this.constructor._copyProps
 
     if (!copy) {
@@ -195,14 +195,18 @@
     //
     //#-setOnDeclViaPush
     //
-    // Specifies which instance properties are to be merged
-    // rather than overwritten when redefined in a subclass.
+    // Specifies which instance properties are to be merged rather than
+    // overwritten when redefined in a subclass.
     //
     //= array of string `- property names
     //
     // Properties must be of these types:
-    //> array `- Merged using `[Array.concat(baseClass[prop], childClass[prop])`]. Subclass' values are added after parents' values: `[['a', 'b'] + ['c'] = ['a', 'b', 'c']`].
-    //> object `- Merged using `[_.extend(baseClass[prop], childClass[prop])`]. Keys defined in parents are kept unless also defined in a subclass: `[{a: 1, b: 2} + {a: 3, c: 4} = {a: 3, b: 2, c: 4}`].
+    //> array `- Merged using `[Array.concat(baseClass[prop],
+    //  childClass[prop])`]. Subclass' values are added after parents' values:
+    //  `[['a', 'b'] + ['c'] = ['a', 'b', 'c']`].
+    //> object `- Merged using `[_.extend(baseClass[prop], childClass[prop])`].
+    //  Keys defined in parents are kept unless also defined in a subclass:
+    //  `[{a: 1, b: 2} + {a: 3, c: 4} = {a: 3, b: 2, c: 4}`].
     //
     //? `[
     //   var MyParent = Sqimitive.Base.extend({
@@ -224,9 +228,10 @@
     //]
     //
     //#mergePropsExtend
-    // ` `*Warning:`* when passing `#_mergeProps or `#_shareProps inside `'staticProps (second argument of
-    // `#extend()) all inherited items will be removed. The correct way to add your
-    // properties while keeping those in the base classes is this:
+    // ` `*Warning:`* when passing `#_mergeProps or `#_shareProps inside
+    // `'staticProps (second argument of `#extend()) all inherited items will
+    // be removed. The correct way to add your properties while keeping those
+    // in the base classes is this:
     //[
     //   var MySqimitive = Sqimitive.Base.extend({
     //     // Define instance fields...
@@ -247,7 +252,8 @@
     //     // WRONG: _mergeProps is static so it won't be read from here.
     //     _mergeProps: ['prop'],
     //   }, {
-    //     // WRONG: technically fine but will entirely replace base class' merge list.
+    //     // WRONG: technically fine but will entirely replace base class'
+    //     // merge list.
     //     _mergeProps: ['prop'],
     //   })
     //
@@ -262,9 +268,13 @@
     //
     // Other notes:
     //* `#extend() always clones `#_mergeProps and `#_shareProps.
-    //* By default, `#Base class adds `@Base._opt`@, `@Base.elEvents`@ and `#_respToOpt to this list.
+    //* By default, `#Base class adds `@Base._opt`@, `@Base.elEvents`@ and
+    //  `#_respToOpt to this list.
     //* See instance `#.mixIn() for the implementation.
-    //* Removing a parent-of-parent's property from `'_mergeProps doesn't "un-merge" it since merging happens in `#extend() (`#mixIn()) so after `#extend() the new class already has merged properties of all of its ancestors. However, removal does affect new subclasses: `[
+    //* Removing a parent-of-parent's property from `'_mergeProps doesn't
+    //  "un-merge" it since merging happens in `#extend() (`#mixIn()) so after
+    //  `#extend() the new class already has merged properties of all of its
+    //  ancestors. However, removal does affect new subclasses: `[
     //    var ClassA = Sqimitive.Base.extend({array: ['in A']})
     //    ClassA._mergeProps.push('array')
     //      // (new ClassA).array is ['in A']
@@ -281,9 +291,9 @@
     //  `]
     //
     //# Complex inherited value modification
-    // `'_mergeProps doesn't allow deleting members or otherwise changing the value.
-    // However, in some contexts `'null or `'undefined does the job for objects
-    // (in contrast with `'delete such properties still appear when
+    // `'_mergeProps doesn't allow deleting members or otherwise changing the
+    // value. However, in some contexts `'null or `'undefined does the job for
+    // objects (in contrast with `'delete such properties still appear when
     // using `[for..in`], etc.):
     //[
     //   var MyParent = Sqimitive.Base.extend({
@@ -303,7 +313,8 @@
     //     //=> key2
     //]
     //
-    // Use `@Base.init()`@ or `#postInit() to modify inherited values in other ways:
+    // Use `@Base.init()`@ or `#postInit() to modify inherited values in other
+    // ways:
     //[
     //   var MyParent = Sqimitive.Base.extend({
     //     _objectProperty: {key1: 'value1', key2: 'value2'},
@@ -326,8 +337,8 @@
     //]
     //
     //#-inBB
-    // In Backbone, when you extend a parent class with a property that
-    // it already has you end up with a completely new property. This doesn't
+    // In Backbone, when you extend a parent class with a property that it
+    // already has you end up with a completely new property. This doesn't
     // always make sense - for example, if a class has its own
     // `@bb:View-events`@ then what you really need is merge its own (base)
     // events with the events of new subclass. Same thing with
@@ -343,7 +354,9 @@
     //   var MyOtherView = MyView.extend({
     //     // This object entirely replaces MyView's event map.
     //     events: {
-    //       'keypress .me': function () { alert('Oh noes, we broke the button :(') },
+    //       'keypress .me': function () {
+    //         alert('Oh noes, we broke the button :(')
+    //       },
     //     },
     //   })
     //]
@@ -354,20 +367,24 @@
     //
     //#-setOnDeclViaPush
     //
-    // Specifies which instance properties are not to be cloned upon construction. They will be
-    // shared by all instances of a class (where the property was defined, i.e. where given to `#extend()).
+    // Specifies which instance properties are not to be cloned upon
+    // construction. They will be shared by all instances of a class (where the
+    // property was defined, i.e. where given to `#extend()).
     //
     //= array of string `- property names
     //
-    // Unlisted instance properties are cloned (using `#deepClone()) upon new object
-    // instantiation (in `#constructor). If you don't want this overhead for some property (even though it's usually tiny)
-    // then list it in `#_shareProps or assign its value in `@Base.init()`@ or
-    // `#postInit().
+    // Unlisted instance properties are cloned (using `#deepClone()) upon new
+    // object instantiation (in `#constructor). If you don't want this overhead
+    // for some property (even though it's usually tiny) then list it in
+    // `#_shareProps or assign its value in `@Base.init()`@ or `#postInit().
     //
-    //? One particular case when the default cloning causes problem is when you are assigning "classes" to
-    //  properties - recursive copying of such a value not just breaks it (`[MyClass === myObj._model`] no longer works) but is also very heavy.
+    //? One particular case when the default cloning causes problem is when you
+    //  are assigning "classes" to properties - recursive copying of such a
+    //  value not just breaks it (`[MyClass === myObj._model`] no longer works)
+    //  but is also very heavy.
     //
-    //  Either use `#_shareProps... `[
+    //  Either use `#_shareProps...
+    //  `[
     //    var MyView = Sqimitive.Base.extend({
     //      _model: MyApp.MyModel,
     //    })
@@ -376,7 +393,8 @@
     //    MyView._shareProps.push('_model')
     //  `]
     //
-    //  ...Or assign the value after instantiation, which is less declarative: `[
+    //  ...Or assign the value after instantiation, which is less declarative:
+    //  `[
     //    var MyView = Sqimitive.Base.extend({
     //      _model: null,   // MyApp.MyModel¹
     //
@@ -387,7 +405,8 @@
     //      },
     //    })
     //  `]
-    //    `&sup1 It's customary in Sqimitive to leave a comment with the type's name next to such property.
+    //    `&sup1 It's customary in Sqimitive to leave a comment with the type's
+    //    name next to such property.
     //
     //#-mergePropsExtend
     //
@@ -396,12 +415,12 @@
     //* See instance `#.mixIn() for the implementation.
     //
     //#-inBB
-    // In Backbone, values of all properties inherited by a subclass are
-    // shared among all instances of the base class where they are defined.
-    // Just like in Python, if you have `[...extend( {array: []} )`] then doing
+    // In Backbone, values of all properties inherited by a subclass are shared
+    // among all instances of the base class where they are defined. Just like
+    // in Python, if you have `[...extend( {array: []} )`] then doing
     // `[this.array.push(123)`] will affect all instances where `'array wasn't
-    // overwritten with a new object. This poses a typical problem in day-to-day
-    // development.
+    // overwritten with a new object. This poses a typical problem in
+    // day-to-day development.
     //
     // Example (`@http://jsfiddle.net/Proger/vwqk67h8/`@):
     //[
@@ -416,8 +435,8 @@
     _shareProps: [],
 
     //! +ig
-    // An internal field - list of prototype (instance) properties being
-    // copied in the constructor. Running `[for..in`] each time is extremely
+    // An internal field - list of prototype (instance) properties being copied
+    // in the constructor. Running `[for..in`] each time is extremely
     // expensives (10X). Maintained automatically by `#extend()/`#mixIn().
     // `'null value causes constructor to collect the props.
     _copyProps: null,
@@ -444,22 +463,24 @@
     // `'protoProps fields become accessible as `[(new MyClass).instanceSomething()`]
     // while `'staticProps - as `[MyClass.staticSomething()`].
     //
-    // Any argument may be `'null or omitted. If all are such then you get a copy of
-    // the base class (and yet `[BaseClass !== SubClass`]).
+    // Any argument may be `'null or omitted. If all are such then you get a
+    // copy of the base class (and yet `[BaseClass !== SubClass`]).
     //
     // Other notes:
     //* In Sqimitive, subclassing is a special case of mix-ins (multi-parent
-    //  inheritance in OOP). `#extend() simply creates a new "blank"
-    //  class and mixes the base class into it. Therefore most of the job is
-    //  performed by `#mixIn() (which also allows changing particular object's
-    //  prototype after class construction on run-time).
-    //* `#extend() creates a new prototype, sets its parent, assigns `'__super__
-    //  (a static property pointing to the base class), calls `#::mixIn() and resolves
-    //  `#_childClass if it's a string (since it can't be done before the prototype
-    //  is created).
+    //  inheritance in OOP). `#extend() simply creates a new "blank" class and
+    //  mixes the base class into it. Therefore most of the job is performed by
+    //  `#mixIn() (which also allows changing particular object's prototype
+    //  after class construction on run-time).
+    //* `#extend() creates a new prototype, sets its parent, assigns
+    //  `'__super__ (a static property pointing to the base class), calls
+    //  `#::mixIn() and resolves `#_childClass if it's a string (since it can't
+    //  be done before the prototype is created).
     //#-mixInDoes
-    //* The `'staticProps argument is applied by `#extend() before `#mixIn() applies the `'staticProps key of
-    //  `'protoProps so the latter win on key conflict. If giving both (which you'd rarely do) results may be unexpected: `[
+    //* The `'staticProps argument is applied by `#extend() before `#mixIn()
+    //  applies the `'staticProps key of `'protoProps so the latter win on key
+    //  conflict. If giving both (which you'd rarely do) results may be
+    //  unexpected: `[
     //    var Class = Sqimitive.Base.extend({
     //      staticProps: {prop: 'foo'},
     //    }, {
@@ -469,8 +490,8 @@
     //  `]
     //
     //? In case of duplicated field names, subclass' fields take precedence and
-    //  overwrite fields in the parent class except for fields listed
-    //  in `#_mergeProps: `[
+    //  overwrite fields in the parent class except for fields listed in
+    //  `#_mergeProps: `[
     //    // First we extend a base Sqimitive class with our own properties.
     //    var MyBase = Sqimitive.jQuery.extend({
     //      _somethingBase: 123,
@@ -532,8 +553,8 @@
 
       var child = extend(name || 'Sqimitive', this, arguments[0])
       //! +ig
-      // Since base class has its own __super__, make sure child's (set up
-      // by extend() above) isn't overwritten.
+      // Since base class has its own __super__, make sure child's (set up by
+      // extend() above) isn't overwritten.
       _.extend(child, this, arguments[1], {__super__: child.__super__})
 
       // Ensure changing these in a subclass doesn't affect the parent:
@@ -554,11 +575,11 @@
       arguments[0] && child.mixIn(arguments[0])
 
       // String class path is relative to the base class; instead of searching
-      // all prototypes to find where this property was introduced (without this
-      // all children will reference to them as the base class), we "fixate"
-      // it when declaring the class.
-      // Done here, not in mixIn(), to avoid questions like "is the string,
-      // if given by a mix-in, relative to the mix-in or the target class?".
+      // all prototypes to find where this property was introduced (without
+      // this all children will reference to them as the base class), we
+      // "fixate" it when declaring the class. Done here, not in mixIn(), to
+      // avoid questions like "is the string, if given by a mix-in, relative to
+      // the mix-in or the target class?".
       if (typeof child.prototype._childClass == 'string') {
         child.prototype._childClass = [child, child.prototype._childClass]
       }
@@ -584,8 +605,10 @@
     //
     // ` `#stub() is similar to `@un:noop`@() in Underscore and LoDash.
     //
-    //? Use `#stub() in places where you don't want to supply any implementation - this lets Sqimitive optimize
-    //  things when it knows that a function (acting as a method or an event handler) can be simply discarded or overridden.
+    //? Use `#stub() in places where you don't want to supply any
+    //  implementation - this lets Sqimitive optimize things when it knows that
+    //  a function (acting as a method or an event handler) can be simply
+    //  discarded or overridden.
     //  `[
     //     var MySqim = Sqimitive.Base.extend({
     //       success: Sqimitive.Base.stub,
@@ -610,7 +633,9 @@
     //     //=> my._events.success.length is 2
     //]
     //
-    // Exact optimizations are implementation details and may change in the future, but at this time if you were to put `'success into `'events it would be kept because `#on() doesn't check existing handlers for `#stub:
+    // Exact optimizations are implementation details and may change in the
+    // future, but at this time if you were to put `'success into `'events it
+    // would be kept because `#on() doesn't check existing handlers for `#stub:
     //[
     //   var MySqim = Sqimitive.Base.extend({
     //     events: {
@@ -632,9 +657,9 @@
     //* `@Core::unique()`@
     //#
     //
-    // Returns a sequental number starting from `[1`] that is guaranteed to
-    // be unique among all calls to `#unique() with the same `'prefix during
-    // this session (page load, etc.).
+    // Returns a sequental number starting from `[1`] that is guaranteed to be
+    // unique among all calls to `#unique() with the same `'prefix during this
+    // session (page load, etc.).
     //
     // ` `#_cid receives one such value in `#constructor.
     //
@@ -657,12 +682,14 @@
     //* `@Core::picker()`@
     //#
     //
-    // Returns a function that fetches `'prop property of the object it's given,
-    // possibly calling it with `'args.
+    // Returns a function that fetches `'prop property of the object it's
+    // given, possibly calling it with `'args.
     //
-    // The function expects one argument (an object) that, when
-    // called, returns the value of the given object's `'prop property (if it's not a function) or the result of calling that function (if it is one, giving it `'args).
-    // In other cases (not an object or no `'prop) the function returns `'undefined.
+    // The function expects one argument (an object) that, when called, returns
+    // the value of the given object's `'prop property (if it's not a function)
+    // or the result of calling that function (if it is one, giving it `'args).
+    // In other cases (not an object or no `'prop) the function returns
+    // `'undefined.
     //
     // ` `#picker() is similar to `@un:result`@() in Underscore and LoDash.
     //
@@ -686,8 +713,8 @@
     //        //=> [undefined, undefined, undefined, 1]
     //  `]
     //
-    //? Usually `#picker()'s result is given to some filtering function (`#util).
-    //  Example from `#chld: `[
+    //? Usually `#picker()'s result is given to some filtering function
+    //  (`#util). Example from `#chld: `[
     //    getIncomplete: function () {
     //      return this.reject(MyToDoList.picker('get', 'isCompleted'))
     //    },
@@ -713,10 +740,10 @@
     //
     // If `'func is a string and contains a dot or a dash (`[.-`]) - returns
     // masked (`#masker()) version of this method (`'mask starts with the first
-    // such character). If it's a string without them - returns a function
-    // that calls the method named `'func on `'obj (or `'this if omitted). In other
-    // cases returns `'func as is (if `'obj is omitted) or `[_.bind(func, obj)`]
-    // (if `'obj is given).
+    // such character). If it's a string without them - returns a function that
+    // calls the method named `'func on `'obj (or `'this if omitted). In other
+    // cases returns `'func as is (if `'obj is omitted) or `[_.bind(func,
+    // obj)`] (if `'obj is given).
     //
     //?`[
     //    var func = Sqimitive.Base.expandFunc('meth')
@@ -737,7 +764,8 @@
     //
     //    _.each({k1: 1, k2: 2}, _.bind(func, obj))
     //      // if we didn't give obj to expandFunc() previous example would
-    //      // fail - func() would be called on window which has no 'meth' method.
+    //      // fail - func() would be called on window which has no 'meth'
+    //      // method.
     // `]
     expandFunc: function (func, obj) {
       if (typeof func == 'string') {
@@ -761,23 +789,27 @@
     //* `@Core::masker()`@
     //#
     //
-    // Returns a version of `'func with arguments reordered according to `'mask.
+    // Returns a version of `'func with arguments reordered according to
+    // `'mask.
     //
-    //> mask number to skip that many leading arguments alike to `@un:rest`@()`,
-    //  null/omitted to assume the number `[1`] (skip first argument)`,
-    //  string pattern `#maskerPattern
+    //> mask number to skip that many leading arguments alike to
+    //  `@un:rest`@()`, null/omitted to assume the number `[1`] (skip first
+    //  argument)`, string pattern `#maskerPattern
     //> func string method name`, function `- called on `'cx
     //> cx object`, null/omitted use `'this `- the context for `'func
     //> args array `- extra left-side arguments to `'func
     //
     // ` `#masker() is similar to LoDash's `'rearg().
     //
-    // Masking is a way to work around `#argDanger
-    // and avoid writing callback function wrappers which only ignore or reorder arguments.
-    // It's implicitly used in string `#events values since they are passed to `#expandFunc().
+    // Masking is a way to work around `#argDanger and avoid writing callback
+    // function wrappers which only ignore or reorder arguments. It's
+    // implicitly used in string `#events values since they are passed to
+    // `#expandFunc().
     //
     //#es6this
-    //? ES6 arrow functions could be useful for this but they are ill-suited for use as handlers when `#extend()ing because of their permanent `'this.
+    //? ES6 arrow functions could be useful for this but they are ill-suited
+    //  for use as handlers when `#extend()ing because of their permanent
+    //  `'this.
     //
     //  `[
     //    var MyClass = Sqimitive.Base.extend({
@@ -812,8 +844,8 @@
     //     context: sqim,
     //
     //     // WRONG: success' second argument is textStatus which gets assigned
-    //     // as assignResp(data, options) breaking the latter (textStatus is not
-    //     // options):
+    //     // as assignResp(data, options) breaking the latter (textStatus is
+    //     // not options):
     //     success: sqim.assignResp,
     //
     //     // CORRECT: we indicate that we are only interested in the first
@@ -822,15 +854,16 @@
     //   })
     // `]
     //
-    //? It is customary to alias `#masker() with a shorter name and use the alias in the code:
+    //? It is customary to alias `#masker() with a shorter name and use the
+    //  alias in the code:
     //  `[
     //    var m = Sqimitive.Base.masker
     //
     //    var MyModel = Sqimitive.Base.extend({
     //      // Note that it's different from the first example: normalize_OPT
     //      // is a method, not an event handler, so no need for '+...' - but
-    //      // no automatic masking too (string value can be used only in events,
-    //      // in properties it must be a function).
+    //      // no automatic masking too (string value can be used only in
+    //      // events, in properties it must be a function).
     //      //
     //      // Unmasked, _.trim() takes two arguments: (str, chars).
     //      // normalize_OPT() is passed: (value, options).
@@ -842,9 +875,10 @@
     //? `[
     //    // Giving an explicit cx, the context object (col):
     //    _.each(arrayOfSqims, m('nest', '21', col))
-    //      // here we call col.nest() on each item in arrayOfSqim with swapped arguments,
-    //      // effectively nesting each member into the col object. _.each() calls the
-    //      // iterator as (value, key) while nest() takes (key, sqim)
+    //      // here we call col.nest() on each item in arrayOfSqim with swapped
+    //      // arguments, effectively nesting each member into the col object.
+    //      // _.each() calls the iterator as (value, key) while nest() takes
+    //      // (key, sqim)
     //
     //    m('nest', 1)
     //      // returns a function that preserves all but the first argument:
@@ -854,35 +888,40 @@
     //      // the same - omitted mask defaults to number 1
     //
     //    m('nest', 0, cx)
-    //      // doesn't change arguments at all (_.rest(a, 0) == a) but binds function to cx
+    //      // doesn't change arguments at all (_.rest(a, 0) == a) but binds
+    //      // function to cx
     //
     //    m('nest', 0, null, ['left', 'left2'])
-    //      // doesn't bind result but pushes 'left' and 'left2' arguments before
-    //      // all given arguments: nest('left', 'left2', other args...)
+    //      // doesn't bind result but pushes 'left' and 'left2' arguments
+    //      // before all given arguments: nest('left', 'left2', other args...)
     //
     //    m(function (a1, a2) { alert(a1 + ' ' + a2) }, '')
     //      //=> always 'undefined undefined'
     //  `]
     //
     //#maskerPattern Mask pattern
-    // In a string `'mask each symbol maps arguments given to the masked function (returned
-    // by `#masker) to arguments for the original `'func (the argument to `#masker). Each symbol represents a particular argument and can be one of these:
+    // In a string `'mask each symbol maps arguments given to the masked
+    // function (returned by `#masker) to arguments for the original `'func
+    // (the argument to `#masker). Each symbol represents a particular argument
+    // and can be one of these:
     //
-    //> dot: `[.`] `- gets argument at index of this dot in the `'mask string (`[-..-.`] equals to `[-23-5`])
-    //> dash: `[-`] `- ignores argument (doesn't give to `'func); trailing dashes
-    //  are meaningless (arguments past the end of `'mask are never given unless
-    //  `'mask is a number)
-    //> number: `[1-9`] `- gets argument by index: `[1`] gets the first masked argument, etc.
+    //> dot: `[.`] `- gets argument at index of this dot in the `'mask string
+    //  (`[-..-.`] equals to `[-23-5`])
+    //> dash: `[-`] `- ignores argument (doesn't give to `'func); trailing
+    //  dashes are meaningless (arguments past the end of `'mask are never
+    //  given unless `'mask is a number)
+    //> number: `[1-9`] `- gets argument by index: `[1`] gets the first masked
+    //  argument, etc.
     //
-    // For example, if the wrapped function received arguments `[arg1, arg2, arg3`] then the `'mask of `[-.1`] (same as `[-21`]) gives the original `'func arguments
-    // `[arg2, arg1`].
+    // For example, if the wrapped function received arguments `[arg1, arg2,
+    // arg3`] then the `'mask of `[-.1`] (same as `[-21`]) gives the original
+    // `'func arguments `[arg2, arg1`].
     //
-    // Empty `'mask passes zero arguments (as do `[-`],
-    // `[--`], etc.).
+    // Empty `'mask passes zero arguments (as do `[-`], `[--`], etc.).
     //
-    // Note: the `'mask of `['3'`] (string) is different from `[3`] (number) - `['3'`]
-    // passes 3rd wrapper's argument as the first `'func's argument while `[3`] skips first 3 arguments
-    // and passes all others.
+    // Note: the `'mask of `['3'`] (string) is different from `[3`] (number) -
+    // `['3'`] passes 3rd wrapper's argument as the first `'func's argument
+    // while `[3`] skips first 3 arguments and passes all others.
     masker: function (func, mask, cx, args) {
       mask == null && (mask = 1)
       var isMethod = typeof func == 'string'
@@ -912,14 +951,15 @@
     //* `@Core::deepClone()`@
     //#
     //
-    // Returns a version of the argument with recursively copied arrays and objects so that any modification to either
-    // `'obj or the returned value (`'obj's copy) won't affect its counterpart.
+    // Returns a version of the argument with recursively copied arrays and
+    // objects so that any modification to either `'obj or the returned value
+    // (`'obj's copy) won't affect its counterpart.
     //
-    // ` `#deepClone() is used in `@Core.constructor`@ to copy non-shared properties (`#_shareProps).
-    // Think of it as of recursively calling `@un:clone`@() or `@jq:extend`@() or
-    // using LoDash's `'cloneDeep().
-    // It's deliberately dumb to remain simple and will attempt to copy everything, even built-in
-    // classes like `'Date.
+    // ` `#deepClone() is used in `@Core.constructor`@ to copy non-shared
+    // properties (`#_shareProps). Think of it as of recursively calling
+    // `@un:clone`@() or `@jq:extend`@() or using LoDash's `'cloneDeep(). It's
+    // deliberately dumb to remain simple and will attempt to copy everything,
+    // even built-in classes like `'Date.
     //
     //?`[
     //    var obj = {array: [{sub: 'prop'}]}
@@ -935,7 +975,9 @@
     //      // obj.array is still [{sub: 'prop'}, 'new']
     // `]
     deepClone: function (obj) {
-      // This method has a big impact on performance because it's called in each Sqimitive constructor so we avoid using _'s methods and access standard methods directly (saving 10% of time on each access).
+      // This method has a big impact on performance because it's called in
+      // each Sqimitive constructor so we avoid using _'s methods and access
+      // standard methods directly (saving 10% of time on each access).
       if (typeof obj == 'object' && obj != null) {
         if (Array.isArray(obj)) {
           obj = obj.map(Core.deepClone)
@@ -952,7 +994,8 @@
 
     // Extracts portions of the given event identifier as recognized by `#on().
     //
-    // Returns an object with keys: `'prefix (like `[+`], see `#evtpf), `'args (trailing `[_`]) and `'name (everything else).
+    // Returns an object with keys: `'prefix (like `[+`], see `#evtpf), `'args
+    // (trailing `[_`]) and `'name (everything else).
     //
     // Errors if `'str doesn't look like a proper event reference.
     //
@@ -965,8 +1008,9 @@
     // `]
     parseEvent: function (str) {
       // Colons were reserved for use instead of '_' in 'change_OPT' but turned
-      // out to be troublesome to declare since you'd have to quote them. They're
-      // no longer used but perhaps will find another use in the future.
+      // out to be troublesome to declare since you'd have to quote them.
+      // They're no longer used but perhaps will find another use in the
+      // future.
       //
       // Dots are used in _forward'ed event names, and we need prefix symbols
       // (+-=) in the middle of event name for the same reason: '.-change'.
@@ -977,19 +1021,21 @@
 
     //! `, +fna=function ( funcs [, args] )
     //
-    // Invokes event handlers in response to firing an event (see instance `#.fire()).
+    // Invokes event handlers in response to firing an event (see instance
+    // `#.fire()).
     //
-    // `'funcs is an array of event registration
-    // objects of an internal format. `#::fire() calls each handler in turn according to its type (such as expecting a
-    // fixed number of arguments, accepting current result value, affecting
-    // return value, etc. according to `'prefix in `#on(), see `#evtref) while giving it `'args
-    // (array).
+    // `'funcs is an array of event registration objects of an internal format.
+    // `#::fire() calls each handler in turn according to its type (such as
+    // expecting a fixed number of arguments, accepting current result value,
+    // affecting return value, etc. according to `'prefix in `#on(), see
+    // `#evtref) while giving it `'args (array).
     //
     // If a handler returns something other than `'undefined and it's eligible
-    // for changing return value (as it's the case for `'+event and `'=event, see `#evtpf), then
-    // current result is replaced by that handler's return value. Returns the
-    // ultimate return value after calling every handler, unless stopped by
-    // any `[eobj.post`] callback setting `[eobj.stop`] to `'false (see the example in `#fuse()).
+    // for changing return value (as it's the case for `'+event and `'=event,
+    // see `#evtpf), then current result is replaced by that handler's return
+    // value. Returns the ultimate return value after calling every handler,
+    // unless stopped by any `[eobj.post`] callback setting `[eobj.stop`] to
+    // `'false (see the example in `#fuse()).
     //
     // Other notes:
     //* This is an internal method and there is no reason to call it directly.
@@ -1013,9 +1059,9 @@
       if (funcs) {
         if (!args) { args = [] }
 
-        // Cloning function list because it might change from the outside
-        // (e.g. when a handler is removed from the same event as it's being
-        // fired; may happen when once() is used).
+        // Cloning function list because it might change from the outside (e.g.
+        // when a handler is removed from the same event as it's being fired;
+        // may happen when once() is used).
         _.find(funcs.concat(), function (eobj) {
           if (eobj.args != null && eobj.args != args.length) {
             var thisRes = eobj.sup ? eobj.sup(eobj.cx || this, args) : undefined
@@ -1059,10 +1105,10 @@
     //
     // Attempts to cast `'value into a native `'Array object.
     //
-    // The `'Arguments object becomes an array, `'Array (`[Array.isArray()`]) is returned as is while
-    // anything else is wrapped into an array to become its sole member.
-    // This means that `'false, `'null and `'undefined all result in
-    // `[[value]`], not in `[[]`].
+    // The `'Arguments object becomes an array, `'Array (`[Array.isArray()`])
+    // is returned as is while anything else is wrapped into an array to become
+    // its sole member. This means that `'false, `'null and `'undefined all
+    // result in `[[value]`], not in `[[]`].
     //
     //?`[
     //   ;(function () {
@@ -1096,17 +1142,22 @@
   _.extend(Core.prototype, {
     //#-readOnly
     //
-    // An identifier of this object. Unique among all instances of `[Sqimitive.Core`] or its subclasses
-    // created during this session (page load).
+    // An identifier of this object. Unique among all instances of
+    // `[Sqimitive.Core`] or its subclasses created during this session (page
+    // load).
     //
-    // Currently begins with "p" for "primitive" followed by a positive number as generated by `#unique(). This is unlikely to change but in any case it's guaranteed to remain a valid identifier of only Latin symbols, i.e. begin with a letter followed by zero or more letters, digits and underscores.
+    // Currently begins with "p" for "primitive" followed by a positive number
+    // as generated by `#unique(). This is unlikely to change but in any case
+    // it's guaranteed to remain a valid identifier of only Latin symbols, i.e.
+    // begin with a letter followed by zero or more letters, digits and
+    // underscores.
     //
-    // Can be used to namespace DOM events as
-    // in `[this.el.on('click.' + this._cid)`] (`@jQuery.attach()`@ does this).
+    // Can be used to namespace DOM events as in `[this.el.on('click.' +
+    // this._cid)`] (`@jQuery.attach()`@ does this).
     //
-    // Historically "cid" stands for "`[c`]lient `[id`]entifier" - a term originating
-    // from Backbone (`@bb:Model-cid`@) but probably not holding much meaning at this
-    // point.
+    // Historically "cid" stands for "`[c`]lient `[id`]entifier" - a term
+    // originating from Backbone (`@bb:Model-cid`@) but probably not holding
+    // much meaning at this point.
     //
     //?`[
     //   ;(new Sqimitive.Core)._cid      //=> 'p1'
@@ -1124,17 +1175,17 @@
     //* `@Core.events`@
     //#
     //
-    // There is no such property per se but this key can be passed to `#extend() and `#mixIn() to
-    // set up new event handlers of a "subclass".
+    // There is no such property per se but this key can be passed to
+    // `#extend() and `#mixIn() to set up new event handlers of a "subclass".
     //
     // Giving `'events is the same as calling `[this.on({events})`] after
-    // `#extend()/`#mixIn() so see `#on()
-    // (with an object argument) for details.
+    // `#extend()/`#mixIn() so see `#on() (with an object argument) for
+    // details.
     //
-    // Since in Sqimitive everything is an event (`#evt)
-    // this is the way you do inheritance, override methods, etc. Such events
-    // are "fused" into the new class declaration so there is no overhead of
-    // applying them on each class instantiation.
+    // Since in Sqimitive everything is an event (`#evt) this is the way you do
+    // inheritance, override methods, etc. Such events are "fused" into the new
+    // class declaration so there is no overhead of applying them on each class
+    // instantiation.
     //
     // See the Events overview (`#evt) for examples.
     //
@@ -1160,26 +1211,29 @@
     //   }
     //]
     //
-    // Note that `'_events
-    // includes both `#fuse()d and dynamic events (fused are produced when
-    // `#extend()ing a class so that subclass' event handlers cannot be removed
-    // on run-time). It's not advised to deal with this object directly - instead use
-    // `#on(), `#once(), `#off(), `#fire(), `#fuse(), `#_forward(), etc.
+    // Note that `'_events includes both `#fuse()d and dynamic events (fused
+    // are produced when `#extend()ing a class so that subclass' event handlers
+    // cannot be removed on run-time). It's not advised to deal with this
+    // object directly - instead use `#on(), `#once(), `#off(), `#fire(),
+    // `#fuse(), `#_forward(), etc.
     //
     // Keys of `'_events are event names without any prefixes or suffixes
-    // ("render", "remove" and so on - the `'event in `#evtref), values - arrays of event registration
-    // objects of an internal structure (study comments in the source code for details). These
-    // value arrays are given to `#::fire() when an event occurs.
+    // ("render", "remove" and so on - the `'event in `#evtref), values -
+    // arrays of event registration objects of an internal structure (study
+    // comments in the source code for details). These value arrays are given
+    // to `#::fire() when an event occurs.
     _events: {},
 
     //! +ig
-    // Holds event handlers indexed by ID for quick access. Doesn't contain hardwired (`#fuse()d)
-    // handlers. Values are references to those in `#_event, not copies.
+    // Holds event handlers indexed by ID for quick access. Doesn't contain
+    // hardwired (`#fuse()d) handlers. Values are references to those in
+    // `#_event, not copies.
     //= object {id: eobj}
     _eventsByID: {},
 
     //! +ig
-    // Holds event handlers indexed by their context (`'cx) for quick access. Similar to `#_eventsByID.
+    // Holds event handlers indexed by their context (`'cx) for quick access.
+    // Similar to `#_eventsByID.
     //= array [ [cx, eobj, eobj, ...] ]
     _eventsByCx: [],
 
@@ -1189,28 +1243,30 @@
     //
     // When `[autoOff(sqim)`] is called to keep track of `'sqim object to which
     // `'this object has attached an event listener, such `'sqim object is put
-    // into the `#_autoOff array. You can then call `[this.autoOff()`] in `#unnest()
-    // or in another place to sever all connections between an object that is
-    // about to go away and those still in the world of living.
+    // into the `#_autoOff array. You can then call `[this.autoOff()`] in
+    // `#unnest() or in another place to sever all connections between an
+    // object that is about to go away and those still in the world of living.
     _autoOff: [],
 
     //! +ig
-    // If non-`'null then this instance is logging all event calls by hooking the `'all event
-    // and this value is that `'all's event handler's ID suitable for `#off().
+    // If non-`'null then this instance is logging all event calls by hooking
+    // the `'all event and this value is that `'all's event handler's ID
+    // suitable for `#off().
     _logEventID: null,
 
     //#+tag_Extension
     //* `@Core.mixIn()`@
     //#
     //
-    // Extends this object instance with a behaviour of another "class" (a "mix-in").
+    // Extends this object instance with a behaviour of another "class" (a
+    // "mix-in").
     //
     // The static `#::mixIn() exists which affects all objects of a class.
     //
     //#mixInDesc
     //
-    //> this `- The object receiving new "mixed-in" fields (for static `#::mixIn()
-    //  `'this is the "child" class).
+    //> this `- The object receiving new "mixed-in" fields (for static
+    //  `#::mixIn() `'this is the "child" class).
     //> options `- An arbitrary value (usually an object) given to
     //  `'newClass.`'finishMixIn(), allowing creation of parametrized mix-ins
     //  (basically, generics).
@@ -1218,11 +1274,15 @@
     //
     // Possible `'newClass keys:
     //
-    //> staticProps object `- static fields made available as `[newClass.something`]
+    //> staticProps object `- static fields made available as
+    //  `[newClass.something`]
     //> events object `- event listeners (see `#events)
     //
-    //  Because this is not a real field, keys in `[newClass.events`] do not override keys in `[this.events`]. If both `'this and `'newClass have
-    //  the `'foo event key (i.e. if both listen to this event) then two listeners are set up, not one. Compare with `@Base.elEvents`@ overriding (`#elEventsMixIn).
+    //  Because this is not a real field, keys in `[newClass.events`] do not
+    //  override keys in `[this.events`]. If both `'this and `'newClass have
+    //  the `'foo event key (i.e. if both listen to this event) then two
+    //  listeners are set up, not one. Compare with `@Base.elEvents`@
+    //  overriding (`#elEventsMixIn).
     //
     //> finishMixIn function `- called before returning
     //
@@ -1232,7 +1292,8 @@
     //> mixIns array `- each item is either a mixed-in class or an array:
     //  `[[class, options]`]
     //
-    //> * `- other keys represent instance fields (the `'protoProps argument of `#extend())
+    //> * `- other keys represent instance fields (the `'protoProps argument of
+    //  `#extend())
     //
     //  ` `#_mergeProps is respected, but of `'this (not of `'newClass).
     //
@@ -1284,9 +1345,10 @@
     //     //=> opt = {a: 'base', correctly: 'merged'}
     //]
     //
-    // ` `*Warning:`* `'this is modified in-place; no new class is created (`'mixIn() returns no value). If you want a base
-    // class without a given mix-in and a subclass with that mix-in - first
-    // `#extend() the base class and then mix into the new sub-class:
+    // ` `*Warning:`* `'this is modified in-place; no new class is created
+    // (`'mixIn() returns no value). If you want a base class without a given
+    // mix-in and a subclass with that mix-in - first `#extend() the base class
+    // and then mix into the new sub-class:
     //[
     //   // CORRECT:
     //   var Base = Sqimitive.Base.extend()
@@ -1299,16 +1361,25 @@
     //
     // Other notes:
     //
-    //* `#mixIn() is doing most of `#extend()'s job, which is just creating a special form of a mix-in.
+    //* `#mixIn() is doing most of `#extend()'s job, which is just creating a
+    //  special form of a mix-in.
     //##mixInDoes
-    //* `#mixIn() applies "sub mix-ins" (calls `'mixIn() if `'newClass contains the `'mixIns key; this is recursive), overwrites fields of `'this with ones from `'newClass (or merges according to `#_mergeProps), adds `'staticProps, hardwires events into class definition (`#fuse()) and calls `'finishMixIn().
+    //* `#mixIn() applies "sub mix-ins" (calls `'mixIn() if `'newClass contains
+    //  the `'mixIns key; this is recursive), overwrites fields of `'this with
+    //  ones from `'newClass (or merges according to `#_mergeProps), adds
+    //  `'staticProps, hardwires events into class definition (`#fuse()) and
+    //  calls `'finishMixIn().
     //##
     //* Not to be confused with Underscore's `@un:mixin()`@. However, LoDash's
     //  `'mixin() is of a similar purpose.
     //
     //##elEventsMixIn Merging of `'elEvents
     //
-    // ` `#Base lists `@Base.elEvents`@ in `#_mergeProps so the former are merged but unlike with `[newClass.events`] keys (which can never have a conflict and be dropped), keys in `'elEvents get overridden on name collisions. This is sometimes desirable (to override the parent's handler), sometimes not (then use a unique `[.ns`] suffix):
+    // ` `#Base lists `@Base.elEvents`@ in `#_mergeProps so the former are
+    // merged but unlike with `[newClass.events`] keys (which can never have a
+    // conflict and be dropped), keys in `'elEvents get overridden on name
+    // collisions. This is sometimes desirable (to override the parent's
+    // handler), sometimes not (then use a unique `[.ns`] suffix):
     //[
     //   var Base = Sqimitive.Base.extend({
     //     elEvents: {
@@ -1334,7 +1405,9 @@
     //
     //## Mix-in inheritance
     //
-    // `'mixIns is applied before setting other properties which allows extending mix-ins themselves (later mix-ins override preceding just like with normal inheritance on classes). For example:
+    // `'mixIns is applied before setting other properties which allows
+    // extending mix-ins themselves (later mix-ins override preceding just like
+    // with normal inheritance on classes). For example:
     //[
     //   var ParentMixIn = {
     //     someEvent: function () { /* parent */ },
@@ -1354,10 +1427,12 @@
     //   // myClass had ParentMixIn added, then ChildMixIn, and now has
     //   // 2 listeners on someEvent
     //]
-    // `'ParentMixIn could also have the `'mixIns property to specify its own parent.
+    // `'ParentMixIn could also have the `'mixIns property to specify its own
+    // parent.
     //
-    // In the above example the mix-in specified its parent, which is usually intuitive.
-    // Still, it could be specified in the final class' `'mixIns alone:
+    // In the above example the mix-in specified its parent, which is usually
+    // intuitive. Still, it could be specified in the final class' `'mixIns
+    // alone:
     //[
     //   var ParentMixIn = {
     //     someEvent: function () { /* parent */ },
@@ -1390,8 +1465,11 @@
     //   // 2 listeners: of ParentMixIn and of ChildMixIn
     //]
     //
-    // ` `*Warning:`* calling `'mixIn() in `'finishMixIn() would have a different effect.
-    // If `'ChildMixIn were defined as follows then `'MyClass or `'obj would have `'someEvent not as a `#firer() but as the `'ParentMixIn's function (because it was mixed-in after `'ChildMixIn and overrode its `'events handler):
+    // ` `*Warning:`* calling `'mixIn() in `'finishMixIn() would have a
+    // different effect. If `'ChildMixIn were defined as follows then `'MyClass
+    // or `'obj would have `'someEvent not as a `#firer() but as the
+    // `'ParentMixIn's function (because it was mixed-in after `'ChildMixIn and
+    // overrode its `'events handler):
     //[
     //   var ChildMixIn = {
     //     finishMixIn: function (newClass) {
@@ -1404,7 +1482,8 @@
     //]
     //
     // This will override the handler introduced in the declaration of `'Class
-    // for the same reason - `'MixIn is added to `'Class after `'Class' own fields:
+    // for the same reason - `'MixIn is added to `'Class after `'Class' own
+    // fields:
     //[
     //   var MixIn = {
     //     some: function () { ... },
@@ -1418,7 +1497,8 @@
     //
     //   Class.mixIn(MixIn)
     //]
-    // This is the correct way (using `'mixIns property when `#extend()ing `'Class):
+    // This is the correct way (using `'mixIns property when `#extend()ing
+    // `'Class):
     //[
     //   var MixIn = {
     //     some: function () { ... },
@@ -1437,8 +1517,8 @@
       var merged = {mixIns: undefined, finishMixIn: undefined, staticProps: undefined, events: undefined}
 
       _.each(newClass.mixIns || [], function (mixIn) {
-        // mixIns items are either objects or arrays. concat() ensures
-        // mixIn() is called either with (class, options) or (class) alone.
+        // mixIns items are either objects or arrays. concat() ensures mixIn()
+        // is called either with (class, options) or (class) alone.
         this.mixIn.apply(this, [].concat(mixIn))
       }, this)
 
@@ -1456,17 +1536,26 @@
       _.extend(this.constructor, newClass.staticProps || {})
 
       if (newClass.events) {
-        // Core has no __super__ but it doesn't use mix-ins either so no check for null.
-        // This condition will evaluate to true except when a class has mix-ins (via mixIns property or mixIn() method) - we could clone it in the second case too but this would be a waste.
+        // Core has no __super__ but it doesn't use mix-ins either so no check
+        // for null. This condition will evaluate to true except when a class
+        // has mix-ins (via mixIns property or mixIn() method) - we could clone
+        // it in the second case too but this would be a waste.
         //
-        // Warning: this operates under assumption that the base class is finalized (all mix-ins applied) before any of its sub-classes is created.
+        // Warning: this operates under assumption that the base class is
+        // finalized (all mix-ins applied) before any of its sub-classes is
+        // created.
         //
         //   var Base = Sqimitive.extend()
         //   Base.mixIn(...)    // fine
         //   var Child = Base.extend()
         //   Base.mixIn(...)    // wrong
         //
-        // Adding mix-ins after Child was declared may have unexpected side effects - if the mix-in adds an event and if Child had its own events block, then Child won't receive new mix-in's events. This is an implementation detail - "officially", adding mix-ins after declaring a subclass leads to undefined behaviour and should never be used.
+        // Adding mix-ins after Child was declared may have unexpected side
+        // effects - if the mix-in adds an event and if Child had its own
+        // events block, then Child won't receive new mix-in's events. This is
+        // an implementation detail - "officially", adding mix-ins after
+        // declaring a subclass leads to undefined behaviour and should never
+        // be used.
         if (this._events == this.constructor.__super__._events) {
           //! +ig
           // Could use deepClone but it's more intense - we don't clone eobj's
@@ -1491,17 +1580,19 @@
     //* `@Core.fire()`@
     //#
     //
-    // Triggers an event giving `'args as parameters to all registered listeners.
-    // Returns result of the last called listener that was eligible for changing it.
+    // Triggers an event giving `'args as parameters to all registered
+    // listeners. Returns result of the last called listener that was eligible
+    // for changing it.
     //
     // The actual event processing is performed by static `#::fire().
     //
-    // It's safe to add/remove new listeners while `#fire() is executing - they will be in effect
-    // starting with the next `#fire() call (even if it's nested).
+    // It's safe to add/remove new listeners while `#fire() is executing - they
+    // will be in effect starting with the next `#fire() call (even if it's
+    // nested).
     //
-    // ` `*Warning:`* to override `'fire(), don't use the usual `[on('fire')`] as it will lead
-    // to recursion (even the `'=fire form). Use the old-school prototype
-    // overriding (`'__super__ is set up by `#extend()):
+    // ` `*Warning:`* to override `'fire(), don't use the usual `[on('fire')`]
+    // as it will lead to recursion (even the `'=fire form). Use the old-school
+    // prototype overriding (`'__super__ is set up by `#extend()):
     //[
     //   fire: function (event, args) {
     //     // Do your stuff...
@@ -1510,14 +1601,15 @@
     //]
     //
     //#fireAll The `'all event
-    // ` `#fire() first triggers the special `'all event. If `'all's return value is anything but
-    // `'undefined - `#fire() returns it bypassing the actual handlers of `'event.
+    // ` `#fire() first triggers the special `'all event. If `'all's return
+    // value is anything but `'undefined - `#fire() returns it bypassing the
+    // actual handlers of `'event.
     //
-    // `'all's handlers get `'event
-    // put in front of other `'args (e.g. `[['eventName', 'arg1', 2, ...]`]).
+    // `'all's handlers get `'event put in front of other `'args (e.g.
+    // `[['eventName', 'arg1', 2, ...]`]).
     //
-    // Note that the `'all event is only triggered for actual events so if,
-    // for example, `#render() isn't overriden then it will be called as a regular
+    // Note that the `'all event is only triggered for actual events so if, for
+    // example, `#render() isn't overriden then it will be called as a regular
     // member function without triggering `'all or any other event:
     //[
     //   var ClassA = Sqimitive.Base.extend({
@@ -1538,15 +1630,17 @@
     //   ;(new ClassB)
     //     .on({all: () => alert('booh!')})
     //     .render()
-    //       // no alert(), render of extend() is not an event handler but a method
+    //       // no alert(), render of extend() is not an event handler but a
+    //       // method
     //
     //   ;(new ClassB)
     //     .on({all: () => alert('booh!')})
     //     .on({render: function () { return this }})
     //     .render()
     //       // alert() happens because of on('render') which converted
-    //       // the render function from ClassB's declaration to a firer('render')
-    //       // which when called triggers fire('render') which in turn triggers 'all'
+    //       // the render function from ClassB's declaration to a
+    //       // firer('render') which when called triggers fire('render') which
+    //       // in turn triggers 'all'
     //]
     fire: function (event, args) {
       if (this._events.all && event != 'all') {
@@ -1571,8 +1665,9 @@
     //  (`'firerArgs)
     //> self object `- if not given then context is unchanged
     //
-    //? `#firer() is used by `'on() to "convert" method calls into events making
-    //  it unnecessary to directly call `#fire() in most cases (see `#evt): `[
+    //? `#firer() is used by `'on() to "convert" method calls into events
+    //  making it unnecessary to directly call `#fire() in most cases (see
+    //  `#evt): `[
     //    var MyClass = Sqimitive.Base.extend({
     //      upper: function (s) { return s.toUpperCase() },
     //    })
@@ -1617,14 +1712,16 @@
     //
     // A debug method for logging all triggered events to the console.
     //
-    // ` `#logEvents() allows enabling event logging as well as acts
-    // as an event handler for `'all. The handler can be
-    // used on its own, without enabling logging with `[logEvents(true)`].
+    // ` `#logEvents() allows enabling event logging as well as acts as an
+    // event handler for `'all. The handler can be used on its own, without
+    // enabling logging with `[logEvents(true)`].
     //
-    //> true `- enable logging; do nothing if browser doesn't provide `[console.log()`]
+    //> true `- enable logging; do nothing if browser doesn't provide
+    //  `[console.log()`]
     //> - no arguments `- same as `'true (enable logging)
     //> false `- disable logging, if enabled
-    //> string event name `- log this event; other arguments are the event's arguments
+    //> string event name `- log this event; other arguments are the event's
+    //  arguments
     //
     //= this if `'enable is bool`, undefined if string
     //
@@ -1634,9 +1731,10 @@
     //   sqim.logEvents(false)  // disable
     // `]
     //
-    // Note: `#logEvents logs only events passing through the instance `#.fire(). This means
-    // that only real event calls are tracked, not calls of non-overridden methods
-    // (i.e. of regular functions, not `#firer). See `#fireAll.
+    // Note: `#logEvents logs only events passing through the instance
+    // `#.fire(). This means that only real event calls are tracked, not calls
+    // of non-overridden methods (i.e. of regular functions, not `#firer). See
+    // `#fireAll.
     //
     //# Extending default logger
     // You can override or extend the default logging behaviour by testing the
@@ -1645,8 +1743,9 @@
     //   var MyLoggee = Sqimitive.Base.extend({
     //     events: {
     //       logEvents: function (event) {
-    //         // logEvents() calls itself when an event occurs and the first argument is
-    //         // the event name - a string. In other cases it's not the logger being called.
+    //         // logEvents() calls itself when an event occurs and the first
+    //         // argument is the event name - a string. In other cases it's
+    //         // not the logger being called.
     //         if (typeof event == 'string') {
     //           console.log('el.' + this.el[0].className)
     //         }
@@ -1659,9 +1758,10 @@
     //]
     //
     // Note: returning non-`'undefined from the `'all handler prevents calling
-    // real event handlers (see `#.fire()). In the above example it never happens since `'logEvents
-    // event is hooked with no prefix (`#evtpf) meaning the handler's return value is
-    // ignored (even if it does return anything). However, not in this example:
+    // real event handlers (see `#.fire()). In the above example it never
+    // happens since `'logEvents event is hooked with no prefix (`#evtpf)
+    // meaning the handler's return value is ignored (even if it does return
+    // anything). However, not in this example:
     //[
     //   events: {
     //     '=logEvents': function (sup, event) {
@@ -1710,27 +1810,28 @@
     //* `@Core.on()`@
     //#
     //
-    // Registers a single event handler and returns its ID or permanently hardwires
-    // multiple events and/or handlers.
+    // Registers a single event handler and returns its ID or permanently
+    // hardwires multiple events and/or handlers.
     //
     //> event string to register one handler and return ID that can be used to
-    //  unregister it with `#off()`,
-    //  object to `#fuse() one or multiple handlers and return `'this
-    //  `- Object keys are event references (`#evtref), values are handlers.
+    //  unregister it with `#off()`, object to `#fuse() one or multiple
+    //  handlers and return `'this `- Object keys are event references
+    //  (`#evtref), values are handlers.
     //
-    //  Keys can contain multiple event references separated with `[, `]
-    //  - this is identical to multiple `#on() calls but shorter.
-    //  Note: a space after the comma is mandatory (unlike with jQuery selector)s
+    //  Keys can contain multiple event references separated with `[, `] -
+    //  this is identical to multiple `#on() calls but shorter. Note: a space
+    //  after the comma is mandatory (unlike with jQuery selector)s
     //
     //#onOnce
-    //> cx object`, null/omitted use `'this `- Context in which the handler(s) are called.
-    //  `'this is the object on which `#on() was called so `[on('e', 'h')`] will
-    //  call `'h() on the object where the event occurs (and in that object's context).
+    //> cx object`, null/omitted use `'this `- Context in which the handler(s)
+    //  are called. `'this is the object on which `#on() was called so
+    //  `[on('e', 'h')`] will call `'h() on the object where the event occurs
+    //  (and in that object's context).
     //
-    // The handler (`'func or `'event object value) can be either a (masked) method reference
-    // (see `#expandFunc()) or function.
-    // Strings are resolved when the event is fired so their handlers are always up-to-date
-    // and don't even have to exist by the time `#on() is called.
+    // The handler (`'func or `'event object value) can be either a (masked)
+    // method reference (see `#expandFunc()) or function. Strings are resolved
+    // when the event is fired so their handlers are always up-to-date and
+    // don't even have to exist by the time `#on() is called.
     //
     // Errors if an event reference can't be parsed.
     //
@@ -1757,16 +1858,21 @@
     //     sqim.on('change, nest', this.render, this)
     //   `]
     //
-    //? Object-`'event form is used behind the scenes when `#extend()ing or `#mixIn() a class and supplying the `'events key in `'protoProps, therefore `#events format is exactly the `'events argument of `#on().
+    //? Object-`'event form is used behind the scenes when `#extend()ing or
+    //  `#mixIn() a class and supplying the `'events key in `'protoProps,
+    //  therefore `#events format is exactly the `'events argument of `#on().
     //
-    //  Warning: when giving `#extend() or `#mixIn() a method (as a property, not as an `'events member) which name is already used for an event it will conceal existing handlers and generally misbehave - see `#evtconc.
+    //  Warning: when giving `#extend() or `#mixIn() a method (as a property,
+    //  not as an `'events member) which name is already used for an event it
+    //  will conceal existing handlers and generally misbehave - see `#evtconc.
     //
     //  Warning: this semantics does not apply to `@Base.elEvents`@!
     //
     //  `[
     //     var MyClass = Sqimitive.Base.extend({
     //       events: {
-    //         // Calls render() after 'name' option change and before 'birthday' change.
+    //         // Calls render() after 'name' option change and before
+    //         // 'birthday' change.
     //         'change_name, -change_birthday': 'render',
     //
     //         // Calls fadeOut() when 'close' gets fired.
@@ -1782,12 +1888,12 @@
     //
     // Other notes:
     //* To register one-time handlers use `#once() instead of `#on() + `#off().
-    //* `#on() with an object `'event is like `#fuse() but
-    //  with added comma notation in `'event keys.
+    //* `#on() with an object `'event is like `#fuse() but with added comma
+    //  notation in `'event keys.
     //* Fusing is a bit more performant since no tracking information about
-    //  handlers is stored. If your handler is meant to stay with
-    //  the object for its lifetime - use `[on({event: func}, cx)`]
-    //  or `#fuse() (this also clearly conveys your intention).
+    //  handlers is stored. If your handler is meant to stay with the object
+    //  for its lifetime - use `[on({event: func}, cx)`] or `#fuse() (this also
+    //  clearly conveys your intention).
     //
     //#evtref Event reference format
     // An event reference is a string with 3 parts: `[[prefix]event[args]`].
@@ -1797,17 +1903,17 @@
     //> event `- Event name (alphanumeric symbols, dots and colons) - exactly
     //  what is given to `#fire() when triggering an event.
     //> args `- Zero or more underscores (`'_); if present, the handler gets
-    //  called only if `'event was given that exact number of arguments (it's not
-    //  possible to match zero arguments).
+    //  called only if `'event was given that exact number of arguments (it's
+    //  not possible to match zero arguments).
     //
-    //  For example, `'eve__ registers a
-    //  handler that is called for `[fire('eve', [1, 2])`] but is not called for
-    //  `[fire('eve', [1])`] or `[fire('eve', [1, 2, 3])`].
+    //  For example, `'eve__ registers a handler that is called for
+    //  `[fire('eve', [1, 2])`] but is not called for `[fire('eve', [1])`] or
+    //  `[fire('eve', [1, 2, 3])`].
     //
-    //  In case of `'=event
-    //  (overriding handler), if argument count differs then all handlers
-    //  superseded by this one get called while the superseding handler itself
-    //  is not called (as if the superseding handler was just `[return sup(this, arguments)`]).
+    //  In case of `'=event (overriding handler), if argument count differs
+    //  then all handlers superseded by this one get called while the
+    //  superseding handler itself is not called (as if the superseding handler
+    //  was just `[return sup(this, arguments)`]).
     //
     //  Generally, usage of `'args is frowned upon because of its unintuitive
     //  nature - see `#argDanger.
@@ -1816,45 +1922,48 @@
     //
     //> none  evArgs... `- Add new handler `*after`* existing handlers.
     //  It neither receives the current event result nor it can change it (the
-    //  handler's return value is ignored). This form is used most often and it's perfect
-    //  for "attaching" extra behaviour to the end of the original code, retaining the original
-    //  result.
+    //  handler's return value is ignored). This form is used most often and
+    //  it's perfect for "attaching" extra behaviour to the end of the original
+    //  code, retaining the original result.
     //> -     evArgs... `- Add new handler `*before`* existing handlers,
     //  otherwise identical to "no prefix".
     //> +     `*res`*, evArgs... `- Add new handler after existing handlers.
     //  It receives the current `*event return value`* (`'res) and can change
-    //  it if the handler returns
-    //  anything but `'undefined.
-    //> =     `*sup`*, evArgs... `- `*Wrap around`* existing handlers - they are
-    //  removed. It receives a callable `'sup of form `[function
-    //  (this, args)`] which it may call or not (alike to calling `'super in Java).
+    //  it if the handler returns anything but `'undefined.
+    //> =     `*sup`*, evArgs... `- `*Wrap around`* existing handlers - they
+    //  are removed. It receives a callable `'sup of form `[function (this,
+    //  args)`] which it may call or not (alike to calling `'super in Java).
     //
     //  First argument of `'sup is the context (normally the object which
-    //  initiated the event, i.e. the handler's own `'this). Second argument is an array of arguments the overridden handlers receive. The handler may change these arguments
-    //  to trick the underlying (wrapped) handlers into beliving the event received a different
-    //  set of data or it can pass the `'arguments object that the handler itself has received -
-    //  in this case `[args[0]`] (which is `'sup) is removed and the rest is given to
-    //  the underlying handlers.
+    //  initiated the event, i.e. the handler's own `'this). Second argument is
+    //  an array of arguments the overridden handlers receive. The handler may
+    //  change these arguments to trick the underlying (wrapped) handlers into
+    //  beliving the event received a different set of data or it can pass the
+    //  `'arguments object that the handler itself has received - in this case
+    //  `[args[0]`] (which is `'sup) is removed and the rest is given to the
+    //  underlying handlers.
     //
     //  `? `[
     //       '=someEvent': function (sup, a1, a2) {
     //         // Passes original context and arguments unchanged.
     //         return sup(this, arguments)
-    //         // Identical to above but longer - sup() removes itself from the first argument.
+    //         // Identical to above but longer - sup() removes itself from the
+    //         // first argument.
     //         return sup(this, _.rest(arguments))
-    //         // Not identical to above - if event was given >2 arguments they will
-    //         // be omitted here but passed as is by above.
+    //         // Not identical to above - if event was given >2 arguments they
+    //         // will be omitted here but passed as is by above.
     //         return sup(this, [a1, a2])
-    //         // Changes first argument and omits 3rd and other arguments (if given).
+    //         // Changes first argument and omits 3rd and other arguments (if
+    //         // given).
     //         return sup(this, [1, a2])
     //         // Gives no arguments at all to the underlying handlers.
     //         return sup(this)
     //       },
     //     `]
     //
-    //  Note: old handlers are not technically "removed" - they are
-    //  kept around and restored if the `'=wrapping handler is removed
-    //  so treat this prefix like any other. It can be even used with `#once():
+    //  Note: old handlers are not technically "removed" - they are kept around
+    //  and restored if the `'=wrapping handler is removed so treat this prefix
+    //  like any other. It can be even used with `#once():
     //  `[
     //    sqim.once('=update', function () { alert('Holding tight!') })
     //    sqim.update()   // alerts
@@ -1864,7 +1973,8 @@
     //    sqim.update()   // no more alerts
     //  `]
     //
-    //   This works even if more handlers were added to the event after wrapping:
+    //   This works even if more handlers were added to the event after
+    //   wrapping:
     //   `[
     //    sqim.on('-update', ...)
     //      // 1 handler
@@ -1879,9 +1989,10 @@
     //#argDanger The danger of ev__
     //
     // In JavaScript, functions accept extra arguments with ease; often you
-    // would provide an iterator and only care for some of its arguments. However,
-    // if using the `'ev__ form (underscores are the `'args part of `#evtref) then the event must have been given that `*exact`* number of arguments
-    // even if none of its handlers uses the rest:
+    // would provide an iterator and only care for some of its arguments.
+    // However, if using the `'ev__ form (underscores are the `'args part of
+    // `#evtref) then the event must have been given that `*exact`* number of
+    // arguments even if none of its handlers uses the rest:
     //[
     //   var MySqimitive = Sqimitive.Base.extend({
     //     accessor: function (prop, value) {
@@ -1895,7 +2006,8 @@
     //   })
     //
     //   var sqim = new MySqimitive
-    //   // This handler should always be called when a property is being set... right?
+    //   // This handler should always be called when a property is being
+    //   // set... right?
     //   sqim.on('accessor__', function (prop, value) {
     //     alert('Now ' + prop + ' is ' + value)
     //   })
@@ -1904,11 +2016,13 @@
     //   sqim.accessor('name', 'val')
     //
     //   var propsToSet = {prop: 'foo', bar: 123}
-    //   // map() calls sqim.accessor() for every key in propsToSet and properties
-    //   // are indeed properly set - but no alerts appear!
-    //   // This is because map() passes 3 arguments to the iterator: value, key and the list itself (object in our case).
-    //   // Therefore even if accessor() uses just 2 of these arguments (like it does above) the actual event fired is
-    //   // "accessor___" (3 underscores), not "accessor__" (the one we've hooked).
+    //   // map() calls sqim.accessor() for every key in propsToSet and
+    //   // properties are indeed properly set - but no alerts appear! This is
+    //   // because map() passes 3 arguments to the iterator: value, key and
+    //   // the list itself (object in our case). Therefore even if accessor()
+    //   // uses just 2 of these arguments (like it does above) the actual
+    //   // event fired is "accessor___" (3 underscores), not "accessor__" (the
+    //   // one we've hooked).
     //   _.map(_.invert(propsToSet), sqim.accessor, sqim)
     //]
     on: function (event, func, cx) {
@@ -1933,13 +2047,14 @@
     //* `@Core.once()`@
     //#
     //
-    // Regsiters a single one-shot event handler that removes itself after being called
-    // exactly once.
+    // Regsiters a single one-shot event handler that removes itself after
+    // being called exactly once.
     //
-    // In all other aspects `#once() is identical to `#on() with the string argument, i.e. `[on(event, func,
-    // cx)`]. Returns new event ID
-    // suitable for `#off() so you can unregister it before it's called (or after,
-    // nothing will happen). Doesn't allow registering multiple events/handlers.
+    // In all other aspects `#once() is identical to `#on() with the string
+    // argument, i.e. `[on(event, func, cx)`]. Returns new event ID suitable
+    // for `#off() so you can unregister it before it's called (or after,
+    // nothing will happen). Doesn't allow registering multiple
+    // events/handlers.
     //
     //?`[
     //   sqim.once('change', function () { ... }, this)
@@ -1971,22 +2086,27 @@
     //
     // A utility method for tracking object connections.
     //
-    // If any arguments are given, adds `'sqim (object) to this object's list of
-    // tracked objects (`'_autoOff). This list is not used by Sqimitive but your
-    // application can use it to unbind all listeners added by this object to
-    // other objects in one go. For example, you can do `[this.autoOff()`]
-    // when `'this is about to be destroyed so that events on other objects to which
-    // `'this had any connections won't trigger its handlers. Returns `'sqim.
+    // If any arguments are given, adds `'sqim (object) to this object's list
+    // of tracked objects (`'_autoOff). This list is not used by Sqimitive but
+    // your application can use it to unbind all listeners added by this object
+    // to other objects in one go. For example, you can do `[this.autoOff()`]
+    // when `'this is about to be destroyed so that events on other objects to
+    // which `'this had any connections won't trigger its handlers. Returns
+    // `'sqim.
     //
-    // `'events, if given, is an object in `#on() format (keys are comma-separated event references
-    // and values are their handlers - `#expandFunc()). With `'events, `'cx sets the context
-    // in which handlers will be called. If `'cx is `'null then `'sqim is used, if no `'cx argument is given then `'this is used (i.e. the object on which
+    // `'events, if given, is an object in `#on() format (keys are
+    // comma-separated event references and values are their handlers -
+    // `#expandFunc()). With `'events, `'cx sets the context in which handlers
+    // will be called. If `'cx is `'null then `'sqim is used, if no `'cx
+    // argument is given then `'this is used (i.e. the object on which
     // `'autoOff() was called).
     //
-    // Giving `'sqim without `'events only tracks the object without hooking any events.
+    // Giving `'sqim without `'events only tracks the object without hooking
+    // any events.
     //
-    // If `*no arguments`* are given, calls `[off(this)`] on all tracked objects to remove listeners of `'this
-    // and clears the list. Similar to doing `[_.invoke(this._autoOff, 'off', this)`]. Returns `'this.
+    // If `*no arguments`* are given, calls `[off(this)`] on all tracked
+    // objects to remove listeners of `'this and clears the list. Similar to
+    // doing `[_.invoke(this._autoOff, 'off', this)`]. Returns `'this.
     //
     // Other notes:
     //* One object can be tracked several times without causing problems.
@@ -2018,11 +2138,13 @@
     //       },
     //
     //       // WRONG: if unnest() is called with any arguments
-    //       // (for whatever the reason) then autoOff()'s behaviour would change and it will not untrack objects. See the
-    //       // note on ev__ danger in on().
+    //       // (for whatever the reason) then autoOff()'s behaviour would
+    //       // change and it will not untrack objects. See the note on ev__
+    //       // danger in on().
     //       //'-unnest': 'autoOff',
     //
-    //       // WRONG: ES6 'this' is bound to whatever context is calling extend(), see #es6this:
+    //       // WRONG: ES6 'this' is bound to whatever context is calling
+    //       // extend(), see #es6this:
     //       '-unnest': () => this.autoOff(),
     //
     //       // CORRECT:
@@ -2036,10 +2158,10 @@
     //   })
     //  `]
     //
-    // As a general rule, `#autoOff() is not used for permanently
-    // connected objects, i.e. ones that are destroyed at the same time as
-    // `'this. Such objects are typically set to "_protected"
-    // properties and `#init'ialized during construction:
+    // As a general rule, `#autoOff() is not used for permanently connected
+    // objects, i.e. ones that are destroyed at the same time as `'this. Such
+    // objects are typically set to "_protected" properties and `#init'ialized
+    // during construction:
     //[
     //   var MyGame = Sqimitive.Base.extend({
     //    // Created together with MyGame and only referenced by MyGame:
@@ -2085,15 +2207,19 @@
     //
     // Registers a single permanent event handler.
     //
-    // Unlike with `#on() and `#once(), this handler cannot be removed with `#off().
+    // Unlike with `#on() and `#once(), this handler cannot be removed with
+    // `#off().
     //
     //> event string `- a single event reference (no comma notation)
     //> func function`, string `- masked method name (`#expandFunc())
-    //> cx object`, null/omitted use `'this `- context in which `'func is called
+    //> cx object`, null/omitted use `'this `- context in which `'func is
+    //  called
     //
-    //= object `- an internal event registration object (`'eobj) that should be discarded
+    //= object `- an internal event registration object (`'eobj) that should be
+    //  discarded
     //
-    // ` `#fuse() is a low-level method. You are advised to call `#on({event}) instead.
+    // ` `#fuse() is a low-level method. You are advised to call `#on({event})
+    // instead.
     //
     //?`[
     //   sqim.on({
@@ -2105,18 +2231,18 @@
     //   sqim.fuse('something', function () { ... })
     //   sqim.fuse('someone', function () { ... })
     //
-    //   // A masked callback - receives (a1, a2, a3), passes (a3, a1, a1, a1) to
-    //   // sqim.meth().
+    //   // A masked callback - receives (a1, a2, a3), passes (a3, a1, a1, a1)
+    //   // to sqim.meth().
     //   sqim.fuse('somewhere', 'meth-3111', sqim)
     // `]
     //
-    // One case when you may use `'eobj is to assign the `'post key (this
-    // is considered advanced usage). If set to a function, `#::fire()
-    // calls `[post(eobj, res, args)`] after executing the handler
-    // within the handler's `'cx; `'post must return the new result (replaces
-    // `'res in any case, regardless of `#evtpf). `'args is the event's
-    // arguments, an array-like object (possibly `'Arguments). If `'post sets
-    // `[eobj.stop`] to `'true then remaining handlers are skipped.
+    // One case when you may use `'eobj is to assign the `'post key (this is
+    // considered advanced usage). If set to a function, `#::fire() calls
+    // `[post(eobj, res, args)`] after executing the handler within the
+    // handler's `'cx; `'post must return the new result (replaces `'res in any
+    // case, regardless of `#evtpf). `'args is the event's arguments, an
+    // array-like object (possibly `'Arguments). If `'post sets `[eobj.stop`]
+    // to `'true then remaining handlers are skipped.
     //
     //?  See the source code of `@Sqimitive\Async`@ for a practical example.
     //
@@ -2148,9 +2274,9 @@
     fuse: function (event, func, cx) {
       func = Core.expandFunc(func)
       event = Core.parseEvent(event)
-      // Don't just _events[name] or name in _events because if name is toString
-      // or other Object.prototype member, this will fail (array won't be
-      // created since 'toString' in _events).
+      // Don't just _events[name] or name in _events because if name is
+      // toString or other Object.prototype member, this will fail (array won't
+      // be created since 'toString' in _events).
       var list = hasOwn.call(this._events, event.name)
         ? this._events[event.name] : (this._events[event.name] = [])
       this._wrapHandler(event.name)
@@ -2177,15 +2303,15 @@
 
       event.prefix == '-' ? list.unshift(eobj) : list.push(eobj)
 
-      // A benchmark with optimized event handlers was done on Chrome:
-      // it was discovered that in a certain application 60% of fire() calls
-      // were on events with 1 handler so I made it bypass fire() if there were
-      // no handlers (replaced the wrapped method, firer() with stub) or 1
-      // handler (replaced with direct call to it); this was also maintained
-      // on event handler changes (on()/off()).
+      // A benchmark with optimized event handlers was done on Chrome: it was
+      // discovered that in a certain application 60% of fire() calls were on
+      // events with 1 handler so I made it bypass fire() if there were no
+      // handlers (replaced the wrapped method, firer() with stub) or 1 handler
+      // (replaced with direct call to it); this was also maintained on event
+      // handler changes (on()/off()).
       //
-      // However, performance savings from this optimization were ~5% (on
-      // 30k fire() calls) while the added complexity was significant (due to
+      // However, performance savings from this optimization were ~5% (on 30k
+      // fire() calls) while the added complexity was significant (due to
       // different eobj properties like cx and post which implementation needed
       // to be duplicated in both fire() and the fire()-less wrapper) so it was
       // discarded.
@@ -2195,8 +2321,8 @@
 
     //! +ig
     // Replaces field on this instance with name matching event by a function
-    // that when called triggers event handlers of that event. Does nothing
-    // if the field is already a firer or if it's not a function.
+    // that when called triggers event handlers of that event. Does nothing if
+    // the field is already a firer or if it's not a function.
     _wrapHandler: function (event) {
       if (this[event] === Core.stub) {
         // Continue - overwrite.
@@ -2214,7 +2340,8 @@
 
     //! +ig
     // Registers event object in index objects so that this handler can be
-    // unregistered later with off(). Generates unique handler ID and returns it.
+    // unregistered later with off(). Generates unique handler ID and returns
+    // it.
     _regHandler: function (eobj) {
       var id = eobj.id = eobj.event + '/' + Core.unique('e')
       this._eventsByID[id] = eobj
@@ -2229,8 +2356,8 @@
 
     //! +ig
     // Finds a list of event handlers corresponding to given context object
-    // (the value of cx given to on() or fuse()) and calls func as
-    // function (eobjList, indexIn_eventsByCx).
+    // (the value of cx given to on() or fuse()) and calls func as function
+    // (eobjList, indexIn_eventsByCx).
     //
     // Returns a truthy value if found any handlers of cx or falsy otherwise.
     _cxHandlers: function (cx, func) {
@@ -2253,18 +2380,22 @@
     //
     // `'key can be one of:
     //> string event name `- like "render"; removes all listeners to that event
-    //> string listener ID `- as returned by `#on(); removes that particular listener from that particular event
-    //> object context `- the `'cx to which listeners were registered; removes all listeners to all events with that context
-    //> array `- containing any of the above values including more sub-arrays; identical to multiple `#off() calls
+    //> string listener ID `- as returned by `#on(); removes that particular
+    //  listener from that particular event
+    //> object context `- the `'cx to which listeners were registered; removes
+    //  all listeners to all events with that context
+    //> array `- containing any of the above values including more sub-arrays;
+    //  identical to multiple `#off() calls
     //
-    // Does nothing if no matching  events,
-    // contexts or listeners were found (thus safe to call multiple times).
+    // Does nothing if no matching  events, contexts or listeners were found
+    // (thus safe to call multiple times).
     //
-    // When unregistering a wrapping handler (`'=event, see `#evtpf) its underlying
-    // handlers are put in place of the wrapper in the list of handlers ("undoing" method override).
+    // When unregistering a wrapping handler (`'=event, see `#evtpf) its
+    // underlying handlers are put in place of the wrapper in the list of
+    // handlers ("undoing" method override).
     //
-    // See `#evt for a nice example on this subject and
-    // `#once() for attaching one-shot listeners.
+    // See `#evt for a nice example on this subject and `#once() for attaching
+    // one-shot listeners.
     //
     //?`[
     //   // key = 'evtname' | 'id/123' | {cx} | [key, key, ...]
@@ -2300,8 +2431,8 @@
     },
 
     //! +ig
-    // Removes event handler from this instance, if registered. Cleans up
-    // all indexes.
+    // Removes event handler from this instance, if registered. Cleans up all
+    // indexes.
     _unregHandler: function (eobj) {
       if (eobj && eobj.id) {
         delete this._eventsByID[eobj.id]
@@ -2333,21 +2464,22 @@
   // Instance fields of Sqimitive.Base.
 
   // Implements what makes Sqimitive `*the`* Sqimitive - options (`#opt),
-  // children (`#chld) and filtering (`#util) on top of `#Core which provides the fundamental event framework (`#evt).
+  // children (`#chld) and filtering (`#util) on top of `#Core which provides
+  // the fundamental event framework (`#evt).
   //
-  // If you work with DOM then look for `@Sqimitive\jQuery`@ which
-  // adds `#el and `#elEvents. If you want ordered children - use the
+  // If you work with DOM then look for `@Sqimitive\jQuery`@ which adds `#el
+  // and `#elEvents. If you want ordered children - use the
   // `@Sqimitive\Ordered`@ `#mixIn.
   //
   //?
-  //  It's good practice to extend this class just once in your application
-  //  and use the new base class everywhere else:
-  //  `* If Sqimitive's class hierarchy or your needs change, you'd have to change just
-  //     one reference to `#Base.
+  //  It's good practice to extend this class just once in your application and
+  //  use the new base class everywhere else:
+  //  `* If Sqimitive's class hierarchy or your needs change, you'd have to
+  //     change just one reference to `#Base.
   //  `* You're likely to implement some application-specific application-wise
-  //     logic sooner or later (such as logging) and it's easily done if you have
-  //     just one base class (of course, you should not ever change Sqimitive's own
-  //     prototypes).
+  //     logic sooner or later (such as logging) and it's easily done if you
+  //     have just one base class (of course, you should not ever change
+  //     Sqimitive's own prototypes).
   //  `[
   //     var MyApp = {
   //       VERSION: '0.1',
@@ -2363,15 +2495,16 @@
   //  `]
   //
   // Traditional OOP-style inheritance is not the only form of functionality
-  // extension supported by Sqimitive. For multi-parent inheritance, aka mix-ins,
-  // aka traits and for generics (parametrized mix-ins) see `#mixIn().
+  // extension supported by Sqimitive. For multi-parent inheritance, aka
+  // mix-ins, aka traits and for generics (parametrized mix-ins) see `#mixIn().
   Sqimitive.Base = Core.extend({
 
     //#+tag_Options
     //* `@Base._opt`@
     //#
     //
-    // ` `*May be set upon declaration via `@Core::extend()`@ or `#mixIn, read on run-time with `#get() and written with `#set().`*
+    // ` `*May be set upon declaration via `@Core::extend()`@ or `#mixIn, read
+    // on run-time with `#get() and written with `#set().`*
     //
     // List of "`#opt'ions" (public properties) of this instance.
     //
@@ -2382,9 +2515,10 @@
     // this class' methods and from the outside - it's a public interface).
     //
     // When any option's value is changed, `#ifSet:
-    //* Fires the `#normalize_OPT event to allow for value normalization and validation.
-    //* If no error occurred, changes the value in `[this._opt`] and
-    //  fires `#change_OPT and `#change to notify the interested parties.
+    //* Fires the `#normalize_OPT event to allow for value normalization and
+    //  validation.
+    //* If no error occurred, changes the value in `[this._opt`] and fires
+    //  `#change_OPT and `#change to notify the interested parties.
     //
     //?`[
     //   var Parent = Sqimitive.Base.extend({
@@ -2427,23 +2561,23 @@
     //     // _opt.body     = ' S P A C E '
     // `]
     //
-    // When given to `#extend(), the `'_opt key specifies initial options (their defaults)
-    // for new instances.
+    // When given to `#extend(), the `'_opt key specifies initial options
+    // (their defaults) for new instances.
     //
     //#-inMergeProps
     //
-    // It's highly advised to access `#_opt's values only via `#get()/`#set()
-    // - performance benefits of direct access are questionable (especially when
-    // those methods are not events/`#firer's, i.e. almost always) while lack of `#normalize_OPT
-    // and others often cause bugs.
+    // It's highly advised to access `#_opt's values only via `#get()/`#set() -
+    // performance benefits of direct access are questionable (especially when
+    // those methods are not events/`#firer's, i.e. almost always) while lack
+    // of `#normalize_OPT and others often cause bugs.
     //
     //#-inBB
     // In Backbone terms "options" are called `@bb:Model-attributes`@.
     _opt: {},
 
     //! +ig
-    // Not meant for tampering with. Used internally to reverse the order of `#ifSet()-produced
-    // events. See `#_fireSet() for explanation.
+    // Not meant for tampering with. Used internally to reverse the order of
+    // `#ifSet()-produced events. See `#_fireSet() for explanation.
     _firingSet: null,
 
     //#+tag_Nesting
@@ -2453,11 +2587,13 @@
     //
     // Holds the reference to the Sqimitive that owns object, or `'null.
     //
-    // You can read this property from inside methods of the same class. Changing it (from any context) is highly discouraged because it's
-    // easy to break object integrity - use `#nest(), `#unnest() and others.
+    // You can read this property from inside methods of the same class.
+    // Changing it (from any context) is highly discouraged because it's easy
+    // to break object integrity - use `#nest(), `#unnest() and others.
     //
     //##parentAndKey
-    // Non-`#_owning sqimitives never change `#_parent and `#_parentKey of their `#_children.
+    // Non-`#_owning sqimitives never change `#_parent and `#_parentKey of
+    // their `#_children.
     //
     //?`[
     //   Sqimitive.Base.extends({
@@ -2482,9 +2618,11 @@
     //
     //#-readOnly
     //
-    // Holds the key under which this instance is listed in its `#_parent's list of `#_children, or `'null.
+    // Holds the key under which this instance is listed in its `#_parent's
+    // list of `#_children, or `'null.
     //
-    //= string if owned`, null if not `- if `'null then `#_parent is also `'null
+    //= string if owned`, null if not `- if `'null then `#_parent is also
+    //  `'null
     //
     //#-parentAndKey
     //
@@ -2493,7 +2631,8 @@
     //     Sqimitive.Base.extends({
     //       pull: function () {
     //         this._parent.unlist(this._parentKey)
-    //           // this is a contrived example since this.remove() does exactly the same
+    //           // this is a contrived example since this.remove() does
+    //           // exactly the same
     //       },
     //     })
     //  `]
@@ -2503,19 +2642,23 @@
     //* `@Base._children`@
     //#
     //
-    // Holds references to objects contained within this instance ("collection").
+    // Holds references to objects contained within this instance
+    // ("collection").
     //
-    //= object {key: Sqimitive} `- keys are arbitrary strings as given to `#nest (`#_parentKey's if `'this is `#_owning)
-    //  and values are the children themselves (objects)
+    //= object {key: Sqimitive} `- keys are arbitrary strings as given to
+    //  `#nest (`#_parentKey's if `'this is `#_owning) and values are the
+    //  children themselves (objects)
     //
     // You're advised against accessing `#_children at all. Instead, use
     // `#nested() and other methods.
     //
     // Other notes:
     //* Both `#_owning
-    //  sqimitives and not list their children here. For non-`#_owning, `#_children keys naturally differ from `#_parentKey of their children.
+    //  sqimitives and not list their children here. For non-`#_owning,
+    //  `#_children keys naturally differ from `#_parentKey of their children.
     //* This parent-child relationship is purely formal and
-    //  doesn't dictate any DOM or other structure (children can have their `#el's outside
+    //  doesn't dictate any DOM or other structure (children can have their
+    //  `#el's outside
     //  of the parent's node). Moreover, if `#_owning is unset then it doesn't
     //  imply the reverse relationship (from children to their parent).
     //* See the children overview (`#chld) for examples.
@@ -2528,15 +2671,19 @@
     //
     // Specifies if this object manages its children or not (by default it does).
     //
-    //= true the default `- "Managing" (owning) parent. All of its children know who owns them (`#_parent) and
-    //  under which key (`#_parentKey). It makes sure the children only ever have one parent -
-    //  itself, and that they cannot duplicate in its `#_children. Essentially makes a bi-directional tree.
+    //= true the default `- "Managing" (owning) parent. All of its children
+    //  know who owns them (`#_parent) and under which key (`#_parentKey). It
+    //  makes sure the children only ever have one parent - itself, and that
+    //  they cannot duplicate in its `#_children. Essentially makes a
+    //  bi-directional tree.
     //= false `- Unmanaged (non-owning) parent. Acts as a simple collection.
-    //  Imposes no hierarchy onto its children,
-    //  who do not even know that they are listed here and may duplicate in `'this own `#_children (same child under different keys).
+    //  Imposes no hierarchy onto its children, who do not even know that they
+    //  are listed here and may duplicate in `'this own `#_children (same child
+    //  under different keys).
     //
-    // ` `#_owning only affects a subset of features (`#nest(), etc.). Most features -
-    // filtering (`#util), `#_forward'ing `#_childEvents, etc. can be used in both modes.
+    // ` `#_owning only affects a subset of features (`#nest(), etc.). Most
+    // features - filtering (`#util), `#_forward'ing `#_childEvents, etc. can
+    // be used in both modes.
     //
     // See `#chld children overview for more details.
     //
@@ -2573,7 +2720,8 @@
     // Ensures `#_children contains instances of a certain class only.
     //
     //= Object to disable type checking`, Sqimitive.Base the default`,
-    //  array`, string `- array and string are indirect declaration-time references (`#classref)
+    //  array`, string `- array and string are indirect declaration-time
+    //  references (`#classref)
     //
     //?`[
     //   var MyToDoItem = Sqimitive.Base.extend()
@@ -2601,24 +2749,31 @@
     // `]
     //
     // Other notes:
-    //* Typically the value of `#_childClass is
-    //  a subclass of `[Sqimitive.Core`] (`#Core) since non-Sqimitives are unlikely to work properly as children. This is not checked though.
-    //* This constraint is enforced as long as
-    //  children are added via `#nest(), etc. without direct manipulation of `#_children (which is highly discouraged anyway).
-    //* Changing `#_childClass on run-time affects only new nesting attempts (existing children are not validated).
+    //* Typically the value of `#_childClass is a subclass of
+    //  `[Sqimitive.Core`] (`#Core) since non-Sqimitives are unlikely to work
+    //  properly as children. This is not checked though.
+    //* This constraint is enforced as long as children are added via `#nest(),
+    //  etc. without direct manipulation of `#_children (which is highly
+    //  discouraged anyway).
+    //* Changing `#_childClass on run-time affects only new nesting attempts
+    //  (existing children are not validated).
     //* `#_childClass is listed in `#_shareProps by default.
     //
     //#classref Indirect references
-    // It's often convenient to give as an array or string to `#extend() or `#mixIn(). In this case `#init() resolves the value of `#_childClass to the actual class (this makes it a tad slower than giving a real class):
-    //> array like `[[BaseObject, 'Sub.Class.Path']`] `- same as evaluating `[BaseClass.Sub.Class.Path`]
-    //> string like `['Sub.Class.Path'`] `- relative to static properties of `'this
+    // It's often convenient to give as an array or string to `#extend() or
+    // `#mixIn(). In this case `#init() resolves the value of `#_childClass to
+    // the actual class (this makes it a tad slower than giving a real class):
+    //> array like `[[BaseObject, 'Sub.Class.Path']`] `- same as evaluating
+    //  `[BaseClass.Sub.Class.Path`]
+    //> string like `['Sub.Class.Path'`] `- relative to static properties of
+    //  `'this
     //> string empty `- the class of `'this
     //
     // Errors if no class was found.
     //
     //? Indirect references are useful for "forward type declaration" where
-    //  the child class is defined after the collection's class or appears later
-    //  on run-time:
+    //  the child class is defined after the collection's class or appears
+    //  later on run-time:
     //  `[
     //     var MyToDo = {}
     //
@@ -2628,7 +2783,8 @@
     //
     //     MyToDo.Item = Sqimitive.Base.extend()
     //  `]
-    //  Or for the conventional Sqimitive hierarchy of `[<Collection>.<Child>`]:
+    //  Or for the conventional Sqimitive hierarchy of
+    //  `[<Collection>.<Child>`]:
     //  `[
     //     MyToDo.List = Sqimitive.Base.extend({
     //       // All declarations below are equivalent:
@@ -2649,18 +2805,20 @@
     //
     //#-settable
     //
-    // Lists event names for automatic `#_forward'ing from children to the collection object.
+    // Lists event names for automatic `#_forward'ing from children to the
+    // collection object.
     //
     //= array `- `[['-nest_', 'change', ...]`]
     //
-    // Whenever a new child is `#nest()ed, listens to these events on it, firing
-    // events on `'this with the same name but prefixed with a dot `[.`] (e.g. `'render -> `'.render) and with
-    // the child's object pushed in front of the event's arguments.
-    // Think of this as of the usual
-    // `[../../path`] notation in file systems where each dot means "one [parent] above".
+    // Whenever a new child is `#nest()ed, listens to these events on it,
+    // firing events on `'this with the same name but prefixed with a dot `[.`]
+    // (e.g. `'render -> `'.render) and with the child's object pushed in front
+    // of the event's arguments. Think of this as of the usual `[../../path`]
+    // notation in file systems where each dot means "one [parent] above".
     //
     // Nothing special is done to stop listening when a child is removed since
-    // the default `#unnested() implementation calls `[child.off(this)`] (see `#off).
+    // the default `#unnested() implementation calls `[child.off(this)`] (see
+    // `#off).
     //
     //
     //?`[
@@ -2675,11 +2833,11 @@
     //   })
     // `]
     //
-    // Warning: don't list `#unnest here - `#_parent will `#off() itself before that and
-    // never receive the notification. Use `#unnested instead. Using `'-unnest is
-    // also possible
-    // but in this case if an exception occurs during unnesting your handler
-    // won't know this and will be called anyway, while the child is possibly left nested.
+    // Warning: don't list `#unnest here - `#_parent will `#off() itself before
+    // that and never receive the notification. Use `#unnested instead. Using
+    // `'-unnest is also possible but in this case if an exception occurs
+    // during unnesting your handler won't know this and will be called anyway,
+    // while the child is possibly left nested.
     //
     // Other notes:
     //
@@ -2687,13 +2845,15 @@
     //* Use `#_childEvents to track events of `#_children; use `#autoOff() to
     //  track events of the outside objects.
     //##
-    //* If `#_childEvents is changed on run-time, only new children are affected.
+    //* If `#_childEvents is changed on run-time, only new children are
+    //  affected.
     //* For the impementation see `#_forward().
     //* See Children overview (`#chld) for a comprehensive example.
     //
-    //? Using `#_childEvents is identical to manually calling `#on() but more convenient.
-    //  However, since it's `#on() in disguise, you
-    //  can use any event prefixes (`#evtpf), specify methods that will be automatically turned into events (`#evt), etc.
+    //? Using `#_childEvents is identical to manually calling `#on() but more
+    //  convenient. However, since it's `#on() in disguise, you can use any
+    //  event prefixes (`#evtpf), specify methods that will be automatically
+    //  turned into events (`#evt), etc.
     //  `[
     //    var Collection = Sqimitive.Base.extend({
     //      _childEvents: ['=click'],
@@ -2733,22 +2893,26 @@
     //    item.click()    // alerts again; click is again the original method
     //  `]
     //
-    //? You can forward already forwarded events with multi-level nesting (children of children of your collection) the same way. The number of dots indicates the number of child instances prepended to event's arguments:
-    //  `[
+    //? You can forward already forwarded events with multi-level nesting
+    //  (children of children of your collection) the same way. The number of
+    //  dots indicates the number of child instances prepended to event's
+    //  arguments: `[
     //   var MyListGroup = Sqimitive.Base.extend({
-    //     // Indicate this object nests MyList instances from the first example.
+    //     // Indicate this object nests MyList instances from the first
+    //     // example.
     //     _childClass: MyList,
     //
-    //     // MyList forwards '-change' on its children as '.-change' on itself so
-    //     // we can foward that event too on this grouping instance. There's no
-    //     // limit - '....-change' is perfectly fine and works on 4th nesting level.
-    //     // Each forward gets originating object pushed in front so '..-change' gets
-    //     // MyList as first argument. '...-change' would get (MyListGroup, MyList).
+    //     // MyList forwards '-change' on its children as '.-change' on itself
+    //     // so we can foward that event too on this grouping instance.
+    //     // There's no limit - '....-change' is perfectly fine and works on
+    //     // 4th nesting level. Each forward gets originating object pushed in
+    //     // front so '..-change' gets MyList as first argument. '...-change'
+    //     // would get (MyListGroup, MyList).
     //     _childEvents: ['.-change'],
     //   })
     //
-    //   // Listening to '-change' that occurred on a MyList child, with MyList being
-    //   // nested into MyListGroup.
+    //   // Listening to '-change' that occurred on a MyList child, with MyList
+    //   // being nested into MyListGroup.
     //   ;(new MyListGroup).on('..-change', function (myListGroup, myList) { ... })
     //  `]
     //
@@ -2773,25 +2937,42 @@
     //
     //#-settable
     //
-    // Specifies rules for transforming an external input object (e.g. an API response)
-    // into `#_opt'ions for `#assignResp().
+    // Specifies rules for transforming an external input object (e.g. an API
+    // response) into `#_opt'ions for `#assignResp().
     //
     //= object {respKey: optValue}.
     //
-    // ` `#_respToOpt's keys are input object's keys (except the special `[''`]) and values are one of the following (`'optValue):
-    //> false `- Skip input item regardless of `[options.onlyDefined`] as given to `#assignResp().
-    //> true `- Assign input item's value to the option named `'respKey (i.e. keys of the option and the input object are the same).
+    // ` `#_respToOpt's keys are input object's keys (except the special
+    // `[''`]) and values are one of the following (`'optValue):
+    //> false `- Skip input item regardless of `[options.onlyDefined`] as given
+    //  to `#assignResp().
+    //> true `- Assign input item's value to the option named `'respKey (i.e.
+    //  keys of the option and the input object are the same).
     //> string `- Assign input item's value to the option by this name.
     //> function (respValue, key, resp, options)
-    //  `- Input item transformation. This function is called in `'this context and must return `[['optToSet', value]`].
+    //  `- Input item transformation. This function is called in `'this context
+    //  and must return `[['optToSet', value]`].
     //
-    //  `'respKey only determines the `'respValue given to this function; the latter can access the entire input object (`'resp). The (new) option's name is retrieved from the returned array (`'optToSet), not from `'respKey.
+    //  `'respKey only determines the `'respValue given to this function; the
+    //  latter can access the entire input object (`'resp). The (new) option's
+    //  name is retrieved from the returned array (`'optToSet), not from
+    //  `'respKey.
     //
-    //  The `'key argument equals `'respKey (i.e. is the key's name under which the function is listed in `'_respToOpt), `'options is the object given to `#assignResp().
+    //  The `'key argument equals `'respKey (i.e. is the key's name under which
+    //  the function is listed in `'_respToOpt), `'options is the object given
+    //  to `#assignResp().
     //
-    //  If `'optToSet is `'false then the input item is skipped and `'value is unused, otherwise it's the option name to set `'value to (`'value can be of any type). It's similar to calling `#set() but more declarative and future-proof.
+    //  If `'optToSet is `'false then the input item is skipped and `'value is
+    //  unused, otherwise it's the option name to set `'value to (`'value can
+    //  be of any type). It's similar to calling `#set() but more declarative
+    //  and future-proof.
     //
-    // The special key `[''`] (empty string) must be a function `[(resp, options)`] returning object `[{optToSet: value}`] or `'null (equivalent to `[{}`]). It's called in the beginning of `#assignResp() and, as other keys, if `'resp has an empty string key - check `[arguments.length`] if you expect it. This key is useful for unserializing fields that match multiple options or vice-versa:
+    // The special key `[''`] (empty string) must be a function `[(resp,
+    // options)`] returning object `[{optToSet: value}`] or `'null (equivalent
+    // to `[{}`]). It's called in the beginning of `#assignResp() and, as other
+    // keys, if `'resp has an empty string key - check `[arguments.length`] if
+    // you expect it. This key is useful for unserializing fields that match
+    // multiple options or vice-versa:
     //[
     //   Sqimitive.Base.extend({
     //     _respToOpt: {
@@ -2800,7 +2981,8 @@
     //           // same as set('personsName', '<firstName> <secondName>')
     //       }
     //
-    //       // The opposite of the above - if there are two options in one input key.
+    //       // The opposite of the above - if there are two options in one
+    //       // input key.
     //       '': function (resp) {
     //         var name = resp.personsName.split(' ')
     //         return {firstName: name[0], secondName: name[1]}
@@ -2849,10 +3031,10 @@
     //#-inMergeProps
     //
     // Other notes:
-    //* Options are assigned with `#set()
-    //  so normalization and `#change events take place as usual.
-    //* Missing keys may or may not become options by the same name -
-    //  this depends on the `[options.onlyDefined`] flag of `#assignResp().
+    //* Options are assigned with `#set() so normalization and `#change events
+    //  take place as usual.
+    //* Missing keys may or may not become options by the same name - this
+    //  depends on the `[options.onlyDefined`] flag of `#assignResp().
     _respToOpt: {},
 
     //#+tag_Lifecycle
@@ -2862,14 +3044,15 @@
     //
     // "Element" - an external "form" of this Sqimitive (such as a DOM node).
     //
-    // Even though this is technically a public read/write property, it's usually
-    // best not to change it on run-time (after initialization) or at least
-    // not from the outside context.
+    // Even though this is technically a public read/write property, it's
+    // usually best not to change it on run-time (after initialization) or at
+    // least not from the outside context.
     //
     //#elstub
-    // `@Sqimitive\Base`@ doesn't define any element-related functionality
-    // but only provides stubs for several common fields (`#el, `#render(), `#remove(), etc.)
-    // for standardized extension. See `@Sqimitive\jQuery.el`@ for one such subclass.
+    // `@Sqimitive\Base`@ doesn't define any element-related functionality but
+    // only provides stubs for several common fields (`#el, `#render(),
+    // `#remove(), etc.) for standardized extension. See
+    // `@Sqimitive\jQuery.el`@ for one such subclass.
     el: false,
 
     //#+tag_Lifecycle
@@ -2882,23 +3065,23 @@
     //
     //= object {event: func}
     //
-    // ` `#elEvents' format is consistent among `#Base's subclasses
-    // and follows Backbone's `@bb:Model-events`@: keys are event references
-    // of form `[event[.ns][ .sel #ector]`] and
-    // values are strings (`#expandFunc()) or functions, called as `[function (nativeEventObject)`] (see `#argDanger).
+    // ` `#elEvents' format is consistent among `#Base's subclasses and follows
+    // Backbone's `@bb:Model-events`@: keys are event references of form
+    // `[event[.ns][ .sel #ector]`] and values are strings (`#expandFunc()) or
+    // functions, called as `[function (nativeEventObject)`] (see `#argDanger).
     //
     //##-inMergeProps
     //
-    // The `'.ns part is ignored
-    // but can be used to create unique keys for the purpose of inheritance. By convention, the class' own
-    // handlers don't have `'ns while `#mixIn's do.
+    // The `'.ns part is ignored but can be used to create unique keys for the
+    // purpose of inheritance. By convention, the class' own handlers don't
+    // have `'ns while `#mixIn's do.
     //
     //##-es6thiswarn
     //
     // This property is not advised to change on run-time since it's usually
     // unpredictable when it will take effect. For example,
-    // `@Sqimitive\jQuery.attach()`@ only binds events when nesting
-    // `#el into a new parent node:
+    // `@Sqimitive\jQuery.attach()`@ only binds events when nesting `#el into a
+    // new parent node:
     //[
     //   sqim.attach()
     //   sqim.elEvents['click'] = function () { alert('foo') }
@@ -2921,11 +3104,16 @@
 
     //! `, +fna=function ( [opt] )
     //
-    // Calls `@Core.constructor()`@ and `#fire()s `#init and `#postInit, passing `'opt to all.
+    // Calls `@Core.constructor()`@ and `#fire()s `#init and `#postInit,
+    // passing `'opt to all.
     //
-    // `'opt is the first argument optionally given to `'new: `[new Sqimitive.Base({opt...})`].
+    // `'opt is the first argument optionally given to `'new: `[new
+    // Sqimitive.Base({opt...})`].
     //
-    //? Ensures `'opt is always an object before passing it on so that there is no need for checks like `[(opt && opt.foo)`]. Additionally, `#init/`#postInit handlers may propagate changes in user-given `'opt to other handlers or even to the caller of `'new (`#optpropag).
+    //? Ensures `'opt is always an object before passing it on so that there is
+    //  no need for checks like `[(opt && opt.foo)`]. Additionally,
+    //  `#init/`#postInit handlers may propagate changes in user-given `'opt to
+    //  other handlers or even to the caller of `'new (`#optpropag).
     //  `[
     //    var MyClass = Sqimitive.Base.extend({
     //      events: {
@@ -2938,16 +3126,18 @@
     //      // opt.changed == 123
     //  `]
     //
-    // Constructors are reminiscents of the traditional JavaScript OOP (if it can be
-    // called so). They are hard to work with in Sqimitive (you can't
+    // Constructors are reminiscents of the traditional JavaScript OOP (if it
+    // can be called so). They are hard to work with in Sqimitive (you can't
     // override them using events) so you want to leave them alone, instead
-    // working with `#init() and `#postInit() which are "regular" Sqimitive methods.
+    // working with `#init() and `#postInit() which are "regular" Sqimitive
+    // methods.
     constructor: function Sqimitive_Base(opt) {
       // ^^ Giving this function a name so that it's visible in the debugger.
 
       // Ensuring the argument is always an object.
       // Mere arguments[0] = {} won't work because if arguments.length == 0,
-      // this won't update length and so apply() will assume arguments is still empty (0) even though index 0 has been set.
+      // this won't update length and so apply() will assume arguments is still
+      // empty (0) even though index 0 has been set.
       opt || Array.prototype.splice.call(arguments, 0, 1, {})
       Sqimitive.Base.__super__.constructor.apply(this, arguments)
       this.init.apply(this, arguments)
@@ -2962,7 +3152,9 @@
     //
     // Resolves `#_childClass and sets `#_opt'ions from `'opt.
     //
-    // Arguments of `#init() and `#postInit() match those given to the constructor, which in turn gets them from `'new. Usually only the first one (`'opt) is used but you can use others:
+    // Arguments of `#init() and `#postInit() match those given to the
+    // constructor, which in turn gets them from `'new. Usually only the first
+    // one (`'opt) is used but you can use others:
     //[
     //   var MyClass = Sqimitive.Base.extend({
     //     events: {
@@ -2973,8 +3165,9 @@
     //   new MyClass({opt...}, 'extra', ['foo'])
     //]
     //
-    // Options are set by calling `#set() for every member of `'opt (if given). Other `#_opt
-    // remain with the declaration-time default values. `[opt.el`] is ignored, if present (see `@jQuery.el`@ for the reason).
+    // Options are set by calling `#set() for every member of `'opt (if given).
+    // Other `#_opt remain with the declaration-time default values. `[opt.el`]
+    // is ignored, if present (see `@jQuery.el`@ for the reason).
     //
     //#initonce
     //* Both `#init() and `#postInit() are only called once in a given object's
@@ -3006,8 +3199,8 @@
       }
 
       for (var name in opt) {
-        // By convention, el is given as options to replace the default value of
-        // this class, but el isn't a real option.
+        // By convention, el is given as options to replace the default value
+        // of this class, but el isn't a real option.
         name == 'el' || this.set(name, opt[name])
       }
     },
@@ -3020,19 +3213,18 @@
     //
     // Called after `#init() to bootstrap the new instance after construction.
     //
-    // Logically, `#init is part of the object construction while `#postInit
-    // is part of its lifecycle; while `#init is inseparable from `'new,
+    // Logically, `#init is part of the object construction while `#postInit is
+    // part of its lifecycle; while `#init is inseparable from `'new,
     // `#postInit could be called at a later time (in theory) so it should not
-    // make the object inconsistent.
-    // Thinking about it that way helps to decide
+    // make the object inconsistent. Thinking about it that way helps to decide
     // which of the two events to hook.
     //
-    // Usually `#init() creates
-    // and configures related objects (DOM nodes, collections, etc.) while `#postInit()
-    // starts timers, resource preloading, etc. This way you don't depend on the
-    // order of `#init() handlers (it may so happen that the `'init handler of
-    // a subclass is executed before the inherited `'init of its base class,
-    // when internal objects are not yet initialized).
+    // Usually `#init() creates and configures related objects (DOM nodes,
+    // collections, etc.) while `#postInit() starts timers, resource
+    // preloading, etc. This way you don't depend on the order of `#init()
+    // handlers (it may so happen that the `'init handler of a subclass is
+    // executed before the inherited `'init of its base class, when internal
+    // objects are not yet initialized).
     //
     //#-initonce
     //
@@ -3071,14 +3263,14 @@
     //* construct with `'new: `[new Class({opt...})`]
     //* `#attach() (to DOM, etc.), for members - when nested to a collection
     //* `#render() when required for user to see it first time
-    //* `#render() again when somethings changes that affects the visual presentation
-    //  (usually in response to a `#change of some `#_opt'ion)
+    //* `#render() again when somethings changes that affects the visual
+    //  presentation (usually in response to a `#change of some `#_opt'ion)
     //* finally, `#remove()
     //
     // Complete re-rendering on change is simple and adequate for many simple
-    // sqimitives but if it's heavy, it's customary to perform
-    // a partial update using method(s) named `'update().
-    // There are no such methods by default but see `#vw for an example.
+    // sqimitives but if it's heavy, it's customary to perform a partial update
+    // using method(s) named `'update(). There are no such methods by default
+    // but see `#vw for an example.
     //
     //?`[
     //    var Label = Sqimitive.jQuery.extend({
@@ -3103,7 +3295,8 @@
     //
     //#
     //
-    // ` `#Base's `#render() calls `#attach() on all children of self (but not on self).
+    // ` `#Base's `#render() calls `#attach() on all children of self (but not
+    // on self).
     render: function () {
       this.invoke('attach')
       return this
@@ -3113,11 +3306,13 @@
     //* `@Base.attach()`@
     //#
     //
-    // Attach the object to its parent and bind "external" event handlers (`#elEvents).
+    // Attach the object to its parent and bind "external" event handlers
+    // (`#elEvents).
     //
     //#-renderAttach
     //
-    // ` `#Base's `#attach() does nothing. You may be looking for `@Sqimitive\jQuery.attach()`@.
+    // ` `#Base's `#attach() does nothing. You may be looking for
+    // `@Sqimitive\jQuery.attach()`@.
     attach: function (parent) {
       return this
     },
@@ -3131,11 +3326,17 @@
     // Performs batched `#get() and/or `#set() on multiple options.
     //
     //> toGet     string `#_opt name`, array of names
-    //> toSet     string `#_opt name`, array of names`, null/omitted assume `'toGet
-    //> toReturn  string `#_opt name`, array of names`, null/omitted assume `'toSet
-    //> func `- Given `'G arguments (`'G = length of `'toGet), returns an array or a single value (converted to `[[array]`]) - option value(s) to set. Returned array's length must be <= length of `'toSet. Missing members of `'toSet are not set.
+    //> toSet     string `#_opt name`, array of names`, null/omitted assume
+    //  `'toGet
+    //> toReturn  string `#_opt name`, array of names`, null/omitted assume
+    //  `'toSet
+    //> func `- Given `'G arguments (`'G = length of `'toGet), returns an array
+    //  or a single value (converted to `[[array]`]) - option value(s) to set.
+    //  Returned array's length must be <= length of `'toSet. Missing members
+    //  of `'toSet are not set.
     //
-    //  If `'func is missing sets every `[toSet[N]`] to `[toGet[N]`]. The length of `'toSet must be <= length of `'toGet.
+    //  If `'func is missing sets every `[toSet[N]`] to `[toGet[N]`]. The
+    //  length of `'toSet must be <= length of `'toGet.
     //
     //> cx object `- the context for `'func
     //
@@ -3148,8 +3349,8 @@
     //   sqim.getSet(['opt1', 'opt2', 'opt3'])
     //     //=> [value of opt1, value of opt2, value of opt3]
     //     // even though the above not only get()s but also set()s them,
-    //     // unless a normalize_OPT returns a different value then no
-    //     // change events are fired since old values are the same
+    //     // unless a normalize_OPT returns a different value then no change
+    //     // events are fired since old values are the same
     //
     //   sqim.getSet('opt1', 'opt2')
     //   // Equivalent to:
@@ -3208,7 +3409,8 @@
     //* `@Base.get()`@
     //#
     //
-    // Returns the value of one `#_opt or values of all of them (if no argument).
+    // Returns the value of one `#_opt or values of all of them (if no
+    // argument).
     //
     //?`[
     //   sqim.get('opt1')   //=> 'value'
@@ -3216,9 +3418,9 @@
     // `]
     //
     // All options' values are returned in an object shallow-copied from `#_opt
-    // meaning it's safe to change the object itself
-    // (add/remove properties) but changing non-scalar values will indirectly change
-    // options inside the object:
+    // meaning it's safe to change the object itself (add/remove properties)
+    // but changing non-scalar values will indirectly change options inside the
+    // object:
     //[
     //   var MyClass = Sqimitive.Base.extend({
     //     _opt: {array: [1, 2]},
@@ -3232,8 +3434,8 @@
     //   obj.get()              //=> {array: [1, 2, 4]} - changed
     //]
     //
-    // Override this method to read non-existing options or
-    // transform them like this:
+    // Override this method to read non-existing options or transform them like
+    // this:
     //[
     //   var MySetter = Sqimitive.Base.extend({
     //     _opt: {
@@ -3241,7 +3443,8 @@
     //     },
     //
     //     events: {
-    //       // Now any option can be read as option:up to turn its value into upper case.
+    //       // Now any option can be read as option:up to turn its value into
+    //       // upper case.
     //       '+get': function (res, name) {
     //         if (name = name.match(/^([^:]+):up$/)) {
     //           return this.get(name[1]).toUpperCase()
@@ -3269,11 +3472,11 @@
     // Changes the value of one `#_opt'ion and returns `'this.
     //
     // ` `#set() is identical to `#ifSet() except the latter returns
-    // `'true/`'false indicating if the new value was different from the old one
-    // or `[options.forceFire`] was set.
+    // `'true/`'false indicating if the new value was different from the old
+    // one or `[options.forceFire`] was set.
     //
-    // If you are overriding the "setter" behaviour you should override `#ifSet instead of
-    // `#set which calls the former.
+    // If you are overriding the "setter" behaviour you should override `#ifSet
+    // instead of `#set which calls the former.
     //
     //?`[
     //   sqim.set('key', 'foo')     //=> this
@@ -3299,11 +3502,12 @@
     //* `@Base.normalize_OPT()`@
     //#
     //
-    // Called to normalize and/or validate new `#_opt'ion value before it's set.
+    // Called to normalize and/or validate new `#_opt'ion value before it's
+    // set.
     //
     // ` `#ifSet() fires an event named "normalize_" + the option's name before
-    // the value is actually set to `#_opt. Here you should clean it up (e.g. trim
-    // whitespace) or throw an error if it has a wrong format (e.g. not
+    // the value is actually set to `#_opt. Here you should clean it up (e.g.
+    // trim whitespace) or throw an error if it has a wrong format (e.g. not
     // `[YYYY-MM-DD`] for dates).
     //
     //##normopt
@@ -3317,9 +3521,9 @@
     //       stringie: '',
     //     },
     //
-    //     // Now 'stringie' is guaranteed to have no surrounding whitespace and be
-    //     // lower case - as long as it's not written directly as this._opt.stringie,
-    //     // which is a bad idea in general.
+    //     // Now 'stringie' is guaranteed to have no surrounding whitespace
+    //     // and be lower case - as long as it's not written directly as
+    //     // this._opt.stringie, which is a bad idea in general.
     //     normalize_stringie: function (value) {
     //       return _.trim(value).toLowerCase()
     //     },
@@ -3357,10 +3561,12 @@
     //     non-trivial options' types or formats.
     //
     // Unlike with `#change/`#change_OPT, there is no global normalization
-    // function (since every option usually needs a unique approach) but you can override `#ifSet() if you need this.
+    // function (since every option usually needs a unique approach) but you
+    // can override `#ifSet() if you need this.
     //
-    // Remember: when defined in `#events, function's return value is ignored unless `[=`] or
-    // `[+`] prefixes are used (`#evtpf). Also see `#evtconc and `#es6this.
+    // Remember: when defined in `#events, function's return value is ignored
+    // unless `[=`] or `[+`] prefixes are used (`#evtpf). Also see `#evtconc
+    // and `#es6this.
     //[
     //    Sqimitive.Base.extend({
     //      events: {
@@ -3391,9 +3597,12 @@
     // Called to notify that the value of `#_opt'ion named `'OPT has changed.
     //
     //#changeAndOpt
-    // ` `#ifSet normalizes (`#normalize_OPT) new option's value (`'value) and, if it's different from the current one (`'old) fires an event named "change_" + the option's name (`#change_OPT), then fires `#change.
+    // ` `#ifSet normalizes (`#normalize_OPT) new option's value (`'value) and,
+    // if it's different from the current one (`'old) fires an event named
+    // "change_" + the option's name (`#change_OPT), then fires `#change.
     //
-    // New value is already written to `[this._opt.OPT`] by the time change events occur.
+    // New value is already written to `[this._opt.OPT`] by the time change
+    // events occur.
     //
     //##-normopt
     //
@@ -3404,13 +3613,15 @@
     //     },
     //
     //     events: {
-    //       // When _opt.caption is changed - call render() to update the looks.
+    //       // When _opt.caption is changed - call render() to update the
+    //       // looks.
     //       change_caption: 'render', //¹
     //     },
     //   })
     // `]
     //    `&sup1 Be aware of `#argDanger as your handler might care for extra
-    //    arguments. If it does then use a masked reference (see `#masker()): `[
+    //    arguments. If it does then use a masked reference (see `#masker()):
+    //    `[
     //      events: {
     //        // Pass no arguments thanks to '-':
     //        change_caption: 'updateCaption-',
@@ -3429,10 +3640,11 @@
     //     events: {
     //       // When any option is changed - update the corresponding <input>.
     //       change: function (name, value) {
-    //         // change_OPT doesn't receive option's name as the first argument.
+    //         // change_OPT doesn't receive option's name as the first
+    //         // argument.
     //         //
-    //         // value is used as is - if clean-up is required then normalize_OPT
-    //         // events must be handled.
+    //         // value is used as is - if clean-up is required then
+    //         //  normalize_OPT events must be handled.
     //         this.$('[name="' + name + '"]').val(value)
     //       },
     //     },
@@ -3480,10 +3692,11 @@
     //* `@Base.ifSet()`@
     //#
     //
-    // Changes the value of one `#_opt'ion and returns `'true if it was different from current.
+    // Changes the value of one `#_opt'ion and returns `'true if it was
+    // different from current.
     //
-    //= true if events were fired (value different or `[options.forceFire`] set)`,
-    //  false otherwise
+    //= true if events were fired (value different or `[options.forceFire`]
+    //  set)`, false otherwise
     //
     //?`[
     //   sqim.ifSet('key', 'foo')   //=> true (changed)
@@ -3492,16 +3705,18 @@
     // `]
     //
     //#ifSetSet
-    // Calls `#normalize_OPT giving it `'value; if the result is different from `[this._opt.opt`]
-    // (as reported by `@un:isEqual`@()) or if `[options.forceFire`] was set
-    // - fires `#change_OPT event, then `#change.
+    // Calls `#normalize_OPT giving it `'value; if the result is different from
+    // `[this._opt.opt`] (as reported by `@un:isEqual`@()) or if
+    // `[options.forceFire`] was set - fires `#change_OPT event, then `#change.
     //
     //? You can take advantage of `#ifSet()'s return value to perform
-    //  interlocking operations saving a call to `#get() (although of course it's not truly atomic):
+    //  interlocking operations saving a call to `#get() (although of course it's
+    //  not truly atomic):
     //  `[
     //   if (sqim.ifSet('eventsBound', true)) {
-    //     // eventsBound was previously !_.isEqual(true) and it was now changed to
-    //     // true so we can do what we need, once until it changes to non-true again.
+    //     // eventsBound was previously !_.isEqual(true) and it was now
+    //     // changed to true so we can do what we need, once until it changes
+    //     // to non-true again.
     //   }
     //  `]
     //  ...As a short form of writing:
@@ -3513,18 +3728,22 @@
     //  `]
     //
     // Other notes:
-    //* Use `#set() which returns `'this if you don't care for the return value but want method chaining.
-    //* Use `#getSet() if you want to update options based on other options (e.g. increment a value).
-    //* There's no `'set() version that writes multiple options at
-    //  once as you would do in some kind of "sync" operation. You might be looking for `#assignResp() (useful when assigning an
-    //  API response) or just do plain simple `[$.each(opts, model.set.bind(model))`].
-    //* It is safe to change `#_opt from within `#normalize_OPT or
-    //  `#change handlers - they are written to `[this._opt`] immediately but subsequent
-    //  `#change_OPT and `#change events are deferred in FIFO fashion (first set - first fired).
-    //  This preserves "incremental" updates order.
+    //* Use `#set() which returns `'this if you don't care for the return value
+    //  but want method chaining.
+    //* Use `#getSet() if you want to update options based on other options
+    //  (e.g. increment a value).
+    //* There's no `'set() version that writes multiple options at once as you
+    //  would do in some kind of "sync" operation. You might be looking for
+    //  `#assignResp() (useful when assigning an API response) or just do plain
+    //  simple `[$.each(opts, model.set.bind(model))`].
+    //* It is safe to change `#_opt from within `#normalize_OPT or `#change
+    //  handlers - they are written to `[this._opt`] immediately but subsequent
+    //  `#change_OPT and `#change events are deferred in FIFO fashion (first
+    //  set - first fired). This preserves "incremental" updates order.
     //* See also Options overview (`#opt).
     //
-    //? Overriding `#ifSet() is possible but most of the time `#normalize_OPT is what you need:
+    //? Overriding `#ifSet() is possible but most of the time `#normalize_OPT
+    //  is what you need:
     //  `[
     //   var MySetter = Sqimitive.Base.extend({
     //     _opt: {
@@ -3532,12 +3751,13 @@
     //     },
     //
     //     events: {
-    //       // Our handler will be called before the inherited ifSet() and will prevent
-    //       // modification of this._opt.readOnly when they are done via set/ifSet
-    //       // (i.e. the recommended way).
+    //       // Our handler will be called before the inherited ifSet() and
+    //       // will prevent modification of this._opt.readOnly when they are
+    //       // done via set/ifSet (i.e. the recommended way).
     //       //
     //       // Make sure not to hook '-set' because set() calls ifSet() and it
-    //       // would be still possible to change 'readOnly' with ifSet('readOnly', 'bar').
+    //       // would be still possible to change 'readOnly' with
+    //       // ifSet('readOnly', 'bar').
     //       '-ifSet': function (opt) {
     //         if (opt == 'readOnly') {
     //           throw new Error('You shouldn\'t really change what is called readOnly, you know?')
@@ -3599,16 +3819,17 @@
     //    })
     //]
     //
-    // If calling `[set('original', 'new')`] on such an object,
-    // logically you would expect these events: `'change_original, `'change of
-    // `'original, `'change_linked, `'change of `'linked. However, without deferred
-    // handling `'change_original would trigger `'change_linked, then `'change of
-    // `'linked and only then - `'change of `'original.
+    // If calling `[set('original', 'new')`] on such an object, logically you
+    // would expect these events: `'change_original, `'change of `'original,
+    // `'change_linked, `'change of `'linked. However, without deferred
+    // handling `'change_original would trigger `'change_linked, then `'change
+    // of `'linked and only then - `'change of `'original.
     //
-    // This would be also a problem if changing the same option from within
-    // its own event handler as `'change with the new value would be fired first
-    // (since `#set() was called last), then when the original `#set() returns it would
-    // also fire `'change but this time with the original (now old!) value.
+    // This would be also a problem if changing the same option from within its
+    // own event handler as `'change with the new value would be fired first
+    // (since `#set() was called last), then when the original `#set() returns
+    // it would also fire `'change but this time with the original (now old!)
+    // value.
     _fireSet: function (item) {
       // Without reversing the stack if a handler set the same option.
       if (this._firingSet == null) {
@@ -3638,12 +3859,14 @@
     //
     //= `'sqim `- the added child
     //
-    //> key string`, number`, omitted `- if omitted, `#_defaultKey() is used which by default returns `'sqim's `#_cid (unique instance identifier)
+    //> key string`, number`, omitted `- if omitted, `#_defaultKey() is used
+    //  which by default returns `'sqim's `#_cid (unique instance identifier)
     //> sqim object `- new child to nest
-    //> options object`, null/omitted `- keys `'key and `'child are set by `#nest()
+    //> options object`, null/omitted `- keys `'key and `'child are set by
+    //  `#nest()
     //
-    // If you are overriding the "nesting" behaviour you should override `#nestEx instead of
-    // `#nest which calls the former.
+    // If you are overriding the "nesting" behaviour you should override
+    // `#nestEx instead of `#nest which calls the former.
     //
     //#-nestExDesc
     nest: function (key, sqim, options) {
@@ -3661,7 +3884,8 @@
     //* `@Base.nestEx()`@
     //#
     //
-    // Adds a new child to self (`#_children), `#unnest'ing the old one at the same key (if any).
+    // Adds a new child to self (`#_children), `#unnest'ing the old one at the
+    // same key (if any).
     //
     //= object `- `'options with added details about the operation
     //
@@ -3683,7 +3907,8 @@
     //   this.length - (options.previous && options.changed)
     //]
     //
-    // In most cases `#nest() is more convenient to use as it allows omitting `[options.key`] and avoiding object notation for `'options.
+    // In most cases `#nest() is more convenient to use as it allows omitting
+    // `[options.key`] and avoiding object notation for `'options.
     //
     //#nestExDesc
     //?`[
@@ -3727,34 +3952,44 @@
     //  `]
     //
     // Other notes:
-    //* There's no `'nest() version that adds multiple children at
-    //  once as you would do in some kind of "sync" operation. You might be looking for `#assignChildren() (useful when assigning an
-    //  API response).
-    //* As with other `'options-accepting methods (e.g. `#ifSet()), the `'options object may
-    //  be used to propagate custom data to event listeners (`#optpropag); `'options are also passed
-    //  through by `#assignChildren().
+    //* There's no `'nest() version that adds multiple children at once as you
+    //  would do in some kind of "sync" operation. You might be looking for
+    //  `#assignChildren() (useful when assigning an API response).
+    //* As with other `'options-accepting methods (e.g. `#ifSet()), the
+    //  `'options object may be used to propagate custom data to event listeners
+    //  (`#optpropag); `'options are also passed through by `#assignChildren().
     //
     //## Internal operation
-    // ` `#nestEx() checks and errors if `[options.key`] is an object of any type (including `'null or `'undefined), or if
-    // `[options.child`] is of a wrong class (not `#_childClass). Then it converts and sets `[options.key`] to
-    // string, sets `[options.previous`] to the child currently occupying `'key
-    // (possibly `'undefined) and sets `[options.changed`] to `'false if `'previous is exactly `'child.
+    // ` `#nestEx() checks and errors if `[options.key`] is an object of any
+    // type (including `'null or `'undefined), or if `[options.child`] is of a
+    // wrong class (not `#_childClass). Then it converts and sets
+    // `[options.key`] to string, sets `[options.previous`] to the child
+    // currently occupying `'key (possibly `'undefined) and sets
+    // `[options.changed`] to `'false if `'previous is exactly `'child.
     //
     // If `[options.changed`] is `'false then exits, otherwise:
-    //* If `#_owning is `'true (as it is by default), every child of `'this can have exactly one `#_parent thus forming a bi-directional tree (see `#chld). `#nestEx() calls `#unnest() on the old and new children (which call `#unnested() in turn) and updates `#_parent and `#_parentKey of the new child.
-    //* If `#_owning is `'false, children don't know they are part of `'this. `#nestEx() simply calls `#unnested() on self if there was any previous child at `'key.
+    //* If `#_owning is `'true (as it is by default), every child of `'this can
+    //  have exactly one `#_parent thus forming a bi-directional tree (see
+    //  `#chld). `#nestEx() calls `#unnest() on the old and new children (which
+    //  call `#unnested() in turn) and updates `#_parent and `#_parentKey of
+    //  the new child.
+    //* If `#_owning is `'false, children don't know they are part of `'this.
+    //  `#nestEx() simply calls `#unnested() on self if there was any previous
+    //  child at `'key.
     //
-    // Finally, if the child was nested (`[options.changed`] set), `#nestEx() `#_forward's its `#_childEvents and,
-    // if `#_owning, calls new `'child's `#owned() to notify it of the parent change.
+    // Finally, if the child was nested (`[options.changed`] set), `#nestEx()
+    // `#_forward's its `#_childEvents and, if `#_owning, calls new `'child's
+    // `#owned() to notify it of the parent change.
     //
     // Observe that `#nestEx():
-    //* Does nothing if `'child is already contained in this instance
-    //  under the same `'key, i.e. when `[options.previous == child`] (`'changed is `'false).
+    //* Does nothing if `'child is already contained in this instance under the
+    //  same `'key, i.e. when `[options.previous == child`] (`'changed is
+    //  `'false).
     //* `#unnest's and nests `'child again if `'key differs.
     //#nestdup
-    //* Always adds `'child if `'this is non-`#_owning so it may
-    //  duplicate in `#_children. To avoid this hook `'=nestEx and call
-    //  `'sup (`#evtpf) only if `[!this.contains(options.child)`] (`#util).
+    //* Always adds `'child if `'this is non-`#_owning so it may duplicate in
+    //  `#_children. To avoid this hook `'=nestEx and call `'sup (`#evtpf) only
+    //  if `[!this.contains(options.child)`] (`#util).
     nestEx: function (options) {
       var sqim = options.child
 
@@ -3798,17 +4033,19 @@
     //= string`, number
     //
     // ` `#_defaultKey() is called by `#nest() and `#assignChildren() to
-    // generate a key for the new child (`'sqim) that is about to be nested into this instance.
+    // generate a key for the new child (`'sqim) that is about to be nested
+    // into this instance.
     //
     // Default `#Base's implementation returns `'sqim's `#_cid.
     //
-    // Make sure the returned value is constant for a given child so that
-    // if nesting the same child with no explicit key several times it isn't
+    // Make sure the returned value is constant for a given child so that if
+    // nesting the same child with no explicit key several times it isn't
     // constantly re-nested due to a different key (see `#nestEx()).
     //
-    // Warning: if you want to index children by some "ID" attribute (like Backbone's
-    // `@bb:Collection`@ does) note that `#_parentKey `*will not`* be automatically updated if that
-    // ID attribute changes. You should track it and update the collection. For example (see `#_childEvents):
+    // Warning: if you want to index children by some "ID" attribute (like
+    // Backbone's `@bb:Collection`@ does) note that `#_parentKey `*will not`*
+    // be automatically updated if that ID attribute changes. You should track
+    // it and update the collection. For example (see `#_childEvents):
     //[
     //   var MyCollection = Sqimitive.Base.extend({
     //     _childEvents: ['.change_id'],
@@ -3817,7 +4054,8 @@
     //       // '.change_id' will only occur for "models" which _parent is this.
     //       // They will be re-nested with the key expanding to
     //       // this._defaultKey(sqim), basically doing nest(newID, sqim) - and
-    //       // since this is an _owning collection, nest() will cause sqim to be unnest()'ed and then nested with the new key.
+    //       // since this is an _owning collection, nest() will cause sqim to
+    //       // be unnest()'ed and then nested with the new key.
     //       '.change_id': function (sqim) { this.nest(sqim) },
     //
     //       // Same but shorter using a masked function reference:
@@ -3832,11 +4070,13 @@
     //
     //#-unordered
     // If you want to not just keep some attribute synced with `#_parentKey but
-    // also maintain a specific order based on it - use the `@Sqimitive\Ordered`@ `#mixIn.
+    // also maintain a specific order based on it - use the
+    // `@Sqimitive\Ordered`@ `#mixIn.
     //
     //#-inBB
-    // In Backbone, `@bb:Model-idAttribute`@ names the property used for a similar
-    // purpose but in Sqimitive it's a function allowing flexible automatic naming.
+    // In Backbone, `@bb:Model-idAttribute`@ names the property used for a
+    // similar purpose but in Sqimitive it's a function allowing flexible
+    // automatic naming.
     _defaultKey: function (sqim) {
       return sqim._cid
     },
@@ -3847,21 +4087,22 @@
     //* `@Base.owned()`@
     //#
     //
-    // Called after `'this instance has been `#nest'ed into an `#_owning sqimitive
-    // (changed parents or got a first `#_parent).
+    // Called after `'this instance has been `#nest'ed into an `#_owning
+    // sqimitive (changed parents or got a first `#_parent).
     //
-    // By the time `#owned is called
-    // `#_parent and `#_parentKey of self are
+    // By the time `#owned is called `#_parent and `#_parentKey of self are
     // already set to new values.
     //
-    // See also `#unnest() that gets called before `#_parent is changed/removed.
+    // See also `#unnest() that gets called before `#_parent is
+    // changed/removed.
     //
     //?`[
     //   var MyChild = Sqimitive.Base.extend({
     //     events: {
-    //       // Will append this.el to parent's .some-point node as soon as this
-    //       // instance gets a new parent. If you want to do this in production
-    //       // though, look for the attachPath _opt'ion of Sqimitive\jQuery.
+    //       // Will append this.el to parent's .some-point node as soon as
+    //       // this instance gets a new parent. If you want to do this in
+    //       // production though, look for the attachPath _opt'ion of
+    //       // Sqimitive\jQuery.
     //       owned: function () {
     //         this.attach(this._parent.$('.some-point'))
     //       },
@@ -3875,8 +4116,10 @@
     //* This method returns nothing.
     //* It should not be called directly.
     //#
-    //* It's defined as `#stub in `#Base which lets Sqimitive remove this function instead
-    //  of calling it as a handler doing nothing when a new handler is registered for this event (e.g. in a subclass via `#events as in the example above).
+    //* It's defined as `#stub in `#Base which lets Sqimitive remove this
+    //  function instead of calling it as a handler doing nothing when a new
+    //  handler is registered for this event (e.g. in a subclass via `#events
+    //  as in the example above).
     owned: Core.stub,
 
     //#+tag_Events
@@ -3885,26 +4128,30 @@
     //
     // Forwards `'events occuring on `'sqim to `'this.
     //
-    // Forwarding is done by firing "prefix + event_name"
-    // on `'this (the object on which `#_forward() is called) with `'sqim pushed in front of original event's
-    // arguments.
-    // `'event_name is a complete reference string as given to `#parseEvent(), e.g. `[=foo_`].
+    // Forwarding is done by firing "prefix + event_name" on `'this (the object
+    // on which `#_forward() is called) with `'sqim pushed in front of original
+    // event's arguments. `'event_name is a complete reference string as given
+    // to `#parseEvent(), e.g. `[=foo_`].
     //
-    // `#_forward() is used to set up `#_childEvents, with the `'prefix of `[.`].
+    // `#_forward() is used to set up `#_childEvents, with the `'prefix of
+    // `[.`].
     //
     //?`[
     //   d._forward('.', ['render'], o)
     //   d.on('.render', function (o) { alert(o._cid) })
-    //    // now whenever 'render' is fired on o, '.render' is fired on d where it
-    //    // shows the _cid of the object where the original 'render' occurred
+    //    // now whenever 'render' is fired on o, '.render' is fired on d where
+    //    // it shows the _cid of the object where the original 'render'
+    //    // occurred
     // `]
     //
     //?`[
     //   destination._forward('dlg-', ['change', '-render'], origin)
     // `]
-    //  This example
-    //  fires `[dlg-change`] and `[dlg--render`] events on `'destination (a Sqimitive)
-    //  whenever `'change and `'render are fired on `'origin. `'-render simply means the forwarded events occur on `'destination before other handlers of `'origin are executed, as per `#evtpf.
+    //  This example fires `[dlg-change`] and `[dlg--render`] events on
+    //  `'destination (a Sqimitive) whenever `'change and `'render are fired on
+    //  `'origin. `'-render simply means the forwarded events occur on
+    //  `'destination before other handlers of `'origin are executed, as per
+    //  `#evtpf.
     _forward: function (prefix, events, sqim) {
       _.each(events.concat(), function (event) {
         var name = prefix + event
@@ -3934,13 +4181,13 @@
     //    collection.unlist(child)    //=> Sqimitive (child) or undefined
     // `]
     //
-    // If `#_owning is set (as it is by default) calls `#remove(), else
-    // deletes the key in `#_children and calls `#unnested() on self.
+    // If `#_owning is set (as it is by default) calls `#remove(), else deletes
+    // the key in `#_children and calls `#unnested() on self.
     //
     // Does nothing if this `'key/child is not contained (returns `'undefined).
     //
-    // See also `#unnest() which is called on the child (not on the parent object).
-    // However, it's only usable in `#_owning collections since
+    // See also `#unnest() which is called on the child (not on the parent
+    // object). However, it's only usable in `#_owning collections since
     // there's no reverse child -> parent relationship in non-`#_owning mode.
     unlist: function (key) {
       if (key instanceof Object) {
@@ -3970,10 +4217,11 @@
     //
     //= `'this
     //
-    // ` `#unnest() does nothing if `#_parent of `'this is
-    // already `'null (i.e. not owned).
+    // ` `#unnest() does nothing if `#_parent of `'this is already `'null (i.e.
+    // not owned).
     //
-    // Note: it doesn't remove own `#el from its parent node - use `#remove() for this.
+    // Note: it doesn't remove own `#el from its parent node - use `#remove()
+    // for this.
     //
     //#-rmvsunn
     //
@@ -3982,21 +4230,22 @@
     //   var MyChild = Sqimitive.Base.extend({
     //     events: {
     //       '-unnest': function () {
-    //         // this._parent and _parentKey are still set if this instance was
-    //         // attached to any parent, otherwise they are null.
+    //         // this._parent and _parentKey are still set if this instance
+    //         // was attached to any parent, otherwise they are null.
     //         this._parent && alert("I am about to be... unnested! :'(")
     //       },
     //
     //       unnest: function () {
-    //         // At this point _parent and _parentKey are certainly null but there's
-    //         // no telling if they will remain so - or if this instance had any parent before
-    //         // unnest() was called.
+    //         // At this point _parent and _parentKey are certainly null but
+    //         // there's no telling if they will remain so - or if this
+    //         // instance had any parent before unnest() was called.
     //         alert('I am now as free as the wind!')
     //       },
     //
-    //       // In contrast to the above, here we can reliably determine if this
-    //       // sqimitive was previously nested and if it was - do something after
-    //       // it was unnested by calling the inherited implementation via sup.
+    //       // In contrast to the above, here we can reliably determine if
+    //       // this sqimitive was previously nested and if it was - do
+    //       // something after it was unnested by calling the inherited
+    //       // implementation via sup.
     //       '=unnest': function (sup) {
     //         var hadParent = this._parent != null
     //         sup(this, arguments)
@@ -4008,10 +4257,10 @@
     //  `]
     //
     // Other notes:
-    //* `#unnest() clears `#_parent and `#_parentKey and calls `[unnested(this)`] on the former parent.
-    //* This effectively
-    //  creates a new detached tree (if `'this has nested `#_children) or a leaf (if not) -
-    //  more in Children concept (`#chld).
+    //* `#unnest() clears `#_parent and `#_parentKey and calls
+    //  `[unnested(this)`] on the former parent.
+    //* This effectively creates a new detached tree (if `'this has nested
+    //  `#_children) or a leaf (if not) - more in Children concept (`#chld).
     unnest: function () {
       var parent = this._parent
       if (parent) {
@@ -4027,14 +4276,16 @@
     //* `@Base.unnested()`@
     //#
     //
-    // Called right after a child of self (`'sqim) was detached from its parent (`'this).
+    // Called right after a child of self (`'sqim) was detached from its parent
+    // (`'this).
     //
-    // ` `#Base's implementation calls `'sqim.`#off(`'this) to unregister all event handlers that might
-    // have been previously attached to the removed child by this instance (provided they
-    // were not hardwired with `#fuse() and used `[cx === this`]).
+    // ` `#Base's implementation calls `'sqim.`#off(`'this) to unregister all
+    // event handlers that might have been previously attached to the removed
+    // child by this instance (provided they were not hardwired with `#fuse()
+    // and used `[cx === this`]).
     //
-    // By the time `#unnested is called
-    // `'sqim's `#_parent and `#_parentKey are already `'null.
+    // By the time `#unnested is called `'sqim's `#_parent and `#_parentKey are
+    // already `'null.
     //
     //?`[
     //   var MyParent = Sqimitive.Base.extend({
@@ -4047,7 +4298,9 @@
     // `]
     //
     // Other notes:
-    //* `#unnested() works for both `#_owning collections and not: for `#_owning it's called by `'sqim.`#unnest() while for non-`#_owning - by `'this.`#unlist().
+    //* `#unnested() works for both `#_owning collections and not: for
+    //  `#_owning it's called by `'sqim.`#unnest() while for non-`#_owning - by
+    //  `'this.`#unlist().
     //#-plainstub
     unnested: function (sqim) {
       sqim.off(this)
@@ -4063,14 +4316,15 @@
     //* `@Base.nested()`@
     //#
     //
-    // Returns a single child by key or instance or all `#_children (if no argument).
+    // Returns a single child by key or instance or all `#_children (if no
+    // argument).
     //
     //= object all children if `'key not given`, object the found child`,
     //  undefined if given `'key/child isn't nested in `'this
     //
-    //> key omitted return a shallow copy of `#_children`,
-    //  string or number return the object at that key (case-sensitive) or `'null`,
-    //  object return the argument itself if this object is nested as per `#findKey()
+    //> key omitted return a shallow copy of `#_children`, string or number
+    //  return the object at that key (case-sensitive) or `'null`, object
+    //  return the argument itself if this object is nested as per `#findKey()
     //
     //?`[
     //   sqim.nested()   //=> {childKey1: Sqimitive, ...}
@@ -4082,8 +4336,8 @@
     //   sqim.nested(new Sqimitive)  //=> undefined - object not listed in sqim._children
     // `]
     //
-    //? The object `'key form allows using `#nested() as `@un:includes`@() (`#util)
-    //  to check if a child is part of the collection:
+    //? The object `'key form allows using `#nested() as `@un:includes`@()
+    //  (`#util) to check if a child is part of the collection:
     //  `[
     //    if (col.nested(sqim)) {
     //      // ...
@@ -4091,14 +4345,15 @@
     //  `]
     //
     //#parentkeyowning
-    // Note: key only matches the child's `#_parentKey if `'this is
-    // `#_owning, else it may differ.
+    // Note: key only matches the child's `#_parentKey if `'this is `#_owning,
+    // else it may differ.
     //
     //#-unordered
     // Order of keys in the returned `#_children's copy may be unpredictable.
     //
     //#nestedslice
-    // ` `#nested() without arguments returns an object - children with keys. `#slice() returns an array - children only, dropping their keys.
+    // ` `#nested() without arguments returns an object - children with keys.
+    // `#slice() returns an array - children only, dropping their keys.
     nested: function (key) {
       if (!arguments.length) {
         return _.extend({}, this._children)
@@ -4117,13 +4372,13 @@
     //* `@Base.slice()`@
     //#
     //
-    // Treats this instance's `#_children as an
-    // ordered array and returns a portion of it.
+    // Treats this instance's `#_children as an ordered array and returns a
+    // portion of it.
     //
     // `'start defaults to 0, `'end - to `#length + 1.
     //
-    // Attention: the `'end index is not included into result. If `[start == end`] then an
-    // empty array is always returned.
+    // Attention: the `'end index is not included into result. If `[start ==
+    // end`] then an empty array is always returned.
     //
     //?`[
     //  slice()       // get all children; toArray() does the same
@@ -4134,8 +4389,8 @@
     //  slice(1, -1)  // get all children except the first and last
     // `]
     //
-    // Along with `#length, `#slice() makes Sqimitives look like an array
-    // and so `#slice()'s interface is the same as `'Array's `'slice():
+    // Along with `#length, `#slice() makes Sqimitives look like an array and
+    // so `#slice()'s interface is the same as `'Array's `'slice():
     // `@https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice`@
     //
     //#-nestedslice
@@ -4144,16 +4399,15 @@
     //#-unordered
     // ` `#slice() may return entries in arbitrary order.
     //
-    // It should not be used unless special measures were taken to
-    // make this instance properly ordered or if the caller doesn't care for
-    // child order (but then it should never use a positive `'start as there are
-    // no guarantees which child will be at that index).
+    // It should not be used unless special measures were taken to make this
+    // instance properly ordered or if the caller doesn't care for child order
+    // (but then it should never use a positive `'start as there are no
+    // guarantees which child will be at that index).
     //
-    // Use either the
-    // `#Ordered `#mixIn (and see `#at()) or override `#slice() to sort `#_children
-    // based on some criteria before taking a portion of it
-    // (this may be slower than `#Ordered that maintains sort
-    // order as children come and go without resorting on every call to `#slice()):
+    // Use either the `#Ordered `#mixIn (and see `#at()) or override `#slice()
+    // to sort `#_children based on some criteria before taking a portion of it
+    // (this may be slower than `#Ordered that maintains sort order as children
+    // come and go without resorting on every call to `#slice()):
     //[
     //  events: {
     //    '=slice': function (sup, start, end) {
@@ -4166,14 +4420,14 @@
     //]
     //
     // Making `#slice() "ordered" is enough to make the Sqimitive ordered
-    // because `#slice is used by all other functions
-    // that treat `#_children as an array (`'each(), `'find() and others, see `#util).
+    // because `#slice is used by all other functions that treat `#_children as
+    // an array (`'each(), `'find() and others, see `#util).
     slice: function (start, end) {
       // _.values(), _.toArray(), Object.keys(), etc. return values in
       // arbitrary order. The Base Sqimitive is unordered.
       //
-      // Warning: do not replace _.values() with this.toArray() since the latter
-      // calls this.slice().
+      // Warning: do not replace _.values() with this.toArray() since the
+      // latter calls this.slice().
       return _.values(this._children).slice(start, end)
     },
 
@@ -4183,14 +4437,15 @@
     //* `@Base.findKey()`@
     //#
     //
-    // Returns the string key of a child (`#_children of self) or the first child matched by the callback.
+    // Returns the string key of a child (`#_children of self) or the first
+    // child matched by the callback.
     //
     // ` `#findKey() has two call forms:
     //
     //* `[function (sqim)`] - If `'sqim is part of `#_children, returns its key.
     //
-    //* `[function (func [, cx])`] - Call `'func in the `'cx context
-    //  (`'this if `'null or omitted) giving it the usual iterator's set of arguments:
+    //* `[function (func [, cx])`] - Call `'func in the `'cx context (`'this if
+    //  `'null or omitted) giving it the usual iterator's set of arguments:
     //  `[childObject, childKey, childrenObject`] (as in Underscore, etc.).
     //  Returns `'childKey as soon as `'func returns a truthy value.
     //
@@ -4206,9 +4461,9 @@
     //#-parentkeyowning
     //
     //#-unordered
-    // Either `'func() should match exactly 0 or 1 children or the caller should
-    // not care which of the matched ones `#findKey() returns (since it may return
-    // a different matching child every time).
+    // Either `'func() should match exactly 0 or 1 children or the caller
+    // should not care which of the matched ones `#findKey() returns (since it
+    // may return a different matching child every time).
     findKey: function (func, cx) {
       var eq = func instanceof Object
       for (var key in this._children) {
@@ -4226,16 +4481,16 @@
     //
     // Returns wrapped `#_children array for chaining with your utility library.
     //
-    // Chaining is useful for transforming the value (array of children) several times. Call
-    // `'value() to obtain the final value. If you're only doing a single
-    // transformation - just call it directly on `'this since most
-    // of them are exposed as methods (see `#util).
+    // Chaining is useful for transforming the value (array of children)
+    // several times. Call `'value() to obtain the final value. If you're only
+    // doing a single transformation - just call it directly on `'this since
+    // most of them are exposed as methods (see `#util).
     //
     // Note: Underscore (see `@un:chain`@()) and LoDash support chaining but
     // NoDash doesn't and `#_() will error.
     //
-    // The reference to the utility library itself (the global `[_`] object)
-    // is accessible via `[Sqimitive._`].
+    // The reference to the utility library itself (the global `[_`] object) is
+    // accessible via `[Sqimitive._`].
     //
     //?`[
     //   col._().filter(...).sort(...).value()    //=> array of children
@@ -4261,11 +4516,12 @@
     //= object `- `'this
     //
     //##rmvsunn
-    // Use `#unnest() when an object is temporary elided from the hierarchy (e.g. because it's
-    // changing parents). Use `#remove() when it's completely destroyed and
-    // its "view" (DOM node, etc.) is no longer needed. By convention, `#remove()
-    // is also used on `#el-less objects (where it's identical to `#unnest() in
-    // effect) to convey the intention of destroying them.
+    // Use `#unnest() when an object is temporary elided from the hierarchy
+    // (e.g. because it's changing parents). Use `#remove() when it's
+    // completely destroyed and its "view" (DOM node, etc.) is no longer
+    // needed. By convention, `#remove() is also used on `#el-less objects
+    // (where it's identical to `#unnest() in effect) to convey the intention
+    // of destroying them.
     //
     //?`[
     //   var child = new Sqimitive.Base({el: '<p>Some text.</p>'})
@@ -4298,11 +4554,12 @@
     //* `@Base.assignChildren()`@
     //#
     //
-    // Unserializes children: updates own `#_children based on data of arbitrary format.
+    // Unserializes children: updates own `#_children based on data of
+    // arbitrary format.
     //
-    // Merges external "response" `'resp into `#_children by
-    // updating existing nested sqimitives and adding new and/or removing unlisted
-    // ones. `'resp is a list of data objects, one object per every child:
+    // Merges external "response" `'resp into `#_children by updating existing
+    // nested sqimitives and adding new and/or removing unlisted ones. `'resp
+    // is a list of data objects, one object per every child:
     //[
     //   resp = [ {caption: 'foo', body: 'bar'}, {caption: 'bazz'}, ... ]
     //            ^^^ the first child's data ^^  ^ the second child
@@ -4312,25 +4569,32 @@
     //> classFunc function returning constructor (class) for new children;
     //  receives response data object`,
     //  `'null/omitted use `#_childClass of `'this
-    //> eqFunc `'null/omitted if `'keepMissing then do nothing, else remove all children prior to assignment`,
+    //> eqFunc `'null/omitted if `'keepMissing then do nothing, else remove all
+    //  children prior to assignment`,
     //  string option name for `#get()`,
     //  function `[(child, opt)`] returning `'true when the given child is the
-    //  "same" as one of `'resp data objects and should be kept and have its `#_opt updated without creating a new child for that `'opt
-    //> keepMissing true to keep children "not present" in `'resp (as reported by `'eqFunc) unchanged,
-    //  false to ensure all `#_children left after `#assignChildren() were present in `'resp and that others were `#unlist()ed from self
-    //> keyFunc `'null/omitted use `#_defaultKey() of `'this (returns `#_cid by default)`,
+    //  "same" as one of `'resp data objects and should be kept and have its
+    //  `#_opt updated without creating a new child for that `'opt
+    //> keepMissing true to keep children "not present" in `'resp (as reported
+    //  by `'eqFunc) unchanged,
+    //  false to ensure all `#_children left after `#assignChildren() were
+    //  present in `'resp and that others were `#unlist()ed from self
+    //> keyFunc `'null/omitted use `#_defaultKey() of `'this (returns `#_cid by
+    //  default)`,
     //  function returning key (string or number); receives a constructed Sqimitive
     //  before it's `#nest'ed
     //
-    //= array `[[nested, unlisted]`] `- `'nested is an array of `#nestEx() return
-    //  values, `'unlisted is an object of child Sqimitives (by their keys in `'this) that were not
-    //  found in `'resp.
+    //= array `[[nested, unlisted]`] `- `'nested is an array of `#nestEx()
+    //  return values, `'unlisted is an object of child Sqimitives (by their
+    //  keys in `'this) that were not found in `'resp.
     //
-    //  If `[options.eqFunc`] was unset then `'unlisted is either always `[{}`] (`[options.keepMissing`] set) or the copy of `#_children before `#assignChildren().
+    //  If `[options.eqFunc`] was unset then `'unlisted is either always `[{}`]
+    //  (`[options.keepMissing`] set) or the copy of `#_children before
+    //  `#assignChildren().
     //
     //#assignchre
-    // ` `#assignChildren() "unserializes" own `#_children objects while `#assignResp()
-    // "unserializes" own `#_opt'ions ("attributes").
+    // ` `#assignChildren() "unserializes" own `#_children objects while
+    // `#assignResp() "unserializes" own `#_opt'ions ("attributes").
     //
     //#
     //
@@ -4348,9 +4612,10 @@
     //   var resp = [{foo: 'incoming#1'}, {foo: 'existing'}]
     //   list.assignChildren(resp)
     //     //=> [ [item with 'foo' of 'incoming#1', item with 'foo' of 'existing'], {item1} ]
-    //     // item1 was removed from list and the latter got two new children with 'foo' of
-    //     // 'incoming#1' and 'existing' (the latter has identical _opt with the
-    //     // removed item but a new object was nevertheless created and nested)
+    //     // item1 was removed from list and the latter got two new children
+    //     // with 'foo' of 'incoming#1' and 'existing' (the latter has
+    //     // identical _opt with the removed item but a new object was
+    //     // nevertheless created and nested)
     //
     //   // Let's restore the list.
     //   list.invoke('remove')
@@ -4360,9 +4625,11 @@
     //     return sqim.get('foo') == opt.foo
     //   }})
     //     //=> [ [item with 'foo' of 'incoming#1'], {} ]
-    //     // Now item1 wasn't removed because the function we've passed compared its foo
-    //     // option with resp's foo value and returned true to indicate that existing child represents the same entity as the incoming data object. In addition to item1, list
-    //     // got one new item with foo of 'incoming#1'.
+    //     // Now item1 wasn't removed because the function we've passed
+    //     // compared its foo option with resp's foo value and returned true
+    //     // to indicate that existing child represents the same entity as the
+    //     // incoming data object. In addition to item1, list got one new item
+    //     // with foo of 'incoming#1'.
     //
     //   // We can use this short form of eqFunc if we're simply matching some
     //   // option with a field by the same name in resp's objects:
@@ -4382,7 +4649,8 @@
     //?`[
     //  assignChildren([ {key: 'foo'}, {key: 'bar'} ], {eqFunc: 'key'})
     //    // adds/updates 2 children with _opt = {key: 'foo'} and {key: 'bar'};
-    //    // "same" sqimitives are those having the same value for the 'key' option and data object's 'key' field
+    //    // "same" sqimitives are those having the same value for the 'key'
+    //    // option and data object's 'key' field
     //
     //  assignChildren([ {key: 'foo'}, {key: 'bar'} ],
     //                 {eqFunc: function (sqim, opt) { return sqim.get('key') == opt.key }})
@@ -4396,20 +4664,22 @@
     //    // identical to the above but keeps old children
     //
     //  assignChildren([ {key: 'foo'}, {key: 'bar'} ])
-    //    // similar but always removes all nested sqimitives and adds 2 new ones
+    //    // similar but always removes all nested sqimitives and adds 2 new
+    //    // ones
     //
     //  assignChildren(..., {onlyDefined: true, forceFire: true})
     //    // passes onlyDefined to assignResp() and forceFire to set()
     // `]
     //
     //# The operation
-    // First, `#assignChildren() determines which `'resp objects are new
-    // and which are "serialized" forms of one of the existing `#_children by calling `[options.eqFunc`]
-    // with combinations of `[(child, obj)`] for every child and data object. `'eqFunc should
-    // return `'true exactly for none or one such combination. If `[options.eqFunc`]
-    // is a string then it's assumed that children are identified by an `#_opt'ion
-    // by this name (like "id"), mapping to data objects with the same value of
-    // this property:
+    // First, `#assignChildren() determines which `'resp objects are new and
+    // which are "serialized" forms of one of the existing `#_children by
+    // calling `[options.eqFunc`] with combinations of `[(child, obj)`] for
+    // every child and data object. `'eqFunc should return `'true exactly for
+    // none or one such combination. If `[options.eqFunc`] is a string then
+    // it's assumed that children are identified by an `#_opt'ion by this name
+    // (like "id"), mapping to data objects with the same value of this
+    // property:
     //[
     //   var resp = [ {id: 1, caption: 'foo'}, {id: 2, caption: 'bar'} ]
     //   var child = new Sqimitive.Base({id: 1, caption: 'quux'})
@@ -4432,38 +4702,40 @@
     //   }})
     //]
     //
-    // To recap: children keys (`#_parentKey) are not used when linking `#_children
-    // and `'resp objects unless you code this in your `[options.eqFunc`].
+    // To recap: children keys (`#_parentKey) are not used when linking
+    // `#_children and `'resp objects unless you code this in your
+    // `[options.eqFunc`].
     //
-    // If `[options.eqFunc`] is unset then all existing children are `#unlist()ed
-    // unless `[options.keepMissing`] is set - in this case they
-    // are preserved and for each item in `'resp a new child is
-    // nested. However, on duplicate keys (`[options.keyFunc`]) only the
-    // last child is kept and others are removed as per the usual
-    // behaviour of `#nest() (`#assignChildren() doesn't handle this specially
-    // and such "removed-by-nesting" children are not reflected in the returned array).
+    // If `[options.eqFunc`] is unset then all existing children are
+    // `#unlist()ed unless `[options.keepMissing`] is set - in this case they
+    // are preserved and for each item in `'resp a new child is nested.
+    // However, on duplicate keys (`[options.keyFunc`]) only the last child is
+    // kept and others are removed as per the usual behaviour of `#nest()
+    // (`#assignChildren() doesn't handle this specially and such
+    // "removed-by-nesting" children are not reflected in the returned array).
     //
     // Then, for data objects mapped to an existing child `#assignChildren()
-    // calls `#assignResp() on that child giving it the mapped data object
-    // to essentially update it. For unmapped, it creates a new Sqimitive as
+    // calls `#assignResp() on that child giving it the mapped data object to
+    // essentially update it. For unmapped, it creates a new Sqimitive as
     // `[options.classFunc`], calls `#assignResp() and `#nest's it under the
     // key of `[options.keyFunc`].
     //
     // Finally, if `[options.keepMissing`] is unset `#assignChildren() removes
-    // all children which were neither updated not created during this call.
-    // If it's set then they are just left unchanged as `#_children of `'this.
+    // all children which were neither updated not created during this call. If
+    // it's set then they are just left unchanged as `#_children of `'this.
     //
     //# Propagation of `'options
     //##assignoprop
-    // ` `#assignChildren() and `#assignResp() call/fire several methods/events (`#evt), all of which
-    // receive the same `'options object. This allows changing those methods'
-    // options as well as propagating data back from them to the original caller
-    // (see `#optpropag).
+    // ` `#assignChildren() and `#assignResp() call/fire several methods/events
+    // (`#evt), all of which receive the same `'options object. This allows
+    // changing those methods' options as well as propagating data back from
+    // them to the original caller (see `#optpropag).
     //
     //##
     //
-    // In particular, `#assignChildren() calls `#assignResp(), `#set()/`#ifSet(), `#nestEx()
-    // firing `#normalize_OPT, `#change_OPT and `#change, as well as `#nestEx-produced events.
+    // In particular, `#assignChildren() calls `#assignResp(),
+    // `#set()/`#ifSet(), `#nestEx() firing `#normalize_OPT, `#change_OPT and
+    // `#change, as well as `#nestEx-produced events.
     //
     //[
     //   sqim.assignChildren({a: 1, b: 2}, {schema: api3, forceFire: true})
@@ -4471,8 +4743,9 @@
     //     // passes forceFire to set() to always fire change events
     //]
     //
-    // Additionally, this method sets `[options.assignChildren`] to `'true
-    // so you can determine when an option is being set as a result of this method call:
+    // Additionally, this method sets `[options.assignChildren`] to `'true so
+    // you can determine when an option is being set as a result of this method
+    // call:
     //[
     //   Sqimitive.Base.extend({
     //     events: {
@@ -4488,30 +4761,32 @@
     //]
     //
     //# Format of `'resp
-    // `'resp is either an array of objects or an "object of objects" - then it's
-    // converted using `@un:values`@() ignoring the keys.
+    // `'resp is either an array of objects or an "object of objects" - then
+    // it's converted using `@un:values`@() ignoring the keys.
     //
-    //   Sqimitive prior to v1.2 allowed `'resp
-    //   to be an object with the `'data key to integrate with Python's Flask
-    //   framework but it's no longer supported - see
+    //   Sqimitive prior to v1.2 allowed `'resp to be an object with the `'data
+    //   key to integrate with Python's Flask framework but it's no longer
+    //   supported - see
     //   `@https://flask.palletsprojects.com/en/1.1.x/security/#json-security`@.
     //
     //#-unordered
-    // ` `#assignChildren() may process `'resp and `#nest/update children in any order.
-    // If you need specific order then pass `'resp as an array instead of object.
+    // ` `#assignChildren() may process `'resp and `#nest/update children in
+    // any order. If you need specific order then pass `'resp as an array
+    // instead of object.
     //
     //# Other notes
-    //* There's no `'assignChildren() version that takes ready-made
-    //  objects (like Backbone's `@bb:Collection-set`@()) because many questions
-    //  arise: do you need to keep old duplicate children or replace them with
-    //  supplied objects and what to do with event listeners on the old children
-    //  if you do replace them, or with listeners on the new if you don't; what to consider
-    //  "duplicate" (some ID attribute? exact same object?), do you want to keep
-    //  old options, etc. etc. Instead of making Sqimitive figure or enforce them on you it just lets you
-    //  implement exactly what you need.
+    //* There's no `'assignChildren() version that takes ready-made objects
+    //  (like Backbone's `@bb:Collection-set`@()) because many questions arise:
+    //  do you need to keep old duplicate children or replace them with
+    //  supplied objects and what to do with event listeners on the old
+    //  children if you do replace them, or with listeners on the new if you
+    //  don't; what to consider "duplicate" (some ID attribute? exact same
+    //  object?), do you want to keep old options, etc. etc. Instead of making
+    //  Sqimitive figure or enforce them on you it just lets you implement
+    //  exactly what you need.
     //#assignname
-    //* This method is named "assign" to emphasize the fact that data may undergo
-    //  transformations before being assumed by the sqimitive.
+    //* This method is named "assign" to emphasize the fact that data may
+    //  undergo transformations before being assumed by the sqimitive.
     //
     //#
     assignChildren: function (resp, options) {
@@ -4570,25 +4845,27 @@
     //* `@Base.assignResp()`@
     //#
     //
-    // Unserializes options: updates own `#_opt based on a data object of arbitrary format.
+    // Unserializes options: updates own `#_opt based on a data object of
+    // arbitrary format.
     //
-    // ` `#assignResp() calls `[options.schema`]'s empty key and then
-    // `#set()s own `#_opt based on transformation rules (`[options.schema`]) for
-    // the external input `'resp (e.g. an API response).
-    // `'resp is an object where one member usually represents one option
-    // (but this is not a requirement).
+    // ` `#assignResp() calls `[options.schema`]'s empty key and then `#set()s
+    // own `#_opt based on transformation rules (`[options.schema`]) for the
+    // external input `'resp (e.g. an API response). `'resp is an object where
+    // one member usually represents one option (but this is not a
+    // requirement).
     //
     // `'options keys used by this method:
     //> schema null/omitted to use `#_respToOpt`, object in `#_respToOpt format
-    //> onlyDefined null/omitted to call `#set(key) for every key in `'resp not listed
-    //  in `'schema`, true to ignore such keys
+    //> onlyDefined null/omitted to call `#set(key) for every key in `'resp not
+    //  listed in `'schema`, true to ignore such keys
     //
     //= `'this
     //
     //#-assignchre
     //
-    //? In the simplest case when `#_respToOpt is not overridden (i.e. is `[{}`])
-    //  and `'onlyDefined is unset `#assignResp() acts as a "multi-`#set()":
+    //? In the simplest case when `#_respToOpt is not overridden (i.e. is
+    //  `[{}`]) and `'onlyDefined is unset `#assignResp() acts as a
+    //  "multi-`#set()":
     //  `[
     //  sqim.assignResp({date: '2000-01-01', id_key: '123'})
     //    // without _respToOpt, schema and onlyDefined is equivalent to:
@@ -4599,8 +4876,8 @@
     //  `]
     //
     //#assignrespvs
-    //? Using `#assignResp() in conjunction with `#_respToOpt to
-    //  "blend" into this object a typical JSON response from a backend:
+    //? Using `#assignResp() in conjunction with `#_respToOpt to "blend" into
+    //  this object a typical JSON response from a backend:
     //  `[
     //   var MyModel = Sqimitive.Base.extend({
     //     _opt: {
@@ -4632,18 +4909,22 @@
     //   var sqim = new MyModel
     //
     //   // Since it's using regular set() to assign new values all the usual
-    //   // normalize/change events are fired. In particular, MyModel's normalize_id_key
-    //   // and then change_id_key are called. As a result _opt setting happens
-    //   // exactly the same as if it was done with the usual set() from the outside.
+    //   // normalize/change events are fired. In particular, MyModel's
+    //   // normalize_id_key and then change_id_key are called. As a result
+    //   // _opt setting happens exactly the same as if it was done with the
+    //   // usual set() from the outside.
     //   sqim.assignResp({date: '2000-01-01', id_key: '123', bazzz: 'Ouch!'})
     //
     //   // Now sqim.get() is {date: new Date('2000-01-01'), id_key: 123, bazzz: 'Ouch!'}.
-    //   // date was turned into a Date object thanks to the transformation function in _respToOpt.
+    //   // date was turned into a Date object thanks to the transformation
+    //   // function in _respToOpt.
     //   // id_key was turned into a number thanks to normalize_id_key.
     //   // bazzz was assigned too because we didn't pass {onlyDefined: true}.
     //  `]
     //
-    //? If you have several API routes with different formats but logically the same data (so they unserialize to the same object), pass `[options.schema`] without changing `#_respToOpt on run-time:
+    //? If you have several API routes with different formats but logically the
+    //  same data (so they unserialize to the same object), pass
+    //  `[options.schema`] without changing `#_respToOpt on run-time:
     //  `[
     //    sqim.assignResp(apiResp1, {schema: {id: 'id_key'}})
     //      // set('id_key', apiResp1.id) and set other keys as is
@@ -4654,10 +4935,10 @@
     //      // handle other keys according to sqim._respToOpt
     //  `]
     //
-    //  `'schema is not meant for changing `'resp's shape, e.g. from
-    //  array `[[['opt', 'name'], ...]`] to object `[{opt: 'name', ...}`] -
-    //  declare a specialized public method instead of making your consumers
-    //  pass `'schema or know how to treat the data:
+    //  `'schema is not meant for changing `'resp's shape, e.g. from array
+    //  `[[['opt', 'name'], ...]`] to object `[{opt: 'name', ...}`] - declare a
+    //  specialized public method instead of making your consumers pass
+    //  `'schema or know how to treat the data:
     //  `[
     //    assignBillingResponse: function (resp) {
     //      this.assignResp(_.object(resp), {
@@ -4667,8 +4948,8 @@
     //    }
     //  `]
     //
-    // Having `[options.onlyDefined`] unset is similar to having all keys in `'resp
-    // missing from `#_respToOpt listed there with the value of `'true:
+    // Having `[options.onlyDefined`] unset is similar to having all keys in
+    // `'resp missing from `#_respToOpt listed there with the value of `'true:
     //[
     //   Sqimitive.Base.extend({
     //     _respToOpt: {a: false, b: true},
@@ -4682,9 +4963,9 @@
     //     // as if _respToOpt had also {c: true}
     //]
     //
-    //? Override `#assignResp() to force skipping `'resp keys not defined in `#_respToOpt -
-    //  handy if this method is used directly by API consumers, i.e. there's
-    //  no specialized "unserialize()":
+    //? Override `#assignResp() to force skipping `'resp keys not defined in
+    //  `#_respToOpt - handy if this method is used directly by API consumers,
+    //  i.e. there's no specialized "unserialize()":
     //  `[
     //    var MySqimitive = Sqimitive.Base.extend({
     //      events: {
@@ -4698,22 +4979,24 @@
     //# Propagation of `'options
     //#-assignoprop
     //
-    // In particular, `#assignResp() calls `#set()/`#ifSet()
-    // firing `#normalize_OPT, `#change_OPT and `#change.
+    // In particular, `#assignResp() calls `#set()/`#ifSet() firing
+    // `#normalize_OPT, `#change_OPT and `#change.
     //[
     //   sqim.assignResp({a: 1, b: 2}, {forceFire: true})
     //     // passes forceFire to set() causing change events of a and/or b
     //     // to fire even if they had the same values before assignResp()
     //]
     //
-    // Additionally, this method sets `[options.assignResp`] to `'true
-    // so you can determine when an option is being set as a result of this method call
-    // (see `#assignoprop for an example). If called by `#assignChildren(),
-    // `'options has both `'assignChildren and `'assignResp set.
+    // Additionally, this method sets `[options.assignResp`] to `'true so you
+    // can determine when an option is being set as a result of this method
+    // call (see `#assignoprop for an example). If called by
+    // `#assignChildren(), `'options has both `'assignChildren and `'assignResp
+    // set.
     //
     //# `'normalize/`'change vs `#_respToOpt
-    // You may notice that `'=normalize_id_key and `'_respToOpt's `'date in example `#assignrespvs
-    // fulfill a similar purpose. That example could have been written like this:
+    // You may notice that `'=normalize_id_key and `'_respToOpt's `'date in
+    // example `#assignrespvs fulfill a similar purpose. That example could
+    // have been written like this:
     // `[
     //  var MyModel = Sqimitive.Base.extend({
     //    _respToOpt: {
@@ -4757,19 +5040,19 @@
     //  })
     // `]
     //
-    // Indeed, `#normalize_OPT and others are fired by `#ifSet() and
-    // they occur during `#assignResp() because the latter is calling `#set()
-    // internally. However, `#_respToOpt is only used by `#assignResp() so
-    // both of the above examples have issues:
-    //* If there is no `'=normalize_id_key then `#assignResp() works as expected
-    //  while `[set('id_key', 'zabzab')`] doesn't trigger an error.
-    //* If there are no `'_respToOpt rules then `#assignResp() again works
-    //  as expected but `[set('date', new Date)`] results in `[_opt.date`]
+    // Indeed, `#normalize_OPT and others are fired by `#ifSet() and they occur
+    // during `#assignResp() because the latter is calling `#set() internally.
+    // However, `#_respToOpt is only used by `#assignResp() so both of the
+    // above examples have issues:
+    //* If there is no `'=normalize_id_key then `#assignResp() works as
+    //  expected while `[set('id_key', 'zabzab')`] doesn't trigger an error.
+    //* If there are no `'_respToOpt rules then `#assignResp() again works as
+    //  expected but `[set('date', new Date)`] results in `[_opt.date`]
     //  becoming `[new Date(new Date)`].
     //
-    // Additionally, `#assignResp() allows different
-    // "unserialization profiles" by passing rules in `[options.schema`]
-    // rather than defining them in `#_respToOpt.
+    // Additionally, `#assignResp() allows different "unserialization profiles"
+    // by passing rules in `[options.schema`] rather than defining them in
+    // `#_respToOpt.
     //
     //#-unordered
     // ` `#assignResp() may process `'resp and call `#set() in any order.
@@ -4808,30 +5091,31 @@
     //
     // Triggers an event on every parent, recursively.
     //
-    // Sends `'event with arguments `'args upstream - to `'this.`#_parent,
-    // to that parent's parent and so on. Does nothing if `#_parent is unset.
+    // Sends `'event with arguments `'args upstream - to `'this.`#_parent, to
+    // that parent's parent and so on. Does nothing if `#_parent is unset.
     //
     //#bubsin
     //= this
     //
-    // If `'fireSelf is `'true then first fires
-    // `'event on self (by default it doesn't).
+    // If `'fireSelf is `'true then first fires `'event on self (by default it
+    // doesn't).
     //
-    // ` `#bubble() sends the event upstream while `#sink() sends it downstream.
-    // However, the first walks `#_owning sqimitives (since it's using `#_parent)
-    // while the second works for any mode (since it's using `#_children).
+    // ` `#bubble() sends the event upstream while `#sink() sends it
+    // downstream. However, the first walks `#_owning sqimitives (since it's
+    // using `#_parent) while the second works for any mode (since it's using
+    // `#_children).
     //
     // Since both call methods, not necessary events, you can "recursively"
     // call methods as well (which may or may not be events, see `#evt).
     //
     //#
     //
-    // ` `#bubble() is very much like DOM's event bubbling except that it happens
-    // on sqimitives, not on their `#el's.
+    // ` `#bubble() is very much like DOM's event bubbling except that it
+    // happens on sqimitives, not on their `#el's.
     //
     // While it should not be abused because it makes the execution flow less
-    // obvious (much like `'goto or `'longjmp()), it's indispensible for propagating generic signals like errors and logs
-    // to whoever is on top.
+    // obvious (much like `'goto or `'longjmp()), it's indispensible for
+    // propagating generic signals like errors and logs to whoever is on top.
     //
     //?`[
     //   // Causes self and all parent sqimitives to be rendered:
@@ -4842,7 +5126,8 @@
     //   // of attach()):
     //   sqim.bubble('invoke', ['attach'])
     //
-    //   // We can use it to obtain data from "some" (unspecified) _owning object:
+    //   // We can use it to obtain data from "some" (unspecified) _owning
+    //   // object:
     //   var out = {}
     //   sqim.bubble('giveMeData', [out])
     //   alert(out.data)
@@ -4861,9 +5146,8 @@
     //
     // Triggers an event on every child, recursively.
     //
-    // Sends `'event with arguments `'args to all nested `#_children, to
-    // nested children of those children and so
-    // on.
+    // Sends `'event with arguments `'args to all nested `#_children, to nested
+    // children of those children and so on.
     //
     //#-bubsin
     //
@@ -4873,17 +5157,19 @@
     //   // Recursively causes all nested views and self to be rendered:
     //   sqim.sink('render', []. true)
     //
-    //   // Recursively calls remove() on self, all children and their children, removing
-    //   // every single sqimitive from its parent (useful when removing a parent
-    //   // el doesn't automatically free resources of its children like it does in DOM):
+    //   // Recursively calls remove() on self, all children and their
+    //   // children, removing every single sqimitive from its parent (useful
+    //   // when removing a parent el doesn't automatically free resources of
+    //   // its children like it does in DOM):
     //   sqim.sink('invoke', ['remove'], true)
     //
     //   // We can use it to serialize the entire tree:
     //   var serialized = []
     //   sqim.sink('saveTo', [serialized])
     //   localStorage.setItem('saved', JSON.stringify(serialized))
-    //   // Now if children implement something like this then serialized will contain
-    //   // a portable representation of the current hierarchy (without self):
+    //   // Now if children implement something like this then serialized will
+    //   // contain a portable representation of the current hierarchy (without
+    //   // self):
     //   child.on('saveTo', function (ser) { ser.push(this.get()) })
     // `]
     sink: function (event, args, fireSelf) {
@@ -4893,8 +5179,8 @@
     },
   })
 
-  // Setting reference to self in the instance property. Can't be set when extending
-  // because the target class doesn't exist yet.
+  // Setting reference to self in the instance property. Can't be set when
+  // extending because the target class doesn't exist yet.
   Sqimitive.Base.prototype._childClass = Sqimitive.Base
 
   // Static fields of Sqimitive.Base.
@@ -4920,19 +5206,19 @@
   //  })
   // `]
   //
-  // JavaScript objects are unordered, even if it appears to work the way
-  // you expect (it's very browser-specific). For example: `[Object.keys({9: 0, 1: 0})`] returns `[[1, 9]`].
-  // Since `@Sqimitive\Base`@ stores children in an object (`#_children),
-  // sqimitives are unordered by default; this affects `#nested(), `'toArray()
-  // (`#util) and many other functions.
+  // JavaScript objects are unordered, even if it appears to work the way you
+  // expect (it's very browser-specific). For example: `[Object.keys({9: 0, 1:
+  // 0})`] returns `[[1, 9]`]. Since `@Sqimitive\Base`@ stores children in an
+  // object (`#_children), sqimitives are unordered by default; this affects
+  // `#nested(), `'toArray() (`#util) and many other functions.
   //
-  // ` `#Ordered maintains order of children without disrupting the standard API
-  // but makes nesting and unnesting on such sqimitives slower
-  // (access time is unaffected).
+  // ` `#Ordered maintains order of children without disrupting the standard
+  // API but makes nesting and unnesting on such sqimitives slower (access time
+  // is unaffected).
   //
-  // ` `#Ordered supports any `#_owning mode (but `#_owning works faster). Like with `#Base, duplicate
-  // children may appear if `#_owning is unset -
-  // to disallow this wrap `'=nestEx in a check with `'contains() (see `#nestdup).
+  // ` `#Ordered supports any `#_owning mode (but `#_owning works faster). Like
+  // with `#Base, duplicate children may appear if `#_owning is unset - to
+  // disallow this wrap `'=nestEx in a check with `'contains() (see `#nestdup).
   Sqimitive.Ordered = {
     // Holds positional information about objects contained within this instance.
     //
@@ -4941,10 +5227,12 @@
     //  `> key string `- `'child's key in `#_children
     //  `> pos any `- the value from `#nestEx's `[options.pos`]
     //
-    // ` `#_ordered is a properly sorted array of `#_children, in order determined by `#_sorter().
-    // It's kept in sync with `#_children automatically.
+    // ` `#_ordered is a properly sorted array of `#_children, in order
+    // determined by `#_sorter(). It's kept in sync with `#_children
+    // automatically.
     //
-    // The format of `#_ordered objects conveniently matches that accepted by `#nestEx():
+    // The format of `#_ordered objects conveniently matches that accepted by
+    // `#nestEx():
     //[
     //   // Assuming both collections are Ordered and _owning, removes
     //   // the first child from col1 and inserts it in col2, preserving
@@ -4957,20 +5245,20 @@
 
     events: {
       //! +fn=nestEx:options
-      // `#Ordered extends the inherited `'nestEx (typically `@Base.nestEx()`@) and handles
-      // new `'options keys:
-      //> pos any, optional `- the caller may explicitly specify new child's position
-      //  relative to other children; `'pos may be used by `#_sorter() (in the
-      //  default implementation it is)
+      // `#Ordered extends the inherited `'nestEx (typically `@Base.nestEx()`@)
+      // and handles new `'options keys:
+      //> pos any, optional `- the caller may explicitly specify new child's
+      //  position relative to other children; `'pos may be used by `#_sorter()
+      //  (in the default implementation it is)
       //> index number `- set on return to the actual position of the new child
       //  in `#_ordered; `'index can be given to `#at()
       //> oldIndex number `- only set on return if `[options.changed`] is unset
       //
-      // If re-nesting the same child on the same key, `#Base's `#nestEx()
-      // does nothing but `#Ordered's `#nestEx updates the child's position in `#_ordered
-      // if old and new `[options.pos`] are different (i.e. `[!_.isEqual()`])
-      // and calls `#_repos(). `[options.changed`]
-      // remains `'false. Detect this situation by comparing `'index and `'oldIndex:
+      // If re-nesting the same child on the same key, `#Base's `#nestEx() does
+      // nothing but `#Ordered's `#nestEx updates the child's position in
+      // `#_ordered if old and new `[options.pos`] are different (i.e.
+      // `[!_.isEqual()`]) and calls `#_repos(). `[options.changed`] remains
+      // `'false. Detect this situation by comparing `'index and `'oldIndex:
       //[
       //   col.nestEx({child: sqim, pos: -123})   // new child, explicit pos
       //     //=> {..., changed: true, previous: null, index: 0}
@@ -4989,9 +5277,10 @@
         }
         if (changed) {
           res.index = this._indexFor(res)
-          // pick() removes keys that Ordered doesn't need (and which may reference some objects
-          // preventing their GC'ion) and clones `'options to avoid indirect changes
-          // by the caller (nestEx() returns this object as is).
+          // pick() removes keys that Ordered doesn't need (and which may
+          // reference some objects preventing their GC'ion) and clones
+          // `'options to avoid indirect changes by the caller (nestEx()
+          // returns this object as is).
           this._ordered.splice(res.index, 0, _.pick(res, 'child', 'key', 'pos'))
           this._repos(res.child, res.index)
         }
@@ -4999,14 +5288,15 @@
 
       unnested: function (sqim) {
         // Owning Ordered sqimitives can never have duplicates so no matter
-        // from where unnesting is called, we don't need any more info than
-        // the sqim itself to locate its correct entry in _ordered.
+        // from where unnesting is called, we don't need any more info than the
+        // sqim itself to locate its correct entry in _ordered.
         //
         // For a non-_owning duplicating sqimitive we do need sqim's former
         // key. Unnesting can happen either in nestEx() (when replacing old
         // sqim with another sqimitive) or in unlist() (when removing a
-        // particular sqim). In both cases we have the needed info but it's
-        // not here but there, in those methods so removal from _ordered is handled there.
+        // particular sqim). In both cases we have the needed info but it's not
+        // here but there, in those methods so removal from _ordered is handled
+        // there.
         if (this._owning) {
           // _parentKey is not available at this point.
           var entry = _.find(this._ordered, function (entry) {
@@ -5016,11 +5306,12 @@
         }
       },
 
-      // Non-_owning duplicating Ordered's unlist() removes all occurrences
-      // of a child if given an object or a particular one if given a string
+      // Non-_owning duplicating Ordered's unlist() removes all occurrences of
+      // a child if given an object or a particular one if given a string
       // (key).
       '+unlist': function (sqim, key) {
-        // If !sqim then unlist() didn't find the child so no need to update _ordered.
+        // If !sqim then unlist() didn't find the child so no need to update
+        // _ordered.
         if (!this._owning && sqim) {
           if (sqim == key) {    // object given.
             this._ordered = this._ordered.filter(function (entry) {
@@ -5032,7 +5323,8 @@
         }
       },
 
-      // Returned array members have a guaranteed order. Object keys are lost (if this is non-_owning).
+      // Returned array members have a guaranteed order. Object keys are lost
+      // (if this is non-_owning).
       '=slice': function (sup, start, end) {
         return _.pluck(this._ordered.slice(start, end), 'child')
       },
@@ -5048,23 +5340,23 @@
     },
 
     //! +ig
-    // If `'sqim is missing, it's read from `#_children (in this case `#_indexOf()
-    // should not be called after `'sqim was already unnested).
+    // If `'sqim is missing, it's read from `#_children (in this case
+    // `#_indexOf() should not be called after `'sqim was already unnested).
     _indexOf: function (key, sqim) {
       key += ''
       sqim = sqim || this._children[key]
       return _.findIndex(this._ordered, function (entry) {
-        // Technically only comparing keys would suffice (since
-        // _children can't have 2 members with the same key) but
-        // comparing objects first is faster.
+        // Technically only comparing keys would suffice (since _children can't
+        // have 2 members with the same key) but comparing objects first is
+        // faster.
         return entry.child == sqim && entry.key == key
       })
     },
 
     //! +ig
     //> entry `- object with `'child/`'key/`'pos keys (as in `#_ordered)
-    // Gets called assuming `[entry.child`] is not yet nested in `#this.
-    // `'pos is coming from `#nestEx()'s `'options.
+    // Gets called assuming `[entry.child`] is not yet nested in `#this. `'pos
+    // is coming from `#nestEx()'s `'options.
     _indexFor: function (entry) {
       return this.constructor.indexFor(this._ordered, entry, this._sorter, this)
     },
@@ -5072,18 +5364,19 @@
     // The comparison function for determining desired child order.
     //
     //= < 0 if `'a must go before `'b`, > 0 if it must go after`,
-    //  0 if they can go in any order; it's generally recommended to avoid 0
-    //  to ensure that re-sorting the same array doesn't result in
-    //  a different order of members
+    //  0 if they can go in any order; it's generally recommended to avoid 0 to
+    //  ensure that re-sorting the same array doesn't result in a different
+    //  order of members
     //
     // You want to override `#_sorter() if you are not happy with the default
-    // implementation. If you do,
-    // see `#indexFor() for the invokation format. Default implementation compares
-    // using `'pos (if given to `#nestEx() for an object) or `'key (if nesting using `#_defaultKey() then keys are `#_cid's).
+    // implementation. If you do, see `#indexFor() for the invokation format.
+    // Default implementation compares using `'pos (if given to `#nestEx() for
+    // an object) or `'key (if nesting using `#_defaultKey() then keys are
+    // `#_cid's).
     //
-    //? Adapted code snippet from the sample To-Do application which is using the value
-    //  of the `'order option of a given child if no explicit `'pos was provided for it
-    //  when nesting:
+    //? Adapted code snippet from the sample To-Do application which is using
+    //  the value of the `'order option of a given child if no explicit `'pos
+    //  was provided for it when nesting:
     //  `[
     //     '=_sorter': function (sup, a, b, posB) {
     //       var posA = a.pos == null ? a.child.get('order') : a.pos
@@ -5094,12 +5387,14 @@
     //     },
     //  `]
     //
-    // `'a and `'b are objects in the `#_ordered format. During `#nestEx() one of them
-    // may be missing from `#_ordered but present in `#_children; during `#resort()
-    // both are present in `#_ordered. `'b is `'null on the first iteration (see `#indexFor()).
+    // `'a and `'b are objects in the `#_ordered format. During `#nestEx() one
+    // of them may be missing from `#_ordered but present in `#_children;
+    // during `#resort() both are present in `#_ordered. `'b is `'null on the
+    // first iteration (see `#indexFor()).
     //
-    // Note: if consumers of this object are using `'pos, make sure either they supply correct types or you normalize them in `#_sorter: number `[10`] is > `[2`]
-    // but string `['10'`] is < `['2'`].
+    // Note: if consumers of this object are using `'pos, make sure either they
+    // supply correct types or you normalize them in `#_sorter: number `[10`]
+    // is > `[2`] but string `['10'`] is < `['2'`].
     _sorter: function (a, b, posB) {
       a = a.pos == null ? a.key : a.pos
       return arguments.length == 1 ? a
@@ -5111,7 +5406,8 @@
     //
     //= this
     //
-    // Call `#resort() if an option that affects the sort order (`#_sorter) was changed or if sorting was temporary disabled.
+    // Call `#resort() if an option that affects the sort order (`#_sorter) was
+    // changed or if sorting was temporary disabled.
     //
     // Calls `#_repos() on every member after sorting `#_ordered.
     //
@@ -5132,7 +5428,8 @@
     //   })
     // `]
     //
-    //? Temporary disabling automatic sorting is useful during mass-assignment (`#assignChildren()):
+    //? Temporary disabling automatic sorting is useful during mass-assignment
+    //  (`#assignChildren()):
     //  `[
     //     var hook = this.on('=_indexFor', Sqimitive.Core.stub)
     //     try {
@@ -5153,7 +5450,8 @@
     },
 
     //! +fn=_repos:child:index +ig
-    // Called when a child's position has changed or was set for the first time.
+    // Called when a child's position has changed or was set for the first
+    // time.
     //
     //> sqim object `- the child that has changed position
     //> index int `- `'sqim's index in `'this; can be given to `#at()
@@ -5171,13 +5469,15 @@
     //     },
     //  `]
     //
-    // ` `#_repos() is called for newly `#nest'ed `#_children and those that have changed `'pos. It's not called for removed
-    // children. The default implementation in `#Ordered does nothing.
+    // ` `#_repos() is called for newly `#nest'ed `#_children and those that
+    // have changed `'pos. It's not called for removed children. The default
+    // implementation in `#Ordered does nothing.
     //
-    // ` `#resort() calls `#_repos() for all children (even if some didn't change
-    // positions - this is hard to determine). Here, note `'Array's `'forEach() implications:
-    // going in ascending order from child #0 to last, and if `#_repos() mutates children
-    // then `#_repos() is not called for some of them (so don't mutate).
+    // ` `#resort() calls `#_repos() for all children (even if some didn't
+    // change positions - this is hard to determine). Here, note `'Array's
+    // `'forEach() implications: going in ascending order from child #0 to
+    // last, and if `#_repos() mutates children then `#_repos() is not called
+    // for some of them (so don't mutate).
     //
     //#-plainstub
     _repos: Core.stub,
@@ -5186,9 +5486,9 @@
     //
     //= object `- entry in the format of `#_ordered
     //
-    // With `#at() you can obtain a child's key or `'pos.
-    // Use it from `#util functions like `'each() which provide you with an
-    // index in `#_ordered (or in the result of `#slice()).
+    // With `#at() you can obtain a child's key or `'pos. Use it from `#util
+    // functions like `'each() which provide you with an index in `#_ordered
+    // (or in the result of `#slice()).
     //
     // Warning: `#at() returns the object from `#_ordered verbatim - do not
     // change it, or shallow-copy before you do.
@@ -5224,15 +5524,19 @@
       //* `@Ordered::indexFor()`@
       //#
       //
-      // Determines insertion position for a new member `'value in `'array using a binary search.
+      // Determines insertion position for a new member `'value in `'array
+      // using a binary search.
       //
       // ` `#indexFor() is an adaptation of Underscore's `@un:sortedIndex`@().
-      // It supports two sort callback styles: relative (`[(a, b)`], as for `'Array's `'sort()) and weight-based (`[(a)`], as for `@un:sortBy`@()).
+      // It supports two sort callback styles: relative (`[(a, b)`], as for
+      // `'Array's `'sort()) and weight-based (`[(a)`], as for
+      // `@un:sortBy`@()).
       //
-      // First time `'func is called it's given only 1 argument (`'value) and expected to return `'value's weight (which is
-      // stored for later calls), then it's called repeatedly to compare `'value against
-      // other members (returning < 0 if `'b must go before `'a, > 0 if after, == 0
-      // if their sort order is the same and either can go in front of another).
+      // First time `'func is called it's given only 1 argument (`'value) and
+      // expected to return `'value's weight (which is stored for later calls),
+      // then it's called repeatedly to compare `'value against other members
+      // (returning < 0 if `'b must go before `'a, > 0 if after, == 0 if their
+      // sort order is the same and either can go in front of another).
       //
       // In `#Ordered, `#indexFor() is used to maintain the order of children
       // (in `#_ordered) using `#_sorter() for `'func. Usually there's no need
@@ -5281,9 +5585,9 @@
   // For non-Ordered.
   // iterator = function (Sqimitive child, int index)
   //
-  // toArray() is part of arrayUtils, not objectUtils so that it uses Sqimitive's
-  // slice() to preserve the order (result of toArray(_children) would be
-  // unordered, of toArray(slice()) - ordered if slice() is ordered).
+  // toArray() is part of arrayUtils, not objectUtils so that it uses
+  // Sqimitive's slice() to preserve the order (result of toArray(_children)
+  // would be unordered, of toArray(slice()) - ordered if slice() is ordered).
   var arrayUtils =
     'each map find filter reject reduce every some contains invoke pluck' +
     ' max min sortBy groupBy indexBy countBy chunk shuffle sample' +

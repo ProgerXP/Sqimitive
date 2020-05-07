@@ -550,18 +550,19 @@ Sample code below demonstrates this in practice. It's a good idea to make a clas
     },
 
     _modelAdded: function (model) {
-      // This is the place where a new View gets created, nested and linked to the model.
-      // First argument to nest() is view's parent key by which it can be retrieved
-      // later. Model's ID is usually unique so use it if you have one. If this key already
-      // existed then that View will be removed and replaced with the new View.
+      // This is the place where a new View gets created, nested and linked to
+      // the model. First argument to nest() is view's parent key by which it
+      // can be retrieved later. Model's ID is usually unique so use it if you
+      // have one. If this key already existed then that View will be removed
+      // and replaced with the new View.
       var view = this.nest(model.get('id'), new this._childClass({
         model: model,
         attachPath: '.models',
       }))
 
-      // Append view.el to this.el.find('.models') and bind its DOM event listeners.
-      // This won't render() the View but it might listen to 'attach' and call render()
-      // automatically.
+      // Append view.el to this.el.find('.models') and bind its DOM event
+      // listeners. This won't render() the View but it might listen to
+      // 'attach' and call render() automatically.
       view.attach()
       // ...If it doesn't auto-render - no big deal:
       view.render()
@@ -570,8 +571,9 @@ Sample code below demonstrates this in practice. It's a good idea to make a clas
     _modelRemoved: function (model) {
       var view = this.nested(model.get('id'))
       if (view) {
-        // Removes view's DOM element from this.el and unnests view from this children.
-        // This essentially unbinds view's DOM listeners and its Sqimitive listeners on the parent (this).
+        // Removes view's DOM element from this.el and unnests view from this
+        // children. This essentially unbinds view's DOM listeners and its
+        // Sqimitive listeners on the parent (this).
         view.remove()
       } else {
         console.warn('Removed a Model with no nested View.')
@@ -641,7 +643,8 @@ Sample code below defines a class with two options – `'isCompleted (boolean) a
 
     normalize_isCompleted: function (value) {
       // Turn whatever is given as a new value for isCompleted into a boolean.
-      // If the result is identical to the current value – 'change' is not fired.
+      // If the result is identical to the current value – 'change' is not
+      // fired.
       return !!value
     },
 
@@ -651,8 +654,9 @@ Sample code below defines a class with two options – `'isCompleted (boolean) a
     },
 
     render: function () {
-      // Retrieve the map of all options/values and pass them as variables to the template.
-      // Note that template() implementation differs in NoDash, Underscore and LoDash.
+      // Retrieve the map of all options/values and pass them as variables to
+      // the template. Note that template() implementation differs in NoDash,
+      // Underscore and LoDash.
       var vars = this.get()   // = {isCompleted: false, caption: 'foo'}
       this.el.html(_.template(this._tpl, vars))
     },
@@ -673,17 +677,18 @@ Note that the hierarchy of sqimitives (defined by `#nest) doesn't necessary refl
 
 `[
   var MyToDoList = Sqimitive.jQuery.extend({
-    // Add extra protection against accidental foreign class being added as a child.
+    // Add extra protection against accidental foreign class being added as a
+    // child.
     _childClass: MyToDoItem,
     // Leading dash means "listen before" - see next section about events.
     _childEvents: ['-change', 'change'],
 
     events: {
-      // To avoid collisions between children-generated and self events
-      // those forwarded from children get prepended with a period. If you
-      // have another parent that is forwarding its child's children events
-      // then another period appears - e.g. '..change'. Think of this as of
-      // regular '../../path' notation where each period means "one level above".
+      // To avoid collisions between children-generated and self events those
+      // forwarded from children get prepended with a period. If you have
+      // another parent that is forwarding its child's children events then
+      // another period appears - e.g. '..change'. Think of this as of regular
+      // '../../path' notation where each period means "one level above".
       '.-change': function (sqim, optName, newValue, currentValue) {
         // Outputs something like "To-do item's caption ... from foo to bar".
         console.log('To-do item\'s ' + optName + ' is about to be changed' +
@@ -699,7 +704,8 @@ Note that the hierarchy of sqimitives (defined by `#nest) doesn't necessary refl
       var itemOptions = {isCompleted: false, caption: 'Dummy item'}
       var sqim = this.nest(new MyToDoItem(itemOptions))
       sqim.set('caption', 'fire them!')
-      // Because of forwarded events two new messages have appeared in the console.
+      // Because of forwarded events two new messages have appeared in the
+      // console.
 
       // Can also assign an explicit name (if omitted _cid is used).
       this.nest('childName', new this._childClass)
@@ -710,10 +716,10 @@ Note that the hierarchy of sqimitives (defined by `#nest) doesn't necessary refl
 
     // Use Underscore to retireve only children with isCompleted being false.
     getIncomplete: function () {
-      // picker() gets inherited from Sqimitive.Core and is simply a
-      // function calling a method on the given object with given parameters.
-      // In other words, equivalent to ES6's: (o) => o.get('isCompleted')
-      // LoDash has a similar method called rearg().
+      // picker() gets inherited from Sqimitive.Core and is simply a function
+      // calling a method on the given object with given parameters. In other
+      // words, equivalent to ES6's: (o) => o.get('isCompleted') LoDash has a
+      // similar method called rearg().
       return this.reject(MyToDoList.picker('get', 'isCompleted'))
     },
   })
@@ -749,9 +755,9 @@ An example to demonstrate how methods become events "on demand" (`#logEvents):
   })
 
   // Now we are in fact firing 'render' which is an event with two listeners:
-  // one from MyBase (called first) and another from MyChild.
-  // 'render' is fired whenever we call render() in MyChild and descendants,
-  // and for them logEvents() logs the call.
+  // one from MyBase (called first) and another from MyChild. 'render' is fired
+  // whenever we call render() in MyChild and descendants, and for them
+  // logEvents() logs the call.
   ;(new MyChild).render()
 
   // POTENTIALLY WRONG:
@@ -763,12 +769,12 @@ An example to demonstrate how methods become events "on demand" (`#logEvents):
 
   // Now we're back to event-less render() - a mere function. Note that two
   // former 'render' handlers are still present so if we attach a new listener
-  // to 'render' current render() ("Boom") will be prepended to the list of handlers as a 3rd handler and
-  // MyChile.render() itself will be replaced by firer('render'). It's a bad
-  // practice to supersede an "evented" function like this and usually indicates
-  // a mistake (forgetting that a method of the same name exists in some parent).
-  // Consequently, logEvents() here won't track anything.
-  // More on this below, in #evtconc.
+  // to 'render' current render() ("Boom") will be prepended to the list of
+  // handlers as a 3rd handler and MyChile.render() itself will be replaced by
+  // firer('render'). It's a bad practice to supersede an "evented" function
+  // like this and usually indicates a mistake (forgetting that a method of the
+  // same name exists in some parent). Consequently, logEvents() here won't
+  // track anything. More on this below, in #evtconc.
   ;(new MyChile).render()
 `]
 
@@ -791,7 +797,8 @@ Compare Sqimitive-style inheritance (`#evtpf) and the traditional inheritance us
     // Calling the inherited implementation...
     effect: function (arg) {
       console.log('pre-actions')
-      // We have to hardcode current class and method names, plus the call is quite long.
+      // We have to hardcode current class and method names, plus the call is
+      // quite long.
       var result = JsOopSubclassing.__super__.effect.apply(this, arguments)
       console.log('post-actions')
       return result
@@ -815,9 +822,10 @@ Compare Sqimitive-style inheritance (`#evtpf) and the traditional inheritance us
         return result
       },
 
-      // However, such a full override is rarely needed - most often you only need
-      // to do something after the original method executes, keeping its return value.
-      // This one is identical to the above in effect but without logging 'pre-actions'.
+      // However, such a full override is rarely needed - most often you only
+      // need to do something after the original method executes, keeping its
+      // return value. This one is identical to the above in effect but without
+      // logging 'pre-actions'.
       effect: function (arg) {
         console.log('post-actions')
       },
@@ -827,8 +835,8 @@ Compare Sqimitive-style inheritance (`#evtpf) and the traditional inheritance us
         console.log('pre-actions')
       },
 
-      // Yet at other times we need to call the original code and
-      // obtain and/or change its return value.
+      // Yet at other times we need to call the original code and obtain and/or
+      // change its return value.
       '+effect': function (result, arg) {
         console.log('post-actions')
 
@@ -837,8 +845,8 @@ Compare Sqimitive-style inheritance (`#evtpf) and the traditional inheritance us
           return new That(arg)
         }
 
-        // Returning undefined or not returning at all retains the current result.
-        // These are identical:
+        // Returning undefined or not returning at all retains the current
+        // result. These are identical:
         //return undefined
         //return
       },
@@ -866,18 +874,18 @@ Finally, to demonstrate the usage of dynamic event binding and method overriding
 
     listeners: function () {
       // When slotA is fired, it outputs "slotA" and "post-effect" to the
-      // console and returns 'slotA'. Exactly the same would be with slotB
-      // even though it was't explicitly declared as an event - it becomes
-      // one as soon as the first handler is attached.
+      // console and returns 'slotA'. Exactly the same would be with slotB even
+      // though it was't explicitly declared as an event - it becomes one as
+      // soon as the first handler is attached.
       this.on('slotA', function () {
         console.log('post-effect')
       })
 
       // Nobody said we can't create events out of thin air without defining
-      // them anywhere first. Note that since it's an event handler and not
-      // a class method it cannot return any value (it would be ignored). This way no
-      // disruption is caused if the class suddenly declares a method
-      // of the same name (this handler will be called after it).
+      // them anywhere first. Note that since it's an event handler and not a
+      // class method it cannot return any value (it would be ignored). This
+      // way no disruption is caused if the class suddenly declares a method of
+      // the same name (this handler will be called after it).
       this.on('slotC', function () {
         console.log('post-effect')
         return 'ignored'
@@ -897,8 +905,9 @@ Finally, to demonstrate the usage of dynamic event binding and method overriding
         return 'ignored'
       })
 
-      // You can do a full override as well - and the beauty is that
-      // you can off() it any time later and original method(s) (now "inside" sup) will be put back in place.
+      // You can do a full override as well - and the beauty is that you can
+      // off() it any time later and original method(s) (now "inside" sup) will
+      // be put back in place.
       this.on('=slotC', function (sup) {
         console.log('pre-effect')
         var result = sup(this, arguments)
@@ -906,10 +915,9 @@ Finally, to demonstrate the usage of dynamic event binding and method overriding
         return result
       })
 
-      // If you try to turn a non-method into an event nothing
-      // will break - you will add an event listener all right and fire('notASlot')
-      // will work but doing
-      // notASlot() won't fire the event - only access that property.
+      // If you try to turn a non-method into an event nothing will break - you
+      // will add an event listener all right and fire('notASlot') will work
+      // but doing notASlot() won't fire the event - only access that property.
       // Granted, it's confusing to have an event which works differently from
       // this.notASlot() so better avoid it.
       this.on('notASlot', function () {
@@ -924,11 +932,11 @@ Finally, to demonstrate the usage of dynamic event binding and method overriding
       var handler = function () { };
       var context = new SomeObject;
 
-      // Unless "fused" (on class declaration time), each event handler gets
-      // a unique ID that can be used to unbind it later (very fast).
-      // Contrary to the common approach, Sqimitive offers no event namespaces
-      // (such as my.handler) used to unbind group of events - by-context lookup
-      // is available and it covers most of such use-cases (see below).
+      // Unless "fused" (on class declaration time), each event handler gets a
+      // unique ID that can be used to unbind it later (very fast). Contrary to
+      // the common approach, Sqimitive offers no event namespaces (such as
+      // my.handler) used to unbind group of events - by-context lookup is
+      // available and it covers most of such use-cases (see below).
       var id = this.on('event', handler)
       this.off(id)
 
@@ -1028,15 +1036,15 @@ Sample code below creates a simple login form. It stores data in its own `#opt'i
       this.$('[name=remember]')[0].checked = this.get('remember')
     },
 
-    // stub() is just a function that returns undefined (nothing).
-    // When it's used in place of a method and if that method becomes
-    // an event (getting a listener) then there's a small optimization -
-    // Sqimitive removes the old method entirely without adding it
-    // as a listener for that event.
+    // stub() is just a function that returns undefined (nothing). When it's
+    // used in place of a method and if that method becomes an event (getting a
+    // listener) then there's a small optimization - Sqimitive removes the old
+    // method entirely without adding it as a listener for that event.
     //
     // Alternatively, you could just leave this undefined and always use
-    // fire('loggedIn') but it's against Sqimitive conventions, more tricky and less obvious if you ever
-    // get a loggedIn() method that for any reason does something else.
+    // fire('loggedIn') but it's against Sqimitive conventions, more tricky and
+    // less obvious if you ever get a loggedIn() method that for any reason
+    // does something else.
     loggedIn: Sqimitive.jQuery.stub,
   })
 `]
@@ -1044,7 +1052,8 @@ Sample code below creates a simple login form. It stores data in its own `#opt'i
 We can use the above class as follows:
 
 `[
-  // A typical use case - just create a new form object along with its DOM element:
+  // A typical use case - just create a new form object along with its DOM
+  // element:
   var sqim = new MyFormView({login: 'default@login'})
 
   // Or if we have an existing container element - use it:
@@ -1063,9 +1072,10 @@ We can use the above class as follows:
     }
   })
 
-  // This is not Sqimitive-way: it's long-winded, overrides whatever is
-  // already defined as render() including all event listeners (if 'render' is an event slot, see #evtconc)
-  // and hardcodes parent class name and return value... but if you don't mind that - use it, Sqimitive doesn't care.
+  // This is not Sqimitive-way: it's long-winded, overrides whatever is already
+  // defined as render() including all event listeners (if 'render' is an event
+  // slot, see #evtconc) and hardcodes parent class name and return value...
+  // but if you don't mind that - use it, Sqimitive doesn't care.
   sqim.render = function () {
     if (location.protocol != 'https:') {
       this.el.text('Your connection is not secure!')
@@ -1141,9 +1151,11 @@ This technique allows attaching custom info to every class (prototype) but is fa
     // ...
   })
 
-  // MyAppRoot.BaseView.SubView is a constructor, i.e. a function, and so has a name property:
+  // MyAppRoot.BaseView.SubView is a constructor, i.e. a function, and so has a
+  // name property:
   MyAppRoot.BaseView.SubView.name     //=> 'BaseView.SubView'
-    // some browsers even show the function's name when you hover or print such an object
+    // some browsers even show the function's name when you hover or print such
+    // an object
 
   var sqim = new MyAppRoot.BaseView.SubView
   sqim.constructor.name               //=> 'BaseView.SubView'
@@ -1154,7 +1166,8 @@ This technique allows attaching custom info to every class (prototype) but is fa
 Sometimes you get a number of actions to be completed before performing a specific task. For example, you need to preload a bunch of images and work on them once they are all ready. You can use native `'Promise objects or their "fractal" form (`@Sqimitive\Async`@), or you can write a simple class for counter-based synchronization:
 
 `[
-  // We need no associated el object so we extend Base and don't depend on jQuery.
+  // We need no associated el object so we extend Base and don't depend on
+  // jQuery.
   var Countdown = Sqimitive.Base.extend('Countdown', {
     _opt: {
       count: 0,
@@ -1163,7 +1176,8 @@ Sometimes you get a number of actions to be completed before performing a specif
 
     events: {
       init: function (opt, onDone) {
-        // This way dec() and inc() calls will always happen on this object instance.
+        // This way dec() and inc() calls will always happen on this object
+        // instance.
         _.bindAll(this, 'dec', 'inc')
         onDone && (this.done = onDone)
       },
@@ -1201,7 +1215,8 @@ Its usage is straightforward:
   // Start loading images.
   _.each(images, function (path) {
     var img = new Image
-    // dec() is bound to the instance so can be called with an arbitrary context.
+    // dec() is bound to the instance so can be called with an arbitrary
+    // context.
     img.onload = countdown.dec
     img.src = path
   })
@@ -1233,8 +1248,8 @@ An instance of this class can have only one stage active at a given time and so 
       this.passthru()
     },
 
-    // (2) Proceed to 'transition' if need to perform any action (e.g. if
-    // a window is visible, not hidden) or to 'done'.
+    // (2) Proceed to 'transition' if need to perform any action (e.g. if a
+    // window is visible, not hidden) or to 'done'.
     passthru: function () {
       this.transition()
     },
@@ -1305,7 +1320,8 @@ When you want to start running a new activity use `'start() with an optional cal
           cx: this,
         })
 
-        // You don't have to implement every method down here, this is just an example.
+        // You don't have to implement every method down here, this is just an
+        // example.
         this._activity.on({
           passthru: function () {
             if (this.el(':visible')) {
@@ -1348,7 +1364,8 @@ When you want to have your callback fired right away without starting the activi
 
 `[
   this._activity.enqueue(function () {
-    // At this point it's guaranteed that the activity is no more/was not running.
+    // At this point it's guaranteed that the activity is no more/was not
+    // running.
   })
 `]
 
