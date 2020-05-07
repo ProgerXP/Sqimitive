@@ -10,7 +10,7 @@
   "authors": [
     "Proger_XP <proger.xp@gmail.com> (http://proger.me)"
   ],
-  "description": "A JavaScript primitive. Events, collections, inheritance, DOM integration based on a universal paradgm.",
+  "description": "A JavaScript primitive. Events, collections, inheritance, DOM integration based on a universal paradigm.",
   "moduleType": [
     "amd",
     "node",
