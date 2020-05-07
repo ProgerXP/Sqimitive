@@ -79,7 +79,7 @@ Attention: JavaScript objects are unordered. See the description of `#Ordered.
 
 `# Introduction
 
-`## Sqimitive.js – A Universal Primitive
+`## Sqimitive.js - A Universal Primitive
 
 Sqimitive.js is a minimalistic paradigm-agnostic building block for applications written in JavaScript (not necessary in-browser or DOM-related). It provides core infrastructure without much domain-specific logic which you can quickly develop thanks to its flexible API.
 
@@ -141,7 +141,7 @@ Sqimitive has been inspired by Backbone.js (`@bb:`@) and was written as a soluti
 
 `* Removes server-side communication layer (`@bb:Model-sync`@) while keeping routines to smart-update object states (`#assignChildren(), `#assignResp()). Instead of overriding parts of the library (as it's often done with Backbone) you implement them yourself just once given your unique project requirements.
 
-While different, Sqimitive will appear very familiar to Backbone users and being paradigm-free it will even let you work the way you used with Backbone or another framework – in aspects you wish. You can create your own Model, Collection and View classes to follow MVC, use traditional `'__super__-style inheritance, write your specific `'sync() routines and so on.
+While different, Sqimitive will appear very familiar to Backbone users and being paradigm-free it will even let you work the way you used with Backbone or another framework - in aspects you wish. You can create your own Model, Collection and View classes to follow MVC, use traditional `'__super__-style inheritance, write your specific `'sync() routines and so on.
 
 This section highlights most notable gaps present in Backbone and other frameworks. Strictly subjective!
 
@@ -149,9 +149,9 @@ This section highlights most notable gaps present in Backbone and other framewor
 
 In Backbone and other JavaScript frameworks inheritance (overriding of parent properties and methods) is painful.
 
-` `*With properties`*, if it's a complex object that you would rather extend (append to) rather than replace entirely – as it is the case with `@bb:Model-attributes`@, `@bb:Model-defaults`@, `@bb:View-events`@ (DOM bindings) and others – you have to add them in the constructor because if you define such a property in the child class you will `*entirely overwrite the inherited value`*. Moreover, if at some point the base class that did not have that property decided to declare it – all its subclasses overwrite it without notice... Unless you remember to update them, which is an unnecessary cognitive burden.
+` `*With properties`*, if it's a complex object that you would rather extend (append to) rather than replace entirely - as it is the case with `@bb:Model-attributes`@, `@bb:Model-defaults`@, `@bb:View-events`@ (DOM bindings) and others - you have to add them in the constructor because if you define such a property in the child class you will `*entirely overwrite the inherited value`*. Moreover, if at some point the base class that did not have that property decided to declare it - all its subclasses overwrite it without notice... Unless you remember to update them, which is an unnecessary cognitive burden.
 
-` `*With methods`*, you have to hardcode reference to the base class – that's not to mention the entire construct which is already ugly: `[My.Class.__super__.baseMethod.apply(this, arguments)`]. So if you later rename the base class or move this subclass under another parent, or rename the method, or just make a typo – the entire inheritance chain for this method is broken. You may or may not get an error, too.
+` `*With methods`*, you have to hardcode reference to the base class - that's not to mention the entire construct which is already ugly: `[My.Class.__super__.baseMethod.apply(this, arguments)`]. So if you later rename the base class or move this subclass under another parent, or rename the method, or just make a typo - the entire inheritance chain for this method is broken. You may or may not get an error, too.
 
 This is the price for trying to push classic OOP into JavaScript prototype model.
 
@@ -210,11 +210,11 @@ See more details and examples in the Views overview section (`#vw).
 
 In Backbone and other frameworks, you have to track changes to your data and view states. Backbone eases this task by providing standard events like `[change:attr`] event for Models. However, this approach must be brought further to let us take full advantage of it.
 
-In Sqimitive, you get a special object property – `@Base._opt`@ ("options") – that is a pool of trackable states, similar to Backbone's `@bb:Model-attributes`@. Items in this pool are read with `#get() and written with `#set(). When a new and different value is written a bunch of events occurs; within their listeners you can cancel or normalize the change (`#normalize_OPT()) or perform an action (`#change_OPT() and `#change()). Parent sqimitives can optionally forward their children events to themselves (`#_childEvents).
+In Sqimitive, you get a special object property - `@Base._opt`@ ("options") - that is a pool of trackable states, similar to Backbone's `@bb:Model-attributes`@. Items in this pool are read with `#get() and written with `#set(). When a new and different value is written a bunch of events occurs; within their listeners you can cancel or normalize the change (`#normalize_OPT()) or perform an action (`#change_OPT() and `#change()). Parent sqimitives can optionally forward their children events to themselves (`#_childEvents).
 
-This can be used to create event observation spots too. Suppose that you have an object that's loading some data from the server. Since it's asynchronous you don't know when (or if) it will finish. Usually you would either create a callback property and call it or use a custom event (like jQuery and Backbone do) and trigger it once loading is done. In Sqimitive, you simply introduce some `[_opt.loading`], set it to `'false initially and once done – change to `'true. Observers listen to the `'change_loading event having the full set of event handling routines at their disposal (`#on, `#once, `#fuse, `#off, `#autoOff, `#logEvents, etc.) instead of introducing `'isLoading(), `'abortLoading(), `'onLoading(), etc.
+This can be used to create event observation spots too. Suppose that you have an object that's loading some data from the server. Since it's asynchronous you don't know when (or if) it will finish. Usually you would either create a callback property and call it or use a custom event (like jQuery and Backbone do) and trigger it once loading is done. In Sqimitive, you simply introduce some `[_opt.loading`], set it to `'false initially and once done - change to `'true. Observers listen to the `'change_loading event having the full set of event handling routines at their disposal (`#on, `#once, `#fuse, `#off, `#autoOff, `#logEvents, etc.) instead of introducing `'isLoading(), `'abortLoading(), `'onLoading(), etc.
 
-Thanks to the new option, this starts working the other way too: an external object can `[set('loading', true)`] to trigger data refresh on the object. Better still – the loading object itself can set this option to trigger its own loading routine – naturally, avoiding code duplication.
+Thanks to the new option, this starts working the other way too: an external object can `[set('loading', true)`] to trigger data refresh on the object. Better still - the loading object itself can set this option to trigger its own loading routine - naturally, avoiding code duplication.
 
 Moreover, since options are not accessed directly you can always listen for their access with `'get or add custom behaviour with `'set, disregarding the fact they are originally methods (`#get(), `#set()). Lack of direct access to `#opt'ions improves stability of the code base.
 
@@ -281,7 +281,7 @@ Given this mechanism you can significantly lower your `'render() and custom even
 
 If you have used Backbone's `'add, `'remove and `'change events then you probably know that they do not occur... always. For example, if you `'reset() a Collection it won't fire `'add for new Models, `'remove for gone or `'change for existing Models that were updated.
 
-This smells like an optimization – after all, firing hundreds of events when resetting a huge Collection might be slow. However, such cases are very rare and yet the existence of `'reset() makes it problematic to track the updates because often you will end up with your own routine bound to `'reset as an event that will figure the difference between old Collection contents and new one.
+This smells like an optimization - after all, firing hundreds of events when resetting a huge Collection might be slow. However, such cases are very rare and yet the existence of `'reset() makes it problematic to track the updates because often you will end up with your own routine bound to `'reset as an event that will figure the difference between old Collection contents and new one.
 
 This also happens with attribute normalization on Models which for some reason doesn't occur when assigning an API response.
 
@@ -304,11 +304,11 @@ Backbone inherits this behaviour which most of the time leads to very confusing 
 
 The only way around is to assign such properties in the constructor, which you should first override using the crazy `[My.Class.__super__.baseMethod.apply(this, arguments)`] construct. This gives your code -50 points in the ability to save kittens on this planet!
 
-Sqimitive eliminates this problem by automatically deep cloning (`#deepClone) all complex values upon new object instantiation. Of course, sometimes this is not desired – for this you can always assign them in the constructor just like before or list them in `#_shareProps to prevent automatic cloning.
+Sqimitive eliminates this problem by automatically deep cloning (`#deepClone) all complex values upon new object instantiation. Of course, sometimes this is not desired - for this you can always assign them in the constructor just like before or list them in `#_shareProps to prevent automatic cloning.
 
 `## Backbonization
 
-The following tricks can be used to make Sqimitive's API appear more like Backbone's. It will not make it 100% identical so don't use it in production as is – it's intended to give you some pointers.
+The following tricks can be used to make Sqimitive's API appear more like Backbone's. It will not make it 100% identical so don't use it in production as is - it's intended to give you some pointers.
 
 `### General
 
@@ -493,11 +493,11 @@ Views have `@bb:View-setElement`@(), `@bb:View-delegateEvents`@() and `@bb:View-
 
 `### Babysitting Models
 
-One of the most common problems when developing a complex client-side app is keeping track of multiple Models or of a Collection connected to a particular View. When a new Model appears you need to create and display a new nested View; when it's removed – its View should go away; when Model attributes change the View should be updated (and this case is often but not always handled by that Model's specific View).
+One of the most common problems when developing a complex client-side app is keeping track of multiple Models or of a Collection connected to a particular View. When a new Model appears you need to create and display a new nested View; when it's removed - its View should go away; when Model attributes change the View should be updated (and this case is often but not always handled by that Model's specific View).
 
 On top of that, when parent View acquires another Collection it should properly detach itself from the previously assigned Collection, attach to the new object and repopulate itself.
 
-Things get even more complex with asynchronous operations – sometimes the user gets ahead of his network packets and you don't want the user interface to tangle up.
+Things get even more complex with asynchronous operations - sometimes the user gets ahead of his network packets and you don't want the user interface to tangle up.
 
 Sqimitive addresses all of these challenges:
 
@@ -617,9 +617,9 @@ Each sqimitive has three fundamental features that in different combinations cov
 
 `##opt Options
 
-` `*Options`* are `@bb:Model-attributes`@ in Backbone's terms – set of key/value pairs defined under `@Base._opt`@ which trigger events on `#change or access, can be normalized and can be virtual (i.e. you can write your accessor that won't correspond to a "physical", listed option). They are solely accessed via `#set() and `#get() methods to create a sort-of public object interface.
+` `*Options`* are `@bb:Model-attributes`@ in Backbone's terms - set of key/value pairs defined under `@Base._opt`@ which trigger events on `#change or access, can be normalized and can be virtual (i.e. you can write your accessor that won't correspond to a "physical", listed option). They are solely accessed via `#set() and `#get() methods to create a sort-of public object interface.
 
-Sample code below defines a class with two options – `'isCompleted (boolean) and `'caption (string). When one of them is changed the associated DOM node is updated (see the sample To-Do application for more: `@https://squizzle.me/js/sqimitive/demo/to-do.html`@).
+Sample code below defines a class with two options - `'isCompleted (boolean) and `'caption (string). When one of them is changed the associated DOM node is updated (see the sample To-Do application for more: `@https://squizzle.me/js/sqimitive/demo/to-do.html`@).
 
 `[
   var MyToDoItem = Sqimitive.jQuery.extend({
@@ -643,7 +643,7 @@ Sample code below defines a class with two options – `'isCompleted (boolean) a
 
     normalize_isCompleted: function (value) {
       // Turn whatever is given as a new value for isCompleted into a boolean.
-      // If the result is identical to the current value – 'change' is not
+      // If the result is identical to the current value - 'change' is not
       // fired.
       return !!value
     },
@@ -665,15 +665,15 @@ Sample code below defines a class with two options – `'isCompleted (boolean) a
 
 `##chld Children
 
-` `*Children`* are zero or more "sqimitives" `#nested into zero or more parent "sqimitives". Their events may be forwarded to parent – but only while they are still part of that parent (`#_childEvents); upon removal they are automatically unbound (`#autoOff). When a children is added or removed its parent, if any, gets notified (`#unnested). Also, most of Underscore.js is available as methods to easily filter or transform children into native arrays or objects (`#util).
+` `*Children`* are zero or more "sqimitives" `#nested into zero or more parent "sqimitives". Their events may be forwarded to parent - but only while they are still part of that parent (`#_childEvents); upon removal they are automatically unbound (`#autoOff). When a children is added or removed its parent, if any, gets notified (`#unnested). Also, most of Underscore.js is available as methods to easily filter or transform children into native arrays or objects (`#util).
 
 Parent sqimitives can be of two types: `*`#_owning`* (by default) and `*non-owning`*. First represent a typical tree where each child has exactly one `#_parent and which you can traverse the tree in either direction starting from any node. If you `#nest one children into another parent it's automatically removed from the former owner. Second type is more of a list where you can only traverse from the outside because a child doesn't know in what other sqimitives it might be listed in, if at all, and no automatic removal is done when a child becomes part of another parent.
 
-Sample code below defines a to-do list that is meant for storing `[MyToDoItem`]s from the above example. Note that in Backbone you would have at least two classes: one `@bb:Collection`@ for storing the list of to-do items and one `@bb:View`@ for displaying that collection... Or, to be brutally honest, you would create four classes: a `@bb:Model`@ holding data of a single to-do item, a `@bb:View`@ displaying it, a `@bb:Collection`@ holding to-do items as a whole and another `@bb:View`@ holding the Collection holding the Models – and you still have to link each Model to its View and keep track of their events and DOM elements.
+Sample code below defines a to-do list that is meant for storing `[MyToDoItem`]s from the above example. Note that in Backbone you would have at least two classes: one `@bb:Collection`@ for storing the list of to-do items and one `@bb:View`@ for displaying that collection... Or, to be brutally honest, you would create four classes: a `@bb:Model`@ holding data of a single to-do item, a `@bb:View`@ displaying it, a `@bb:Collection`@ holding to-do items as a whole and another `@bb:View`@ holding the Collection holding the Models - and you still have to link each Model to its View and keep track of their events and DOM elements.
 
 In Sqimitive you can still do all that but it's the author's opinion that such pure concepts are only good for academics and very large projects - most of the time you would rather have something more utilitarian and dirty, if you will. Sqimitive allows you a choice since everything is ultimately a primitive and can be "purified" to the point you need.
 
-Note that the hierarchy of sqimitives (defined by `#nest) doesn't necessary reflect the hierarchy in DOM (of `@jQuery.el`@) – `#_children can have their elements under their `#_parent's `'el or elsewhere, or not have DOM elements at all (as "models" do).
+Note that the hierarchy of sqimitives (defined by `#nest) doesn't necessary reflect the hierarchy in DOM (of `@jQuery.el`@) - `#_children can have their elements under their `#_parent's `'el or elsewhere, or not have DOM elements at all (as "models" do).
 
 `[
   var MyToDoList = Sqimitive.jQuery.extend({
@@ -731,7 +731,7 @@ Note that the hierarchy of sqimitives (defined by `#nest) doesn't necessary refl
 
 When you try to listen to an event and there is a method of the same name, Sqimitive turns that method into an event slot and the method itself becomes its first listener. This way every method is potentially an event which you can manipulate on run-time as well as upon declaration (`#events), working with nearly conventional OOP as found in languages like C and PHP while still utilizing the power of dynamic object manipulation as it's meant with JavaScript.
 
-Likewise, if there is no method when you define an event – Sqimitive creates it so that calling it actually triggers the event (`#firer). This way you can always invoke a method without knowing if it's a real function or an event trampoline, bridging the gap between the two.
+Likewise, if there is no method when you define an event - Sqimitive creates it so that calling it actually triggers the event (`#firer). This way you can always invoke a method without knowing if it's a real function or an event trampoline, bridging the gap between the two.
 
 An example to demonstrate how methods become events "on demand" (`#logEvents):
 `[
@@ -1097,7 +1097,7 @@ This section is a collection of practical snippets and recipes demonstrating how
 
 With its concept of "functions as first-class citizens", JavaScript lacks any kind of "class name" references in instantiated objects. The best we can afford is duck-typing: if we see an object X having properties Y and Z the we `*suspect`* it's that kind of object (i.e. of that "class").
 
-Quite often while debugging we need to figure what's the object we see, `*reliably`*. If your app has all Sqimitive classes defined under a certain object (like `'window – which is a bad practice – or `[window.MyApp`]) you can go through all prototypes on start-up and add some property, let's say "sqClassName", holding string reference to that prototype, like `[MyApp.Collections.FooBar`].
+Quite often while debugging we need to figure what's the object we see, `*reliably`*. If your app has all Sqimitive classes defined under a certain object (like `'window - which is a bad practice - or `[window.MyApp`]) you can go through all prototypes on start-up and add some property, let's say "sqClassName", holding string reference to that prototype, like `[MyApp.Collections.FooBar`].
 
 First, let's override `@Core::extend()`@ with our own version that will mark each produced prototype so we know we're looking at something we have created:
 
@@ -1379,7 +1379,7 @@ When you want to have your callback fired right away without starting the activi
 
 `##
 
-Each Sqimitive instance inherits a bunch of functions from your utility library – those used to sort, filter, transform, count, locate, cook, boil, slice up and serve `#nest'ed children as standard objects and arrays. For example: `[
+Each Sqimitive instance inherits a bunch of functions from your utility library - those used to sort, filter, transform, count, locate, cook, boil, slice up and serve `#nest'ed children as standard objects and arrays. For example: `[
   sqim.filter(child => child.get('enabled'))
   // Instead of:
   _.filter(sqim.slice(), child => child.get('enabled'))
@@ -1407,9 +1407,9 @@ Example: `[sqim.keys()`] -> `[_.keys(sqim.nested())`].
 
 Methods available for `@Sqimitive\Base`@ subclasses:
 
-`* `@un:keys`@`[()`] – returns an array of all children keys (of `#_parentKey's if `#_owning)
-`* `@un:omit`@`[(keys | key[, key, ...] | iterator[, cx])`] – the opposite of `'pick(), children with mismatching keys
-`* `@un:pick`@`[(keys | key[, key, ...] | iterator[, cx])`] – returns object of children with matching keys: `[
+`* `@un:keys`@`[()`] - returns an array of all children keys (of `#_parentKey's if `#_owning)
+`* `@un:omit`@`[(keys | key[, key, ...] | iterator[, cx])`] - the opposite of `'pick(), children with mismatching keys
+`* `@un:pick`@`[(keys | key[, key, ...] | iterator[, cx])`] - returns object of children with matching keys: `[
       sqim.pick(['k1', 'k2'])   //=> {k1: child1, k2: child2}
       sqim.pick('k1', 'k2')
       sqim.pick(child => child.get('enabled'))
@@ -1430,47 +1430,47 @@ If `@Sqimitive\Ordered`@ is not used, `'index is an arbitrary number sequential 
 
 Methods available for `@Sqimitive\Base`@ subclasses:
 
-`* `@un:chunk`@`[(length)`] – returns an array of arrays of `'length members each (except last): `[[child1, child2], [child3, child4], [child5]`]
-`* `@un:contains`@`[(sqim)`] – returns `'true if there's a nested `'sqim instance (similar to `#nested()); warning: it's named `'includes() in LoDash
-`* `@un:countBy`@`[(iterator[, cx])`] – same as `'groupBy() but values are group lengths: `[{group1: 3, group2: 1, ...}`]
-`* `@un:difference`@`[(array[, array, ...])`] – same as `'without() but accepts one or more arrays
-`* `@un:each`@`[(iterator[, cx])`] – calls `'iterator on every child; returns nothing
-`* `@un:every`@`[(predicate[, cx])`] – returns `'true if for every child `'predicate returned a truthy value
-`* `@un:filter`@`[(predicate[, cx])`] – returns array of children for which `'predicate returned a truthy value; see `'pick() which returns an object
-`* `@un:find`@`[(predicate[, cx])`] – returns the first child for which `'predicate returned a truthy value or `'undefined
-`* `@un:groupBy`@`[(iterator[, cx])`] – returns an object with arrays of children for which `'iterator returned the same string (the object's keys are those strings): `[{group1: [child1, child3], group2: [...]}`]
-`* `@un:indexBy`@`[(iterator[, cx])`] – same as `'groupBy() but expects strings to be unique; returns `[{group1: child1, group2: child2, ...}`]; warning: missing from LoDash
-`* `@un:intersection`@`[(array[, array, ...])`] – returns an array of children listed in any of the given arrays
-`* `@un:invoke`@`[(method[, arg1, arg2, ...])`] – calls `'method of each child, giving it the passed `[arg`]uments; returns an array with results of every call; see `'map() which calls an iterator instead; warning: LoDash's works differently, do not use
-`* `@un:map`@`[(iterator[, cx])`] – returns an array with results of calling `'iterator for every child; similar to `'invoke() but doesn't call children's methods
-`* `@un:max`@`[(iterator[, cx])`] – ranks all children by calling `'iterator and returns the "highest" one
-`* `@un:min`@`[(iterator[, cx])`] – same as `'max() but returns the "lowest" child
-`* `@un:partition`@`[(predicate)`] – returns an array of two arrays: first with children matching `'predicate, second – not matching
-`* `@un:pluck`@`[(prop)`] – returns array of values of the `'prop property of every child; warning: missing from LoDash
+`* `@un:chunk`@`[(length)`] - returns an array of arrays of `'length members each (except last): `[[child1, child2], [child3, child4], [child5]`]
+`* `@un:contains`@`[(sqim)`] - returns `'true if there's a nested `'sqim instance (similar to `#nested()); warning: it's named `'includes() in LoDash
+`* `@un:countBy`@`[(iterator[, cx])`] - same as `'groupBy() but values are group lengths: `[{group1: 3, group2: 1, ...}`]
+`* `@un:difference`@`[(array[, array, ...])`] - same as `'without() but accepts one or more arrays
+`* `@un:each`@`[(iterator[, cx])`] - calls `'iterator on every child; returns nothing
+`* `@un:every`@`[(predicate[, cx])`] - returns `'true if for every child `'predicate returned a truthy value
+`* `@un:filter`@`[(predicate[, cx])`] - returns array of children for which `'predicate returned a truthy value; see `'pick() which returns an object
+`* `@un:find`@`[(predicate[, cx])`] - returns the first child for which `'predicate returned a truthy value or `'undefined
+`* `@un:groupBy`@`[(iterator[, cx])`] - returns an object with arrays of children for which `'iterator returned the same string (the object's keys are those strings): `[{group1: [child1, child3], group2: [...]}`]
+`* `@un:indexBy`@`[(iterator[, cx])`] - same as `'groupBy() but expects strings to be unique; returns `[{group1: child1, group2: child2, ...}`]; warning: missing from LoDash
+`* `@un:intersection`@`[(array[, array, ...])`] - returns an array of children listed in any of the given arrays
+`* `@un:invoke`@`[(method[, arg1, arg2, ...])`] - calls `'method of each child, giving it the passed `[arg`]uments; returns an array with results of every call; see `'map() which calls an iterator instead; warning: LoDash's works differently, do not use
+`* `@un:map`@`[(iterator[, cx])`] - returns an array with results of calling `'iterator for every child; similar to `'invoke() but doesn't call children's methods
+`* `@un:max`@`[(iterator[, cx])`] - ranks all children by calling `'iterator and returns the "highest" one
+`* `@un:min`@`[(iterator[, cx])`] - same as `'max() but returns the "lowest" child
+`* `@un:partition`@`[(predicate)`] - returns an array of two arrays: first with children matching `'predicate, second - not matching
+`* `@un:pluck`@`[(prop)`] - returns array of values of the `'prop property of every child; warning: missing from LoDash
 
    `'pluck() is hardly useful in Sqimitive since public properties are usually within `@Base._opt`@ and picking protected "_properties" has a limited utility. Use `'map() in combination with `#picker() or `'invoke() with `#get(): `[
      col.map(Sqimitive.Core.picker('get', 'opt'))   // map() + picker()
      col.invoke('get', 'opt')                       // invoke() + get()
    `]
 
-`* `@un:reduce`@`[(iterator, memo[, cx])`] – calls `[iterator(memo, sqim, parentKey)`] for every child (returns new `'memo) and returns the final value of `'memo
-`* `@un:reject`@`[(predicate[, cx])`] – the opposite of `'filter(), returns array of children mismatching `'predicate
-`* `@un:sample`@`[([n])`] – returns one random child (if no arguments) or `'n random children (or less if have fewer)
-`* `@un:shuffle`@`[()`] – returns array of children in random order
-`* `@un:some`@`[(predicate[, cx])`] – returns `'true if `'predicate returned a truthy value for any child
-`* `@un:sortBy`@`[(iterator[, cx])`] – returns array of children sorted by their rank determined by `'iterator (ascending)
-`* `@un:toArray`@`[()`] – simply returns array of all children; same as `#slice() and `@un:values`@() (not exposed as a method)
-`* `@un:union`@`[(array[, array, ...])`] – returns array of children plus members of all given arrays
-`* `@un:without`@`[(sqim[, sqim, ...])`] – returns array of children omitting those given as arguments; same as `'difference() but takes objects
+`* `@un:reduce`@`[(iterator, memo[, cx])`] - calls `[iterator(memo, sqim, parentKey)`] for every child (returns new `'memo) and returns the final value of `'memo
+`* `@un:reject`@`[(predicate[, cx])`] - the opposite of `'filter(), returns array of children mismatching `'predicate
+`* `@un:sample`@`[([n])`] - returns one random child (if no arguments) or `'n random children (or less if have fewer)
+`* `@un:shuffle`@`[()`] - returns array of children in random order
+`* `@un:some`@`[(predicate[, cx])`] - returns `'true if `'predicate returned a truthy value for any child
+`* `@un:sortBy`@`[(iterator[, cx])`] - returns array of children sorted by their rank determined by `'iterator (ascending)
+`* `@un:toArray`@`[()`] - simply returns array of all children; same as `#slice() and `@un:values`@() (not exposed as a method)
+`* `@un:union`@`[(array[, array, ...])`] - returns array of children plus members of all given arrays
+`* `@un:without`@`[(sqim[, sqim, ...])`] - returns array of children omitting those given as arguments; same as `'difference() but takes objects
 
 Methods available if mixed-in `@Sqimitive\Ordered`@:
 
-`* `@un:findIndex`@`[(predicate[, cx])`] – returns index of the first child for which `'predicate returns a truthy value or `[-1`]; similar to `'indexOf() but takes a callback
-`* `@un:findLastIndex`@`[(predicate[, cx])`] – same as `'findIndex() but returns index of the last child; only useful for non-`#_owning (see `'lastIndexOf()); warning: missing from NoDash
-`* `@un:first`@`[()`] – returns first nested child or `'undefined
-`* `@un:indexOf`@`[(sqim)`] – returns the ordinal number of `'sqim or `[-1`] if it's not nested
-`* `@un:initial`@`[([n])`] – returns all but last `'n children (`[1`] if no arguments)
-`* `@un:last`@`[()`] – returns last nested child or `'undefined
-`* `@un:lastIndexOf`@`[(sqim)`] – same as `'indexOf() but counts from the end; only useful for non-`#_owning that may have duplicate children, else `'lastIndexOf() is the same as `'indexOf()
-`* `@un:reduceRight`@`[(iterator, memo[, cx])`] – same as `'reduce() but goes from the end
-`* `@un:rest`@`[([n])`] – returns all but first `'n children (`[1`] if no arguments)
+`* `@un:findIndex`@`[(predicate[, cx])`] - returns index of the first child for which `'predicate returns a truthy value or `[-1`]; similar to `'indexOf() but takes a callback
+`* `@un:findLastIndex`@`[(predicate[, cx])`] - same as `'findIndex() but returns index of the last child; only useful for non-`#_owning (see `'lastIndexOf()); warning: missing from NoDash
+`* `@un:first`@`[()`] - returns first nested child or `'undefined
+`* `@un:indexOf`@`[(sqim)`] - returns the ordinal number of `'sqim or `[-1`] if it's not nested
+`* `@un:initial`@`[([n])`] - returns all but last `'n children (`[1`] if no arguments)
+`* `@un:last`@`[()`] - returns last nested child or `'undefined
+`* `@un:lastIndexOf`@`[(sqim)`] - same as `'indexOf() but counts from the end; only useful for non-`#_owning that may have duplicate children, else `'lastIndexOf() is the same as `'indexOf()
+`* `@un:reduceRight`@`[(iterator, memo[, cx])`] - same as `'reduce() but goes from the end
+`* `@un:rest`@`[([n])`] - returns all but first `'n children (`[1`] if no arguments)
