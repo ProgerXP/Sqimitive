@@ -71,6 +71,7 @@
         context: this,
         success: function (code) {
           eval(code)
+          Prism.plugins.customClass.prefix('prism__')
           this._source.find('pre').each(this.constructor.expandFunc('_hili-.', this))
         },
       })
