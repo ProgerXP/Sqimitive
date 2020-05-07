@@ -1127,7 +1127,7 @@
     //     // a is now [5, 'foo']
     //]
     toArray: function (value) {
-      if (Object.prototype.toString.call(value) == '[object Arguments]') {
+      if (_.isArguments(value)) {
         return Array.prototype.slice.call(value)
       } else if (!Array.isArray(value)) {
         return [value]
@@ -1511,6 +1511,31 @@
     //     }
     //   })
     //]
+    //
+    //## Edge cases
+    // See the source code for details.
+    //* Given a base class `'B and subclass `'C, adding mix-ins to `'B after `'C
+    //  has been `#extend()ed from `'B when `'C declares `#events will lead to
+    //  `'C not having `#events of the newly mixed-in objects of `'B.
+    //* Declaration-time `#events of `'B are `#fuse()d and their `'eobj's are
+    //  shared among all subclasses of `'B and should not be changed (list of
+    //  events may change, just not properties of inherited handlers): `[
+    //    var ClassB = Sqimitive.Core.extend({
+    //      events: {change: 'render'},
+    //    })
+    //
+    //    ClassB.prototype._events.change[0].post    //=> undefined
+    //
+    //    var ClassC = ClassB.extend()
+    //    ClassC.prototype._events.change[0].post = function () { ... }
+    //    ClassB.prototype._events.change[0].post    //=> Function
+    //
+    //    // In this version instances' _events are deepClone()'d so changing it
+    //    // (not the prototype) doesn't affect other classes/objects:
+    //    var obj = new ClassC
+    //    obj._events.change[0].post = 'foo'
+    //    ClassB.prototype._events.change[0].post    //=> still Function
+    //  `]
     mixIn: function (newClass, options) {
       //! +ig=4
       // Don't expose internal inheritance fields on the final classes.
@@ -1590,9 +1615,11 @@
     // will be in effect starting with the next `#fire() call (even if it's
     // nested).
     //
-    // ` `*Warning:`* to override `'fire(), don't use the usual `[on('fire')`]
-    // as it will lead to recursion (even the `'=fire form). Use the old-school
-    // prototype overriding (`'__super__ is set up by `#extend()):
+    //#fireOverride
+    // ` `*Warning:`* to override `#fire, `#fuse and `#on, don't use the usual
+    // `[on('fire')`] as it will lead to recursion (even the `'=fire form,
+    // `#evtpf). Use the old-school prototype overriding (`'__super__ is
+    // set up by `#extend()) - see `#Async's source code for an example:
     //[
     //   fire: function (event, args) {
     //     // Do your stuff...
@@ -1885,6 +1912,8 @@
     //     obj.set('name', 'miku')   // render() called
     //     obj.close()               // fadeOut() called
     //  `]
+    //
+    //#-fireOverride
     //
     // Other notes:
     //* To register one-time handlers use `#once() instead of `#on() + `#off().
@@ -2271,6 +2300,8 @@
     //    sqim.fire('event')      //=> 'TEST'
     //      // console logs: 1, 2, 3 but not 4
     //  `]
+    //
+    //#-fireOverride
     fuse: function (event, func, cx) {
       func = Core.expandFunc(func)
       event = Core.parseEvent(event)
@@ -2292,8 +2323,7 @@
         // function (this, arguments)
         //    sup() itself is removed if present as arguments[0].
         var sup = eobj.sup = function (self, args) {
-          if (Object.prototype.toString.call(args) == '[object Arguments]' &&
-              args[0] === sup) {
+          if (_.isArguments(args) && args[0] === sup) {
             args = Array.prototype.slice.call(args, 1)
           }
 
@@ -3535,7 +3565,8 @@
     //       //=> 'Foo'
     // `]
     //
-    //? Validating new value: `[
+    //? Validating new value (see the sample To-Do application for a complete
+    //  primer): `[
     //   var MyValid = Sqimitive.Base.extend({
     //     _opt: {
     //       date: null,    //= Date or 'YYYY-MM-DD'¹
@@ -3995,7 +4026,8 @@
 
       if (!(sqim instanceof this._childClass)) {
         throw new TypeError('nestEx: Nesting Sqimitive of wrong class')
-      } else if (typeof options.key == 'object') {    // object or null.
+      } else if (typeof options.key == 'object' ||    // object or null.
+                 options.key === undefined) {
         throw new TypeError('nestEx: Bad key given')
       }
 
@@ -4735,7 +4767,8 @@
     //
     // In particular, `#assignChildren() calls `#assignResp(),
     // `#set()/`#ifSet(), `#nestEx() firing `#normalize_OPT, `#change_OPT and
-    // `#change, as well as `#nestEx-produced events.
+    // `#change, as well as `#nestEx-produced events (however, for `#nestEx()
+    // a shallow-copy of `'options is given).
     //
     //[
     //   sqim.assignChildren({a: 1, b: 2}, {schema: api3, forceFire: true})
@@ -5454,7 +5487,8 @@
     // time.
     //
     //> sqim object `- the child that has changed position
-    //> index int `- `'sqim's index in `'this; can be given to `#at()
+    //> index int `- `'sqim's current (new) index in `'this; can be given to
+    //  `#at()
     //
     // Typically you'd listen to/override this method to keep positions of
     // children on screen (in their parent's `@Base.el`@) in sync with their
