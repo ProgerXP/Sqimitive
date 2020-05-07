@@ -128,8 +128,8 @@
   //  `]
   //  Using `'AsyncImage to load a single image:
   //  `[
-  //    var async = new AsyncImage({src: 'pic.jpg'})
-  //    async.whenSuccess(() => alert(async.width()))
+  //    ;(new AsyncImage({src: 'pic.jpg'})
+  //      .whenSuccess(async => alert(async.width()))
   //
   //    // Similar to:
   //    var img = new Image
@@ -179,7 +179,7 @@
     //  `[
     //   // This function is called before listeners to 'success' with a
     //   // larger priority (which is 0 by default).
-    //   async.whenSuccess(function () { ... }, this, -Infinity)
+    //   async.whenSuccess(function (async) { ... }, this, -Infinity)
     //  `]
     MAX_PRIORITY: 2,
 
@@ -245,11 +245,11 @@
 
       change_status: function () {
         if (!this.isLoading()) {
-          var ex1 = this._callPriorities(this.isSuccessful() ? 'success' : 'error', [])
+          var ex1 = this._callPriorities(this.isSuccessful() ? 'success' : 'error', [this])
           // Don't call complete if status has changed during success/error
           // since after change_status returns, change_status will be triggered
           // again and complete will run then.
-          var ex2 = ex1 === true || this._callPriorities('complete', [])
+          var ex2 = ex1 === true || this._callPriorities('complete', [this])
           if (typeof ex1 == 'object') {
             this.exception(ex1)
           } else if (typeof ex2 == 'object') {
@@ -337,7 +337,7 @@
 
       if (met) {
         try {
-          func.call(cx)
+          func.call(cx, this)
         } catch (e) {
           this.exception(e)
         }
@@ -354,7 +354,7 @@
     //?`[
     //   $('#spinner').show()
     //   var async = new MyAsync({...})
-    //   async.whenComplete(function () {
+    //   async.whenComplete(function (async) {
     //     $('#spinner').hide()
     //   })
     //
@@ -373,6 +373,7 @@
     // Otherwise `'func is executed before all handlers registered with a larger
     // `'priority, among (in any order) those with the same and after those
     // with a lower. The value is clamped to the `#MAX_PRIORITY range.
+    // In any case, `'func is given `'this (the `#Async instance).
     //
     // Warning: the following is incorrect use because `'func may be called immediately,
     // before the result is assigned to `'req:
@@ -384,7 +385,11 @@
     //
     //   // CORRECT: assign to the variable first:
     //   var req = new Sqimitive.Async
-    //   req.whenComplete(...)
+    //   req.whenComplete(function () { ... })
+    //
+    //   // CORRECT: or use the passed "this":
+    //   ;(new Sqimitive.Async)
+    //     .whenComplete(function (req) { ... })
     //]
     whenComplete: function (func, cx, priority) {
       return this._when(func, cx, priority, !this.isLoading(), 'complete')
@@ -393,7 +398,7 @@
     // Fire `'func whenever this instance's operation has failed - see `#error.
     //
     //?`[
-    //   async.whenError(function () {
+    //   async.whenError(function (async) {
     //     alert("Met an error :'(")
     //   })
     // `]
@@ -483,7 +488,7 @@
       return this.get('status') == null
     },
 
-    //! +fn=success +ig
+    //! +fn=success:this +ig
     //
     // Called when this instance and children have succeeded.
     //
@@ -510,9 +515,9 @@
     //   var async = new MyAsync({...})
     //   // If async is already complete before we call on() - our handler will
     //   // not be triggered:
-    //   async.on('success', function () { ... })
+    //   async.on('success', function (async) { ... })
     //   // So you want to do this:
-    //   async.whenSuccess(function () { ... })
+    //   async.whenSuccess(function (async) { ... })
     //  `]
     //
     // The call order of handlers is deterministic (`#Async's `#nest() acts as `#on()
@@ -522,7 +527,7 @@
     // `[success2`].
     success: Sqimitive.Core.stub,
 
-    //! +fn=error +ig
+    //! +fn=error:this +ig
     //
     // Called when this instance or one of its children has failed.
     //
@@ -532,7 +537,7 @@
     //#-sec
     error: Sqimitive.Core.stub,
 
-    //! +fn=complete +ig
+    //! +fn=complete:this +ig
     //
     // Called when this instance stops being `#isLoading().
     //
@@ -565,6 +570,7 @@
     //* The usual events have "whenXXX()" (`#whenComplete(), etc.) but
     //  there's no "whenException()" because no info about already occurred errors is
     //  stored (like `'status is stored in `#_opt). Only future exceptions can be listened to, with the usual `#on().
+    //* Unlike `#success/`#error/`#complete, `#exception doesn't receive `'this as an argument.
     //* `#exception isn't called on request failure unless you throw an exception from `#error
     //  (because `#Async doesn't know about your operation's details).
     //* The default implementation throws the argument.
