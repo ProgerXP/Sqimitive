@@ -52,7 +52,7 @@
   // `#abort()ed.
   //
   // ` `#Async's state is stored in the `'status `#_opt'ion (`'true when
-  // succeeded, `'false if failed, `'null if still incomplete). On change
+  // succeeded, `'false if failed, `'null if still incomplete). On change,
   // `#Async fires `#success or `#error and, always, `#complete:
   //* Listeners may be prioritized relative to others (see `#MAX_PRIORITY).
   //* `#exception's during an event handler do not mark `#Async as failed
@@ -379,7 +379,7 @@
     //#completeDesc
     // Unlike with a simple `[on('event')`] (`#on()) `'func gets called
     // immediately if the condition is already met (then `'priority is
-    // ignored). Otherwise `'func is executed before all handlers registered
+    // ignored). Otherwise, `'func is executed before all handlers registered
     // with a larger `'priority, among (in any order) those with the same and
     // after those with a lower. The value is clamped to the `#MAX_PRIORITY
     // range. In any case, `'func is given `'this (the `#Async instance).
@@ -577,11 +577,11 @@
     // "promise" (`#Async) doesn't mark that promise failed if its underlying
     // action (e.g. an AJAX call) has succeeded.
     //
-    // If an exception is thrown during an `#error or `#success handler then
+    // If an exception is thrown during an `#error or `#success handlers then
     // remaining handlers are skipped, `#complete is triggered and the
-    // exception is re-thrown. An exception during `#complete also remaining
-    // handlers of `#complete and is re-thrown unless there was an exception
-    // during `#error or `#success.
+    // exception is re-thrown. An exception during `#complete also skips
+    // remaining handlers of `#complete and is re-thrown unless there was an
+    // exception during `#error or `#success.
     //
     // Other notes:
     //* `#exception's event listeners are not affected by `#clear().

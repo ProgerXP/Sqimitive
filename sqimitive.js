@@ -522,7 +522,7 @@
     //      ...we get the following class, after merging with its parent:
     //
     //        MySubclass = {
-    //          // Got new value - overriden in MySubclass.
+    //          // Got new value - overridden in MySubclass.
     //          _somethingBase: 987,
     //          // Retained old value from MyBase.
     //          _somethingNew: 'foo',
@@ -539,7 +539,7 @@
     //            baseOption: 'boo',
     //            // Introduced.
     //            subOption: 'sub',
-    //            // Overriden.
+    //            // Overridden.
     //            baseMore: 'bus',
     //          },
     //        }
@@ -657,7 +657,7 @@
     //* `@Core::unique()`@
     //#
     //
-    // Returns a sequental number starting from `[1`] that is guaranteed to be
+    // Returns a sequential number starting from `[1`] that is guaranteed to be
     // unique among all calls to `#unique() with the same `'prefix during this
     // session (page load, etc.).
     //
@@ -802,7 +802,7 @@
     // ` `#masker() is similar to LoDash's `'rearg().
     //
     // Masking is a way to work around `#argDanger and avoid writing callback
-    // function wrappers which only ignore or reorder arguments. It's
+    // function wrappers that only ignore or reorder arguments. It's
     // implicitly used in string `#events values since they are passed to
     // `#expandFunc().
     //
@@ -900,7 +900,7 @@
     //  `]
     //
     //#maskerPattern Mask pattern
-    // In a string `'mask each symbol maps arguments given to the masked
+    // In a string `'mask, each symbol maps arguments given to the masked
     // function (returned by `#masker) to arguments for the original `'func
     // (the argument to `#masker). Each symbol represents a particular argument
     // and can be one of these:
@@ -951,7 +951,7 @@
     //* `@Core::deepClone()`@
     //#
     //
-    // Returns a version of the argument with recursively copied arrays and
+    // Returns a version of the argument with recursively-copied arrays and
     // objects so that any modification to either `'obj or the returned value
     // (`'obj's copy) won't affect its counterpart.
     //
@@ -1332,7 +1332,7 @@
     //     _opt: {
     //      a: 'base',
     //    },
-    //     // Not overriden by MixIn.
+    //     // Not overridden by MixIn.
     //     _someProp: 123,
     //   })
     //
@@ -1430,7 +1430,7 @@
     // `'ParentMixIn could also have the `'mixIns property to specify its own
     // parent.
     //
-    // In the above example the mix-in specified its parent, which is usually
+    // In the above example, the mix-in specified its parent, which is usually
     // intuitive. Still, it could be specified in the final class' `'mixIns
     // alone:
     //[
@@ -1636,7 +1636,7 @@
     // `[['eventName', 'arg1', 2, ...]`]).
     //
     // Note that the `'all event is only triggered for actual events so if, for
-    // example, `#render() isn't overriden then it will be called as a regular
+    // example, `#render() isn't overridden then it will be called as a regular
     // member function without triggering `'all or any other event:
     //[
     //   var ClassA = Sqimitive.Base.extend({
@@ -1919,7 +1919,7 @@
     //* To register one-time handlers use `#once() instead of `#on() + `#off().
     //* `#on() with an object `'event is like `#fuse() but with added comma
     //  notation in `'event keys.
-    //* Fusing is a bit more performant since no tracking information about
+    //* Fusing is a bit more efficient since no tracking information about
     //  handlers is stored. If your handler is meant to stay with the object
     //  for its lifetime - use `[on({event: func}, cx)`] or `#fuse() (this also
     //  clearly conveys your intention).
@@ -1963,11 +1963,11 @@
     //  are removed. It receives a callable `'sup of form `[function (this,
     //  args)`] which it may call or not (alike to calling `'super in Java).
     //
-    //  First argument of `'sup is the context (normally the object which
+    //  First argument of `'sup is the context (normally the object that
     //  initiated the event, i.e. the handler's own `'this). Second argument is
     //  an array of arguments the overridden handlers receive. The handler may
     //  change these arguments to trick the underlying (wrapped) handlers into
-    //  beliving the event received a different set of data or it can pass the
+    //  believing the event received a different set of data or it can pass the
     //  `'arguments object that the handler itself has received - in this case
     //  `[args[0]`] (which is `'sup) is removed and the rest is given to the
     //  underlying handlers.
@@ -2494,10 +2494,10 @@
   // Instance fields of Sqimitive.Base.
 
   // Implements what makes Sqimitive `*the`* Sqimitive - options (`#opt),
-  // children (`#chld) and filtering (`#util) on top of `#Core which provides
+  // children (`#chld) and filtering (`#util) on top of `#Core, which provides
   // the fundamental event framework (`#evt).
   //
-  // If you work with DOM then look for `@Sqimitive\jQuery`@ which adds `#el
+  // If you work with DOM then look for `@Sqimitive\jQuery`@, which adds `#el
   // and `#elEvents. If you want ordered children - use the
   // `@Sqimitive\Ordered`@ `#mixIn.
   //
@@ -2779,7 +2779,7 @@
     // `]
     //
     // Other notes:
-    //* Typically the value of `#_childClass is a subclass of
+    //* Typically, the value of `#_childClass is a subclass of
     //  `[Sqimitive.Core`] (`#Core) since non-Sqimitives are unlikely to work
     //  properly as children. This is not checked though.
     //* This constraint is enforced as long as children are added via `#nest(),
@@ -3293,7 +3293,7 @@
     //* construct with `'new: `[new Class({opt...})`]
     //* `#attach() (to DOM, etc.), for members - when nested to a collection
     //* `#render() when required for user to see it first time
-    //* `#render() again when somethings changes that affects the visual
+    //* `#render() again when something changes that affects the visual
     //  presentation (usually in response to a `#change of some `#_opt'ion)
     //* finally, `#remove()
     //
@@ -3596,7 +3596,7 @@
     // can override `#ifSet() if you need this.
     //
     // Remember: when defined in `#events, function's return value is ignored
-    // unless `[=`] or `[+`] prefixes are used (`#evtpf). Also see `#evtconc
+    // unless `[=`] or `[+`] prefixes are used (`#evtpf). Also, see `#evtconc
     // and `#es6this.
     //[
     //    Sqimitive.Base.extend({
@@ -4158,7 +4158,7 @@
     //* `@Base._forward()`@
     //#
     //
-    // Forwards `'events occuring on `'sqim to `'this.
+    // Forwards `'events occurring on `'sqim to `'this.
     //
     // Forwarding is done by firing "prefix + event_name" on `'this (the object
     // on which `#_forward() is called) with `'sqim pushed in front of original
@@ -4445,7 +4445,7 @@
     //    '=slice': function (sup, start, end) {
     //      var sorter = function (a, b) { return a.get('pos') - b.get('pos') }
     //      return sup(this).sort(sorter).slice(start, end)
-    //      // WRONG: do not use any #util functions to avoid retursion:
+    //      // WRONG: do not use any #util functions to avoid recursion:
     //      return this.toArray()...
     //    }
     //  }
@@ -4469,8 +4469,8 @@
     //* `@Base.findKey()`@
     //#
     //
-    // Returns the string key of a child (`#_children of self) or the first
-    // child matched by the callback.
+    // Returns the string key of the given child (in `#_children of self) or of
+    // the first child matched by the callback, or `'undefined.
     //
     // ` `#findKey() has two call forms:
     //
@@ -4489,6 +4489,11 @@
     //   col.findKey(col.first())   // get key of the first child
     //   col.findKey(ch => ch.get('enabled'))   // get key of the first "enabled" child
     // `]
+    //
+    // Other notes:
+    //* `#findKey() is similar to `'findIndex() `#util.
+    //* It returns an arbitrary key if `'this has duplicate children
+    //  (non-`#_owning), even if `#Ordered.
     //
     //#-parentkeyowning
     //
@@ -5402,12 +5407,12 @@
     //  order of members
     //
     // You want to override `#_sorter() if you are not happy with the default
-    // implementation. If you do, see `#indexFor() for the invokation format.
+    // implementation. If you do, see `#indexFor() for the invocation format.
     // Default implementation compares using `'pos (if given to `#nestEx() for
     // an object) or `'key (if nesting using `#_defaultKey() then keys are
     // `#_cid's).
     //
-    //? Adapted code snippet from the sample To-Do application which is using
+    //? Adapted code snippet from the sample To-Do application that is using
     //  the value of the `'order option of a given child if no explicit `'pos
     //  was provided for it when nesting:
     //  `[
@@ -5483,14 +5488,14 @@
     },
 
     //! +fn=_repos:child:index +ig
-    // Called when a child's position has changed or was set for the first
+    // Called when a child's position has changed or was assumed for the first
     // time.
     //
     //> sqim object `- the child that has changed position
     //> index int `- `'sqim's current (new) index in `'this; can be given to
     //  `#at()
     //
-    // Typically you'd listen to/override this method to keep positions of
+    // Typically, you'd listen to/override this method to keep positions of
     // children on screen (in their parent's `@Base.el`@) in sync with their
     // "logical" order (in `'this).
     //
