@@ -87,7 +87,7 @@
 
   var Sqimitive = {
     // Version of the core Sqimitive library in use.
-    version: '1.1',
+    version: '1.2',
 
     // Reference to the utility library in use.
     //
