@@ -61,7 +61,9 @@
 
   _loadPrism: function () {
     if (this.ifSet('prismLoaded', true) && !window.Prism) {
-      $('<link>').attr({rel: 'stylesheet', href: '../docs/prism.css'}).appendTo('head')
+      $('<link>')
+        .attr({rel: 'stylesheet', href: '../docs/prism.css'})
+        .appendTo('head')
 
       $.ajax({
         url: '../docs/prism.js',
