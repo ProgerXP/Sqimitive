@@ -43,7 +43,7 @@
     "semi": [1, "never"],
     "space-after-keywords": [2, "always"],
     "space-unary-word-ops": 2,
-    "max-len": [1, 90, 2],
+    "max-len": [1, 80, 2],
     "max-depth": [1, 5],
     "max-params": [1, 5]
   }

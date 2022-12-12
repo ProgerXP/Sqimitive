@@ -1,8 +1,8 @@
 {
   "name": "sqimitive",
-  "main": "sqimitive.js",
-  "version": "1.2.0",
-  "homepage": "http://squizzle.me/js/sqimitive",
+  "main": "main.js",
+  "version": "1.3.0",
+  "homepage": "https://squizzle.me/js/sqimitive",
   "repository": {
     "type": "git",
     "url": "git@github.com:ProgerXP/Sqimitive.git"
@@ -10,16 +10,16 @@
   "bugs": {
     "url": "https://github.com/ProgerXP/Sqimitive/issues"
   },
-  "author": "Proger_XP <proger.xp@gmail.com> (http://proger.me)",
+  "author": "Proger_XP <proger.xp@gmail.com> (https://proger.me)",
   "description": "A JavaScript primitive. Events, collections, inheritance, DOM integration based on a universal paradigm.",
   "dependencies": {
   },
   "files": [
-    "sqimitive.js",
+    "main.js",
+    "async.js",
+    "jquery.js",
     "sqimitive.min.js",
     "sqimitive.min.js.map",
-    "sqimitive-async.js",
-    "sqimitive-jquery.js",
     "README.txt",
     "LICENSE.txt"
   ],

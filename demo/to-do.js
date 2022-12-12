@@ -160,7 +160,7 @@ App.Tasks = App.Base.extend({
   // Makes sure we don't occasionally nest a wrong class.
   _childClass: App.Task,
 
-  // This forwards all 'change' events of nested children (Task's) onto
+  // This forwards all 'change' events of nested children (Task-s) onto
   // this object as '.change' so you can (new App.Tasks).on('.change', func)
   // and Sqimitive will manage adding/removing listeners from individual tasks
   // as they appear and go away.
@@ -179,14 +179,14 @@ App.Tasks = App.Base.extend({
       var posA = a.pos == null ? a.child.get(this.get('order')) : a.pos
       return arguments.length == 2 ? posA
         : (posA > posB ? +1 : (posA < posB ? -1
-            // If properties match - sort stably by unique and constant _cid's.
+            // If properties match - sort stably by unique and constant _cid-s.
             : (a.child._cid - b.child._cid)))
     },
 
     // When the property we're sorting by is changed, update that child's pos.
     '.change': function (sqim, option, now, old) {
-      // Re-nesting an already nested child simply changes its pos.
-      option == this.get('order') && this.nest(sqim, {pos: now})
+      // Re-nesting an already nested child is used to manipulate its position.
+      option == this.get('order') && this.nest(sqim, {repos: true})
     },
 
     // When changing the sort order, re-sort the entire list.
@@ -272,8 +272,8 @@ App.Document = App.Base.extend({
     init: function () {
       // autoOff() keeps track of all hooked objects so that we can unhook
       // them all in one go by calling autoOff() without arguments.
-      // Here we simply invoke render() whenever a task is added, removed
-      // or its attribute changes (e.g. it's renamed).
+      // Here we simply invoke Document's render() whenever a task is added,
+      // removed or its attribute changes (e.g. due to renaming).
       this.autoOff(this.get('tasks'), {'nestEx, unnested, .change': 'render'})
 
       this.attach().render()
@@ -334,7 +334,7 @@ App.Document = App.Base.extend({
   $(window).on('click beforeunload', function () {
     var data = tasks.invoke('get')
     document.cookie = 'sqimtodo=' + encodeURIComponent(JSON.stringify(data))
-                      '; expires=Sat, 22-Sep-2024 00:00:00 GMT'
+                      '; expires=Sat, 22-Sep-2033 00:00:00 GMT'
   })
 
   // Load previously saved tasks, if any.
@@ -342,7 +342,7 @@ App.Document = App.Base.extend({
   try {
     // assignChildren() is Backbone's sync() without a remote request.
     // It adds, updates and removes children according to given data
-    // (array of options that are turned into new Sqimitive's).
+    // (array of options that are turned into new Sqimitive-s).
     tasks.assignChildren( $.parseJSON(decodeURIComponent(data[2])) )
   } catch (e) {
     // Ignore JSON parse errors or different serialization format.

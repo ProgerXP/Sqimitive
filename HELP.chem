@@ -55,7 +55,10 @@ Description template (sections):
 ` `*May only be read, not changed.`*
 
 `#inMergeProps
-This property is listed in `#_mergeProps by default so subclasses defining it add to their parents' objects instead of overwriting them entirely (but identical keys are still overwritten).
+This property is listed in `#_mergeProps by default so subclass defining it adds to its parent's object instead of overwriting it entirely (but identical keys are still overwritten).
+
+`#inMergePropsA
+This property is listed in `#_mergeProps by default so subclass defining it adds to its parent's values instead of overwriting the array entirely.
 
 `#es6thiswarn
 Warning: avoid using ES6 arrow functions as handlers due to their fixed `'this (`#es6this).
@@ -64,7 +67,7 @@ Warning: avoid using ES6 arrow functions as handlers due to their fixed `'this (
 `## In Backbone...
 
 `#unordered
-Attention: JavaScript objects are unordered. See the description of `#Ordered.
+Attention: JavaScript objects are unordered, as explained in the description of `#Ordered.
 
 
 `#tag_Events Event system (`#evt):
@@ -84,14 +87,14 @@ Attention: JavaScript objects are unordered. See the description of `#Ordered.
 Sqimitive.js is a minimalistic paradigm-agnostic building block for applications written in JavaScript (not necessary in-browser or DOM-related). It provides core infrastructure without much domain-specific logic that you can quickly develop thanks to its flexible API.
 
 `* Declaration-time and run-time mix-ins and traditional OOP inheritance using events. `#evt `#events `#mixIn `#_mergeProps
-`* Collections with Underscore integration and assisted management of children. `#util `#_childEvents `#autoOff
+`* Collections with Underscore (or other) integration and assisted management of children. `#util `#_childEvents `#autoOff
 `* Transparently ordered collections. `#Ordered `#_repos
-`* Attributes with normalization and on-change notifications. `#opt `#change_OPT
+`* Attributes with normalization, on-change notifications and batching. `#opt `#change_OPT `#batch
 `* Unserialization of data in arbitrary format. `#assignChildren `#assignResp
 `* DOM integration for "views". `#jQuery `@Base.elEvents`@
-`* Fractal Promise on steroids. `#Async
+`* Fractal Promise on steroids. `#Async `#Fetch
 
-Sqimitive.js is under 20K (minified), sports documentation that is nearly a hundred pages long (printed A4), needs no transpilers (plain pre-ES6 JavaScript, IE 11+) and depends only on a compatible utility library (NoDash +15K, Underscore.js `@un:`@ or LoDash) and, optionally, on jQuery `@jq:`@ or Zepto (for `@Sqimitive\jQuery`@).
+Sqimitive.js is under 20K (minified), sports documentation that is over 200 pages long (printed A4), needs no transpilers (plain pre-ES6 JavaScript, IE 11+) and depends only on a compatible utility library (NoDash `@no@`@ +16K, Underscore.js >=1.9.0 `@un:`@ or LoDash) and, optionally, on jQuery `@jq:`@ or Zepto (for `@Sqimitive\jQuery`@).
 
 And it's in public domain (`@http://unlicense.org`@).
 
@@ -99,14 +102,12 @@ And it's in public domain (`@http://unlicense.org`@).
 
 `## Resources
 
-`<img src="data:image/gif;base64,R0lGODlhEgAQALMAAOLe3WhWQfjYL/RUNbWzngDG/+ieJiqyK4FuapVqMUZ9ib5GMVItK52PjoLRLf///yH5BAAAAAAALAAAAAASABAAAASF8ElAUAgIyEn2A8EyjEugAY3SbOA4GMawII9SKJoUuAZBGItG6rYhiEaGi4FGUCg6EoQLGUsgUlDddMoICAFg7XbASAgEsASmtV0szmfD4RBgSMfw8/xgb5gNaIBnDnt1NAAMeXlOFg1ZDQyCcFYTHjplggkMDDmWH42bmyaenghdDZ0eEQA7" alt="bower"`> `*bower install sqimitive`*
-`&nbsp `&nbsp
 `<img src="data:image/gif;base64,R0lGODlhKQAQAIAAAP///8s5OCH5BAAAAAAALAAAAAApABAAAAJOjI+py+0Po5wK2GsP3np7kHygIY5BiYUXaaZst55jhri0fOf2bLK0roP9eKqhsCMkyopKnCf5WtZiwKfPKJW4KNxr97v9OkUMlPlcPosKADs" alt="npm"`> `*npm install sqimitive`*
 
 
 `* New to Sqimitive? Start with the overview: `#ov
-`* Download for development: `@https://github.com/ProgerXP/Sqimitive/blob/master/sqimitive.js`@
-`* Download for production (minified):`@https://github.com/ProgerXP/Sqimitive/blob/master/sqimitive.min.js`@
+`* Download for development: `@https://github.com/ProgerXP/Sqimitive/archive/master.zip`@
+`* Download for production (minified): `@https://raw.githubusercontent.com/ProgerXP/Sqimitive/master/sqimitive.min.js`@
 `* Check out the sample To-Do application: `@https://squizzle.me/js/sqimitive/demo/to-do.html`@
 `* Report issues: `@https://github.com/ProgerXP/Sqimitive/issues`@
 `* Get the code on GitHub: `@https://github.com/ProgerXP/Sqimitive`@
@@ -127,6 +128,46 @@ If you spot a typo - select the fragment and press `*Ctrl+Enter`*. Help us keep 
   `]
 
 `* `*`'null is `'undefined`* - unless mentioned, these two values are used interchangeably: when testing, use `[value == null`] instead of `[===`]; when supplying, give any of the two. One case when `'undefined is different are event handler results (see `#::fire()).
+
+`##deps Customizing dependencies
+
+Sqimitive can be included using several methods as implemented by `[umh.js`]. Each method has its own way of overriding dependencies (which default to NoDash `@no@`@ and jQuery `@jq:`@). Alternatively, you can change the `'deps variable in the source code but you'll have to redo it on upgrade.
+
+`### CommonJS/Node.js
+In npm 8.3+, put this into your project's `[package.json`] before doing `[npm install sqimitive`] (`@https://github.com/npm/cli/issues/4909`@):
+`[
+  "overrides": {
+    "sqimitive": {
+      "nodash": "npm:underscore",
+      "jquery": "npm:zepto"
+    }
+  }
+`]
+
+`### AMD/Require.js
+Use `'map and/or `'path options (`@https://requirejs.org/docs/api.html#config`@):
+`[
+  requirejs.config({
+    map: {
+      'sqimitive/main': {
+        'nodash/main': 'lodash'
+      },
+      'sqimitive/jquery': {
+        jquery: 'zepto'
+      }
+    },
+    paths: {
+      nodash: 'https://cdn.jsdelivr.net/npm/underscore@latest/underscore-umd-min.js'
+    }
+  })
+`]
+
+`### Plain `[<script>`]
+Dependencies land in global `'window so simply fetch the needed script before including Sqimitive:
+`[
+  <script src="https://cdn.jsdelivr.net/npm/underscore@latest/underscore-umd-min.js"></script>
+  <script src="https://raw.githubusercontent.com/ProgerXP/Sqimitive/master/sqimitive.min.js"></script>
+`]
 
 
 `! +pg=vsbb +pgo=10
@@ -1332,7 +1373,7 @@ When you want to start running a new activity use `'start() with an optional cal
           },
 
           transition: function () {
-            // Since Activity's event handlers are called with the activity's
+            // Since Activity's event handlers are called with the Activity's
             // context we can use this.get('cx') to access this page instance.
             this.get('cx').el.fadeOut(_.bind(this.done, this))
           },
@@ -1379,13 +1420,13 @@ When you want to have your callback fired right away without starting the activi
 
 `##
 
-Each Sqimitive instance inherits a bunch of functions from your utility library - those used to sort, filter, transform, count, locate, cook, boil, slice up and serve `#nest'ed children as standard objects and arrays. For example: `[
+Each Sqimitive instance inherits a bunch of functions from your utility library in addition to standard ones (`#tag_Utilities) - those used to sort, filter, transform, count, locate, cook, boil, slice up and serve `#nest'ed children as regular objects and arrays. For example: `[
   sqim.filter(child => child.get('enabled'))
   // Instead of:
   _.filter(sqim.slice(), child => child.get('enabled'))
 `]
 
-These functions are generally portable but with subtle differences in availability and behaviour between NoDash, Underscore `@un:`@ and LoDash - check the compatibility table for details: `@https://squizzle.me/js/nodash/p_compat.html`@.
+These functions are generally portable but with subtle differences in availability and behaviour between NoDash `@no@`@, Underscore `@un:`@ and LoDash - check the `@no@COMPATIBILITY`@ table for details.
 
   For portability avoid using shortcut iterator syntax - it's only supported in Underscore (`@un:iteratee`@), not in NoDash, LoDash or in standard `'Array/`'Object methods. Notable exceptions are `'pick()/`'omit(): in Underscore and NoDash the iterator may be a function or a list of property names, in LoDash - list only.
 
@@ -1399,6 +1440,8 @@ If doing several transformations one after another consider `#_() which allows c
 
 For this reason some methods are only available when mixing-in `@Sqimitive\Ordered`@ which guarantees iteration order.
 
+The `'iterator argument may be followed by call context (`'cx) which defaults to the sqimitive if omitted.
+
 `## Methods working with children keys (`#nested())
 `[
   iterator = function (Sqimitive child, string parentKey)
@@ -1407,9 +1450,9 @@ Example: `[sqim.keys()`] -> `[_.keys(sqim.nested())`].
 
 Methods available for `@Sqimitive\Base`@ subclasses:
 
-`* `@un:keys`@`[()`] - returns an array of all children keys (of `#_parentKey's if `#_owning)
-`* `@un:omit`@`[(keys | key[, key, ...] | iterator[, cx])`] - the opposite of `'pick(), children with mismatching keys
-`* `@un:pick`@`[(keys | key[, key, ...] | iterator[, cx])`] - returns object of children with matching keys: `[
+`* `@no@keys`@`[()`] - returns an array of all children keys (of `#_parentKey-s if `#_owning)
+`* `@no@omit`@`[(keys | key[, key, ...] | iterator[, cx])`] - the opposite of `'pick(), children with mismatching keys
+`* `@no@pick`@`[(keys | key[, key, ...] | iterator[, cx])`] - returns object of children with matching keys: `[
       sqim.pick(['k1', 'k2'])   //=> {k1: child1, k2: child2}
       sqim.pick('k1', 'k2')
       sqim.pick(child => child.get('enabled'))
@@ -1428,49 +1471,51 @@ Example: `[sqim.sample()`] -> `[_.sample(sqim.slice())`].
 `#-unordered
 If `@Sqimitive\Ordered`@ is not used, `'index is an arbitrary number sequential in this particular call to the utility method; `[sqim.filter((c, i) => sqim.slice(i, 1))`] may produce undefined behaviour. For `#Ordered, `'index is stable and can be given to `#at() or `#slice().
 
+Attention: `'forEach() and other methods here work with child indexes, not keys! Obtain keys by `#_parentKey if the collection is `#_owning, or by `#findKey(), or do `[_.each(col.nested(), (sqim, key) => ...)`]. For `#Ordered, can also use `[at(index).key`].
+
 Methods available for `@Sqimitive\Base`@ subclasses:
 
-`* `@un:chunk`@`[(length)`] - returns an array of arrays of `'length members each (except last): `[[child1, child2], [child3, child4], [child5]`]
-`* `@un:contains`@`[(sqim)`] - returns `'true if there's a nested `'sqim instance (similar to `#nested()); warning: it's named `'includes() in LoDash
-`* `@un:countBy`@`[(iterator[, cx])`] - same as `'groupBy() but values are group lengths: `[{group1: 3, group2: 1, ...}`]
-`* `@un:difference`@`[(array[, array, ...])`] - same as `'without() but accepts one or more arrays
-`* `@un:each`@`[(iterator[, cx])`] - calls `'iterator on every child; returns nothing
-`* `@un:every`@`[(predicate[, cx])`] - returns `'true if for every child `'predicate returned a truthy value
-`* `@un:filter`@`[(predicate[, cx])`] - returns array of children for which `'predicate returned a truthy value; see `'pick() which returns an object
-`* `@un:find`@`[(predicate[, cx])`] - returns the first child for which `'predicate returned a truthy value or `'undefined
-`* `@un:groupBy`@`[(iterator[, cx])`] - returns an object with arrays of children for which `'iterator returned the same string (the object's keys are those strings): `[{group1: [child1, child3], group2: [...]}`]
-`* `@un:indexBy`@`[(iterator[, cx])`] - same as `'groupBy() but expects strings to be unique; returns `[{group1: child1, group2: child2, ...}`]; warning: missing from LoDash
-`* `@un:intersection`@`[(array[, array, ...])`] - returns an array of children listed in any of the given arrays
-`* `@un:invoke`@`[(method[, arg1, arg2, ...])`] - calls `'method of each child, giving it the passed `[arg`]uments; returns an array with results of every call; see `'map() which calls an iterator instead; warning: LoDash's works differently, do not use
-`* `@un:map`@`[(iterator[, cx])`] - returns an array with results of calling `'iterator for every child; similar to `'invoke() but doesn't call children's methods
-`* `@un:max`@`[(iterator[, cx])`] - ranks all children by calling `'iterator and returns the "highest" one
-`* `@un:min`@`[(iterator[, cx])`] - same as `'max() but returns the "lowest" child
-`* `@un:partition`@`[(predicate)`] - returns an array of two arrays: first with children matching `'predicate, second - not matching
-`* `@un:pluck`@`[(prop)`] - returns array of values of the `'prop property of every child; warning: missing from LoDash
+`* `@no@chunk`@`[(length)`] - returns an array of arrays of `'length members each (except last): `[[child1, child2], [child3, child4], [child5]`]
+`* `@no@includes`@`[(sqim)`] - returns `'true if there's a nested `'sqim instance (similar to `#nested())
+`* `@no@countBy`@`[(iterator[, cx])`] - same as `'groupBy() but values are group lengths: `[{group1: 3, group2: 1, ...}`]
+`* `@no@difference`@`[(array[, array, ...])`] - same as `'without() but accepts one or more arrays
+`* `@no@forEach`@`[(iterator[, cx])`] - calls `'iterator on every child; returns nothing; alias: `'each()
+`* `@no@every`@`[(predicate[, cx])`] - returns `'true if for every child `'predicate returned a truthy value
+`* `@no@filter`@`[(predicate[, cx])`] - returns array of children for which `'predicate returned a truthy value; see `'pick() which returns an object
+`* `@no@find`@`[(predicate[, cx])`] - returns the first child for which `'predicate returned a truthy value or `'undefined
+`* `@no@groupBy`@`[(iterator[, cx])`] - returns an object with arrays of children for which `'iterator returned the same string (the object's keys are those strings): `[{group1: [child1, child3], group2: [...]}`]
+`* `@no@indexBy`@`[(iterator[, cx])`] - same as `'groupBy() but expects strings to be unique; returns `[{group1: child1, group2: child2, ...}`]; warning: missing from LoDash
+`* `@no@intersection`@`[(array[, array, ...])`] - returns an array of children listed in any of the given arrays
+`* `@no@invoke`@`[(method[, arg1, arg2, ...])`] - calls `'method of each child, giving it the passed `[arg`]uments; returns an array with results of every call; see `'map() which calls an iterator instead; warning: LoDash's works differently, do not use
+`* `@no@map`@`[(iterator[, cx])`] - returns an array with results of calling `'iterator for every child; similar to `'invoke() but doesn't call children's methods
+`* `@no@max`@`[(iterator[, cx])`] - ranks all children by calling `'iterator and returns the "highest" one
+`* `@no@min`@`[(iterator[, cx])`] - same as `'max() but returns the "lowest" child
+`* `@no@partition`@`[(predicate)`] - returns an array of two arrays: first with children matching `'predicate, second - not matching
+`* `@no@pluck`@`[(prop)`] - returns array of values of the `'prop property of every child; warning: missing from LoDash
 
-   `'pluck() is hardly useful in Sqimitive since public properties are usually within `@Base._opt`@ and picking protected "_properties" has a limited utility. Use `'map() in combination with `#picker() or `'invoke() with `#get(): `[
+   `'pluck() is hardly useful in Sqimitive since public properties are usually within `@Base._opt`@ and picking protected "_properties" has limited utility. Use `'map() in combination with `#picker() or `'invoke() with `#get(): `[
      col.map(Sqimitive.Core.picker('get', 'opt'))   // map() + picker()
      col.invoke('get', 'opt')                       // invoke() + get()
    `]
 
-`* `@un:reduce`@`[(iterator, memo[, cx])`] - calls `[iterator(memo, sqim, parentKey)`] for every child (returns new `'memo) and returns the final value of `'memo
-`* `@un:reject`@`[(predicate[, cx])`] - the opposite of `'filter(), returns array of children mismatching `'predicate
-`* `@un:sample`@`[([n])`] - returns one random child (if no arguments) or `'n random children (or less if have fewer)
-`* `@un:shuffle`@`[()`] - returns array of children in random order
-`* `@un:some`@`[(predicate[, cx])`] - returns `'true if `'predicate returned a truthy value for any child
-`* `@un:sortBy`@`[(iterator[, cx])`] - returns array of children sorted by their rank determined by `'iterator (ascending)
-`* `@un:toArray`@`[()`] - simply returns array of all children; same as `#slice() and `@un:values`@() (not exposed as a method)
-`* `@un:union`@`[(array[, array, ...])`] - returns array of children plus members of all given arrays
-`* `@un:without`@`[(sqim[, sqim, ...])`] - returns array of children omitting those given as arguments; same as `'difference() but takes objects
+`* `@no@reduce`@`[(iterator, memo[, cx])`] - calls `[iterator(memo, sqim, parentKey)`] for every child (returns new `'memo) and returns the final value of `'memo
+`* `@no@reject`@`[(predicate[, cx])`] - the opposite of `'filter(), returns array of children mismatching `'predicate
+`* `@no@sample`@`[([n])`] - returns one random child (if no arguments) or `'n random children (or less if have fewer); alias of `'shuffle()
+`* `@no@shuffle`@`[()`] - returns array of children in random order
+`* `@no@some`@`[(predicate[, cx])`] - returns `'true if `'predicate returned a truthy value for any child
+`* `@no@sortBy`@`[(iterator[, cx])`] - returns array of children sorted by their rank determined by `'iterator (ascending)
+`* `@no@toArray`@`[()`] - simply returns array of all children; same as `#slice() and `@no@values`@() (not exposed as a method)
+`* `@no@union`@`[(array[, array, ...])`] - returns array of children plus members of all given arrays
+`* `@no@without`@`[(sqim[, sqim, ...])`] - returns array of children omitting those given as arguments; same as `'difference() but takes objects
 
 Methods available if mixed-in `@Sqimitive\Ordered`@:
 
-`* `@un:findIndex`@`[(predicate[, cx])`] - returns index of the first child for which `'predicate returns a truthy value or `[-1`]; similar to `'indexOf() but takes a callback
+`* `@no@findIndex`@`[(predicate[, cx])`] - returns index of the first child for which `'predicate returns a truthy value or `[-1`]; similar to `'indexOf() but takes a callback
 `* `@un:findLastIndex`@`[(predicate[, cx])`] - same as `'findIndex() but returns index of the last child; only useful for non-`#_owning (see `'lastIndexOf()); warning: missing from NoDash
-`* `@un:first`@`[()`] - returns first nested child or `'undefined
-`* `@un:indexOf`@`[(sqim)`] - returns the ordinal number of `'sqim or `[-1`] if it's not nested
-`* `@un:initial`@`[([n])`] - returns all but last `'n children (`[1`] if no arguments)
-`* `@un:last`@`[()`] - returns last nested child or `'undefined
-`* `@un:lastIndexOf`@`[(sqim)`] - same as `'indexOf() but counts from the end; only useful for non-`#_owning that may have duplicate children, else `'lastIndexOf() is the same as `'indexOf()
-`* `@un:reduceRight`@`[(iterator, memo[, cx])`] - same as `'reduce() but goes from the end
-`* `@un:rest`@`[([n])`] - returns all but first `'n children (`[1`] if no arguments)
+`* `@no@first`@`[()`] - returns first nested child or `'undefined
+`* `@no@indexOf`@`[(sqim)`] - returns the ordinal number of `'sqim or `[-1`] if it's not nested
+`* `@no@initial`@`[([n])`] - returns all but last `'n children (`[1`] if no arguments)
+`* `@no@last`@`[()`] - returns last nested child or `'undefined
+`* `@no@lastIndexOf`@`[(sqim)`] - same as `'indexOf() but counts from the end; only useful for non-`#_owning that may have duplicate children, else `'lastIndexOf() is the same as `'indexOf()
+`* `@no@reduceRight`@`[(iterator, memo[, cx])`] - same as `'reduce() but goes from the end
+`* `@no@rest`@`[([n])`] - returns all but first `'n children (`[1`] if no arguments)

@@ -1,3 +1,393 @@
+Migrating from 1.2 to 1.3
+=========================
+
+1.3 is a bug fixing release with new functions and breaking changes.
+Most important new features are the new batch() system and hook priorities^.
+
+Bug fixes:
+
+  * once() now passes on() the given cx (previously it passed none, i.e. this)
+  * Fixed autoOff()'s processing of cx:
+    * events' functions are called in caller-provided cx
+    * cx given to on() is always this
+    * previously, cx of both was sqim if autoOff() was given 2 arguments,
+      or this if more (was ignoring caller-provided cx)
+  * Fixed _unregHandler() not restoring hooks of an unhooked =wrapped hook that
+    in turn was also =wrapped (but still hooked)
+  * ...which also led to them being unregistrable from _eventsByID/_eventsByCx
+  * Fixed unregistering all hooks when doing off('event') in presence of
+    =wrapped hooks with still-registered hooks in supList
+  * Improved Core::fire():
+    * doing nothing if funcs is !isArray
+    * correctly calling supList of an unhooked =wrapped handler
+    * not calling eobj.post if func wasn't called (unhooked or mismatching ev__)
+  * Fixed bugs in Ordered::indexFor()
+  * Fixed cloning of properties declared in a subclass if an instance of its
+    superclass was instantiated before subclass declaration: Superclass.extend()
+  * Added cloning of instance properties of mix-in applied to instance, not class
+  * expandFunc() now treats '.' and '-' as part of method name (not mask) if
+    they are followed by [^\d.-]
+  * Fixed unlist() removing wrong child by casting null/undefined key to string
+  * ...also happened if it was given an object that wasn't part of own children
+  * Added internal _nested/_unnested methods for Ordered to ensure consistent
+    state of _children and _ordered for user hooks on nestEx and unnested
+
+Improvements:
+
+  * parseEvent() no longer restricts event name to [\w\d.:+\-=]
+  * Improved performance of object instantiation-time cloning of class
+    properties by 2-3X (new Core::deepCloner() function)
+  * init() now resolves relative _childClass once per class instantiation,
+    writing resolved class to own prototype
+  * Default subclass name (when no name was given to extend()) is the
+    superclass' name, not the string "Sqimitive"
+  * _event key is now deleted if no active handlers remain for that event
+  * _owning findKey() no longer iterates over own children when given an object
+  * Ordered no longer calls _repos if child's index in _ordered didn't change
+  * Ordered no longer calls _sorter to compare the object with itself
+
+New features:
+
+  * Reworked former Base's deferring of change/change_OPT events (and removed
+    _firingSet and _fireSet()) into a Core batch system with new fields:
+    batch(), ::batchGuard(), _batchOptions(),
+    _batches, _batch, _batchID, _batched    - internal properties
+  * Added hook priorities: '123^<event>' to maintain hook's position relative to
+    others with different priorities and '-prefixes' added later
+  * unnested() now receives former child's key as second argument
+  * assignChildren()'s keyFunc now receives response object as second argument
+  * Added new assignChildren() options: newFunc (ex. classFUnc), posFunc, unFunc
+  * picker() now accepts dot-path, list of arguments for functions, etc.
+  * Added getSet() cx default of this (previously called func in globalThis)
+  * ...and made it return pre-toSet values for toReturn keys with leading '-'
+  * Added default cx of this to all #util-s
+  * once() now allows retaining the hook if it returns a special value
+  * autoOff() now allows iterating over tracked objects, unlisting an object
+    without unhooking and hooking with an array in addition to object
+  * nest() now accepts a plain object as sqim to construct sqim from _childClass
+  * Replaced calls to _.isEqual() with new Base.isEqual() using === by default
+  * Added Ordered nestEx options.repos to re-evaluate child position
+  * Added _initToOpt to control assignment of opt given to new/constructor/init()
+  * Moved _forward() from Base to Core and added an optional prepend parameter
+  * assignResp() options.schema may now be a string (name of property on this)
+  * assignResp() sets this.prop from leading '.' in schema's key
+  * Added #util forEach() (in addition to non-standard but common each())
+  * Added Base.sort() method
+  * Added Ordered methods: shift(), pop(), reverse()
+  * Ordered._indexFor() and ::indexFor() now have new fifth oldIndex parameter
+  * Added Core._mustClone() method to determine properties to clone
+  * sup.name is now set to the name of event the =handler was added for
+  * Added Core._wrapUndeclared to not create firers in missing properties
+  * Added Core::trace flag and many debug info fields (Core::lastFired, etc.)
+
+Breaking changes:
+
+  * Renamed sqimitive.js to main.js, sqimitive-async/jquery.js to async/jquery.js
+    => if using npm, the require('sqimitive') call will continue to function
+    => if using npm or Require.js, instead of:
+           define(['sqimitive/sqimitive'], function (Sqimitive) { ... })
+           var jQuery = require('sqimitive/sqimitive-jquery')
+       do:
+           define(['sqimitive/main'], function (Sqimitive) { ... })
+           var jQuery = require('sqimitive/jquery')
+    => if using <script>, instead of:
+           <script src="sqimitive/sqimitive-async.js"></script>
+       do:
+           <script src="sqimitive/async.js"></script>
+
+  * Calling autoOff() with one argument now unlists and unhooks that sqimitive
+    rather than listing it without adding hooks
+
+    => instead of:
+           this.autoOff(sqim).once(...)
+       do:
+           this.autoOff(sqim, {}).once(...)
+
+  * assignResp() now returns list of changed properties rather than this
+    => instead of:
+           col.nest(sqim.assignResp(...))
+       do:
+           sqim.assignResp(...)
+           col.nest(sqim)
+
+  * Removed assignChildren() options.classFunc, replaced with new newFunc
+    => instead of:
+           col.assignChildren(..., {classFunc: resp => SomeClass})
+       do:
+           col.assignChildren(..., {newFunc: resp => new SomeClass})
+
+  * Added _childEvents to _mergeProps
+    => given this:
+           var Super = Sqimitive.Core.extend({
+             _childEvents: ['sup'],
+           })
+           var Sub = Super.extend({
+             _childEvents: ['sub'],
+           })
+           ;(new Sub)._childEvents    //=> ['sub']
+       update _mergeProps immediately after calling extend() on the superclass:
+           Sub._mergeProps.splice(Sub._mergeProps.indexOf('_childEvents'), 1)
+       if not done:
+           ;(new Sub)._childEvents    //=> ['sup', 'sub']
+
+  * Removed non-standard #util alias contains(), replaced with new includes()
+    => instead of:
+           col.contains(sqim)
+       do:
+           col.includes(sqim)
+
+  * Made Core.firer() static
+    => instead of:
+           this.firer('event', ...)
+       do one of this:
+           Sqimitive.Core.firer('event', ...)
+           this.constructor.firer('event', ...)
+
+  * picker()'s string is now a dot-path (prop.sub.it) or a pre-split array
+    => instead of:
+           picker('x.y')({'x.y': ...})
+       do:
+           picker(['x.y'])({'x.y': ...})
+
+  * picker()'s args is now a list of arguments, not arguments for (one) call
+    => instead of:
+           picker('method', [1, 2])({method: (a, b) { ... }})
+       do:
+           picker('method', [[1, 2]])({method: (a, b) { ... }})
+    => instead of:
+           picker('method', [1])({method: (a) { ... }})
+       do one of this:
+           picker('method', 1)({method: (a) { ... }})
+           picker('method', [[1]])({method: (a) { ... }})
+
+  * if picker()'s returned function is given a function, that function is called
+    and descended into rather than undefined returned
+
+    => before:
+           picker('length')(new Function)   //=> undefined
+       now:
+           picker('length')(new Function)   //=> 0
+
+  * picker()'s returned function doesn't call functions with names starting with
+    a capital letter (considering them constructors/class names)
+
+    => before:
+           picker('x')({x: Date})     //=> 'Sun Dec 11 ...'
+       now:
+           picker('x')({x: Date})     //=> Date
+
+  * Replaced calls to _.isEqual() with new Base.isEqual() using === by default;
+    this change affects ifSet() (set()) and Ordered's test of pos in nestEx
+
+    => before:
+           sqim.on('change_opt', () => console.log('changed'))
+           sqim.set('opt', 1)     //=> logged
+           sqim.set('opt', '1')
+       now:
+           sqim.set('opt', 1)     //=> logged
+           sqim.set('opt', '1')   //=> logged
+    => restore old behaviour by overriding isEqual:
+           events: {'=isEqual': (res, a, b) => _.isEqual(a, b)}
+           sqim.on('=isEqual',  (res, a, b) => _.isEqual(a, b))
+
+  * _wrapHandler() no longer creates firer() if event's name has a \W
+    => if using such events as methods:
+           var Class = Sqimitive.Core.extend({
+             events: {'foo:bar': function ...}
+           })
+           var sqim = new Class
+           sqim['foo:bar']()
+           sqim.sink('foo:bar')
+       add an explicit method:
+           var Class = new Sqimitive.Core({
+             events: /* as before */,
+             'foo:bar': function () { this.fire('foo:bar', arguments) }
+             // or:
+             'foo:bar': Sqimitive.Core.firer('foo:bar')
+           })
+
+  * normalize_OPT's undefined result doesn't change ifSet()'s value but keeps it
+    => ifSet() has to be overridden to allow normalize_OPT set value to undefined
+
+  * Giving extend() second argument (staticProps) now replaces value of first
+    argument's (protoProps) staticProps key; previously, staticProps argument
+    was applied before applying MixIns which led to counterintuitive results
+
+    => instead of:
+           var MyClass = Sqimitive.Core.extend({staticProps: {...}}, {...})
+       do one of this:
+           var MyClass = Sqimitive.Core.extend({staticProps: {...}})
+           var MyClass = Sqimitive.Core.extend({}, {...})
+
+Minor breaking changes:
+
+  * Changed format of _autoOff from array to Set (can be null)
+    => instead of:
+           var a = this._autoOff.map(...)
+       do:
+           var a = []
+           ;(this._autoOff || []).forEach(... a.push(...))
+
+  * Core::fire() and Core.fire() now accept an internal third argument
+    => don't accidentally provide it, e.g. if using fire() as a forEach callback
+
+  * _respToOpt and schema object of assignResp() now recognize leading '.'
+    in key's string value and in key's Function value's returned array[0]:
+    leading '.' sets respValue to this[substr(1)], sole '.' - to this[respKey];
+    previously such values meant the same as others, i.e. set() of _opt['...']
+
+    => instead of (same with '.opt' replaced with '.'):
+           _respToOpt: {'.opt': true}
+           _respToOpt: {respKey: '.opt'}
+           _respToOpt: {respKey: respValue => {return ['.opt', respValue]}}
+       do:
+           _respToOpt: {'.opt':  respValue => {this.set('.opt', respValue)}}
+           _respToOpt: {respKey: respValue => {this.set('.opt', respValue)}}
+           // same for return ['.opt', ...]
+
+  * getSet() now ignores leading dash '-' in toGet/toSet/toReturn members;
+    '-' (-opt) in toReturn causes opt's value be get() before processing toSet
+
+    => instead of:
+           var res = getSet('-x', '-y', '-z')
+       do:
+           set('-y', get('-x'))
+           var res = get(-z')
+
+  * unique() is used to generate these new internal prefixes in addition to 'p':
+    'e', 'o', 'b', 'bg'
+
+  * These functions now defer events of all processed _opt'ions (run in a batch):
+    init(), getSet(), assignResp() (+ assignChildren())
+
+    => before:
+           sqim.on('change_x', () => console.log(sqim.get('y')))
+           sqim.assignResp({x: 1, y: 2})    //=> undefined
+       now:
+           sqim.assignResp({x: 1, y: 2})    //=> 2
+
+  * Non-_owning Ordered.unlist() when given an object now removes only one
+    (arbitrary) child entry, not all of them, in line with Base.unlist()
+
+    => instead of:
+           var Class = Sqimitive.Base.extend({
+             mixIns: [Sqimitive.Ordered],
+             _owning: false
+           })
+           var col = new Class
+           var sqim = new Class
+           col.nest(sqim)
+           col.nest(sqim)
+           col.unlist(sqim)
+           col.length       //=> 0
+       do:
+           col.nest(sqim)
+           col.nest(sqim)
+           col.unlist(sqim)
+           col.length       //=> 1
+           while (col.unlist(key)) ;
+
+  * Changed format of eobj.id and of on()'s result from string to null
+    => before:
+           on('foo', function ...)    //=> 'foo/123'
+       now:
+           on('foo', function ...)    //=> 4567
+
+  * eobj can now have null func (unhooked) and has new keys:
+    batch, priority, prefix, trace
+
+  * parseEvent() returns new keys (batch, priority, trace); name became event
+    => instead of:
+           parseEvent('foo').name
+       do:
+           parseEvent('foo').event
+
+  * parseEvent() returns args as a number or null rather than string of '_'s
+    => before:
+           parseEvent('ev').args      //=> ''
+           parseEvent('ev__').args    //=> '__'
+       now:
+           parseEvent('ev').args      //=> null
+           parseEvent('ev__').args    //=> 2
+
+  * Removed _cxHandlers() and changed format of _eventsByCx from array to Map
+    => instead of:
+           _cxHandlers(sqim, ...)
+       do:
+           _eventsByCx.get(sqim)
+
+  * Leading '^' and '^number^'/'number^' now have special meaning in event names
+    (parseEvent(), on(), etc.): '^.ev', '^-1^+ev', '+10-ev', .etc.
+
+  * _wrapHandler() now treats a defined property with undefined value as stub
+    (previously it would skip creating firer() as for any non-Function)
+
+    => before:
+           var Class = Sqimitive.Core.extend({
+             undef: undefined,
+           })
+           var sqim = new Class
+           // or:
+           var sqim = new Sqimitive.Core
+           sqim.undef = undefined
+           // then:
+           sqim.on('undef', ...)
+           sqim.undef           //=> undefined
+           sqim.fire('undef', [...])
+       now:
+           // ...
+           // then:
+           sqim.on('undef', ...)
+           sqim.undef           //=> Function
+           sqim.undef(...)      // same as fire()
+           sqim.fire('undef', [...])
+
+  * _wrapHandler() now inserts defined property's Function value after existing
+    handlers (with 0 priority), not -before
+
+    => this should be impossible to meet on normal usage because _wrapHandler()
+       is executed when adding a first handler but before it's actually added
+
+  * _unregHandler() takes new parameters (options, eobj)
+    => instead of:
+           _unregHandler(eobj)
+       do:
+           _unregHandler({}, eobj)
+
+  * _unregHandler() may no longer be called with null or unregistered eobj
+    => instead of:
+           _unregHandler( this._eventsByID['non-existing key'] )
+       do:
+           var eobj = this._eventsByID['non-existing key']
+           eobj && _unregHandler({}, eobj)
+    => instead of:
+           _unregHandler(eobj)
+           // later, again:
+           _unregHandler(eobj)
+       do:
+           eobj.func && _unregHandler({}, eobj)
+           // later, again:
+           eobj.func && _unregHandler({}, eobj)
+
+  * ifSet() (set()) now writes value to _opt only if events were fired;
+    previously it wrote the value, then checked for forceFire and !isEqual
+
+    => before:
+           sqim.ifSet('opt', 1)
+           _.isEqual(1, '1')        //=> true
+           sqim.ifSet('opt', '1')   //=> false
+           sqim._opt.opt            //=> '1'
+       now:
+           sqim.isEqual = _.isEqual
+           sqim.ifSet('opt', 1)
+           sqim.ifSet('opt', '1')   //=> false
+           sqim._opt.opt            //=> 1
+
+  * Removed key parameter of Ordered._indexOf()
+
+  * Changed format of _copyProps from array to Function
+
+
 Migrating from 1.0 to 1.2
 =========================
 
@@ -76,6 +466,7 @@ Breaking changes:
 
     * Sqimitive.Base.slice() used to treat length parameter as end index; this
       was fixed to conform to standard Array's slice()
+
       => instead of (sqim having 3 children):
              sqim.slice(2, 1)   that was returning [child3]
          do:
@@ -104,6 +495,7 @@ Breaking changes:
   * Helper methods now operate on array (Base.slice()), not object (_children):
     each(), map(), reduce(), find(), filter(), reject(), every(), some(), max(),
     min(), sortBy(), groupBy(), indexBy(), countBy()
+
     => see above for reduceRight() (omit the first argument, memo):
            osqim.each(function (child, index, array) {
              var key = this.at(index).key
@@ -164,6 +556,7 @@ Breaking changes:
 
   * attach() is using _parent's $(), not repeating look-up if given parent
     parameter matched no node, not passing '.ns' part to jQuery.on() (elEvents)
+
     => these can almost be qualified as bugs; Sqimitive.jQuery must always use
        '.sqim-'_cid as a namespace - if you need your own '.ns', do it yourself:
            events: {
@@ -224,4 +617,4 @@ Breaking changes:
 
 ---
 Squizzle ♥ it
-http://squizzle.me
+https://squizzle.me

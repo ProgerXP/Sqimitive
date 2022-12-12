@@ -131,7 +131,7 @@ $('<style>')
       font-family: monospace;
     }
 
-    #viewSource a {
+    #viewSource a:not(.prism__token) {
       font-size: 1.3em;
       text-align: center;
       display: block;

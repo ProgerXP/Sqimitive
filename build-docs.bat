@@ -24,7 +24,8 @@ php "%CHEM_PHP%" --esprima-node="%NODE%" -p=docs -z ^
   --f-link-GitHub=https://github.com/ProgerXP/Sqimitive ^
   --f-link-download=https://github.com/ProgerXP/Sqimitive/archive/master.zip ^
   --f-link-issues=https://github.com/ProgerXP/Sqimitive/issues ^
+  --extchem-no=https://squizzle.me/js/nodash/ ^
   --extchem-jq=https://api.jquery.com/[?s=%%r] ^
   --extchem-un=https://underscorejs.org/[#%%r] ^
   --extchem-bb=https://backbonejs.org/[#%%r] ^
-  HELP.chem sqimitive.js sqimitive-async.js sqimitive-jquery.js %*
+  HELP.chem main.js async.js jquery.js %*

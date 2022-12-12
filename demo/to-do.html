@@ -11,7 +11,7 @@
       <h1>Simple To-Do App</h1>
 
       <nav>
-        A <a href="http://squizzle.org/js/sqimitive">Sqimitive.js</a> demo
+        A <a href="https://squizzle.me/js/sqimitive">Sqimitive.js</a> demo
         • <a href="to-do.js" id="source">View source</a>
       </nav>
     </header>
@@ -58,8 +58,10 @@
         <textarea name="description">{{ description }}</textarea>
       {{else}}
         <h2>
-          {{ caption }}
-          <input type="checkbox" {{#if done}}checked{{/if}}>
+          <label>
+            {{ caption }}
+            <input type="checkbox" {{#if done}}checked{{/if}}>
+          </label>
           <a href="#{{ id }}">#</a>
         </h2>
 
@@ -78,14 +80,14 @@
     </script>
 
     <script type="text/javascript" src="underscore.js"></script>
-    <!-- This demo uses Zepto instead of jQuery to demonstrate that it's the same. -->
+    <!-- This demo uses Zepto instead of jQuery for demonstrative purposes. -->
     <script type="text/javascript" src="zepto.js"></script>
-    <script type="text/javascript" src="../sqimitive.js"></script>
-    <script type="text/javascript" src="../sqimitive-jquery.js"></script>
+    <script type="text/javascript" src="../main.js"></script>
+    <script type="text/javascript" src="../jquery.js"></script>
     <!-- Handlebars is not required for Sqimitive but is used in this demo. -->
     <script type="text/javascript" src="handlebars.js"></script>
     <script type="text/javascript" src="to-do.js"></script>
-    <!-- This is just for View soure link to work. -->
+    <!-- This is just for the "View soure" link to work. -->
     <script type="text/javascript" src="demo.js"></script>
   </body>
 </html>
