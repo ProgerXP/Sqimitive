@@ -106,9 +106,9 @@
   //]
   //
   // Other notes:
-  //* Child `#Async-s may be `#nest'ed at any time and their `'status may be
-  //  any (loading, failed or succeeded) - the parent's `'status will be
-  //  updated accordingly and `#success/`#error/`#complete may arise on it.
+  //* Child `#Async-s may be `#nest'ed at any time and their `'status may be any
+  //  (loading, failed or succeeded) - the parent's `'status will be updated
+  //  accordingly and `#success/`#error/`#complete may arise on it.
   //* These three events are first fired on the `#Async itself (distance 0),
   //  then on its immediate parent (1), then on that parent's parent (2) and so
   //  on. In case of multiple parents of the same distance (one
@@ -203,9 +203,10 @@
   //  `]
   //
   //# Event order and nesting
-  // Often you want to call `[when...()`] on a child being `'nest()'ed, such as when wrapping
-  // an `#Async. In this example API calls are delayed but the caller receives
-  // an `#Async immediately. It might be tempting to write something like this:
+  // Often you want to call `[when...()`] on a child being `'nest()'ed, such as
+  // when wrapping an `#Async. In this example API calls are delayed but the
+  // caller receives an `#Async immediately. It might be tempting to write
+  // something like this:
   //[
   //    var queue = []
   //    var timer
@@ -243,8 +244,8 @@
   // returned by `'_callAPI(); when the latter succeeds or fails, the caller's
   // `#Async automatically finishes and `'callAPI() copies response data
   // (`'result) to the wrapper - but running into the same pitfall described in
-  // `#_opt.`'ignoreError, namely that `'whenSuccess() is called after nesting, allowing the
-  // caller's hooks to execute first.
+  // `#_opt.`'ignoreError, namely that `'whenSuccess() is called after nesting,
+  // allowing the caller's hooks to execute first.
   //[
   //    // wrapper is the result Async in callAPI().
   //    var wrapper = callAPI('foo')
@@ -253,9 +254,8 @@
   //      // before callAPI()'s whenSuccess() runs
   //]
   var Async = Sqimitive.Base.extend('Sqimitive.Async', {
-    // The maximum number (absolute, i.e. positive) accepted by
-    // `#whenComplete() and others; out of range priority is clamped to the
-    // nearest value.
+    // The maximum number (absolute, i.e. positive) accepted by `#whenComplete()
+    // and others; out of range priority is clamped to the nearest value.
     //
     //? Use `'-Infinity and `'Infinity to specify minimum and maximum priority.
     //  `[
@@ -315,8 +315,8 @@
     //> immediateError bool `- if set, this instance will be considered failed
     //  as soon as any child fails, even if there is an `#isLoading() child
     //
-    //  This value affects the next child status check so it's best changed
-    //  when there are no children.
+    //  This value affects the next child status check so it's best changed when
+    //  there are no children.
     //
     //  The default (disabled) is safe because it ensures completion of all
     //  children before completing the parent, avoiding any orphan processes.
@@ -369,12 +369,12 @@
         // after nest().
         var isNew = !this.includes(options.child)
         var res = sup(this, arguments)
-        // This request (sqim) could have already been complete between
-        // creation and nesting as in second.nest(new first(...)), and so
-        // complete event will never occur, and _childComplete - be never
-        // called. We call it on nest, but only for truly new objects -
-        // otherwise if sqim is already complete, and its complete event is
-        // pending, we'd call _childComplete twice.
+        // This request (sqim) could have already been complete between creation
+        // and nesting as in second.nest(new first(...)), and so complete event
+        // will never occur, and _childComplete - be never called. We call it on
+        // nest, but only for truly new objects - otherwise if sqim is already
+        // complete, and its complete event is pending, we'd call _childComplete
+        // twice.
         isNew && this._childComplete(res.child)
         return res
       },
@@ -421,8 +421,8 @@
 
     //! +ig
     // Separate events for separate priorities are used instead of a single
-    // event because Sqimitive doesn't support ordered handlers and because
-    // such set-up doesn't require sorting (or inserting handlers in specific
+    // event because Sqimitive doesn't support ordered handlers and because such
+    // set-up doesn't require sorting (or inserting handlers in specific
     // positions).
     //= object Error if caught`, true if quit due to status change`, false
     _callPriorities: function (event, args) {
@@ -517,11 +517,11 @@
     //= this
     //
     // Unlike with a simple `[on('event')`] (`#on()) `'func gets called
-    // immediately if the condition is already met (then `'priority is
-    // ignored). Otherwise, `'func is executed before all handlers registered
-    // with a larger `'priority, among (in any order) those with the same and
-    // after those with a lower. The value is clamped to the `#MAX_PRIORITY
-    // range. In any case, `'func is given `'this (the `#Async instance).
+    // immediately if the condition is already met (then `'priority is ignored).
+    // Otherwise, `'func is executed before all handlers registered with a
+    // larger `'priority, among (in any order) those with the same and after
+    // those with a lower. The value is clamped to the `#MAX_PRIORITY range. In
+    // any case, `'func is given `'this (the `#Async instance).
     //
     // Warning: the following is incorrect use because `'func may be called
     // immediately, before the result is assigned to `'req:
@@ -603,9 +603,9 @@
     // be reused. `#clear() can be also seen as "hard" `#abort().
     //
     // Removes event listeners for `#success/`#error/`#complete (but not for
-    // `#exception), calls `#abort() on self and on `#_children
-    // (recursively), calls `@Base.remove()`@ on children if `#_owning or `#unlist() if not, and sets `'status
-    // (`#_opt) to `'null (`#isLoading()).
+    // `#exception), calls `#abort() on self and on `#_children (recursively),
+    // calls `@Base.remove()`@ on children if `#_owning or `#unlist() if not,
+    // and sets `'status (`#_opt) to `'null (`#isLoading()).
     clear: function () {
       _.forEach(['success', 'error', 'complete'], function (e) { this.off(e) }, this)
       this.sink('abort', [], true)
@@ -614,10 +614,11 @@
       return this
     },
 
-    // Nests a new child and returns a function that sets the child's `'status to `'true.
+    // Nests a new child and returns a function that sets the child's `'status
+    // to `'true.
     //
-    // The returned function has an `'error method that sets the child's `'status to
-    // `'false.
+    // The returned function has an `'error method that sets the child's
+    // `'status to `'false.
     //
     //? Use `#nestDoner() to interface with callback-style functions:
     //  `[
@@ -649,9 +650,8 @@
       return nestDoner_
     },
 
-    //= null when still `#isLoading()`,
-    //  true if `'status `#_opt is `'true or `'ignoreError `#_opt is set`,
-    //  false
+    //= null when still `#isLoading()`, true if `'status `#_opt is `'true or
+    //  `'ignoreError `#_opt is set`, false
     //
     // `'ignoreError affects all methods using `#isSuccessful(), in particular
     // `#whenSuccess() and `#whenError():
@@ -705,8 +705,8 @@
     //
     //? In most cases you need to use `#whenSuccess(), `#whenError() and
     //  `#whenComplete() rather than subscribing via `#on() because if the
-    //  instance's status changes between its construction and your
-    //  subscription - your handler will not be called:
+    //  instance's status changes between its construction and your subscription
+    //  - your handler will not be called:
     //  `[
     //   var async = new MyAsync({...})
     //   // If async is already complete before we call on() - our handler will
@@ -719,8 +719,8 @@
     // The call order of handlers is deterministic (`#Async's `#nest() acts as
     // `#on() because of `#_childEvents/`#_forward()) but it's usually more
     // convenient to use specific priority levels to not depend on the order of
-    // `#nest()/`#on() calls: `[on('success')`] is guaranteed to be called
-    // after `[success-3`] but before `[success2`].
+    // `#nest()/`#on() calls: `[on('success')`] is guaranteed to be called after
+    // `[success-3`] but before `[success2`].
     success: Sqimitive.Core.stub,
 
     //! +fn=error:this +ig
@@ -752,16 +752,16 @@
     // action (e.g. an AJAX call) has succeeded.
     //
     // If an exception is thrown during an `#error or `#success handlers then
-    // remaining handlers are skipped, `#complete is triggered and the
-    // exception is re-thrown. An exception during `#complete also skips
-    // remaining handlers of `#complete and is re-thrown unless there was an
-    // exception during `#error or `#success.
+    // remaining handlers are skipped, `#complete is triggered and the exception
+    // is re-thrown. An exception during `#complete also skips remaining
+    // handlers of `#complete and is re-thrown unless there was an exception
+    // during `#error or `#success.
     //
     // Other notes:
     //* `#exception's event listeners are not affected by `#clear().
-    //* `#Async replaces the `#exception() handler of its children so that
-    //  the exception is thrown on the top-level `#Async (whose `#_parent is
-    //  not another `#Async).
+    //* `#Async replaces the `#exception() handler of its children so that the
+    //  exception is thrown on the top-level `#Async (whose `#_parent is not
+    //  another `#Async).
     //* The above also means that it's enough to override just the top-level
     //  `#exception() to affect the entire tree.
     //* The usual events have "whenXXX()" (`#whenComplete(), etc.) but there's
@@ -781,8 +781,8 @@
     //! +fn=abort +ig
     // Aborts the operation of this instance.
     //
-    //? `#abort() doesn't affect own `#_children - call `#sink() or `#clear() to abort
-    //  everything recursively:
+    //? `#abort() doesn't affect own `#_children - call `#sink() or `#clear() to
+    //  abort everything recursively:
     //  `[
     //     async.sink('abort')
     //  `]
@@ -813,17 +813,23 @@
   //* A single instance (`'this) can be used to issue only one request.
   Async.Fetch = Async.extend('Sqimitive.Async.Fetch', {
     //#-readOnly
-    // Available after `'init(). Result of `#_fetch(): native or wrapped `'XMLHttpRequest (as returned by `'ajax()) or `'Promise (`'fetch()).
+    // Available after `'init(). Result of `#_fetch(): native or wrapped
+    // `'XMLHttpRequest (as returned by `'ajax()) or `'Promise (`'fetch()).
     request: null,
 
     //#-readOnly
-    // Available once not `#isSuccessful(). For `'ajax() this is whatever was given to the `'error callback (may be even unset/falsy). For (`'fetch()) this is either `'Response (request completed successfully but with HTTP status outside of 200-299; `[!requestError.ok`]) or `'Error (request didn't complete).
+    // Available once not `#isSuccessful(). For `'ajax() this is whatever was
+    // given to the `'error callback (may be even unset/falsy). For (`'fetch())
+    // this is either `'Response (request completed successfully but with HTTP
+    // status outside of 200-299; `[!requestError.ok`]) or `'Error (request
+    // didn't complete).
     //
     // Not to be confused with the `@Async.error`@ event/method.
     requestError: null,
 
     //#-readOnly
-    // Available once `#isSuccessful(). Value of `'request's `[response...`] property (`'ajax()) or `'Response (`'fetch()).
+    // Available once `#isSuccessful(). Value of `'request's `[response...`]
+    // property (`'ajax()) or `'Response (`'fetch()).
     response: null,
 
     //! +ig
@@ -834,9 +840,11 @@
     //  fetching (e.g. `@jq:ajax`@() or browser's `'fetch())
     //> * `- options given to `'function
     //
-    //  Usually you want to set at least `'url (required by both `'ajax() and `'fetch()).
+    //  Usually you want to set at least `'url (required by both `'ajax() and
+    //  `'fetch()).
     //
-    //  `'method/`'body (`'fetch()-style) default to values of `'type/`'data (`'ajax()-style).
+    //  `'method/`'body (`'fetch()-style) default to values of `'type/`'data
+    //  (`'ajax()-style).
     //
     //  Don't set `'context (always `'this), `'success/`'error (use
     //  `#whenSuccess(), etc.), `'signal (use `#abort()).
@@ -926,11 +934,17 @@
       this.request = this.request /*set by _fetch()*/ || res
     },
 
-    // Fires off the request using `'options. Must either set `#response or return its new value.
+    // Fires off the request using `'options. Must either set `#response or
+    // return its new value.
     //
-    // Base implementation calls `#_opt.`'function or `#defaultFunction, giving it `'options. If result has `'then function (`'Promise), hooks it in order to call `'options' `'success/`'error. `'error is also called if `'Promise fulfills with `[Response.ok`] of `'false.
+    // Base implementation calls `#_opt.`'function or `#defaultFunction, giving
+    // it `'options. If result has `'then function (`'Promise), hooks it in
+    // order to call `'options' `'success/`'error. `'error is also called if
+    // `'Promise fulfills with `[Response.ok`] of `'false.
     //
-    //? If using `'fetch(), `#request is `'Promise by default. You can replace it with a more useful `'Request by changing `#_opt.`'function or `#defaultFunction like so:
+    //? If using `'fetch(), `#request is `'Promise by default. You can replace
+    //  it with a more useful `'Request by changing `#_opt.`'function or
+    //  `#defaultFunction like so:
     //  `[
     //    Async.Fetch.defaultFunction = function (options) {
     //      return fetch(options.context.request = new Request(options))
@@ -947,16 +961,17 @@
       return res
     },
 
-    // Sets `#response value based on properties of `'obj when `'this is about to become `#isSuccessful().
+    // Sets `#response value based on properties of `'obj when `'this is about
+    // to become `#isSuccessful().
     //
     // Base implementation is suitable for supported `#defaultFunction-s.
     //
-    // If overriding `#_assign(),
-    // avoid reading response data of the same (`'XMLHttpRequest) request multiple times because
-    // browsers parse it on every access. For example, 100 reads on
-    // `[xhr.response`] are 100 times slower than reading `[xhr.response`] once
-    // and using that copy for subsequent access. This is especially noticeable
-    // on huge JSONs where each read may take seconds.
+    // If overriding `#_assign(), avoid reading response data of the same
+    // (`'XMLHttpRequest) request multiple times because browsers parse it on
+    // every access. For example, 100 reads on `[xhr.response`] are 100 times
+    // slower than reading `[xhr.response`] once and using that copy for
+    // subsequent access. This is especially noticeable on huge JSONs where each
+    // read may take seconds.
     _assign: function (obj) {
       if ('responseJSON' in obj) {
         var resp = obj.responseJSON   // non-standard jQuery field
@@ -990,7 +1005,12 @@
   //! +prop=defaultFunction
   // The function used by `#_fetch() when `#_opt.`'function is unset.
   //
-  // Defaults to `'ajax() of the global jQuery, Zepto or `[_`] (`[nodash/extra`] provides `@no@Extra.ajax`@()) or the native `'fetch(), whichever is available (in this order). This makes `#Fetch suitable for use in a web browser with zero configuration. In other environments client must either set `#defaultFunction (provided nobody else does so and the value fits all other clients) or supply `#_opt.`'function to every instance of `#Fetch.
+  // Defaults to `'ajax() of the global jQuery, Zepto or `[_`] (`[nodash/extra`]
+  // provides `@no@Extra.ajax`@()) or the native `'fetch(), whichever is
+  // available (in this order). This makes `#Fetch suitable for use in a web
+  // browser with zero configuration. In other environments client must either
+  // set `#defaultFunction (provided nobody else does so and the value fits all
+  // other clients) or supply `#_opt.`'function to every instance of `#Fetch.
   //
   // Changes to `#defaultFunction take effect on next request (new `#Fetch).
   Async.Fetch.defaultFunction = typeof self == 'object' &&

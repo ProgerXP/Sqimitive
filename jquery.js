@@ -40,11 +40,13 @@
   var _ = Sqimitive._
 
   //! +cl=Sqimitive.jQuery.MixIn
-  // A `#mixIn to map Sqimitive onto a DOM representation via the jQuery interface.
+  // A `#mixIn to map Sqimitive onto a DOM representation via the jQuery
+  // interface.
   //
   // See `#jQuery for details.
   //
-  // Use `@Sqimitive\jQuery`@ if you just want a standard `#Base with jQuery features.
+  // Use `@Sqimitive\jQuery`@ if you just want a standard `#Base with jQuery
+  // features.
   //
   //?`[
   //    var jQueryInMyClass = MyClass.extend({
@@ -57,9 +59,9 @@
   //! +cl=Sqimitive.jQuery:Sqimitive.Base:Sqimitive.jQuery.MixIn
   // A Sqimitive with a DOM representation via the jQuery interface (`@jq:`@).
   //
-  // ` `@Sqimitive\jQuery`@ is the base class used in a typical web
-  // application. It turns `#el into a jQuery node, keeps it attached to
-  // `#_parent's `#el, maintains `#el's event listeners in DOM, etc.
+  // ` `@Sqimitive\jQuery`@ is the base class used in a typical web application.
+  // It turns `#el into a jQuery node, keeps it attached to `#_parent's `#el,
+  // maintains `#el's event listeners in DOM, etc.
   //
   // This class can also work with libraries imitating jQuery API like Zepto
   // since this is a thin interface to jQuery and very few of its features are
@@ -67,7 +69,9 @@
   //
   // See the included sample To-Do application for a "real-world" example.
   //
-  // ` `@Sqimitive\jQuery\MixIn`@ can be used to add this functionality into a sqimitive whose superclass is different from `#Base, possibly even on run-time.
+  // ` `@Sqimitive\jQuery\MixIn`@ can be used to add this functionality into a
+  // sqimitive whose superclass is different from `#Base, possibly even on
+  // run-time.
   //
   //#jqex
   //? `[
@@ -123,7 +127,7 @@
       //   var p = Sqimitive.jQuery.$('<p class=text>')
       //]
       //
-      // A similar global property `[Sqimitive._`]  holds reference to the
+      // A similar global property `[Sqimitive._`] holds reference to the
       // utility library in use.
       $: $,
 
@@ -163,11 +167,11 @@
 
     // New standard options (`@Base._opt`@):
     //
-    //> attachPath: string selector, object DOM or jQuery
-    //  `- Default root to where this `#el is appended, resolved via
-    //  `#_parent's `'$() or, if there's no parent, via global `[$()`]. Used
-    //  when `#attach() is called without arguments (happens when `#_parent's
-    //  `#attach() or `#render() is called).
+    //> attachPath: string selector, object DOM or jQuery `- Default root to
+    //  where this `#el is appended, resolved via `#_parent's `'$() or, if
+    //  there's no parent, via global `[$()`]. Used when `#attach() is called
+    //  without arguments (happens when `#_parent's `#attach() or `#render() is
+    //  called).
     //
     //  Usually the value is a string selector like `[form > .filters`] or a
     //  period `'. (special case when have a `#_parent, gets its `#el).
@@ -214,27 +218,27 @@
     //  need `@Sqimitive\jQuery`@ at all, use the lighter `#Base)
     //> string `- a `[se #lec > .tor`] (errors if no node matched) or a `[<new
     //  node=spec>`] as handled by the global `'$()
-    //> object that passes `[is$()`] or `#canWrap() `- assumes this ready-made DOM
-    //  or jQuery node
+    //> object that passes `[is$()`] or `#canWrap() `- assumes this ready-made
+    //  DOM or jQuery node
     //> object other `- Creates a new DOM node with these HTML attributes and
     //  calls `[el.data('sqimitive', this)`]. Special keys: `'tag (defaults to
-    //  `'div) and `'className  (overrides `'class unless falsy to work around
+    //  `'div) and `'className (overrides `'class unless falsy to work around
     //  the reserved word).
     //
     //  `'data() allows you to reverse-lookup a Sqimitive instance from its DOM
-    //  node. However, not only this is a generally deplorable practice but
-    //  also not supported by some builds of Zepto.
+    //  node. However, not only this is a generally deplorable practice but also
+    //  not supported by some builds of Zepto.
     //
-    // In any case, `#el after `'init() is either `'null or a jQuery node with
-    // a non-zero `'length.
+    // In any case, `#el after `'init() is either `'null or a jQuery node with a
+    // non-zero `'length.
     //
-    // ` `#el is not automatically attached anywhere after construction, nor
-    // are its `#elEvents bound - call `#attach() for this. `@Base.render()`@
-    // also calls `#attach() but it does nothing if the `'attachPath `#_opt'ion
-    // is not set.
+    // ` `#el is not automatically attached anywhere after construction, nor are
+    // its `#elEvents bound - call `#attach() for this. `@Base.render()`@ also
+    // calls `#attach() but it does nothing if the `'attachPath `#_opt'ion is
+    // not set.
     //
-    // This property is not advised to change directly after `'init() but if
-    // you do then only set it to an `[is$()`] object.
+    // This property is not advised to change directly after `'init() but if you
+    // do then only set it to an `[is$()`] object.
     //
     // See Views overview (`#vw) for the high-level idea.
     el: {tag: 'div', className: ''},
@@ -264,8 +268,9 @@
     // unchanged, nor does it `'empty() `#el's contents produced by `#render()
     // or children.
     //
-    // Use `#_removeEl when you need special behaviour in `#remove()
-    // but don't want to override it entirely (`'=remove) in order to keep `#jQuery's behaviour.
+    // Use `#_removeEl when you need special behaviour in `#remove() but don't
+    // want to override it entirely (`'=remove) in order to keep `#jQuery's
+    // behaviour.
     _removeEl: true,
 
     //elEvents: {},
@@ -342,11 +347,11 @@
       //  no argument use the `'attachPath `#_opt`, null only bind events
       //
       // First, unless `'parent is `'null, `#attach() resolves `'parent with
-      // `#_parent's `'$() or global `'$() (if no `#_parent) and, if the
-      // found parent is a node and `#el's current direct parent is different,
-      // calls `@jq:appendTo`@() on own `#el and `#attach() on all children of
-      // self to let them rebind their DOM listeners (but see `#_invokeAttach).
-      // Doesn't un-attach `#el if no parent was found. Doesn't call `#render().
+      // `#_parent's `'$() or global `'$() (if no `#_parent) and, if the found
+      // parent is a node and `#el's current direct parent is different, calls
+      // `@jq:appendTo`@() on own `#el and `#attach() on all children of self to
+      // let them rebind their DOM listeners (but see `#_invokeAttach). Doesn't
+      // un-attach `#el if no parent was found. Doesn't call `#render().
       //
       // Second, `#attach() clears all existing `#el event listeners and binds
       // those defined in `#elEvents under the `[.sqim-`] + `#_cid jQuery
@@ -375,8 +380,8 @@
       //  var child = parent.nest(new Sqimitive.jQuery).attach('body')
       //    //=> child.el.parent() is []
       //]
-      // Work around this by setting `'attachPath or `#el to a DOM or
-      // `'$ node or by giving one to `'el after construction:
+      // Work around this by setting `'attachPath or `#el to a DOM or `'$ node
+      // or by giving one to `'el after construction:
       //[
       //   var MyView = Sqimitive.jQuery.extend({
       //     el: window,
