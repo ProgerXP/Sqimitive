@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html data-root="" data-entity='{"type":"page","id":798,"name":"ex","start":{"line":1130,"column":-1,"offset":50807},"end":{"line":1412,"column":-1,"offset":60580},"forced":null,"modifiers":[],"file":"HELP.chem"}'>
+  <head>
+    <meta charset="utf-8">
+    <title>Examples, tips &amp; tricks – Sqimitive</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <script>orphus = {action: 'https://proger.me/orphus.php'}</script>
+    <script src="https://proger.me/orphus.js"></script>
+
+    
+<nav class="qnbar">
+  <a href="#" class="qnbar__locate" title="Hotkey: Alt+E">&larr; Locate</a>
+  <a href="#">Top</a> of Examples, tips &amp; tricks  (<a href="?noframe" target="_blank">no frame</a>)
+          <a class="qnbar__section"
+       title="Figuring "class name""
+       href="#A082b706864">
+      Figuring &quot;class nam…</a>
+          <a class="qnbar__section"
+       title=""
+       href="#A69d7388f8d">
+      Countdown class</a>
+          <a class="qnbar__section"
+       title="Activity pipeline class"
+       href="#A33899a84c4">
+      Activity pipeline c…</a>
+  </nav>
+
+  <div class="up">
+          <article class="fmt">
+        <h1 id="A11410a0612" class="chemdoc__h1">Examples, tips &amp; tricks</h1><p>This section is a collection of practical snippets and recipes demonstrating how Sqimitive addresses real-world, day-to-day problems.</p><h2 id="A082b706864" class="chemdoc__h2">Figuring “class name”</h2><p>With its concept of “functions as first-class citizens”, JavaScript lacks any kind of “class name” references in instantiated objects. The best we can afford is duck-typing: if we see an object X having properties Y and Z the we <b>suspect</b> it’s that kind of object (i.e. of that “class”).</p><p>Quite often, while debugging we need to figure what’s the object we see, <b>reliably</b>. If your app has all Sqimitive classes defined under a certain object (like <code class="chemdoc__id">window</code> – which is a bad practice – or <code>window.MyApp</code>) you can go through all prototypes on start-up and add some property, let’s say “sqClassName”, holding string reference to that prototype, like <code>MyApp.Collections.FooBar</code>.</p><p>First, let’s override <a href="Sqimitive/c_Core.html#Sqimitive-Core--sfextend" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="909 chemdoc__link-entity-cur">Core::extend()</a> with our own version that will mark each produced prototype so we know we’re looking at something we have created:</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var BaseSqimitive = Sqimitive.jQuery.extend()
+
+BaseSqimitive.extend = function () {
+  var child = Sqimitive.jQuery.extend.apply(this, arguments)
+  // If you're strictly ES6+ then use Symbols.
+  child.sqIsClass = true
+
+  // If your classes are defined like AppRoot, AppRoot.View, AppRoot.View.Cart
+  // the following code will skip subclasses when extending a class:
+  //   AppRoot.OtherBaseView = AppRoot.View.extend()
+  // Without it OtherBaseView would get AppRoot.View.Cart as OtherBaseView.Cart.
+  for (var prop in this) {
+    if (/^[A-Z]/.test(prop) &amp;&amp; typeof this[prop] == 'function' &amp;&amp; this[prop].sqIsClass) {
+      delete child[prop]
+    }
+  }
+
+  return child
+}</code></pre></p><p>Now on start-up we can go through all classes and add <code class="chemdoc__id">sqClassName</code> like <code>View.Cart</code>:</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">// Define classes above or wrap the following into $().
+;(function (cls, prefix) {
+  for (var key in cls) {
+    var member = cls[key]
+    if (/[A-Z]/.test(key[0]) &amp;&amp; typeof member == 'function' &amp;&amp; member.sqIsClass) {
+      member.prototype.sqClassName = prefix + key
+      arguments.callee(member, prefix + key + '.')
+    }
+  }
+})(window.MyAppRoot, '')
+// Replace MyAppRoot reference with your root.</code></pre></p><p>Here’s an example of what you get:</p><ul><li><b><code>MyAppRoot.BaseView</code></b><code>.sqClassName = 'BaseView'</code></li><li><b><code>MyAppRoot.BaseView.SubView</code></b><code>.sqClassName = 'BaseView.SubView'</code></li><li><b><code>MyAppRoot.BaseModel</code></b><code>.sqClassName = 'BaseModel'</code></li></ul><p>This technique allows attaching custom info to every class (prototype) but is fairly slow to enable in production. It’s recommended that you pass your “class name” (or other string) directly to <a href="Sqimitive/c_Core.html#Sqimitive-Core--sfextend" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="909 chemdoc__link-entity-cur">Core::extend()</a> – it’s zero-overhead and will appear in debugger too:
+<pre><code class="chemdoc__block prism language-javascript match-braces">MyAppRoot.BaseView.SubView = MyAppRoot.BaseView.extend('BaseView.SubView', {
+  // ...
+})
+
+// MyAppRoot.BaseView.SubView is a constructor, i.e. a function, and so has a
+// name property:
+MyAppRoot.BaseView.SubView.name     //=&gt; 'BaseView.SubView'
+  // some browsers even show the function's name when you hover or print such
+  // an object
+
+var sqim = new MyAppRoot.BaseView.SubView
+sqim.constructor.name               //=&gt; 'BaseView.SubView'</code></pre></p><h2 id="A69d7388f8d" class="chemdoc__h2">Countdown class</h2><p>Sometimes you get a number of actions to be completed before performing a specific task. For example, you need to preload a bunch of images and work on them once they are all ready. You can use native <code class="chemdoc__id">Promise</code> objects or their “fractal” form (<a href="Sqimitive/c_Async.html" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Sqimitive\Async</a>), or you can write a simple class for counter-based synchronization:</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">// We need no associated el object so we extend Base and don't depend on
+// jQuery.
+var Countdown = Sqimitive.Base.extend('Countdown', {
+  _opt: {
+    count: 0,
+    cx: null,
+  },
+
+  events: {
+    init: function (opt, onDone) {
+      // This way dec() and inc() calls will always happen on this object
+      // instance.
+      _.bindAll(this, 'dec', 'inc')
+      onDone &amp;&amp; (this.done = onDone)
+    },
+  },
+
+  done: Sqimitive.Base.stub,
+  error: Sqimitive.Base.stub,
+
+  dec: function () {
+    if (--this._opt.count == 0) {
+      this.done.call(this.get('cx') || this)
+    } else if (this._opt.count &lt; 0) {
+      console &amp;&amp; console.warn('Countdown below zero.')
+    }
+
+    return this
+  },
+
+  inc: function () {
+    ++this._opt.count
+    return this
+  },
+})</code></pre></p><p>Its usage is straightforward:</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var images = ['pic1.jpg', 'pic2.jpg']
+
+var countdown = new Countdown({count: images.length}, function () {
+  // Executed when all images have been loaded.
+});
+
+// Start loading images.
+_.each(images, function (path) {
+  var img = new Image
+  // dec() is bound to the instance so can be called with an arbitrary
+  // context.
+  img.onload = countdown.dec
+  img.src = path
+})</code></pre></p><h2 id="A33899a84c4" class="chemdoc__h2">Activity pipeline class</h2><p>At other times, you might need complex synchronization, like <a href="Sqimitive/c_Async.html" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Sqimitive\Async</a> or Promises but with multiple stages that should be easy to override, e.g. in a subclass or by outside listeners.</p><p>For example, imagine a <code class="chemdoc__id">Page</code> class. Its objects occupy all available window space and when switched from one to another must perform a visual effect (e.g. slide or fade). Effect can be changed in specific <code class="chemdoc__id">Page</code> subclass, there are various actions to perform when it’s done (e.g. freeing of data), and there are also conditions when pages should not be changed – e.g. when it’s busy or asking for confirmation. And it must be singular – we don’t want effects or other phases overlap.</p><p>Below is a helper class that represents a pipeline of actions: the process begins with <code>prereq()</code>, proceeds to <code>passthru()</code>, then to <code>transition()</code> and finishes with <code>done()</code>. If the action has been stopped then <code>cancel()</code> occurs at any point. They are all methods but can be turned into events by overriding them with <a href="Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">on()</a> according to Sqimitive’s event model (<a href="p_ov.html#-evt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="797 chemdoc__link-entity-cur">evt</a>).</p><p>An instance of this class can have only one stage active at a given time and so it ignores multiple <code>start()</code> calls until <code>done()</code> or <code>cancel()</code> are reached. <code class="chemdoc__id">done</code> callbacks given during a single run are retained and called upon completion.</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var Activity = Sqimitive.Base.extend('Activity', {
+  _done: [],
+
+  _opt: {
+    cx: null,
+    active: false,
+  },
+
+  // (1) Proceed to 'passthru' if the activity can be performed (e.g. if
+  // popup window can be closed without explicit user choice), otherwise
+  // proceed to 'cancel'.
+  prereq: function () {
+    this.passthru()
+  },
+
+  // (2) Proceed to 'transition' if need to perform any action (e.g. if a
+  // window is visible, not hidden) or to 'done'.
+  passthru: function () {
+    this.transition()
+  },
+
+  // (3) Proceed to 'done' when all actions are finished.
+  transition: function () {
+    this.done()
+  },
+
+  // (4) Invokes all pending callbacks.
+  done: function () {
+    var funcs = this._done.splice(0)
+    this.set('active', false)
+    this._invoke(funcs)
+  },
+
+  // (2) Remove all on-done callbacks (not possible to perform the activity).
+  cancel: function () {
+    this._done = []
+    this.set('active', false)
+  },
+
+  _invoke: function (list) {
+    _.each(list, function (item) {
+      try {
+        item[0].call(item[1])
+      } catch (e) {
+        console &amp;&amp; console.error('Activity callback exception: ' + e)
+      }
+    })
+  },
+
+  // If currently active func will be called upon completion. If not active
+  // the activity will be started and func called when it's done.
+  start: function (func, cx) {
+    func &amp;&amp; this.enqueue(func, cx, true)
+    this.ifSet('active', true) &amp;&amp; this.prereq()
+    return this
+  },
+
+  // Unlike start() doesn't run the activity but instead calls func if it's
+  // currently active or calls func right away if not, without starting up.
+  enqueue: function (func, cx, always) {
+    cx = cx || this.get('cx') || this
+    ;(always || this.get('active')) ? this._done.push([func, cx]) : func.call(cx)
+    return this
+  },
+})</code></pre></p><p>When you want to start running a new activity use <code>start()</code> with an optional callback:</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var MyPage = Sqimitive.jQuery.extend({
+  _activity: null,
+
+  elEvents: {
+    'click .close': function () {
+      this._activity.start(function () {
+        alert('Completely went away...')
+      })
+    },
+  },
+
+  events: {
+    init: function () {
+      this._activity = new Activity({
+        cx: this,
+      })
+
+      // You don't have to implement every method down here, this is just an
+      // example.
+      this._activity.on({
+        passthru: function () {
+          if (this.el(':visible')) {
+            this.transition()
+          } else {
+            this.done()
+          }
+        },
+
+        transition: function () {
+          // Since Activity's event handlers are called with the Activity's
+          // context we can use this.get('cx') to access this page instance.
+          this.get('cx').el.fadeOut(_.bind(this.done, this))
+        },
+
+        done: function () {
+          this.get('cx').remove()
+        },
+      })
+    },
+  },
+})
+
+var MyAskingPage = MyPage.extend({
+  events: {
+    init: function () {
+      this._activity.on('prereq', function () {
+        if (confirm('Really close this page?')) {
+          this.passthru()
+        } else {
+          this.cancel()
+        }
+      })
+    },
+  },
+})</code></pre></p><p>When you want to have your callback fired right away without starting the activity and postpone it if it is active – use <code>enqueue()</code>:</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">this._activity.enqueue(function () {
+  // At this point it's guaranteed that the activity is no more/was not
+  // running.
+})</code></pre></p>      </article>
+    
+    <div class="entity-info">
+      <p class="entity-info__file">
+        Defined in:
+        HELP.chem, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/HELP.chem#L1131-L1413" target="_blank">lines 1131-1413</a> (283 lines)      </p>
+    </div>
+  </div>
+
+
+<footer class="footer">
+      <span class="footer__group">
+      ⁂
+              <a href="https://squizzle.me/js/sqimitive/">
+            Sqimitive</a>    </span>
+    <span class="footer__group">
+    <a href="#">Scroll to top</a>
+  </span>
+  <span class="footer__group">
+    Generated by
+    <a href="http://squizzle.me/chem" target="_blank">Chem &amp; Chemdoc</a>
+  </span>
+  <span class="footer__group">
+    2022-12-25  </span>
+  <span class="footer__group">
+    Typo?
+    <a href="https://github.com/ProgerXP/Orphus" target="_blank">Ctrl+Enter</a>
+  </span>
+</footer>
+    <script src="scripts.js"></script>
+
+          <link rel="stylesheet" href="prism.css">
+      <script src="prism.js"></script>
+      <script>
+        Prism.plugins.customClass.prefix('prism__')
+      </script>
+    
+        <script src="entities.js"></script>
+  </body>
+</html>

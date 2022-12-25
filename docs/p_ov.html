@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html data-root="" data-entity='{"type":"page","id":797,"name":"ov","start":{"line":650,"column":-1,"offset":29283},"end":{"line":1129,"column":-1,"offset":50807},"forced":null,"modifiers":[],"file":"HELP.chem"}'>
+  <head>
+    <meta charset="utf-8">
+    <title>Anatomy of a Sqimitive – Sqimitive</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <script>orphus = {action: 'https://proger.me/orphus.php'}</script>
+    <script src="https://proger.me/orphus.js"></script>
+
+    
+<nav class="qnbar">
+  <a href="#" class="qnbar__locate" title="Hotkey: Alt+E">&larr; Locate</a>
+  <a href="#">Top</a> of Anatomy of a Sqimitive  (<a href="?noframe" target="_blank">no frame</a>)
+          <a class="qnbar__section"
+       title=""
+       href="#-opt">
+      Options</a>
+          <a class="qnbar__section"
+       title=""
+       href="#-chld">
+      Children</a>
+          <a class="qnbar__section"
+       title=""
+       href="#-evt">
+      Events</a>
+          <a class="qnbar__section"
+       title="Events vs methods on extension"
+       href="#-evtconc">
+      Events vs methods o…</a>
+          <a class="qnbar__section"
+       title=""
+       href="#-vw">
+      Opening the views</a>
+  </nav>
+
+  <div class="up">
+          <article class="fmt">
+        <h1 id="A0dd151ef57" class="chemdoc__h1">Anatomy of a Sqimitive</h1><p>Objects in Sqimitive are homogeneous and mostly deal with other “sqimitives” only – the basic building blocks provided by the library, the “primitive”.</p><p>Each sqimitive has three fundamental features that in different combinations cover an extremely wide range of tasks: <b><a href="p_ov.html#-opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="797 chemdoc__link-entity-cur">opt</a> options</b>, <b><a href="p_ov.html#-chld" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="797 chemdoc__link-entity-cur">chld</a> children</b> and <b><a href="p_ov.html#-evt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="797 chemdoc__link-entity-cur">evt</a> events</b>. Below is a quick high-level overview to demonstrate the main idea; consult the API documentation on <a href="Sqimitive/c_Core.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">Core</a>, <a href="Sqimitive/c_Base.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">Base</a> and others with hundreds of examples if you want to get all out of Sqimitive.</p><h2 id="-opt" class="chemdoc__h2 chemdoc__anchored">Options<a class="chemdoc__anchor chemdoc__header-anchor" href="#-opt">opt</a></h2><p><b>Options</b> are <a href="https://backbonejs.org/#Model-attributes" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Model-attributes</a> in Backbone’s terms – set of key/value pairs defined under <a href="Sqimitive/c_Base.html#Sqimitive-Base--iv_opt" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">Base._opt</a> which trigger events on <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifchange" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">change</a> or access, can be normalized and can be virtual (i.e. you can write your accessor that won’t correspond to a “physical”, listed option). They are solely accessed via <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifset" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">set()</a> and <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifget" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">get()</a> methods to create a sort-of public object interface.</p><p>Sample code below defines a class with two options – <code class="chemdoc__id">isCompleted</code> (boolean) and <code class="chemdoc__id">caption</code> (string). When one of them is changed, the associated DOM node is updated (see the sample To-Do application for more: <a href="https://squizzle.me/js/sqimitive/demo/to-do.html" class="chemdoc__custom-link chemdoc__proto-https" target="_blank">https://squizzle.me/js/sqimitive/demo/to-do.html</a>).</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var MyToDoItem = Sqimitive.jQuery.extend({
+  _opt: {
+    isCompleted: true,
+    caption: 'Do me at home!',
+  },
+
+  events: {
+    // When task becomes complete or incomplete its DOM element gets that
+    // class added or removed on the fly.
+    change_isCompleted: function (newValue) {
+      this.el.toggleClass('done', newValue)
+    },
+
+    change_caption: 'render',
+  },
+
+  // HTML template for this node's contents as used below.
+  _tpl: '&lt;h3&gt;&lt;%- caption %&gt;&lt;/h3&gt;',
+
+  normalize_isCompleted: function (value) {
+    // Turn whatever is given as a new value for isCompleted into a boolean.
+    // If the result is identical to the current value - 'change' is not
+    // fired.
+    return !!value
+  },
+
+  // Trim whitespace around the caption.
+  normalize_caption: function (value) {
+    return _.trim(value)
+  },
+
+  render: function () {
+    // Retrieve the map of all options/values and pass them as variables to
+    // the template. Note that template() implementation differs in NoDash,
+    // Underscore and LoDash.
+    var vars = this.get()   // = {isCompleted: false, caption: 'foo'}
+    this.el.html(_.template(this._tpl, vars))
+  },
+})</code></pre></p><h2 id="-chld" class="chemdoc__h2 chemdoc__anchored">Children<a class="chemdoc__anchor chemdoc__header-anchor" href="#-chld">chld</a></h2><p><b>Children</b> are zero or more “sqimitives” <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifnested" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nested</a> into zero or more parent “sqimitives”. Their events may be forwarded to parent – but only while they are still part of that parent (<a href="Sqimitive/c_Base.html#Sqimitive-Base--iv_childEvents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_childEvents</a>); upon removal they are automatically unbound (<a href="Sqimitive/c_Core.html#Sqimitive-Core--ifautoOff" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">autoOff</a>). When a child is added or removed its parent, if any, gets notified (<a href="Sqimitive/c_Base.html#Sqimitive-Base--ifunnested" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">unnested</a>). Also, most of Underscore.js is available as methods to easily filter or transform children into native arrays or objects (<a href="p_util.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_page mmods-fg " data-if-entity="799 chemdoc__link-entity-cur">util</a>).</p><p>Parent sqimitives can be of two types: <b><a href="Sqimitive/c_Base.html#Sqimitive-Base--iv_owning" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_owning</a></b> (by default) and <b>non-owning</b>. First represent a typical tree where each child has exactly one <a href="Sqimitive/c_Base.html#Sqimitive-Base--iv_parent" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_parent</a> and which you can traverse the tree in either direction starting from any node. If you <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nest</a> a child into another parent it’s automatically removed from the former owner. Second type is more of a list where you can only traverse from the outside because a child doesn’t know in what other sqimitives it might be listed in, if at all, and no automatic removal is done when a child becomes part of another parent.</p><p>Sample code below defines a to-do list that is meant for storing <code>MyToDoItem</code>s from the above example. Note that in Backbone you would have at least two classes: one <a href="https://backbonejs.org/#Collection" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Collection</a> for storing the list of to-do items and one <a href="https://backbonejs.org/#View" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:View</a> for displaying that collection… Or, to be brutally honest, you would create four classes: a <a href="https://backbonejs.org/#Model" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Model</a> holding data of a single to-do item, a <a href="https://backbonejs.org/#View" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:View</a> displaying it, a <a href="https://backbonejs.org/#Collection" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Collection</a> holding to-do items as a whole and another <a href="https://backbonejs.org/#View" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:View</a> holding the Collection holding the Models – and you still have to link each Model to its View and keep track of their events and DOM elements.</p><p>In Sqimitive you can still do all that but it’s the author’s opinion that such pure concepts are only good for academics and very large projects – most of the time you would rather have something more utilitarian and dirty, if you will. Sqimitive allows you a choice since everything is ultimately a primitive and can be “purified” to the point you need.</p><p>Note that the hierarchy of sqimitives (defined by <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nest</a>) doesn’t necessary reflect the hierarchy in DOM (of <a href="Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">jQuery.el</a>) – <a href="Sqimitive/c_Base.html#Sqimitive-Base--iv_children" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_children</a> can have their elements under their <a href="Sqimitive/c_Base.html#Sqimitive-Base--iv_parent" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_parent</a>’s <code class="chemdoc__id">el</code> or elsewhere, or not have DOM elements at all (as “models” do).</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var MyToDoList = Sqimitive.jQuery.extend({
+  // Add extra protection against accidental foreign class being added as a
+  // child.
+  _childClass: MyToDoItem,
+  // Leading dash means "listen before" - see next section about events.
+  _childEvents: ['-change', 'change'],
+
+  events: {
+    // To avoid collisions between children-generated and self events those
+    // forwarded from children get prepended with a period. If you have
+    // another parent that is forwarding its child's children events then
+    // another period appears - e.g. '..change'. Think of this as of regular
+    // '../../path' notation where each period means "one level above".
+    '.-change': function (sqim, optName, newValue, currentValue) {
+      // Outputs something like "To-do item's caption ... from foo to bar".
+      console.log('To-do item\'s ' + optName + ' is about to be changed' +
+                  ' from ' + currentValue + ' to ' + newValue)
+    },
+
+    '.change': function (sqim, optName, newValue, currentValue) {
+      console.log(optName + ' has changed to ' + newValue)
+    },
+  },
+
+  postInit: function () {
+    var itemOptions = {isCompleted: false, caption: 'Dummy item'}
+    var sqim = this.nest(new MyToDoItem(itemOptions))
+    sqim.set('caption', 'fire them!')
+    // Because of forwarded events two new messages have appeared in the
+    // console.
+
+    // Can also assign an explicit name (if omitted _cid is used).
+    this.nest('childName', new this._childClass)
+    // Can retrieve the object like this:
+    var sqim = this.nested('childName')
+    sqim.unnest()
+  },
+
+  // Use Underscore to retireve only children with isCompleted being false.
+  getIncomplete: function () {
+    // picker() gets inherited from Sqimitive.Core and is simply a function
+    // calling a method on the given object with given parameters. In other
+    // words, equivalent to ES6's: (o) =&gt; o.get('isCompleted') LoDash has a
+    // similar method called rearg().
+    return this.reject(MyToDoList.picker('get', 'isCompleted'))
+  },
+})</code></pre></p><h2 id="-evt" class="chemdoc__h2 chemdoc__anchored">Events<a class="chemdoc__anchor chemdoc__header-anchor" href="#-evt">evt</a></h2><p><b>Events</b> are Squimitive’s Swiss Army Knife to deal with everything from inheritance (OOP style – <a href="Sqimitive/c_Core.html#Sqimitive-Core--sfextend" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="909 chemdoc__link-entity-cur">extend</a> and <a href="Sqimitive/c_Core.html#Sqimitive-Core--ifmixIn" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">mixIn</a>) and prototyping (native JavaScript style) to dynamic property morphing and dispatching notifications in an Observer-like fashion. When defined upon class declaration handlers are “<a href="Sqimitive/c_Core.html#Sqimitive-Core--iffuse" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">fuse</a>’d” into the class (reducing their performance overhead), otherwise they work as regular event listeners that can be manipulated on run-time using <a href="Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">on</a>, <a href="Sqimitive/c_Core.html#Sqimitive-Core--ifoff" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">off</a> and others (for instance, they are automatically removed once a <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifnested" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nested</a> sqimitive is <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifunnested" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">unnested</a>).</p><p>When you try to listen to an event and there is a method of the same name, Sqimitive turns that method into an event slot and the method itself becomes its first listener. This way every method is potentially an event that you can manipulate on run-time as well as upon declaration (<a href="Sqimitive/c_Core.html#Sqimitive-Core--ivevents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">events</a>), working with nearly conventional OOP as found in languages like C and PHP while still utilizing the power of dynamic object manipulation as it’s meant with JavaScript.</p><p>Likewise, if there is no method when you define an event – Sqimitive creates it so that calling it actually triggers the event (<a href="Sqimitive/c_Core.html#Sqimitive-Core--sffirer" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="909 chemdoc__link-entity-cur">firer</a>). This way you can always invoke a method without knowing if it’s a real function or an event trampoline, bridging the gap between the two.</p><p>An example to demonstrate how methods become events “on demand” (<a href="Sqimitive/c_Core.html#Sqimitive-Core--iflogEvents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">logEvents</a>):
+<pre><code class="chemdoc__block prism language-javascript match-braces">var MyBase = Sqimitive.Base.extend({
+  // render() is essentially a function, regular "method".
+  render: function () {
+    this.el.text('Hello!')
+  },
+})
+
+// What we're doing is calling a function. It's not an event and won't be
+// caught by logEvents().
+;(new MyBase).render()
+
+var MyChild = MyBase.extend({
+  events: {
+    render: function () {
+      this.el.append('...I extend...')
+    },
+  },
+})
+
+// Now we are in fact firing 'render' which is an event with two listeners:
+// one from MyBase (called first) and another from MyChild. 'render' is fired
+// whenever we call render() in MyChild and descendants, and for them
+// logEvents() logs the call.
+;(new MyChild).render()
+
+// POTENTIALLY WRONG:
+var MyChile = MyChild.extend({
+  render: function () {
+    alert('Boom!')
+  },
+})
+
+// Now we're back to event-less render() - a mere function. Note that two
+// former 'render' handlers are still present so if we attach a new listener
+// to 'render' current render() ("Boom") will be prepended to the list of
+// handlers as a 3rd handler and MyChile.render() itself will be replaced by
+// firer('render'). It's a bad practice to supersede an "evented" function
+// like this and usually indicates a mistake (forgetting that a method of the
+// same name exists in some parent). Consequently, logEvents() here won't
+// track anything. More on this below, in #evtconc.
+;(new MyChile).render()</code></pre></p><p>Compare Sqimitive-style inheritance (<a href="Sqimitive/c_Core.html#-evtpf" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">evtpf</a>) and the traditional inheritance using <code class="chemdoc__id">__super__</code> (which still works in Sqimitive):
+<pre><code class="chemdoc__block prism language-javascript match-braces">var MyBase = Sqimitive.Base.extend({
+  effect: function (arg) {
+    console.log('MyBase.effect(' + arg + ')')
+    return this
+  },
+})
+
+// Traditional JavaScript-OOP inheritance as supported by Backbone.
+var JsOopSubclassing = Sqimitive.Base.extend({
+  // This way you override the inherited method, entirely.
+  effect: function (arg) {
+    return 'foo'
+  },
+
+  // Calling the inherited implementation...
+  effect: function (arg) {
+    console.log('pre-actions')
+    // We have to hardcode current class and method names, plus the call is
+    // quite long.
+    var result = JsOopSubclassing.__super__.effect.apply(this, arguments)
+    console.log('post-actions')
+    return result
+  },
+})
+
+// Event-oriented Sqimitive inheritance.
+var SqimitiveSubclassing = Sqimitive.Base.extend({
+  events: {
+    // This is how you override the entire method in Sqimitive.
+    '=effect': function (sup, arg) {
+      return 'foo'
+    },
+
+    // ...and this is how you call the inherited implementation.
+    '=effect': function (sup, arg) {
+      console.log('pre-actions')
+      // No hardcoded class reference, concise calling format.
+      var result = sup(this, arguments)
+      console.log('post-actions')
+      return result
+    },
+
+    // However, such a full override is rarely needed - most often you only
+    // need to do something after the original method executes, keeping its
+    // return value. This one is identical to the above in effect but without
+    // logging 'pre-actions'.
+    effect: function (arg) {
+      console.log('post-actions')
+    },
+
+    // Sometimes we need to do just 'pre-actions' - this is how.
+    '-effect': function (arg) {
+      console.log('pre-actions')
+    },
+
+    // Yet at other times we need to call the original code and obtain and/or
+    // change its return value.
+    '+effect': function (result, arg) {
+      console.log('post-actions')
+
+      if (result === this) {
+        // Return something other than the original code returned.
+        return new That(arg)
+      }
+
+      // Returning undefined or not returning at all retains the current
+      // result. These are identical:
+      //return undefined
+      //return
+    },
+  },
+})</code></pre></p><p>Finally, to demonstrate the usage of dynamic event binding and method overriding.</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var DynamicEvents = Sqimitive.Base.extend({
+  events: {
+    slotA: function () {
+      console.log('slotA')
+      return 'slotA'
+    },
+  },
+
+  slotB: function () {
+    return 'slotB'
+  },
+
+  // Just a property that isn't a function.
+  notASlot: 123,
+
+  listeners: function () {
+    // When slotA is fired, it outputs "slotA" and "post-effect" to the
+    // console and returns 'slotA'. Exactly the same would be with slotB even
+    // though it was't explicitly declared as an event - it becomes one as
+    // soon as the first handler is attached.
+    this.on('slotA', function () {
+      console.log('post-effect')
+    })
+
+    // Nobody said we can't create events out of thin air without defining
+    // them anywhere first. Note that since it's an event handler and not a
+    // class method it cannot return any value (it would be ignored). This
+    // way no disruption is caused if the class suddenly declares a method of
+    // the same name (this handler will be called after it).
+    this.on('slotC', function () {
+      console.log('post-effect')
+      return 'ignored'
+    })
+
+    this.slotC()        // both are
+    this.fire('slotC')  // equivalent.
+
+    // Of course, events can have prefixes seen in the previous sample.
+    this.on('+slotC', function (result) {
+      console.log('post-effect')
+      return 'new result'
+    },
+
+    this.on('-slotC', function () {
+      console.log('pre-effect')
+      return 'ignored'
+    })
+
+    // You can do a full override as well - and the beauty is that you can
+    // off() it any time later and original method(s) (now "inside" sup) will
+    // be put back in place.
+    this.on('=slotC', function (sup) {
+      console.log('pre-effect')
+      var result = sup(this, arguments)
+      console.log('post-effect')
+      return result
+    })
+
+    // If you try to turn a non-method into an event nothing will break - you
+    // will add an event listener all right and fire('notASlot') will work
+    // but doing notASlot() won't fire the event - only access that property.
+    // Granted, it's confusing to have an event which works differently from
+    // this.notASlot() so better avoid it.
+    this.on('notASlot', function () {
+      alert('Boo!')
+    })
+
+    alert(this.notASlot)    // alerts 123.
+    this.fire('notASlot')   // alerts Boo!
+  },
+
+  dynamic: function () {
+    var handler = function () { };
+    var context = new SomeObject;
+
+    // Unless "fused" (on class declaration time), each event handler gets a
+    // unique ID that can be used to unbind it later (very fast). Contrary to
+    // the common approach, Sqimitive offers no event namespaces (such as
+    // my.handler) used to unbind group of events - by-context lookup is
+    // available and it covers most of such use-cases (see below).
+    var id = this.on('event', handler)
+    this.off(id)
+
+    // You are free to use dots and colons in event names for your needs.
+    this.on('com.myapi.proc:group', handler)
+
+    // Slower but removes all bindings to the given context object among all
+    // events of this object in one go.
+    this.on('withContext', handler, context)
+    this.off(context)
+
+    // You can also clear all listeners to a particular event.
+    this.on('wipeEvent', handler)
+    this.off('wipeEvent')
+  },
+})</code></pre></p><h2 id="-evtconc" class="chemdoc__h2 chemdoc__anchored">Events vs methods on extension<a class="chemdoc__anchor chemdoc__header-anchor" href="#-evtconc">evtconc</a></h2><p>As demonstrated, method calls are often event triggers in disguise and so both <code>obj.method()</code> and <code>obj.fire('method')</code> work exactly the same way. However, there is a catch: when <a href="Sqimitive/c_Core.html#Sqimitive-Core--sfextend" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="909 chemdoc__link-entity-cur">extend</a>’ing a class or an object (<a href="Sqimitive/c_Core.html#Sqimitive-Core--ifmixIn" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">mixIn</a>) you can either add methods within the <a href="Sqimitive/c_Core.html#Sqimitive-Core--ivevents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">events</a> property or list them as regular properties – and the latter is wrong. Compare:
+<pre><code class="chemdoc__block prism language-javascript match-braces">// WRONG:
+Sqimitive.Base.extend({
+  method: function () { ... }
+})
+
+// CORRECT:
+Sqimitive.Base.extend({
+  events: {
+    '=method': function () { ... }
+  }
+})</code></pre></p><p>The first declaration is bad: it overrides the <a href="Sqimitive/c_Core.html#Sqimitive-Core--sffirer" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="909 chemdoc__link-entity-cur">firer</a> of <code class="chemdoc__id">method</code> so if called as <code>obj.method()</code> it works as expected but as soon as a new handler is added with <a href="Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">on</a>/<a href="Sqimitive/c_Core.html#Sqimitive-Core--ifonce" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">once</a>/<a href="Sqimitive/c_Core.html#Sqimitive-Core--iffuse" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">fuse</a> the defined <code>method()</code> is moved to the beginning of handlers of the <code class="chemdoc__id">method</code> event while retaining all previously defined handlers on that event (unlike with <code>=method</code> which removes old handlers entirely, see <a href="Sqimitive/c_Core.html#-evtpf" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">evtpf</a>). Also, <code>obj.fire('method')</code> calls old (now concealed) handlers while <code>obj.method()</code> does not, with different side effects to the caller!</p><p><b>Follow this rule of a thumb:</b> when introducing a method (or an event, which are very close things in Sqimitive) – declare it as a property; when overriding an existing method – always put it into <a href="Sqimitive/c_Core.html#Sqimitive-Core--ivevents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">events</a>, without exceptions.</p><p>But then, if you want to be on the safe side you can declare all functions in <a href="Sqimitive/c_Core.html#Sqimitive-Core--ivevents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">events</a> – they will work just like regular methods but you’ll need a bit more typing (as the empty event prefix ignores return value – <a href="Sqimitive/c_Core.html#-evtpf" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">evtpf</a>).</p><h1 id="-vw" class="chemdoc__h1 chemdoc__anchored">Opening the views<a class="chemdoc__anchor chemdoc__header-anchor" href="#-vw">vw</a></h1><p>Options, children and events compose 90% of what a sqimitive is. However, they all are mostly about logic and data; to make the user happy we should interact with him and present some visual information. This is when Views in MVC and Backbone terminology come into play.</p><p>By default, each sqimitive possesses a <b>DOM element</b> stored in <code>this.el</code> – a jQuery/Zepto object. It can be disabled for pure data classes (like Models or Collections) but if it isn’t then such a node is automatically created by the constructor and assigned to this property (<a href="Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">jQuery.el</a>). Then you can make use of automatic binding of DOM events via <a href="Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivelEvents" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">jQuery.elEvents</a> and of convenient methods like <a href="Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">jQuery.attach()</a>, <a href="Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifremove" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">jQuery.remove()</a>, <code>this.$('sel.ector')</code>, <code>bubble('eventForAllParents')</code> and others.</p><p>Sample code below creates a simple login form. It stores data in its own <a href="p_ov.html#-opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="797 chemdoc__link-entity-cur">opt</a>’ions but, as you must know by now, Sqimitive allows you to extract it into another Model-like object if you need more abstraction in your application.</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var MyFormView = Sqimitive.jQuery.extend({
+  // If omitted will create just a plain &lt;div&gt;.
+  el: {tag: 'form', action: 'javascript:void 0', className: 'login-form'},
+
+  _opt: {
+    login: '',
+    password: '',
+    remember: false,
+  },
+
+  elEvents: {
+    submit: function () {
+      var data = this.el.serializeArray()
+      $.each(data, _.bind(this.set, this))
+
+      $.ajax({
+        url: 'login',
+        type: 'POST',
+        data: data,
+        context: this,
+        success: this.loggedIn,
+        error: function () {
+          this.addClass('error')
+        },
+      })
+
+      return false
+    },
+
+    'change [name=remember]': function (e) {
+      this.set('remember', e.target.checked)
+    },
+
+    render: function () {
+      this.el.empty()
+        .append('&lt;input name=login autofocus&gt;')
+        .append('&lt;input name=password type=password&gt;')
+        .append('&lt;input name=remember type=checkbox&gt;')
+        .append('&lt;button type=submit&gt;Log In&lt;/button&gt;')
+
+      this.update()
+    },
+  },
+
+  update: function () {
+    this.$('[name=login]').val(this.get('login'))
+    this.$('[name=password]').val(this.get('password'))
+    this.$('[name=remember]')[0].checked = this.get('remember')
+  },
+
+  // stub() is just a function that returns undefined (nothing). When it's
+  // used in place of a method and if that method becomes an event (getting a
+  // listener) then there's a small optimization - Sqimitive removes the old
+  // method entirely without adding it as a listener for that event.
+  //
+  // Alternatively, you could just leave this undefined and always use
+  // fire('loggedIn') but it's against Sqimitive conventions, more tricky and
+  // less obvious if you ever get a loggedIn() method that for any reason
+  // does something else.
+  loggedIn: Sqimitive.jQuery.stub,
+})</code></pre></p><p>We can use the above class as follows:</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">// A typical use case - just create a new form object along with its DOM
+// element:
+var sqim = new MyFormView({login: 'default@login'})
+
+// Or if we have an existing container element - use it:
+var sqim = new MyFormView({login: 'default@login', el: '#loginForm'})
+
+// Then we can listen to new sqimitive's events like so:
+sqim.on('loggedIn', function () { alert('Hello, ' + this.get('login')) })
+
+// ...or morph it dynamically - just like good old JavaScript but better:
+sqim.on('=render', function (sup) {
+  if (location.protocol != 'https:') {
+    this.el.text('Your connection is not secure!')
+  } else {
+    // Only show the form over HTTPS.
+    sup(this, arguments)
+  }
+})
+
+// This is not Sqimitive-way: it's long-winded, overrides whatever is already
+// defined as render() including all event listeners (if 'render' is an event
+// slot, see #evtconc) and hardcodes parent class name and return value...
+// but if you don't mind that - use it, Sqimitive doesn't care.
+sqim.render = function () {
+  if (location.protocol != 'https:') {
+    this.el.text('Your connection is not secure!')
+    return this
+  } else {
+    return MyFormView.render.apply(this, arguments)
+  }
+}</code></pre></p>      </article>
+    
+    <div class="entity-info">
+      <p class="entity-info__file">
+        Defined in:
+        HELP.chem, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/HELP.chem#L651-L1130" target="_blank">lines 651-1130</a> (480 lines)      </p>
+    </div>
+  </div>
+
+
+<footer class="footer">
+      <span class="footer__group">
+      ⁂
+              <a href="https://squizzle.me/js/sqimitive/">
+            Sqimitive</a>    </span>
+    <span class="footer__group">
+    <a href="#">Scroll to top</a>
+  </span>
+  <span class="footer__group">
+    Generated by
+    <a href="http://squizzle.me/chem" target="_blank">Chem &amp; Chemdoc</a>
+  </span>
+  <span class="footer__group">
+    2022-12-25  </span>
+  <span class="footer__group">
+    Typo?
+    <a href="https://github.com/ProgerXP/Orphus" target="_blank">Ctrl+Enter</a>
+  </span>
+</footer>
+    <script src="scripts.js"></script>
+
+          <link rel="stylesheet" href="prism.css">
+      <script src="prism.js"></script>
+      <script>
+        Prism.plugins.customClass.prefix('prism__')
+      </script>
+    
+        <script src="entities.js"></script>
+  </body>
+</html>

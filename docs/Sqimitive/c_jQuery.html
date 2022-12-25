@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html data-root="../" data-entity='{"type":"class","id":882,"name":"Sqimitive.jQuery","start":{"line":58,"column":2,"offset":1870},"end":{"line":488,"column":83,"offset":19200},"forced":true,"modifiers":[],"file":"jquery.js"}'>
+  <head>
+    <meta charset="utf-8">
+    <title>jQuery (in Sqimitive) – Sqimitive</title>
+    <link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <script>orphus = {action: 'https://proger.me/orphus.php'}</script>
+    <script src="https://proger.me/orphus.js"></script>
+
+    
+<nav class="qnbar">
+  <a href="#" class="qnbar__locate" title="Hotkey: Alt+E">&larr; Locate</a>
+  <a href="#">Top</a> of Sqimitive.jQuery  (<a href="?noframe" target="_blank">no frame</a>)
+          <a class="qnbar__section"
+       title=""
+       href="#Sqimitive-jQuery--iv">
+      Properties</a>
+          <a class="qnbar__section"
+       title=""
+       href="#Sqimitive-jQuery--if">
+      Methods</a>
+  </nav>
+
+  <div class="cp">
+    <h1 class="entity-header">
+      <span class="entity-header__type">
+        Class
+      </span>
+              <span class="entity-header__ns">
+          in
+          <a href="../ns_Sqimitive.html">Sqimitive</a>        </span>
+            <span class="entity-header__name">
+        jQuery      </span>
+    </h1>
+
+    <code class="code_block">class Sqimitive.jQuery
+    extends <a href="../Sqimitive/c_Base.html">Sqimitive.Base</a> <a href="../Sqimitive/jQuery/c_MixIn.html">Sqimitive.jQuery.MixIn</a></code>
+
+    <div class="entity-info">
+      <div class="entity-info__synopsis fmt">
+        
+A Sqimitive with a DOM representation via the jQuery interface (<a href="https://api.jquery.com/" class="chemdoc__custom-link chemdoc__proto-jq" target="_blank">jq:</a>)<span class="chemdoc__ellipsis">…</span>      </div>
+
+      <p class="entity-info__file">
+        Defined in:
+        jquery.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/jquery.js#L59-L59" target="_blank">line 59</a>      </p>
+
+          </div>
+
+          <fieldset class="cp-desc fmt">
+        <legend>
+          Description
+          (<a href="#Sqimitive-jQuery--de">skip</a>)
+        </legend>
+        <p>
+A Sqimitive with a DOM representation via the jQuery interface (<a href="https://api.jquery.com/" class="chemdoc__custom-link chemdoc__proto-jq" target="_blank">jq:</a>).</p><p><a href="../Sqimitive/c_jQuery.html" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">Sqimitive\jQuery</a> is the base class used in a typical web application.
+It turns <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> into a jQuery node, keeps it attached to <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_parent" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_parent</a>’s <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a>,
+maintains <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a>’s event listeners in DOM, etc.</p><p>This class can also work with libraries imitating jQuery API like Zepto
+since this is a thin interface to jQuery and very few of its features are
+actually used.</p><p>See the included sample To-Do application for a “real-world” example.</p><p><a href="../Sqimitive/jQuery/c_MixIn.html" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="881 chemdoc__link-entity-cur">Sqimitive\jQuery\MixIn</a> can be used to add this functionality into a
+sqimitive whose superclass is different from <a href="../Sqimitive/c_Base.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">Base</a>, possibly even on
+run-time.</p><fieldset class="chemdoc__example"><legend>Example</legend><a id="-jqex" class="chemdoc__anchor chemdoc__anchor_token" href="#-jqex">jqex</a><pre><code class="chemdoc__block prism language-javascript match-braces">var Task = Sqimitive.jQuery.extend({
+  el: {tag: 'li'},
+
+  _opt: {
+    // Keep el appended to the parent's el.
+    attachPath: '.',
+    // Define the default attributes of Task:
+    caption: '',
+    done: false,
+  },
+
+  events: {
+    // Update the visual presentation whenever any _opt changes:
+    change: 'render',
+
+    render: function () {
+      this.el.text(this.get('caption'))
+        .toggleClass('done', this.get('done'))
+    },
+  },
+
+  elEvents: {
+    // Listen for double clicks on this.el to change the done state:
+    dblclick: function () {
+      this.set('done', !this.get('done'))
+    },
+  },
+})
+
+// Create a parent container for our to-do items (Task's) which
+// is placed into the DOM at $('#tasks'):
+var list = new Sqimitive.jQuery({el: '#tasks'})
+
+// Create a new item, add it to list's _children:
+list.nest( new Task({caption: 'Ready steady go!'}) )
+// ...append to list's el and render for the first time:
+  .attach().render()
+
+// Double click on Task's element in the window to change its
+// className.</code></pre></fieldset>      </fieldset>
+      <a id="Sqimitive-jQuery--de"></a>
+    
+            <h2 id="Sqimitive-jQuery--iv"
+            class="cp-member__group-header">
+          Properties        </h2>
+        <dl>
+                      <dt id="Sqimitive-jQuery--sv-"
+                data-entity='{"type":"var","id":884,"name":"$","start":{"line":131,"column":6,"offset":4405},"end":null,"forced":null,"modifiers":["static"],"file":"jquery.js"}'
+                class="cp-member__header">
+              <b>$</b>
+                          </dt>
+            <dd class="cp-member__info">
+                              <p class="cp-member__mods">
+                  Modifiers:
+                  static                </p>
+                                            <div class="fmt"><p>Holds reference to the global <code>$</code> object.</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var body = Sqimitive.jQuery.$('body')
+var p = Sqimitive.jQuery.$('&lt;p class=text&gt;')</code></pre></p><p>A similar global property <code>Sqimitive._</code> holds reference to the
+utility library in use.</p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-jQuery--sv----code">
+                Defined in:
+                jquery.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/jquery.js#L132-L132" target="_blank">line 132</a>                                  &bull; <a href="#Sqimitive-jQuery--sv----code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">$: $,</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-jQuery--iv_invokeAttach"
+                data-entity='{"type":"var","id":889,"name":"_invokeAttach","start":{"line":258,"column":4,"offset":10125},"end":null,"forced":null,"modifiers":["protected"],"file":"jquery.js"}'
+                class="cp-member__header">
+              <b>_invokeAttach</b>
+                          </dt>
+            <dd class="cp-member__info">
+                              <p class="cp-member__mods">
+                  Modifiers:
+                  protected                </p>
+                                            <div class="fmt"><p class="chemdoc__anchor-inclusion"><span>from <a href="../p__7ibvkbid.html#-settable" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="794 chemdoc__link-entity-cur">settable</a></span></p><p><b>May be set upon declaration via <a href="../Sqimitive/c_Core.html#Sqimitive-Core--sfextend" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="909 chemdoc__link-entity-cur">Core::extend()</a> or <a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifmixIn" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">mixIn</a> and/or read/written directly on run-time.</b></p><p>Specifies if <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">attach()</a> should call <code>attach()</code> on <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_children" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_children</a> when it
+changed the parent of <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a>.</p><p>According to default Sqimitive’s lifecycle (see <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifrender" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">render</a>), <a href="../Sqimitive/c_jQuery.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">jQuery</a>’s
+<a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">attach()</a> propagates recursively while <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifrender" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">render()</a> happens only when
+explicitly called. This is because <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">attach()</a> is fairly fast and often
+nearly no-op while <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifrender" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">render()</a> may repopulate the entire <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a>.</p><p>If your application’s lifecycle is different, use <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--iv_invokeAttach" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="882 chemdoc__link-entity-cur">_invokeAttach</a> to
+disable the inherited <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">attach()</a> propagation without overriding <code>=attach</code>
+entirely.</p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-jQuery--iv_invokeAttach---code">
+                Defined in:
+                jquery.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/jquery.js#L259-L259" target="_blank">line 259</a>                                  &bull; <a href="#Sqimitive-jQuery--iv_invokeAttach---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">_invokeAttach: true,</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-jQuery--iv_opt"
+                data-entity='{"type":"var","id":887,"name":"_opt","start":{"line":181,"column":4,"offset":6511},"end":{"line":181,"column":11,"offset":6518},"forced":null,"modifiers":["protected"],"file":"jquery.js"}'
+                class="cp-member__header">
+              <b>_opt</b>
+                          </dt>
+            <dd class="cp-member__info">
+                              <p class="cp-member__mods">
+                  Modifiers:
+                  protected                </p>
+                                            <div class="fmt"><p>New standard options (<a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_opt" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">Base._opt</a>):</p><table class="chemdoc__entity-table chemdoc__entity-args">
+<caption>Members</caption>
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><th rowspan="1">attachPath</th><td>string selector, object DOM or jQuery </td><td rowspan="1" colspan="1"> Default root to
+where this <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> is appended, resolved via <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_parent" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_parent</a>’s <code>$()</code> or, if
+there’s no parent, via global <code>$()</code>. Used when <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">attach()</a> is called
+without arguments (happens when <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_parent" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_parent</a>’s <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">attach()</a> or <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifrender" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">render()</a> is
+called).<p>Usually the value is a string selector like <code>form &gt; .filters</code> or a
+period <code>.</code> (special case when have a <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_parent" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_parent</a>, gets its <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a>).</p></td></tr><tr class="chemdoc__first"><th rowspan="3">el</th><td>false</td><td rowspan="3" colspan="1"> There is no such option but if <code class="chemdoc__id">el</code> is
+given to <code class="chemdoc__id">new</code> as part of <code class="chemdoc__id">options</code> then it replaces the
+declaration-time value of the <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> property – see <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> for details.</td></tr><tr><td> string</td></tr><tr><td> object </td></tr></table></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-jQuery--iv_opt---code">
+                Defined in:
+                jquery.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/jquery.js#L182-L182" target="_blank">line 182</a>                                  &bull; <a href="#Sqimitive-jQuery--iv_opt---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">_opt: {},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-jQuery--iv_removeEl"
+                data-entity='{"type":"var","id":890,"name":"_removeEl","start":{"line":273,"column":4,"offset":10726},"end":null,"forced":null,"modifiers":["protected"],"file":"jquery.js"}'
+                class="cp-member__header">
+              <b>_removeEl</b>
+                          </dt>
+            <dd class="cp-member__info">
+                              <p class="cp-member__mods">
+                  Modifiers:
+                  protected                </p>
+                                            <div class="fmt"><p class="chemdoc__anchor-inclusion"><span>from <a href="../p__7ibvkbid.html#-settable" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="794 chemdoc__link-entity-cur">settable</a></span></p><p><b>May be set upon declaration via <a href="../Sqimitive/c_Core.html#Sqimitive-Core--sfextend" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="909 chemdoc__link-entity-cur">Core::extend()</a> or <a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifmixIn" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">mixIn</a> and/or read/written directly on run-time.</b></p><p>Specifies if <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> should be <a href="https://api.jquery.com/?s=remove" class="chemdoc__custom-link chemdoc__proto-jq" target="_blank">jq:remove</a>()’d from DOM when this
+sqimitive is <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifremove" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">remove()</a>’d.</p><p>If disabled, <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifremove" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">remove()</a> only unbinds <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivelEvents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">elEvents</a> and other listeners from
+<a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> but doesn’t notify <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_children" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_children</a> so their nodes and listeners remain
+unchanged, nor does it <code>empty()</code> <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a>’s contents produced by <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifrender" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">render()</a>
+or children.</p><p>Use <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--iv_removeEl" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="882 chemdoc__link-entity-cur">_removeEl</a> when you need special behaviour in <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifremove" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">remove()</a> but don’t
+want to override it entirely (<code>=remove</code>) in order to keep <a href="../Sqimitive/c_jQuery.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">jQuery</a>’s
+behaviour.</p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-jQuery--iv_removeEl---code">
+                Defined in:
+                jquery.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/jquery.js#L274-L274" target="_blank">line 274</a>                                  &bull; <a href="#Sqimitive-jQuery--iv_removeEl---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">_removeEl: true,</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-jQuery--ivel"
+                data-entity='{"type":"var","id":888,"name":"el","start":{"line":183,"column":4,"offset":6526},"end":{"line":242,"column":4,"offset":9405},"forced":true,"modifiers":[],"file":"jquery.js"}'
+                class="cp-member__header">
+              <b>el</b>
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p class="chemdoc__anchor-inclusion"><span>from <a href="../p__7ibvkbid.html#-setOnDecl" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="794 chemdoc__link-entity-cur">setOnDecl</a></span></p><p><b>May only be set upon declaration via <a href="../Sqimitive/c_Core.html#Sqimitive-Core--sfextend" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="909 chemdoc__link-entity-cur">Core::extend()</a> or <a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifmixIn" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">mixIn</a>.</b></p><p>Holds a DOM node assigned to this object or <code class="chemdoc__id">null</code>.</p><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">// Set this.el by selector; becomes $(document.body):
+new Sqimitive.jQuery({el: 'body'})
+// Set this.el to a jQuery node:
+new Sqimitive.jQuery({el: $('body')})
+// Set this.el by a DOM node; becomes wrapped into $() by init():
+new Sqimitive.jQuery({el: document.body})
+// Create new element via string specification for $():
+new Sqimitive.jQuery({el: '&lt;p class=text&gt;'})
+// Create new element &lt;p class="text"&gt; by object:
+new Sqimitive.jQuery({el: {tag: 'p', className: 'text'}})
+// Cancel node creation, el becomes null:
+new Sqimitive.jQuery({el: false})
+
+// WRONG: when changing after construction el must always be a
+// jQuery node, only and ever:
+sqim.el = '&lt;p class=text&gt;'
+// WRONG: result is a DOM node, not a jQuery node:
+sqim.el = document.createElement('p')
+// CORRECT: result is a jQuery node:
+sqim.el = $('&lt;p class=text&gt;')</code></pre></fieldset><p><a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a>’s value is special during construction: first, <code>init()</code> takes the
+value of either the <code class="chemdoc__id">el</code> key from <code class="chemdoc__id">new</code>’s <code class="chemdoc__id">options</code> or, if missing, of
+this property, then sets <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a>’s property value according to it:</p><table class="chemdoc__entity-table chemdoc__entity-args">
+<caption>Members</caption>
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><th rowspan="1">false</th><td rowspan="1" colspan="2"> Assumes <code class="chemdoc__id">null</code> <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a>; no DOM node is created or assigned -
+useful for pure data structures aka “models” (but then you might not
+need <a href="../Sqimitive/c_jQuery.html" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">Sqimitive\jQuery</a> at all, use the lighter <a href="../Sqimitive/c_Base.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">Base</a>).</td></tr><tr class="chemdoc__first"><th rowspan="1">string</th><td rowspan="1" colspan="2"> A <code>se #lec &gt; .tor</code> (errors if no node matched) or a <code>&lt;new
+node=spec&gt;</code> as handled by the global <code>$()</code></td></tr><tr class="chemdoc__first"><th rowspan="1">object</th><td>that passes <code>is$()</code> or <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--sfcanWrap" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="882 chemdoc__link-entity-cur">canWrap()</a> </td><td rowspan="1" colspan="1"> Assumes this ready-made
+DOM or jQuery node.</td></tr><tr class="chemdoc__first"><th rowspan="1">object</th><td>other </td><td rowspan="1" colspan="1"> Creates a new DOM node with these HTML attributes and
+calls <code>el.data('sqimitive', this)</code>. Special keys: <code class="chemdoc__id">tag</code> (defaults to
+<code class="chemdoc__id">div</code>) and <code class="chemdoc__id">className</code> (overrides <code class="chemdoc__id">class</code> unless falsy to work around
+the reserved word).<p><code>data()</code> allows you to reverse-lookup a Sqimitive instance from its DOM
+node. However, not only this is a generally deplorable practice but also
+not supported by some builds of Zepto.</p></td></tr></table><p>In any case, <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> after <code>init()</code> is either <code class="chemdoc__id">null</code> or a jQuery node with a
+non-zero <code class="chemdoc__id">length</code>.</p><p><a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> is not automatically attached anywhere after construction, nor are
+its <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivelEvents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">elEvents</a> bound – call <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">attach()</a> for this. <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifrender" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">Base.render()</a> also
+calls <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">attach()</a> but it does nothing if the <code class="chemdoc__id">attachPath</code> <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="882 chemdoc__link-entity-cur">_opt</a>’ion is
+not set.</p><p>This property is not advised to change directly after <code>init()</code> but if you
+do then only set it to an <code>is$()</code> object.</p><p>See Views overview (<a href="../p_ov.html#-vw" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="797 chemdoc__link-entity-cur">vw</a>) for the high-level idea.</p></div>
+                                          <p class="cp-member__file "
+                 id="Sqimitive-jQuery--ivel---code">
+                Defined in:
+                jquery.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/jquery.js#L184-L184" target="_blank">line 184</a>                              </p>
+                          </dd>
+                      <dt id="Sqimitive-jQuery--ivelEvents"
+                data-entity='{"type":"var","id":891,"name":"elEvents","start":{"line":276,"column":4,"offset":10768},"end":{"line":319,"column":4,"offset":12182},"forced":true,"modifiers":[],"file":"jquery.js"}'
+                class="cp-member__header">
+              <b>elEvents</b>
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p class="chemdoc__anchor-inclusion"><span>from <a href="../Sqimitive/c_Base.html#-baseElEvents" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="977 chemdoc__link-entity-cur">baseElEvents</a></span></p><p class="chemdoc__anchor-inclusion"><span>from <a href="../p__7ibvkbid.html#-setOnDecl" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="794 chemdoc__link-entity-cur">setOnDecl</a></span></p><p><b>May only be set upon declaration via <a href="../Sqimitive/c_Core.html#Sqimitive-Core--sfextend" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="909 chemdoc__link-entity-cur">Core::extend()</a> or <a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifmixIn" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">mixIn</a>.</b></p><p>Declares event listeners for <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a>, bound automatically by <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">attach()</a>.</p><table class="chemdoc__entity-table chemdoc__entity-type">
+<caption>Value Types</caption>
+<thead>
+  <tr>
+    
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><td>object {event: func}</td><td rowspan="1" colspan="1"></td></tr></table><p><a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivelEvents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">elEvents</a>’ format is consistent among <a href="../Sqimitive/c_Base.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">Base</a>’s subclasses and follows
+Backbone’s <a href="https://backbonejs.org/#Model-events" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Model-events</a>: keys are event references of form
+<code>event[.ns][ .sel #ector]</code> and values are strings (<a href="../Sqimitive/c_Core.html#Sqimitive-Core--sfexpandFunc" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="909 chemdoc__link-entity-cur">expandFunc()</a>) or
+functions, called as <code>function (nativeEventObject)</code> (see <a href="../Sqimitive/c_Core.html#-argDanger" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">argDanger</a>).</p><p class="chemdoc__anchor-inclusion"><span>from <a href="../p__7ibvkbid.html#-inMergeProps" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="794 chemdoc__link-entity-cur">inMergeProps</a></span></p><p>This property is listed in <a href="../Sqimitive/c_Core.html#Sqimitive-Core--sv_mergeProps" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_static mmods-fg_protected" data-if-entity="909 chemdoc__link-entity-cur">_mergeProps</a> by default so subclass defining it adds to its parent’s object instead of overwriting it entirely (but identical keys are still overwritten).</p><p>The <code>.ns</code> part is ignored but can be used to create unique keys for the
+purpose of inheritance. By convention, the class’ own handlers don’t have
+<code class="chemdoc__id">ns</code> while handlers of <a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifmixIn" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">mixIn</a>-s do.</p><p class="chemdoc__anchor-inclusion"><span>from <a href="../p__7ibvkbid.html#-es6thiswarn" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="794 chemdoc__link-entity-cur">es6thiswarn</a></span></p><p>Warning: avoid using ES6 arrow functions as handlers due to their fixed <code class="chemdoc__id">this</code> (<a href="../Sqimitive/c_Core.html#-es6this" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">es6this</a>).</p><p>This property is not advised to change on run-time since it’s usually
+unpredictable when it will take effect. For example,
+<a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">Sqimitive\jQuery.attach()</a> only binds events when nesting <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> into a
+new parent node:
+<pre><code class="chemdoc__block prism language-javascript match-braces">sqim.attach()
+sqim.elEvents['click'] = function () { alert('foo') }
+sqim.attach()    // will do nothing and 'click' will not be bound
+sqim.el.remove()
+sqim.attach()    // now events are bound</code></pre></p><p>See also the <code class="chemdoc__id">attachPath</code> <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="882 chemdoc__link-entity-cur">_opt</a>.</p><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">var MyView = Sqimitive.jQuery.extend({
+  el: {tag: 'form'},
+
+  elEvents: {
+    // Attach listener to this object's el:
+    submit: function (e) {
+      return false
+        // as with regular jQuery event handlers, returning false
+        // implies e.stopPropagation() and e.preventDefault()
+    },
+
+    // React on change originating from an element with specific name
+    // attribute:
+    'change [name="login"]': function () {
+      this.$('[name="password"]').val('')
+    },
+
+    // Call render() whenever value of an element with the name
+    // attribute changes:
+    'change [name]': 'render',
+
+    // Masked callback - only gives first argument to _linkClicked():
+    'click a': '_linkClicked.',
+
+    // Similar but the '.zyx' namespace creates a second handler,
+    // avoiding key collision with 'click a':
+    'click.zyx a': 'track',
+  },
+})
+
+var MyView2 = MyView.extend({
+  elEvents: {
+    // Overrides the '_linkClicked.' handler but keeps 'track'.
+    'click a': ...,
+  },
+})</code></pre></fieldset></div>
+                                          <p class="cp-member__file "
+                 id="Sqimitive-jQuery--ivelEvents---code">
+                Defined in:
+                jquery.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/jquery.js#L277-L277" target="_blank">line 277</a>                              </p>
+                          </dd>
+                  </dl>
+            <h2 id="Sqimitive-jQuery--if"
+            class="cp-member__group-header">
+          Methods        </h2>
+        <dl>
+                      <dt id="Sqimitive-jQuery--sfcanWrap"
+                data-entity='{"type":"func","id":886,"name":"canWrap","start":{"line":160,"column":6,"offset":5601},"end":{"line":162,"column":6,"offset":5718},"forced":null,"modifiers":["static"],"file":"jquery.js"}'
+                class="cp-member__header">
+              <b>canWrap</b>
+                              (
+                  obj                )
+                          </dt>
+            <dd class="cp-member__info">
+                              <p class="cp-member__mods">
+                  Modifiers:
+                  static                </p>
+                                            <div class="fmt"><p>Determines if <code class="chemdoc__id">obj</code> should be wrapped in <code>$</code> for storing as <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a>.</p><p>Returns <code class="chemdoc__id">true</code> if <code class="chemdoc__id">obj</code> is a native DOM <code class="chemdoc__id">Element</code>, <code class="chemdoc__id">Document</code> or
+<code class="chemdoc__id">Window</code>. Returns <code class="chemdoc__id">false</code> if other, including <code>is$()</code>.</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">Sqimitive.jQuery.canWrap(document.head)  //=&gt; true
+Sqimitive.jQuery.canWrap(null)           //=&gt; false
+Sqimitive.jQuery.is$($('&lt;p&gt;'))           //=&gt; true
+Sqimitive.jQuery.canWrap($('&lt;p&gt;'))       //=&gt; false
+_.isElement(window)                      //=&gt; false
+Sqimitive.jQuery.canWrap(window)         //=&gt; true
+Sqimitive.jQuery.canWrap(document)       //=&gt; true</code></pre></p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-jQuery--sfcanWrap---code">
+                Defined in:
+                jquery.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/jquery.js#L161-L163" target="_blank">lines 161-163</a> (3 lines)                                  &bull; <a href="#Sqimitive-jQuery--sfcanWrap---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">canWrap: function (obj) {
+  return obj && (_.isElement(obj) || obj.nodeType === 9 || obj.window === obj)
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-jQuery--sfis-"
+                data-entity='{"type":"func","id":885,"name":"is$","start":{"line":142,"column":6,"offset":4808},"end":{"line":144,"column":6,"offset":4901},"forced":null,"modifiers":["static"],"file":"jquery.js"}'
+                class="cp-member__header">
+              <b>is$</b>
+                              (
+                  obj                )
+                          </dt>
+            <dd class="cp-member__info">
+                              <p class="cp-member__mods">
+                  Modifiers:
+                  static                </p>
+                                            <div class="fmt"><p>Determines if <code class="chemdoc__id">obj</code> is a <code>$</code> node (<a href="https://api.jquery.com/?s=jQuery" class="chemdoc__custom-link chemdoc__proto-jq" target="_blank">jq:jQuery</a> or Zepto).</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">Sqimitive.jQuery.is$(document.rootElement)   //=&gt; false
+Sqimitive.jQuery.is$($('html'))    //=&gt; true
+Sqimitive.jQuery.is$($('&lt;p&gt;'))     //=&gt; true
+Sqimitive.jQuery.is$($())          //=&gt; true
+Sqimitive.jQuery.is$(null)         //=&gt; false</code></pre></p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-jQuery--sfis----code">
+                Defined in:
+                jquery.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/jquery.js#L143-L145" target="_blank">lines 143-145</a> (3 lines)                                  &bull; <a href="#Sqimitive-jQuery--sfis----code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">is$: function (obj) {
+  return obj instanceof $ || ($.zepto && $.zepto.isZ(obj))
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-jQuery--if-"
+                data-entity='{"type":"func","id":898,"name":"$","start":{"line":477,"column":4,"offset":18843},"end":{"line":485,"column":4,"offset":19109},"forced":null,"modifiers":[],"file":"jquery.js"}'
+                class="cp-member__header">
+              <b>$</b>
+                              (
+                  path                )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>Finds node(s) within own <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a>.</p><table class="chemdoc__entity-table chemdoc__entity-type">
+<caption>Result Types</caption>
+<thead>
+  <tr>
+    
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><td>object </td><td rowspan="1" colspan="1"> A <a href="https://api.jquery.com/?s=jQuery" class="chemdoc__custom-link chemdoc__proto-jq" target="_blank">jq:jQuery</a> node.</td></tr></table><p>Possible <code class="chemdoc__id">path</code>’s:</p><table class="chemdoc__entity-table chemdoc__entity-args">
+<caption>Arguments</caption>
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><th rowspan="2">object</th><td>that is <code>is$()</code> to return the <code class="chemdoc__id">path</code> itself</td><td rowspan="2" colspan="1"> Returned collection may be empty or its members may be outside of
+<code>this.el</code></td></tr><tr><td>
+a DOM node (<a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--sfcanWrap" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="882 chemdoc__link-entity-cur">canWrap()</a>) to wrap and return <code>$(path)</code>
+</td></tr><tr class="chemdoc__first"><th rowspan="2">string</th><td>empty or just <code>.</code> to return own <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a></td><td rowspan="2" colspan="1"> If <code class="chemdoc__id">this</code>.<a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> is unset then always returns a jQuery node with zero
+<code class="chemdoc__id">length</code></td></tr><tr><td>
+selector to return <code>this.el.find(path)</code> – see <a href="https://api.jquery.com/?s=find" class="chemdoc__custom-link chemdoc__proto-jq" target="_blank">jq:find</a>()
+</td></tr></table><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">this.$()                //=&gt; $(this.el) - but better use this.el
+this.$('')              //=&gt; $(this.el)
+this.$('.')             //=&gt; $(this.el)
+this.$('a[href]')       //=&gt; $([A, A, ...])
+this.$(document.body)   //=&gt; $('body')
+this.$($('body'))       // same
+this.$('body')          // empty collection unless this.el is &lt;html&gt;
+
+this.el = null
+this.$('')              //=&gt; $()
+this.$('body')          //=&gt; $()
+this.$(document.body)   //=&gt; $('body')</code></pre></fieldset></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-jQuery--if----code">
+                Defined in:
+                jquery.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/jquery.js#L478-L486" target="_blank">lines 478-486</a> (9 lines)                                  &bull; <a href="#Sqimitive-jQuery--if----code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">$: function (path) {
+  if (this.constructor.is$(path) || this.constructor.canWrap(path)) {
+    return $(path)
+  } else if (this.el) {
+    return (path == '' || path == '.') ? this.el : this.el.find(path)
+  } else {
+    return $()
+  }
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-jQuery--ifattach"
+                data-entity='{"type":"func","id":896,"name":"attach","start":{"line":401,"column":6,"offset":15803},"end":{"line":423,"column":6,"offset":16660},"forced":null,"modifiers":[],"file":"jquery.js"}'
+                class="cp-member__header">
+              <b>attach</b>
+                              (
+                  parent                )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>Appends <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> to a DOM node and binds <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivelEvents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">elEvents</a> if changed parents.</p><table class="chemdoc__entity-table chemdoc__entity-args">
+<caption>Arguments</caption>
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><th rowspan="4">parent</th><td>string selector</td><td rowspan="4" colspan="1"></td></tr><tr><td> object DOM or jQuery node</td></tr><tr><td>
+no argument use the <code class="chemdoc__id">attachPath</code> <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="882 chemdoc__link-entity-cur">_opt</a></td></tr><tr><td> null only bind events</td></tr></table><p>First, unless <code class="chemdoc__id">parent</code> is <code class="chemdoc__id">null</code>, <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">attach()</a> resolves <code class="chemdoc__id">parent</code> with
+<a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_parent" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_parent</a>’s <code>$()</code> or global <code>$()</code> (if no <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_parent" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_parent</a>) and, if the found
+parent is a node and <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a>’s current direct parent is different, calls
+<a href="https://api.jquery.com/?s=appendTo" class="chemdoc__custom-link chemdoc__proto-jq" target="_blank">jq:appendTo</a>() on own <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> and <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">attach()</a> on all children of self to
+let them rebind their DOM listeners (but see <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--iv_invokeAttach" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="882 chemdoc__link-entity-cur">_invokeAttach</a>). Doesn’t
+un-attach <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> if no parent was found. Doesn’t call <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifrender" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">render()</a>.</p><p>Second, <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">attach()</a> clears all existing <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> event listeners and binds
+those defined in <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivelEvents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">elEvents</a> under the <code>.sqim-</code> + <a href="../Sqimitive/c_Core.html#Sqimitive-Core--iv_cid" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="909 chemdoc__link-entity-cur">_cid</a> jQuery
+namespace (ignoring <code>.ns</code> possibly present in <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivelEvents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">elEvents</a> keys – that
+one is to avoid key collisions during inheritance, not for jQuery).
+This happens even if parent didn’t change (above).</p><p>If <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> is <code class="chemdoc__id">null</code> then <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">attach()</a> does nothing.</p><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">sqim.attach('#nav')   //= sqim.el.appendTo('#nav')
+sqim.attach('&lt;div&gt;')  //= appends to a new &lt;div&gt; node
+sqim.attach(null)     // re-binds elEvents only
+sqim.attach('#unk')   // the same
+sqim.attach()         // uses sqim._opt.attachPath, if set
+sqim.attach(sqim.get('attachPath'))   // the same</code></pre></fieldset><p>Note: if <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_parent" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_parent</a> is set then <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">attach()</a> uses its <code>$()</code>. Hence even
+if <code class="chemdoc__id">parent</code> is a globally-reachable selector (like <code>html,head,body</code>)
+it will never match if <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_parent" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_parent</a>’s <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> is unset or if it’s not a
+parent of that node. For example, <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> must be <code>$('html')</code> in order
+to match <code class="chemdoc__id">head</code>:
+<pre><code class="chemdoc__block prism language-javascript match-braces">var parent = new Sqimitive.jQuery({el: 'p'})
+var child = parent.nest(new Sqimitive.jQuery).attach('body')
+  //=&gt; child.el.parent() is []</code></pre></p><p>Work around this by setting <code class="chemdoc__id">attachPath</code> or <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> to a DOM or <code>$</code> node
+or by giving one to <code class="chemdoc__id">el</code> after construction:
+<pre><code class="chemdoc__block prism language-javascript match-braces"> var MyView = Sqimitive.jQuery.extend({
+   el: window,
+   el: document.rootElement,    // for &lt;html&gt;
+   el: document.head,           // for &lt;head&gt;
+   el: document.body,           // for &lt;body&gt;
+})
+
+// Or, on run-time by class' user:
+new Sqimitive.jQuery({attachPath: document.rootElement})
+new Sqimitive.jQuery({el: window})  // binds elEvents only
+sqim.attach(document)               // binds elEvents only</code></pre></p><p>Warning: <code>document.body</code> is not available if the current script is
+executing from <code>&lt;head&gt;</code>.</p><p class="chemdoc__anchor-inclusion"><span>from <a href="../Sqimitive/c_Base.html#-baseAttach" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="977 chemdoc__link-entity-cur">baseAttach</a></span></p><table class="chemdoc__entity-table chemdoc__entity-type">
+<caption>Result Types</caption>
+<thead>
+  <tr>
+    
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><td>object </td><td rowspan="1" colspan="1"> <code class="chemdoc__id">this</code></td></tr></table><p>Here’s a typical Sqimitive object lifecycle:</p><ul><li>construct with <code class="chemdoc__id">new</code>: <code>new Class({opt...})</code></li><li><a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">attach()</a> (to DOM, etc.), for members – when nested to a collection</li><li><a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifrender" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">render()</a> when required for user to see it first time</li><li><a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifrender" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">render()</a> again when something changes that affects the visual
+presentation (usually in response to a <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifchange" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">change</a> of some <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="882 chemdoc__link-entity-cur">_opt</a>’ion)</li><li>finally, <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifremove" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">remove()</a></li></ul><p>Complete re-rendering on change is simple and adequate for many simple
+sqimitives but if it’s heavy, it’s customary to perform a partial update
+using method(s) named <code>update()</code>. There are no such methods by default
+but see <a href="../p_ov.html#-vw" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="797 chemdoc__link-entity-cur">vw</a> for an example.</p><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">var Label = Sqimitive.jQuery.extend({
+  _opt: {caption: 'untitled'},
+
+  events: {
+    render: function () {
+      this.el.text(this.get('caption'))
+    },
+
+    change_caption: 'render',
+  },
+})
+                                    // Lifecycle:
+;(new Label)                        // 1) construct
+  .attach('body')                   // 2) attach
+  .render()                         // 3) render
+  .set('caption', 'render again!')  // 4) update</code></pre></fieldset></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-jQuery--ifattach---code">
+                Defined in:
+                jquery.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/jquery.js#L402-L424" target="_blank">lines 402-424</a> (23 lines)                                  &bull; <a href="#Sqimitive-jQuery--ifattach---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">attach: function (parent) {
+  arguments.length || (parent = this.get('attachPath'))
+
+  if (this.el) {
+    parent = parent && (this._parent ? this._parent.$(parent) : $(parent)) || []
+
+    if (_.isElement(parent[0]) && parent[0] !== this.el[0].parentNode) {
+      this.el.appendTo(parent)
+      // Notifying children of the "mount" node change.
+      this._invokeAttach && this.invoke('attach')
+    }
+
+    var namespace = '.sqim-' + this._cid
+    this.el.off(namespace)
+
+    _.forEach(this.elEvents, function (func, key) {
+      func = Sqimitive.Core.expandFunc(func, this)
+      key = key.match(/^\s*([^\s.]+)(\.\S*)?(\s+(.*))?$/)
+      key[1] += namespace
+      key[4] ? this.el.on(key[1], key[4], func) : this.el.on(key[1], func)
+    }, this)
+  }
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-jQuery--ifremove"
+                data-entity='{"type":"func","id":897,"name":"remove","start":{"line":425,"column":6,"offset":16670},"end":{"line":441,"column":6,"offset":17520},"forced":true,"modifiers":[],"file":"jquery.js"}'
+                class="cp-member__header">
+              <b>remove</b>
+                              (
+                                  )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>Removes own <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> from DOM and <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifunnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">unnest()</a>-s <code class="chemdoc__id">this</code> from <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_parent" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_parent</a>.</p><p>If <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a> is set, <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifremove" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">remove()</a> calls either <a href="https://api.jquery.com/?s=remove" class="chemdoc__custom-link chemdoc__proto-jq" target="_blank">jq:remove</a>() to drop it from
+DOM (if <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--iv_removeEl" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="882 chemdoc__link-entity-cur">_removeEl</a> is set) or <a href="https://api.jquery.com/?s=off" class="chemdoc__custom-link chemdoc__proto-jq" target="_blank">jq:off</a>() to unbind all own events.
+Then the inherited <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifremove" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">Base.remove()</a> calls <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifunnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">unnest()</a> to remove this
+sqimitive from its <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_parent" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_parent</a> (if any).</p><p><a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifremove" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">remove()</a> doesn’t recursively <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifremove" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">remove()</a> all nested <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_children" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_children</a> as
+it might be undesired and slow (in DOM removing the parent node
+automatically unbinds events of all children). If children do need to
+perform some clean-up actions when their parent is removed – call
+<code>this.sink('remove')</code> (<a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifsink" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">sink()</a> is recursive) or let them subscribe
+to <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_parent" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_parent</a>’s <code class="chemdoc__id">remove</code> when <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifowned" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">owned</a>.</p><p class="chemdoc__anchor-inclusion"><span>from <a href="../Sqimitive/c_Base.html#-baseRemove" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="977 chemdoc__link-entity-cur">baseRemove</a></span></p><table class="chemdoc__entity-table chemdoc__entity-type">
+<caption>Result Types</caption>
+<thead>
+  <tr>
+    
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><td>object </td><td rowspan="1" colspan="1"> <code class="chemdoc__id">this</code></td></tr></table><p><a id="-rmvsunn" class="chemdoc__anchor chemdoc__anchor_token" href="#-rmvsunn">rmvsunn</a>Use <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifunnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">unnest()</a> when an object is temporary elided from the hierarchy
+(e.g. because it’s changing parents). Use <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifremove" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">remove()</a> when it’s completely
+destroyed and its “view” (DOM node, etc.) is no longer needed. By
+convention, <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifremove" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">remove()</a> is also used on <a href="../Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">el</a>-less objects (where it’s
+identical to <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifunnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">unnest()</a> in effect) to convey the intention of destroying
+them.</p><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">var child = new Sqimitive.Base({el: '&lt;p&gt;Some text.&lt;/p&gt;'})
+var parent = new Sqimitive.Base({el: '&lt;article&gt;'})
+parent.nest(child).attach(parent.el)
+  // now we have &lt;article&gt;&lt;p&gt;Some text.&lt;/p&gt;&lt;/article&gt;
+
+child.unnest()
+  // we still have &lt;article&gt;&lt;p&gt;Some text.&lt;/p&gt;&lt;/article&gt; even though
+  // child is no more listed under parent._children
+
+// But if we would have done this:
+child.remove()
+  // we would have &lt;article&gt;&lt;/article&gt; with the child removed from
+  // both the parent's _children list and from its the parent's el</code></pre></fieldset></div>
+                                          <p class="cp-member__file "
+                 id="Sqimitive-jQuery--ifremove---code">
+                Defined in:
+                jquery.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/jquery.js#L426-L426" target="_blank">line 426</a>                              </p>
+                          </dd>
+                  </dl>
+      </div>
+
+
+<footer class="footer">
+      <span class="footer__group">
+      ⁂
+              <a href="https://squizzle.me/js/sqimitive/">
+            Sqimitive</a>    </span>
+    <span class="footer__group">
+    <a href="#">Scroll to top</a>
+  </span>
+  <span class="footer__group">
+    Generated by
+    <a href="http://squizzle.me/chem" target="_blank">Chem &amp; Chemdoc</a>
+  </span>
+  <span class="footer__group">
+    2022-12-25  </span>
+  <span class="footer__group">
+    Typo?
+    <a href="https://github.com/ProgerXP/Orphus" target="_blank">Ctrl+Enter</a>
+  </span>
+</footer>
+    <script src="../scripts.js"></script>
+
+          <link rel="stylesheet" href="../prism.css">
+      <script src="../prism.js"></script>
+      <script>
+        Prism.plugins.customClass.prefix('prism__')
+      </script>
+    
+        <script src="../entities.js"></script>
+  </body>
+</html>

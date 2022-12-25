@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html data-root="../../" data-entity='{"type":"class","id":852,"name":"Sqimitive.Async.Fetch","start":{"line":793,"column":2,"offset":29872},"end":{"line":1016,"column":46,"offset":38045},"forced":true,"modifiers":[],"file":"async.js"}'>
+  <head>
+    <meta charset="utf-8">
+    <title>Fetch (in Sqimitive.Async) – Sqimitive</title>
+    <link rel="stylesheet" href="../../styles.css">
+  </head>
+  <body>
+    <script>orphus = {action: 'https://proger.me/orphus.php'}</script>
+    <script src="https://proger.me/orphus.js"></script>
+
+    
+<nav class="qnbar">
+  <a href="#" class="qnbar__locate" title="Hotkey: Alt+E">&larr; Locate</a>
+  <a href="#">Top</a> of Sqimitive.Async.Fetch  (<a href="?noframe" target="_blank">no frame</a>)
+          <a class="qnbar__section"
+       title=""
+       href="#Sqimitive-Async-Fetch--iv">
+      Properties</a>
+          <a class="qnbar__section"
+       title=""
+       href="#Sqimitive-Async-Fetch--if">
+      Methods</a>
+  </nav>
+
+  <div class="cp">
+    <h1 class="entity-header">
+      <span class="entity-header__type">
+        Class
+      </span>
+              <span class="entity-header__ns">
+          in
+          <a href="../../ns_Sqimitive.html">Sqimitive</a>.<a href="../../Sqimitive/ns_Async.html">Async</a>        </span>
+            <span class="entity-header__name">
+        Fetch      </span>
+    </h1>
+
+    <code class="code_block">class Sqimitive.Async.Fetch
+    extends <a href="../../Sqimitive/c_Async.html">Sqimitive.Async</a></code>
+
+    <div class="entity-info">
+      <div class="entity-info__synopsis fmt">
+        
+Wrapper around a compatible <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="852 chemdoc__link-entity-cur">_opt</a>.<code class="chemdoc__id">function</code> performing a single
+asynchronous request to a remote resource<span class="chemdoc__ellipsis">…</span>      </div>
+
+      <p class="entity-info__file">
+        Defined in:
+        async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L794-L794" target="_blank">line 794</a>      </p>
+
+          </div>
+
+          <fieldset class="cp-desc fmt">
+        <legend>
+          Description
+          (<a href="#Sqimitive-Async-Fetch--de">skip</a>)
+        </legend>
+        <p>
+Wrapper around a compatible <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="852 chemdoc__link-entity-cur">_opt</a>.<code class="chemdoc__id">function</code> performing a single
+asynchronous request to a remote resource.</p><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">var async = new Sqimitive.Async.Fetch({
+  function: fetch,
+  url: '//api.moe/v1/',
+  method: 'POST',
+  body: new URLSearchParams({moe: 'please!'}),
+})
+
+async.whenSuccess(function () {
+  this.response.json().then(console.dir)
+})</code></pre></fieldset><p>Other notes:</p><ul><li>Fetching starts as soon as <a href="../../Sqimitive/Async/c_Fetch.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="852 chemdoc__link-entity-cur">Fetch</a> is created (in <code>init()</code>).</li><li>A single instance (<code class="chemdoc__id">this</code>) can be used to issue only one request.</li></ul>      </fieldset>
+      <a id="Sqimitive-Async-Fetch--de"></a>
+    
+            <h2 id="Sqimitive-Async-Fetch--iv"
+            class="cp-member__group-header">
+          Properties        </h2>
+        <dl>
+                      <dt id="Sqimitive-Async-Fetch--svdefaultFunction"
+                data-entity='{"type":"var","id":876,"name":"defaultFunction","start":{"line":1004,"column":2,"offset":37289},"end":{"line":1014,"column":2,"offset":37865},"forced":true,"modifiers":["static"],"file":"async.js"}'
+                class="cp-member__header">
+              <b>defaultFunction</b>
+                          </dt>
+            <dd class="cp-member__info">
+                              <p class="cp-member__mods">
+                  Modifiers:
+                  static                </p>
+                                            <div class="fmt"><p>
+The function used by <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--if_fetch" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="852 chemdoc__link-entity-cur">_fetch()</a> when <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="852 chemdoc__link-entity-cur">_opt</a>.<code class="chemdoc__id">function</code> is unset.</p><p>Defaults to <code>ajax()</code> of the global jQuery, Zepto or <code>_</code> (<code>nodash/extra</code>
+provides <a href="https://squizzle.me/js/nodash/map.html#Extra--ifajax" class="chemdoc__custom-link chemdoc__link-extchem chemdoc__link-extchem-no" target="_blank">no:Extra.ajax</a>()) or the native <code>fetch()</code>, whichever is
+available (in this order). This makes <a href="../../Sqimitive/Async/c_Fetch.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="852 chemdoc__link-entity-cur">Fetch</a> suitable for use in a web
+browser with zero configuration. In other environments client must either
+set <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--svdefaultFunction" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_static" data-if-entity="852 chemdoc__link-entity-cur">defaultFunction</a> (provided nobody else does so and the value fits all
+other clients) or supply <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="852 chemdoc__link-entity-cur">_opt</a>.<code class="chemdoc__id">function</code> to every instance of <a href="../../Sqimitive/Async/c_Fetch.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="852 chemdoc__link-entity-cur">Fetch</a>.</p><p>Changes to <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--svdefaultFunction" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_static" data-if-entity="852 chemdoc__link-entity-cur">defaultFunction</a> take effect on next request (new <a href="../../Sqimitive/Async/c_Fetch.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="852 chemdoc__link-entity-cur">Fetch</a>).</p></div>
+                                          <p class="cp-member__file "
+                 id="Sqimitive-Async-Fetch--svdefaultFunction---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L1005-L1005" target="_blank">line 1005</a>                              </p>
+                          </dd>
+                      <dt id="Sqimitive-Async-Fetch--iv_opt"
+                data-entity='{"type":"var","id":856,"name":"_opt","start":{"line":850,"column":4,"offset":32012},"end":{"line":853,"column":4,"offset":32080},"forced":null,"modifiers":["protected"],"file":"async.js"}'
+                class="cp-member__header">
+              <b>_opt</b>
+                          </dt>
+            <dd class="cp-member__info">
+                              <p class="cp-member__mods">
+                  Modifiers:
+                  protected                </p>
+                                            <div class="fmt"><table class="chemdoc__entity-table chemdoc__entity-args">
+<caption>Members</caption>
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><th rowspan="2">function</th><td>function</td><td rowspan="2" colspan="1"> The backend doing actual
+fetching (e.g. <a href="https://api.jquery.com/?s=ajax" class="chemdoc__custom-link chemdoc__proto-jq" target="_blank">jq:ajax</a>() or browser’s <code>fetch()</code>).</td></tr><tr><td> null = <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--svdefaultFunction" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_static" data-if-entity="852 chemdoc__link-entity-cur">defaultFunction</a> </td></tr><tr class="chemdoc__first"><th rowspan="1">*</th><td rowspan="1" colspan="2"> Options given to <code class="chemdoc__id">function</code><p>Usually you want to set at least <code class="chemdoc__id">url</code> (required by both <code>ajax()</code> and
+<code>fetch()</code>).</p><p><code class="chemdoc__id">method</code>/<code class="chemdoc__id">body</code> (<code>fetch()</code>-style) default to values of <code class="chemdoc__id">type</code>/<code class="chemdoc__id">data</code>
+(<code>ajax()</code>-style).</p><p>Don’t set <code class="chemdoc__id">context</code> (always <code class="chemdoc__id">this</code>), <code class="chemdoc__id">success</code>/<code class="chemdoc__id">error</code> (use
+<a href="../../Sqimitive/c_Async.html#Sqimitive-Async--ifwhenSuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">whenSuccess()</a>, etc.), <code class="chemdoc__id">signal</code> (use <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--ifabort" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="852 chemdoc__link-entity-cur">abort()</a>).</p></td></tr></table></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Async-Fetch--iv_opt---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L851-L854" target="_blank">lines 851-854</a> (4 lines)                                  &bull; <a href="#Sqimitive-Async-Fetch--iv_opt---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">_opt: {
+  function: null,
+  // + ajax()/fetch() options
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Async-Fetch--ivrequest"
+                data-entity='{"type":"var","id":853,"name":"request","start":{"line":817,"column":4,"offset":30745},"end":null,"forced":null,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>request</b>
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p class="chemdoc__anchor-inclusion"><span>from <a href="../../p__7ibvkbid.html#-readOnly" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="794 chemdoc__link-entity-cur">readOnly</a></span></p><p><b>May only be read, not changed.</b></p><p>Available after <code>init()</code>. Result of <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--if_fetch" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="852 chemdoc__link-entity-cur">_fetch()</a>: native or wrapped
+<code class="chemdoc__id">XMLHttpRequest</code> (as returned by <code>ajax()</code>) or <code class="chemdoc__id">Promise</code> (<code>fetch()</code>).</p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Async-Fetch--ivrequest---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L818-L818" target="_blank">line 818</a>                                  &bull; <a href="#Sqimitive-Async-Fetch--ivrequest---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">request: null,</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Async-Fetch--ivrequestError"
+                data-entity='{"type":"var","id":854,"name":"requestError","start":{"line":827,"column":4,"offset":31192},"end":null,"forced":null,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>requestError</b>
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p class="chemdoc__anchor-inclusion"><span>from <a href="../../p__7ibvkbid.html#-readOnly" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="794 chemdoc__link-entity-cur">readOnly</a></span></p><p><b>May only be read, not changed.</b></p><p>Available once not <a href="../../Sqimitive/c_Async.html#Sqimitive-Async--ifisSuccessful" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">isSuccessful()</a>. For <code>ajax()</code> this is whatever was
+given to the <code class="chemdoc__id">error</code> callback (may be even unset/falsy). For (<code>fetch()</code>)
+this is either <code class="chemdoc__id">Response</code> (request completed successfully but with HTTP
+status outside of 200-299; <code>!requestError.ok</code>) or <code class="chemdoc__id">Error</code> (request
+didn’t complete).</p><p>Not to be confused with the <a href="../../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async.error</a> event/method.</p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Async-Fetch--ivrequestError---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L828-L828" target="_blank">line 828</a>                                  &bull; <a href="#Sqimitive-Async-Fetch--ivrequestError---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">requestError: null,</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Async-Fetch--ivresponse"
+                data-entity='{"type":"var","id":855,"name":"response","start":{"line":832,"column":4,"offset":31365},"end":null,"forced":null,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>response</b>
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p class="chemdoc__anchor-inclusion"><span>from <a href="../../p__7ibvkbid.html#-readOnly" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="794 chemdoc__link-entity-cur">readOnly</a></span></p><p><b>May only be read, not changed.</b></p><p>Available once <a href="../../Sqimitive/c_Async.html#Sqimitive-Async--ifisSuccessful" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">isSuccessful()</a>. Value of <code class="chemdoc__id">request</code>’s <code>response...</code>
+property (<code>ajax()</code>) or <code class="chemdoc__id">Response</code> (<code>fetch()</code>).</p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Async-Fetch--ivresponse---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L833-L833" target="_blank">line 833</a>                                  &bull; <a href="#Sqimitive-Async-Fetch--ivresponse---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">response: null,</code></pre>
+                          </dd>
+                  </dl>
+            <h2 id="Sqimitive-Async-Fetch--if"
+            class="cp-member__group-header">
+          Methods        </h2>
+        <dl>
+                      <dt id="Sqimitive-Async-Fetch--if_assign"
+                data-entity='{"type":"func","id":873,"name":"_assign","start":{"line":974,"column":4,"offset":36403},"end":{"line":999,"column":4,"offset":37265},"forced":null,"modifiers":["protected"],"file":"async.js"}'
+                class="cp-member__header">
+              <b>_assign</b>
+                              (
+                  obj                )
+                          </dt>
+            <dd class="cp-member__info">
+                              <p class="cp-member__mods">
+                  Modifiers:
+                  protected                </p>
+                                            <div class="fmt"><p>Sets <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--ivresponse" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="852 chemdoc__link-entity-cur">response</a> value based on properties of <code class="chemdoc__id">obj</code> when <code class="chemdoc__id">this</code> is about
+to become <a href="../../Sqimitive/c_Async.html#Sqimitive-Async--ifisSuccessful" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">isSuccessful()</a>.</p><p>Base implementation is suitable for supported <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--svdefaultFunction" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_static" data-if-entity="852 chemdoc__link-entity-cur">defaultFunction</a>-s.</p><p>If overriding <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--if_assign" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="852 chemdoc__link-entity-cur">_assign()</a>, avoid reading response data of the same
+(<code class="chemdoc__id">XMLHttpRequest</code>) request multiple times because browsers parse it on
+every access. For example, 100 reads on <code>xhr.response</code> are 100 times
+slower than reading <code>xhr.response</code> once and using that copy for
+subsequent access. This is especially noticeable on huge JSONs where each
+read may take seconds.</p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Async-Fetch--if_assign---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L975-L1000" target="_blank">lines 975-1000</a> (26 lines)                                  &bull; <a href="#Sqimitive-Async-Fetch--if_assign---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">_assign: function (obj) {
+  if ('responseJSON' in obj) {
+    var resp = obj.responseJSON   // non-standard jQuery field
+  } else {
+    switch (obj.responseType) {
+      case '':
+      case 'document':
+        // Always a Document on a valid response.
+        if (obj.responseXML) {
+          resp = obj.responseXML
+          break
+        }
+      case 'text':
+        // Reading responseXML or responseText with mismatching responseType
+        // produces an exception.
+        resp = obj.responseText
+        break
+      default:
+        //! +ig
+        // Can be null for a valid JSON response if the fetched file's
+        // contents is "null".
+        resp = ('response' in obj) ? obj.response : obj /*fetch()'s Response*/
+    }
+  }
+  this.response = resp
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Async-Fetch--if_fetch"
+                data-entity='{"type":"func","id":871,"name":"_fetch","start":{"line":952,"column":4,"offset":35430},"end":{"line":961,"column":4,"offset":35779},"forced":null,"modifiers":["protected"],"file":"async.js"}'
+                class="cp-member__header">
+              <b>_fetch</b>
+                              (
+                  options                )
+                          </dt>
+            <dd class="cp-member__info">
+                              <p class="cp-member__mods">
+                  Modifiers:
+                  protected                </p>
+                                            <div class="fmt"><p>Fires off the request using <code class="chemdoc__id">options</code>. Must either set <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--ivresponse" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="852 chemdoc__link-entity-cur">response</a> or
+return its new value.</p><p>Base implementation calls <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="852 chemdoc__link-entity-cur">_opt</a>.<code class="chemdoc__id">function</code> or <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--svdefaultFunction" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_static" data-if-entity="852 chemdoc__link-entity-cur">defaultFunction</a>, giving
+it <code class="chemdoc__id">options</code>. If result has <code class="chemdoc__id">then</code> function (<code class="chemdoc__id">Promise</code>), hooks it in
+order to call <code class="chemdoc__id">options</code>’ <code class="chemdoc__id">success</code>/<code class="chemdoc__id">error</code>. <code class="chemdoc__id">error</code> is also called if
+<code class="chemdoc__id">Promise</code> fulfills with <code>Response.ok</code> of <code class="chemdoc__id">false</code>.</p><fieldset class="chemdoc__example"><legend>Example</legend>If using <code>fetch()</code>, <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--ivrequest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="852 chemdoc__link-entity-cur">request</a> is <code class="chemdoc__id">Promise</code> by default. You can replace
+it with a more useful <code class="chemdoc__id">Request</code> by changing <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="852 chemdoc__link-entity-cur">_opt</a>.<code class="chemdoc__id">function</code> or
+<a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--svdefaultFunction" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_static" data-if-entity="852 chemdoc__link-entity-cur">defaultFunction</a> like so:
+<pre><code class="chemdoc__block prism language-javascript match-braces">Async.Fetch.defaultFunction = function (options) {
+  return fetch(options.context.request = new Request(options))
+}</code></pre></fieldset></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Async-Fetch--if_fetch---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L953-L962" target="_blank">lines 953-962</a> (10 lines)                                  &bull; <a href="#Sqimitive-Async-Fetch--if_fetch---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">_fetch: function (options) {
+  var func = this.get('function') || this.constructor.defaultFunction
+  var res = func(options)
+  if (typeof res.then == 'function') {
+    res.then(function (resp) {
+      (resp.ok ? options.success : options.error)(resp, resp)
+    }, options.error.bind(null, null))
+  }
+  return res
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Async-Fetch--ifabort"
+                data-entity='{"type":"func","id":860,"name":"abort","start":{"line":860,"column":6,"offset":32172},"end":{"line":864,"column":6,"offset":32379},"forced":true,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>abort</b>
+                              (
+                  [reason]                )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>
+Aborts the request and fails this <a href="../../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> or does nothing if not
+<a href="../../Sqimitive/c_Async.html#Sqimitive-Async--ifisLoading" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">isLoading()</a>.</p><table class="chemdoc__entity-table chemdoc__entity-args">
+<caption>Arguments</caption>
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><th rowspan="2">reason</th><td>mixed</td><td rowspan="2" colspan="1"> Used by <code>fetch()</code>, defaults to <code class="chemdoc__id">AbortError</code></td></tr><tr><td> omitted </td></tr></table><table class="chemdoc__entity-table chemdoc__entity-type">
+<caption>Result Types</caption>
+<thead>
+  <tr>
+    
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><td>this</td><td rowspan="1" colspan="1"></td></tr></table></div>
+                                          <p class="cp-member__file "
+                 id="Sqimitive-Async-Fetch--ifabort---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L861-L861" target="_blank">line 861</a>                              </p>
+                          </dd>
+                      <dt id="Sqimitive-Async-Fetch--ifreadyStateText"
+                data-entity='{"type":"func","id":861,"name":"readyStateText","start":{"line":888,"column":4,"offset":33221},"end":{"line":891,"column":4,"offset":33401},"forced":null,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>readyStateText</b>
+                              (
+                                  )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>Returns a symbolic value for <a href="../../Sqimitive/Async/c_Fetch.html#Sqimitive-Async-Fetch--ivrequest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="852 chemdoc__link-entity-cur">request</a>.<code class="chemdoc__id">readyState</code> if using <code>ajax()</code>.</p><table class="chemdoc__entity-table chemdoc__entity-type">
+<caption>Result Types</caption>
+<thead>
+  <tr>
+    
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><td>string like <code class="chemdoc__id">LOADING</code></td><td rowspan="2" colspan="1"></td></tr><tr><td> empty <code>fetch()</code> provides no such info</td></tr></table></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Async-Fetch--ifreadyStateText---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L889-L892" target="_blank">lines 889-892</a> (4 lines)                                  &bull; <a href="#Sqimitive-Async-Fetch--ifreadyStateText---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">readyStateText: function () {
+  var states = ['UNSENT', 'OPENED', 'HEADERS_RECEIVED', 'LOADING', 'DONE']
+  return this.request && states[this.request.readyState] || ''
+},</code></pre>
+                          </dd>
+                  </dl>
+      </div>
+
+
+<footer class="footer">
+      <span class="footer__group">
+      ⁂
+              <a href="https://squizzle.me/js/sqimitive/">
+            Sqimitive</a>    </span>
+    <span class="footer__group">
+    <a href="#">Scroll to top</a>
+  </span>
+  <span class="footer__group">
+    Generated by
+    <a href="http://squizzle.me/chem" target="_blank">Chem &amp; Chemdoc</a>
+  </span>
+  <span class="footer__group">
+    2022-12-25  </span>
+  <span class="footer__group">
+    Typo?
+    <a href="https://github.com/ProgerXP/Orphus" target="_blank">Ctrl+Enter</a>
+  </span>
+</footer>
+    <script src="../../scripts.js"></script>
+
+          <link rel="stylesheet" href="../../prism.css">
+      <script src="../../prism.js"></script>
+      <script>
+        Prism.plugins.customClass.prefix('prism__')
+      </script>
+    
+        <script src="../../entities.js"></script>
+  </body>
+</html>

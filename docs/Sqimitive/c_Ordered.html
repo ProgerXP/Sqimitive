@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html data-root="../" data-entity='{"type":"class","id":1033,"name":"Sqimitive.Ordered","start":{"line":7354,"column":2,"offset":283718},"end":{"line":7979,"column":2,"offset":309747},"forced":true,"modifiers":[],"file":"main.js"}'>
+  <head>
+    <meta charset="utf-8">
+    <title>Ordered (in Sqimitive) – Sqimitive</title>
+    <link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <script>orphus = {action: 'https://proger.me/orphus.php'}</script>
+    <script src="https://proger.me/orphus.js"></script>
+
+    
+<nav class="qnbar">
+  <a href="#" class="qnbar__locate" title="Hotkey: Alt+E">&larr; Locate</a>
+  <a href="#">Top</a> of Sqimitive.Ordered  (<a href="?noframe" target="_blank">no frame</a>)
+          <a class="qnbar__section"
+       title=""
+       href="#Sqimitive-Ordered--iv">
+      Properties</a>
+          <a class="qnbar__section"
+       title=""
+       href="#Sqimitive-Ordered--if">
+      Methods</a>
+  </nav>
+
+  <div class="cp">
+    <h1 class="entity-header">
+      <span class="entity-header__type">
+        Class
+      </span>
+              <span class="entity-header__ns">
+          in
+          <a href="../ns_Sqimitive.html">Sqimitive</a>        </span>
+            <span class="entity-header__name">
+        Ordered      </span>
+    </h1>
+
+    <code class="code_block">class Sqimitive.Ordered</code>
+
+    <div class="entity-info">
+      <div class="entity-info__synopsis fmt">
+        A <a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifmixIn" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">mixIn</a> that transparently makes Sqimitive reliably ordered<span class="chemdoc__ellipsis">…</span>      </div>
+
+      <p class="entity-info__file">
+        Defined in:
+        main.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/main.js#L7355-L7355" target="_blank">line 7355</a>      </p>
+
+          </div>
+
+          <fieldset class="cp-desc fmt">
+        <legend>
+          Description
+          (<a href="#Sqimitive-Ordered--de">skip</a>)
+        </legend>
+        <p>A <a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifmixIn" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">mixIn</a> that transparently makes Sqimitive reliably ordered.</p><ul><li>Provide explicit child positions via new <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifnestEx" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">nestEx()</a> <code class="chemdoc__id">pos</code> option.</li><li>Listen for <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_repos" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_repos()</a> to react to children changing positions.</li><li>Override <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_sorter" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_sorter()</a> to maintain a custom sort order.</li></ul><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">obj.mixIn(Sqimitive.Ordered)    // add to an instance (must be empty!)
+Class.mixIn(Sqimitive.Ordered)  // or add to a class
+
+// Or add to a class when declaring it:
+var Class = Sqimitive.Base.extend({
+  mixIns: [Sqimitive.Ordered],
+  // ...
+})</code></pre></fieldset><p>JavaScript objects are unordered, even if it appears to work the way you
+expect (it’s very browser-specific). For example: <code>Object.keys({9: 0, 1:
+0})</code> returns <code>[1, 9]</code>. Since <a href="../Sqimitive/c_Base.html" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">Sqimitive\Base</a> stores children in an
+object (<a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_children" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_children</a>), sqimitives are unordered by default; this affects
+<a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifnested" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nested()</a>, <code>toArray()</code> (<a href="../p_util.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_page mmods-fg " data-if-entity="799 chemdoc__link-entity-cur">util</a>) and many other functions.</p><p><a href="../Sqimitive/c_Ordered.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">Ordered</a> maintains order of children without disrupting the standard API
+but makes nesting and unnesting on such sqimitives slower (access time is
+unaffected).</p><p><a href="../Sqimitive/c_Ordered.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">Ordered</a> supports any <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_owning" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_owning</a> mode (but <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_owning" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_owning</a> works faster). Like
+with <a href="../Sqimitive/c_Base.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">Base</a>, duplicate children may appear if <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_owning" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_owning</a> is unset – to
+disallow this wrap <code>=nestEx</code> in a check with <code>includes()</code> (see <a href="../Sqimitive/c_Base.html#-nestdup" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nestdup</a>).</p>      </fieldset>
+      <a id="Sqimitive-Ordered--de"></a>
+    
+            <h2 id="Sqimitive-Ordered--iv"
+            class="cp-member__group-header">
+          Properties        </h2>
+        <dl>
+                      <dt id="Sqimitive-Ordered--iv_ordered"
+                data-entity='{"type":"var","id":1034,"name":"_ordered","start":{"line":7409,"column":4,"offset":286081},"end":null,"forced":null,"modifiers":["protected"],"file":"main.js"}'
+                class="cp-member__header">
+              <b>_ordered</b>
+                          </dt>
+            <dd class="cp-member__info">
+                              <p class="cp-member__mods">
+                  Modifiers:
+                  protected                </p>
+                                            <div class="fmt"><p>Holds positional information about objects contained within this
+instance.</p><table class="chemdoc__entity-table chemdoc__entity-type">
+<caption>Value Types</caption>
+<thead>
+  <tr>
+    
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><td>array of object </td><td rowspan="1" colspan="1"> Keys:<table class="chemdoc__entity-table chemdoc__entity-args">
+<caption>Members</caption>
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><th rowspan="1">child</th><td>object </td><td rowspan="1" colspan="1"> A Sqimitive in <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_children" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_children</a></td></tr><tr class="chemdoc__first"><th rowspan="1">key</th><td>string </td><td rowspan="1" colspan="1"> <code class="chemdoc__id">child</code>’s key in <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_children" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_children</a></td></tr><tr class="chemdoc__first"><th rowspan="1">pos</th><td>any </td><td rowspan="1" colspan="1"> The value from <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifnestEx" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">nestEx</a>’s <code>options.pos</code></td></tr></table></td></tr></table><p><a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--iv_ordered" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_ordered</a> is a properly sorted array of <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_children" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_children</a>, in order
+determined by <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_sorter" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_sorter()</a>. It’s kept in sync with <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_children" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_children</a>
+automatically.</p><p>The format of <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--iv_ordered" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_ordered</a> objects conveniently matches the format of
+object accepted by <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifnestEx" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">nestEx()</a>:
+<pre><code class="chemdoc__block prism language-javascript match-braces">// Assuming both collections are Ordered and _owning, this removes
+// the first child from col1 and inserts it in col2, preserving
+// the same position and key:
+col2.nestEx(col1.at(0))</code></pre></p><p>You’re advised against accessing <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--iv_ordered" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_ordered</a> at all. Instead, use <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifat" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">at()</a>.</p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Ordered--iv_ordered---code">
+                Defined in:
+                main.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/main.js#L7410-L7410" target="_blank">line 7410</a>                                  &bull; <a href="#Sqimitive-Ordered--iv_ordered---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">_ordered: [],</code></pre>
+                          </dd>
+                  </dl>
+            <h2 id="Sqimitive-Ordered--if"
+            class="cp-member__group-header">
+          Methods        </h2>
+        <dl>
+                      <dt id="Sqimitive-Ordered--sfindexFor"
+                data-entity='{"type":"func","id":1047,"name":"indexFor","start":{"line":7924,"column":6,"offset":307509},"end":{"line":7937,"column":6,"offset":308165},"forced":null,"modifiers":["static"],"file":"main.js"}'
+                class="cp-member__header">
+              <b>indexFor</b>
+                              (
+                  array, value, func, cx, oldIndex                )
+                          </dt>
+            <dd class="cp-member__info">
+                              <p class="cp-member__mods">
+                  Modifiers:
+                  static                </p>
+                                            <div class="fmt"><p class="chemdoc__anchor-addendum">Part of: <a href="../p__7ibvkbid.html#-tag_Utilities" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="794 chemdoc__link-entity-cur">tag_Utilities</a></p><p>Determines insertion position for a new member <code class="chemdoc__id">value</code> in a sorted
+<code class="chemdoc__id">array</code> using binary search.</p><p><a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--sfindexFor" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="1033 chemdoc__link-entity-cur">indexFor()</a> is an adaptation of Underscore’s <a href="https://underscorejs.org/#sortedIndex" class="chemdoc__custom-link chemdoc__proto-un" target="_blank">un:sortedIndex</a>().
+It supports two sort callback styles: relative (<code>(a, b)</code>, as for
+<code class="chemdoc__id">Array</code>’s <code>sort()</code>) and weight-based (<code>(a)</code>, as for <a href="https://squizzle.me/js/nodash/map.html#NoDash--ifsortBy" class="chemdoc__custom-link chemdoc__link-extchem chemdoc__link-extchem-no" target="_blank">no:sortBy</a>()).</p><p>First time <code class="chemdoc__id">func</code> is called it’s given only 1 argument (<code class="chemdoc__id">value</code>) and
+expected to return <code class="chemdoc__id">value</code>’s weight (which is stored for later calls),
+then it’s called repeatedly to compare <code class="chemdoc__id">value</code> against other members
+(returning &lt; 0 if <code class="chemdoc__id">b</code> must go before <code class="chemdoc__id">a</code>, &gt; 0 if after, == 0 if their
+sort order is the same and either can go in front of another).</p><p>In <a href="../Sqimitive/c_Ordered.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">Ordered</a>, <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--sfindexFor" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="1033 chemdoc__link-entity-cur">indexFor()</a> is used to maintain the order of children
+(in <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--iv_ordered" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_ordered</a>) using <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_sorter" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_sorter()</a> for <code class="chemdoc__id">func</code>. Usually there’s no need
+to call <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--sfindexFor" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="1033 chemdoc__link-entity-cur">indexFor()</a> directly.</p><p><code class="chemdoc__id">cx</code> is <code class="chemdoc__id">func</code>’s context (required).</p><p><code class="chemdoc__id">oldIndex</code> is <code class="chemdoc__id">value</code>’s current position in <code class="chemdoc__id">array</code>. This allows
+checking if re-positioning is needed once <code class="chemdoc__id">value</code> weight has possibly
+changed without pulling it out, as long as other members remain sorted.
+<code class="chemdoc__id">func</code> with 3 arguments is never called for <code class="chemdoc__id">oldIndex</code>.</p><fieldset class="chemdoc__example"><legend>Example</legend>Relative <code class="chemdoc__id">func</code> ignores the first call, otherwise is the same as with
+standard <code>sort()</code>:
+<pre><code class="chemdoc__block prism language-javascript match-braces">Sqimitive.Ordered.indexFor(a, v, function (a, b) {
+  return a &gt; b ? +1 : (a &lt; b ? -1 : 0)
+  // This would fail without a check because b may be null:
+  return b &amp;&amp; (a.prop - b.prop)
+})</code></pre><p>Weight-based <code class="chemdoc__id">func</code> uses all 3 arguments:
+<pre><code class="chemdoc__block prism language-javascript match-braces">Sqimitive.Ordered.indexFor(a, v, function (a, b, posB) {
+  var posA = a.someWeightProp    // assuming it's a number
+  return arguments.length == 1 ? posA : (posA - posB)
+})</code></pre></p></fieldset><fieldset class="chemdoc__example"><legend>Example</legend><a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--sfindexFor" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="1033 chemdoc__link-entity-cur">indexFor()</a> is generic and doesn’t have to be used for sorting. For
+example, given a slow <code>pathfind()</code> function, a long <code class="chemdoc__id">path</code> (where
+members are <code>{x, y}</code> objects in order: first – the closest possible
+step, last – the goal) and the task of determining the farthest
+reachable <code class="chemdoc__id">path</code> item:
+<pre><code class="chemdoc__block prism language-javascript match-braces">// path = [ {x: 0, y: 0}, {x: 1, y: 0}, {x: 1, y: 1}, ... ]
+
+for (var i = 0; i &lt; path.length; i++) {
+  if (!pathfind(path[i].x, path[i].y, maxCost)) { break }
+}
+  // path[i - 1] = last reachable item</code></pre>
+The above code works but does up to <code>path.length</code> calls to
+<code>pathfind()</code> whereas this approach with <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--sfindexFor" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="1033 chemdoc__link-entity-cur">indexFor()</a> will do less
+calls on average:
+<pre><code class="chemdoc__block prism language-javascript match-braces">var i = indexFor(_.range(path.length), null, function (a) {
+  if (arguments.length &gt; 1) {
+    return pathfind(path[a].x, path[a].y, maxCost) ? -1 : +1
+  }
+})</code></pre></fieldset><fieldset class="chemdoc__example"><legend>Example</legend>If <code class="chemdoc__id">oldIndex</code> is given then result of <code>oldIndex</code> or <code>oldIndex + 1</code>
+indicates that <code class="chemdoc__id">value</code> is already in the correct position. Result of
+<code>oldIndex + 2</code> and greater indicates that it should be moved after
+its current position, which usually means <code class="chemdoc__id">value</code> is <code>splice()</code>’d from
+<code class="chemdoc__id">oldIndex</code> and then <code>splice()</code>’d to <code>result - 1</code>.
+<pre><code class="chemdoc__block prism language-javascript match-braces">indexFor([1, 3, 5], 2, (a, b) =&gt; a - b)            //=&gt; 1
+indexFor([1, 3, 5], 3, (a, b) =&gt; a - b, null, 1)   //=&gt; 1 or 2
+indexFor([1, 7, 5], 7, (a, b) =&gt; a - b, null, 1)   //=&gt; 3</code></pre></fieldset></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Ordered--sfindexFor---code">
+                Defined in:
+                main.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/main.js#L7925-L7938" target="_blank">lines 7925-7938</a> (14 lines)                                  &bull; <a href="#Sqimitive-Ordered--sfindexFor---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">indexFor: function (array, value, func, cx, oldIndex) {
+  var pos = array.length && func.call(cx, value)
+  var high = array.length - (array.length - 1 == oldIndex)
+  for (var low = 0, rel = 1; low < high && rel; ) {
+    var mid = low + high >>> 1
+    rel = func.call(cx, array[mid + (mid == oldIndex)], value, pos)
+    //! +ig
+    // Exiting immediately if rel == 0 (found a member with the same sort
+    // order) - low remains next to current index so order of ? : is
+    // important and : must correspond to "<= 0".
+    rel > 0 ? high = mid : low = mid + 1
+  }
+  return low
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Ordered--if_repos"
+                data-entity='{"type":"func","id":1041,"name":"_repos","start":{"line":7665,"column":4,"offset":297316},"end":{"line":7730,"column":4,"offset":299973},"forced":true,"modifiers":["protected"],"file":"main.js"}'
+                class="cp-member__header">
+              <b>_repos</b>
+                              (
+                  child, index                )
+                          </dt>
+            <dd class="cp-member__info">
+                              <p class="cp-member__mods">
+                  Modifiers:
+                  protected                </p>
+                                            <div class="fmt"><p>
+Called when a child’s position has changed or was assumed for the first
+time.</p><table class="chemdoc__entity-table chemdoc__entity-args">
+<caption>Arguments</caption>
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><th rowspan="1">sqim</th><td>object </td><td rowspan="1" colspan="1"> The child that has changed position.</td></tr><tr class="chemdoc__first"><th rowspan="1">index</th><td>int </td><td rowspan="1" colspan="1"> <code class="chemdoc__id">sqim</code>’s current (new) index in <code class="chemdoc__id">this</code>; can be given to
+<a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifat" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">at()</a></td></tr></table><p>Typically, you’d listen to/override this method to keep positions of
+children on screen (in their parent’s <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ivel" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">Base.el</a>) in sync with their
+“logical” order (in <code class="chemdoc__id">this</code>).</p><fieldset class="chemdoc__example"><legend>Example</legend>Adapted code snippet from the sample To-Do application:
+<pre><code class="chemdoc__block prism language-javascript match-braces">_repos: function (child, index) {
+  index &gt;= this.length - 1
+    ? child.el.appendTo(this.el)
+    : child.el.insertBefore(this.el.children()[index])
+},</code></pre></fieldset><p><a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_repos" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_repos()</a> is called for newly <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nest</a>’ed <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_children" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_children</a> and those that
+have changed <code class="chemdoc__id">pos</code>. It’s not called for removed children. The default
+implementation in <a href="../Sqimitive/c_Ordered.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">Ordered</a> does nothing.</p><p><a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_repos" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_repos()</a> is called before <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifnestEx" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">nestEx</a> returns. An example when this
+matters:
+<pre><code class="chemdoc__block prism language-javascript match-braces">// models holds data, views - its representations. Both are Ordered.
+models.on({
+  '+nestEx': function (res) {         // (1)
+    views.nest(res.key, new View(...))
+  },
+  _repos: function (child, index) {   // (2)
+    var key = child._parentKey
+    views.nest(key, views.nested(key), {pos: index})
+  },
+})
+
+models.nest(new Model(...))
+// 1. models.nestEx inherited from Base runs
+// 2. models.nestEx (_nested) inherited from Ordered runs
+// 3. ...which fires models._repos
+// 4. (2) runs first - views.nested() returns null leading to error
+// 5. (1) would run once all _repos listeners including (2) were called</code></pre></p><p>This can be properly rewritten as follows:
+<pre><code class="chemdoc__block prism language-javascript match-braces">models.on({
+  '+nestEx': function (res) {
+    views.nest(res.key, new View(...), {pos: res.index})
+  },
+  _repos: function (child, index) {
+    var view = views.nested(child._parentKey)
+    view &amp;&amp; views.nest(child._parentKey, view, {pos: index})
+  },
+})</code></pre></p><p><a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifresort" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">resort()</a> calls <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_repos" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_repos()</a> for all children (even if some didn’t
+change positions – this is hard to determine). Here, note <code class="chemdoc__id">Array</code>’s
+<code>forEach()</code> implications: going in ascending order from child #0 to last,
+and if <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_repos" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_repos()</a> mutates children then <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_repos" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_repos()</a> is not called for some
+of them (so don’t mutate).</p><p class="chemdoc__anchor-inclusion"><span>from <a href="../Sqimitive/c_Base.html#-plainstub" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="977 chemdoc__link-entity-cur">plainstub</a></span></p><ul><li>This method returns nothing.</li><li>It should not be called directly.</li></ul></div>
+                                          <p class="cp-member__file "
+                 id="Sqimitive-Ordered--if_repos---code">
+                Defined in:
+                main.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/main.js#L7666-L7666" target="_blank">line 7666</a>                              </p>
+                          </dd>
+                      <dt id="Sqimitive-Ordered--if_sorter"
+                data-entity='{"type":"func","id":1038,"name":"_sorter","start":{"line":7611,"column":4,"offset":295669},"end":{"line":7616,"column":4,"offset":295898},"forced":null,"modifiers":["protected"],"file":"main.js"}'
+                class="cp-member__header">
+              <b>_sorter</b>
+                              (
+                  a, b, posB                )
+                          </dt>
+            <dd class="cp-member__info">
+                              <p class="cp-member__mods">
+                  Modifiers:
+                  protected                </p>
+                                            <div class="fmt"><p>The comparison function for determining desired child order.</p><table class="chemdoc__entity-table chemdoc__entity-type">
+<caption>Result Types</caption>
+<thead>
+  <tr>
+    
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><td>&lt; 0 if <code class="chemdoc__id">a</code> must go before <code class="chemdoc__id">b</code></td><td rowspan="3" colspan="1"></td></tr><tr><td> &gt; 0 if it must go after</td></tr><tr><td> 0 if they can
+go in any order; it’s generally recommended to avoid 0 to ensure that
+re-sorting the same array doesn’t result in a different order of members</td></tr></table><p>You want to override <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_sorter" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_sorter()</a> if you are not happy with the default
+implementation. If you do, see <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--sfindexFor" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="1033 chemdoc__link-entity-cur">indexFor()</a> for the invocation format.
+Default implementation compares using <code class="chemdoc__id">pos</code> (if given to <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifnestEx" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">nestEx()</a>) or
+<code class="chemdoc__id">key</code> (if nesting using <a href="../Sqimitive/c_Base.html#Sqimitive-Base--if_defaultKey" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_defaultKey()</a> then keys are <a href="../Sqimitive/c_Core.html#Sqimitive-Core--iv_cid" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="909 chemdoc__link-entity-cur">_cid</a>-s).</p><fieldset class="chemdoc__example"><legend>Example</legend>Adapted code snippet from the sample To-Do application that is using the
+value of the <code class="chemdoc__id">order</code> option of a given child if no explicit <code class="chemdoc__id">pos</code> was
+provided for it when nesting:
+<pre><code class="chemdoc__block prism language-javascript match-braces">'=_sorter': function (sup, a, b, posB) {
+  var posA = a.pos == null ? a.child.get('order') : a.pos
+  return arguments.length == 2 ? posA
+    : (posA &gt; posB ? +1 : (posA &lt; posB ? -1
+        // If properties match - sort stably by unique and constant _cid-s.
+        : (a.child._cid - b.child._cid)))
+},</code></pre></fieldset><p><code class="chemdoc__id">a</code> and <code class="chemdoc__id">b</code> are objects in the <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--iv_ordered" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_ordered</a> format. <code class="chemdoc__id">b</code> is <code class="chemdoc__id">null</code> on the
+first iteration (see <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--sfindexFor" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="1033 chemdoc__link-entity-cur">indexFor()</a>). This object’s state is inconsistent
+when <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_sorter" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_sorter()</a> is called so avoid accessing data outside of the given
+arguments:</p><ul><li>During <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifnestEx" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">nestEx()</a> one of <code class="chemdoc__id">a</code>/<code class="chemdoc__id">b</code> may be missing from <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--iv_ordered" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_ordered</a> but
+present in <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_children" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_children</a>.</li><li>During <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifresort" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">resort()</a> order of <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--iv_ordered" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_ordered</a> members is unspecified.</li></ul><p>Note: if consumers of this object are using <code class="chemdoc__id">pos</code>, make sure either they
+supply correct types or you normalize them in <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_sorter" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_sorter</a>: number <code>10</code>
+is &gt; <code>2</code> but string <code>'10'</code> is &lt; <code>'2'</code>. Children keys are always
+cast to strings, such as here: <code>nestEx({key: 10})</code>.</p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Ordered--if_sorter---code">
+                Defined in:
+                main.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/main.js#L7612-L7617" target="_blank">lines 7612-7617</a> (6 lines)                                  &bull; <a href="#Sqimitive-Ordered--if_sorter---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">_sorter: function (a, b, posB) {
+  a = a.pos == null ? a.key : a.pos
+  return arguments.length == 1 ? a
+    // Not simply a - posB to work with non-numeric key/pos.
+    : (a > posB ? +1 : (a < posB ? -1 : 0))
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Ordered--ifat"
+                data-entity='{"type":"func","id":1042,"name":"at","start":{"line":7785,"column":4,"offset":302031},"end":{"line":7787,"column":4,"offset":302092},"forced":null,"modifiers":[],"file":"main.js"}'
+                class="cp-member__header">
+              <b>at</b>
+                              (
+                  index                )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p class="chemdoc__anchor-addendum">Part of: <a href="../p__7ibvkbid.html#-tag_Utilities" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="794 chemdoc__link-entity-cur">tag_Utilities</a></p><p>Returns detailed info about a child by its index in this collection.</p><table class="chemdoc__entity-table chemdoc__entity-type">
+<caption>Result Types</caption>
+<thead>
+  <tr>
+    
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><td>undefined</td><td rowspan="2" colspan="1"></td></tr><tr><td> object entry in the format of <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--iv_ordered" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_ordered</a></td></tr></table><p>With <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifat" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">at()</a> you can obtain a child’s key or <code class="chemdoc__id">pos</code>. Use it from <a href="../p_util.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_page mmods-fg " data-if-entity="799 chemdoc__link-entity-cur">util</a>
+functions like <code>each()</code> which provide you with an index in <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--iv_ordered" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_ordered</a> (or
+in the result of <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifslice" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">slice()</a>).</p><p>Warning: <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifat" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">at()</a> returns the object from <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--iv_ordered" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_ordered</a> verbatim – do not
+change it, or shallow-copy before you do.</p><p>Unlike <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifslice" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">slice()</a>, <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifat" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">at()</a> does not accept negative <code class="chemdoc__id">index</code>.</p><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">sqim.at(0)        //=&gt; {child: Sqimitive, key: 'foo', pos: 3}
+sqim.at(999)      //=&gt; undefined (if length &lt;= 999)
+sqim.at(-1)       //=&gt; always undefined
+
+this.groupBy(function (sqim, i) { return this.at(i).pos })
+  //=&gt; {pos1value: [child, ...], value2: [child, ...]}
+
+// If clone is a non-_owning Ordered collection, populate it from orig:
+orig.each(function (child, i) {
+  clone.nestEx(orig.at(i))
+})
+
+// Using nest() is possible but will discard pos and keys of children:
+orig.each(function (child) {
+  clone.nest(child)
+})</code></pre></fieldset><p><a id="-poskey" class="chemdoc__anchor chemdoc__anchor_token" href="#-poskey">poskey</a>One common pitfall when updating <code class="chemdoc__id">pos</code> is passing a different key to
+<a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nest()</a> or <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifnestEx" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">nestEx()</a>. In particular, omitting <code class="chemdoc__id">key</code> of <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nest()</a> means
+“take <a href="../Sqimitive/c_Base.html#Sqimitive-Base--if_defaultKey" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_defaultKey()</a> value”, not “take current <code class="chemdoc__id">child</code>’s <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_parentKey" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_parentKey</a>”.
+<pre><code class="chemdoc__block prism language-javascript match-braces">var Collection = Sqimitive.Base.extend({
+  _owning: false,
+})
+col = new Collection
+col.nest('x', sqim1, {pos: 1})
+col.nest('y', sqim2, {pos: 2})
+col.nest(/*_defaultKey =&gt; sqim1._cid, */ sqim1, {pos: 3})
+  // col now has 3 members: {1: sqim1, 2: sqim2, 3: sqim1}
+col.nest('x', sqim1, {pos: 4})
+  // changed pos of the first member: {2: sqim2, 3: sqim1, 4: sqim1}</code></pre></p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Ordered--ifat---code">
+                Defined in:
+                main.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/main.js#L7786-L7788" target="_blank">lines 7786-7788</a> (3 lines)                                  &bull; <a href="#Sqimitive-Ordered--ifat---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">at: function (index) {
+  return this._ordered[index]
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Ordered--ifnestEx"
+                data-entity='{"type":"func","id":1036,"name":"nestEx","start":{"line":7412,"column":6,"offset":286116},"end":{"line":7470,"column":6,"offset":289036},"forced":true,"modifiers":[],"file":"main.js"}'
+                class="cp-member__header">
+              <b>nestEx</b>
+                              (
+                  options                )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>
+<a href="../Sqimitive/c_Ordered.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">Ordered</a> extends the inherited <code class="chemdoc__id">nestEx</code> (typically <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifnestEx" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">Base.nestEx()</a>)
+and handles new <code class="chemdoc__id">options</code> keys:</p><table class="chemdoc__entity-table chemdoc__entity-args">
+<caption>Arguments</caption>
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><th rowspan="1">pos</th><td>any, optional </td><td rowspan="1" colspan="1"> The caller may explicitly specify new child’s
+position relative to other children; <code class="chemdoc__id">pos</code> may be used by <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_sorter" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_sorter()</a>
+(in the default implementation it is).</td></tr><tr class="chemdoc__first"><th rowspan="1">repos</th><td>bool, optional </td><td rowspan="1" colspan="1"> If set, acts as if <code class="chemdoc__id">pos</code> was changed and
+re-calculates the child’s index.</td></tr><tr class="chemdoc__first"><th rowspan="1">index</th><td>number </td><td rowspan="1" colspan="1"> Set on return to the actual position of the new child
+in <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--iv_ordered" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_ordered</a>; <code class="chemdoc__id">index</code> can be given to <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifat" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">at()</a></td></tr><tr class="chemdoc__first"><th rowspan="1">oldIndex</th><td>number </td><td rowspan="1" colspan="1"> Only set on return if <code>options.changed</code> is unset.</td></tr></table><p>If re-nesting the same child on the same key, <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifnestEx" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">Base.nestEx()</a> does
+nothing but <a href="../Sqimitive/c_Ordered.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">Ordered</a>’s <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifnestEx" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">nestEx</a> compares old and new <code>options.pos</code>.
+If they are not <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifisEqual" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">isEqual()</a> or if <code class="chemdoc__id">repos</code> is set, it updates the
+child’s position in <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--iv_ordered" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_ordered</a> and calls <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_repos" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_repos()</a> if it’s different.
+This doesn’t affect <code>options.changed</code>, it remains <code class="chemdoc__id">false</code> even on
+<a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_repos" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_repos()</a> but you can detect this situation by comparing <code class="chemdoc__id">index</code> with
+<code class="chemdoc__id">oldIndex</code>:
+<pre><code class="chemdoc__block prism language-javascript match-braces">col.nestEx({child: sqim, pos: -123})   // new child, explicit pos
+  //=&gt; {..., changed: true, previous: null, index: 0}
+col.nestEx({child: sqim, pos: 9000})   // existing child, changed pos
+  //=&gt; {..., changed: false, previous: sqim, index: 3, oldIndex: 0}</code></pre></p><fieldset class="chemdoc__example"><legend>Example</legend><code class="chemdoc__id">repos</code> is typically used when <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_sorter" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_sorter</a>’s order depends on something
+other than <code class="chemdoc__id">key</code> and <code class="chemdoc__id">pos</code> – changes to these can be only done via
+<a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifnestEx" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">nestEx()</a> and are therefore handled automatically. Adapted code
+snippet from the sample To-Do application:
+<pre><code class="chemdoc__block prism language-javascript match-braces">App.Tasks = App.Base.extend({
+  _childEvents: ['change'],
+  events: {
+    '.change': function (sqim, option) {
+      option == 'caption' &amp;&amp; this.nest(sqim, {repos: true})
+    },
+    // Overridden _sorter:
+    '=_sorter': function (sup, a, b, posB) {
+      var posA = a.pos == null ? a.child.get('caption') : a.pos
+      // ...
+    },
+  },
+})</code></pre>
+Compare with “external” approach based on <code class="chemdoc__id">pos</code> alone:
+<pre><code class="chemdoc__block prism language-javascript match-braces">App.Tasks = App.Base.extend({
+  _childEvents: ['change'],
+  events: {
+    '.change': function (sqim, option, now) {
+      option == 'caption' &amp;&amp; this.nest(sqim, {pos: now})
+    },
+    // Default _sorter is good.
+  },
+})</code></pre>
+Note: you must provide the child’s current key (or have (default)
+<a href="../Sqimitive/c_Base.html#Sqimitive-Base--if_defaultKey" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_defaultKey()</a> do that as in these examples) to only update the order
+without re-nesting the child. See <a href="../Sqimitive/c_Ordered.html#-poskey" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">poskey</a> for details.</fieldset></div>
+                                          <p class="cp-member__file "
+                 id="Sqimitive-Ordered--ifnestEx---code">
+                Defined in:
+                main.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/main.js#L7413-L7413" target="_blank">line 7413</a>                              </p>
+                          </dd>
+                      <dt id="Sqimitive-Ordered--ifpop"
+                data-entity='{"type":"func","id":1044,"name":"pop","start":{"line":7823,"column":4,"offset":303234},"end":{"line":7826,"column":4,"offset":303342},"forced":null,"modifiers":[],"file":"main.js"}'
+                class="cp-member__header">
+              <b>pop</b>
+                              (
+                                  )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p class="chemdoc__anchor-addendum">Part of: <a href="../p__7ibvkbid.html#-tag_Utilities" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="794 chemdoc__link-entity-cur">tag_Utilities</a></p><p>Removes the last child and returns it.</p><p class="chemdoc__anchor-inclusion"><span>from <a href="../Sqimitive/c_Ordered.html#-posh" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="1033 chemdoc__link-entity-cur">posh</a></span></p><table class="chemdoc__entity-table chemdoc__entity-type">
+<caption>Result Types</caption>
+<thead>
+  <tr>
+    
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><td>object former child</td><td rowspan="2" colspan="1"></td></tr><tr><td> undefined if empty</td></tr></table><p><a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifshift" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">shift()</a> and <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifpop" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">pop()</a> allow treating an <a href="../Sqimitive/c_Ordered.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">Ordered</a> sqimitive as a queue
+(FIFO/LIFO). Use <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nest()</a> with a counter to push/unshift.</p><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">sqim.counter = 0
+sqim.nest(new C1, {pos:  sqim.counter++})   // push
+sqim.nest(new C2, {pos: -sqim.counter++})   // unshift
+sqim.last()                                 //=&gt; C1
+sqim.first()                                //=&gt; C2
+sqim.pop()                                  //=&gt; C1
+sqim.shift()                                //=&gt; C2
+sqim.pop()                                  //=&gt; undefined
+sqim.shift()                                //=&gt; undefined</code></pre></fieldset></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Ordered--ifpop---code">
+                Defined in:
+                main.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/main.js#L7824-L7827" target="_blank">lines 7824-7827</a> (4 lines)                                  &bull; <a href="#Sqimitive-Ordered--ifpop---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">pop: function () {
+  var entry = _.last(this._ordered)
+  return entry && this.unlist(entry.key)
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Ordered--ifresort"
+                data-entity='{"type":"func","id":1040,"name":"resort","start":{"line":7655,"column":4,"offset":296998},"end":{"line":7663,"column":4,"offset":297308},"forced":null,"modifiers":[],"file":"main.js"}'
+                class="cp-member__header">
+              <b>resort</b>
+                              (
+                                  )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>Re-sorts the entire collection from scratch.</p><table class="chemdoc__entity-table chemdoc__entity-type">
+<caption>Result Types</caption>
+<thead>
+  <tr>
+    
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><td>this</td><td rowspan="1" colspan="1"></td></tr></table><p>Call <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifresort" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">resort()</a> if an option that affects the sort order (<a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_sorter" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_sorter</a>) was
+changed or if sorting was temporary disabled.</p><p>Calls <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_repos" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_repos()</a> on every member after sorting <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--iv_ordered" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_ordered</a>.</p><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">Sqimitive.Base.extend({
+  mixIns: [Sqimitive.Ordered],
+  _opt: {invert: false},
+
+  events: {
+    '=_sorter': function (sup) {
+      var res = sup(this, arguments)
+      // Invert sort order based on the option's value:
+      return this.get('invert') ? -res : res
+    },
+
+    change_invert: 'resort-',
+  },
+})</code></pre></fieldset><fieldset class="chemdoc__example"><legend>Example</legend>Temporary disabling automatic sorting is useful during mass-assignment
+(<a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifassignChildren" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">assignChildren()</a>):
+<pre><code class="chemdoc__block prism language-javascript match-braces">var hook = this.on('=_indexFor', Sqimitive.Core.stub)
+try {
+  this.assignChildren(data)
+} finally {
+  this.off(hook)
+  this.resort()
+}</code></pre></fieldset></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Ordered--ifresort---code">
+                Defined in:
+                main.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/main.js#L7656-L7664" target="_blank">lines 7656-7664</a> (9 lines)                                  &bull; <a href="#Sqimitive-Ordered--ifresort---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">resort: function () {
+  this._ordered.sort(function (a, b) {
+    // function _sorter(a, b, posB) - obtain that posB (simulating first
+    // iteration of indexFor()).
+    return this._sorter(a, b, this._sorter(b))
+  }.bind(this))
+  this.forEach(this._repos, this)
+  return this
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Ordered--ifreverse"
+                data-entity='{"type":"func","id":1045,"name":"reverse","start":{"line":7835,"column":4,"offset":303546},"end":{"line":7839,"column":4,"offset":303685},"forced":null,"modifiers":[],"file":"main.js"}'
+                class="cp-member__header">
+              <b>reverse</b>
+                              (
+                                  )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p class="chemdoc__anchor-addendum">Part of: <a href="../p__7ibvkbid.html#-tag_Utilities" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="794 chemdoc__link-entity-cur">tag_Utilities</a></p><p>Returns <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_children" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_children</a> in reverse order.</p><p>This differs from standard <code class="chemdoc__id">Array</code>’s <code>reverse()</code> that works in-place.</p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Ordered--ifreverse---code">
+                Defined in:
+                main.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/main.js#L7836-L7840" target="_blank">lines 7836-7840</a> (5 lines)                                  &bull; <a href="#Sqimitive-Ordered--ifreverse---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">reverse: function () {
+  var res = []
+  for (var i = this.length; i--; ) { res.push(this._ordered[i].child) }
+  return res
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Ordered--ifshift"
+                data-entity='{"type":"func","id":1043,"name":"shift","start":{"line":7811,"column":4,"offset":302992},"end":{"line":7814,"column":4,"offset":303097},"forced":null,"modifiers":[],"file":"main.js"}'
+                class="cp-member__header">
+              <b>shift</b>
+                              (
+                                  )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p class="chemdoc__anchor-addendum">Part of: <a href="../p__7ibvkbid.html#-tag_Utilities" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="794 chemdoc__link-entity-cur">tag_Utilities</a></p><p>Removes the first child and returns it.</p><table class="chemdoc__entity-table chemdoc__entity-type">
+<caption>Result Types</caption>
+<thead>
+  <tr>
+    
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><td><a id="-posh" class="chemdoc__anchor chemdoc__anchor_token" href="#-posh">posh</a>object former child</td><td rowspan="2" colspan="1"></td></tr><tr><td> undefined if empty</td></tr></table><p><a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifshift" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">shift()</a> and <a href="../Sqimitive/c_Ordered.html#Sqimitive-Ordered--ifpop" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">pop()</a> allow treating an <a href="../Sqimitive/c_Ordered.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">Ordered</a> sqimitive as a queue
+(FIFO/LIFO). Use <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nest()</a> with a counter to push/unshift.</p><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">sqim.counter = 0
+sqim.nest(new C1, {pos:  sqim.counter++})   // push
+sqim.nest(new C2, {pos: -sqim.counter++})   // unshift
+sqim.last()                                 //=&gt; C1
+sqim.first()                                //=&gt; C2
+sqim.pop()                                  //=&gt; C1
+sqim.shift()                                //=&gt; C2
+sqim.pop()                                  //=&gt; undefined
+sqim.shift()                                //=&gt; undefined</code></pre></fieldset></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Ordered--ifshift---code">
+                Defined in:
+                main.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/main.js#L7812-L7815" target="_blank">lines 7812-7815</a> (4 lines)                                  &bull; <a href="#Sqimitive-Ordered--ifshift---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">shift: function () {
+  var entry = this._ordered[0]
+  return entry && this.unlist(entry.key)
+},</code></pre>
+                          </dd>
+                  </dl>
+      </div>
+
+
+<footer class="footer">
+      <span class="footer__group">
+      ⁂
+              <a href="https://squizzle.me/js/sqimitive/">
+            Sqimitive</a>    </span>
+    <span class="footer__group">
+    <a href="#">Scroll to top</a>
+  </span>
+  <span class="footer__group">
+    Generated by
+    <a href="http://squizzle.me/chem" target="_blank">Chem &amp; Chemdoc</a>
+  </span>
+  <span class="footer__group">
+    2022-12-25  </span>
+  <span class="footer__group">
+    Typo?
+    <a href="https://github.com/ProgerXP/Orphus" target="_blank">Ctrl+Enter</a>
+  </span>
+</footer>
+    <script src="../scripts.js"></script>
+
+          <link rel="stylesheet" href="../prism.css">
+      <script src="../prism.js"></script>
+      <script>
+        Prism.plugins.customClass.prefix('prism__')
+      </script>
+    
+        <script src="../entities.js"></script>
+  </body>
+</html>

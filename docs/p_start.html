@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html data-root="" data-entity='{"type":"page","id":795,"name":"start","start":{"line":80,"column":-1,"offset":2134},"end":{"line":171,"column":-1,"offset":7273},"forced":null,"modifiers":[],"file":"HELP.chem"}'>
+  <head>
+    <meta charset="utf-8">
+    <title>Introduction – Sqimitive</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <script>orphus = {action: 'https://proger.me/orphus.php'}</script>
+    <script src="https://proger.me/orphus.js"></script>
+
+    
+<nav class="qnbar">
+  <a href="#" class="qnbar__locate" title="Hotkey: Alt+E">&larr; Locate</a>
+  <a href="#">Top</a> of Introduction  (<a href="?noframe" target="_blank">no frame</a>)
+          <a class="qnbar__section"
+       title="Sqimitive.js - A Universal Primitive"
+       href="#Ab52540c1bb">
+      Sqimitive.js - A Un…</a>
+          <a class="qnbar__section"
+       title=""
+       href="#Addcf50c292">
+      Resources</a>
+          <a class="qnbar__section"
+       title="Basic code conventions"
+       href="#A683563c566">
+      Basic code conventi…</a>
+          <a class="qnbar__section"
+       title="Customizing dependencies"
+       href="#-deps">
+      Customizing depende…</a>
+          <a class="qnbar__section"
+       title=""
+       href="#A77a886e46e">
+      CommonJS/Node.js</a>
+          <a class="qnbar__section"
+       title=""
+       href="#A89ce00af60">
+      AMD/Require.js</a>
+          <a class="qnbar__section"
+       title=""
+       href="#A5c3dc10dbf">
+      Plain &lt;script&gt; </a>
+  </nav>
+
+  <div class="up">
+          <article class="fmt">
+        <h1 id="A0b79795d3e" class="chemdoc__h1">Introduction</h1><h2 id="Ab52540c1bb" class="chemdoc__h2">Sqimitive.js – A Universal Primitive</h2><p>Sqimitive.js is a minimalistic paradigm-agnostic building block for applications written in JavaScript (not necessary in-browser or DOM-related). It provides core infrastructure without much domain-specific logic that you can quickly develop thanks to its flexible API.</p><ul><li>Declaration-time and run-time mix-ins and traditional OOP inheritance using events. <a href="p_ov.html#-evt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="797 chemdoc__link-entity-cur">evt</a> <a href="Sqimitive/c_Core.html#Sqimitive-Core--ivevents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">events</a> <a href="Sqimitive/c_Core.html#Sqimitive-Core--ifmixIn" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">mixIn</a> <a href="Sqimitive/c_Core.html#Sqimitive-Core--sv_mergeProps" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_static mmods-fg_protected" data-if-entity="909 chemdoc__link-entity-cur">_mergeProps</a></li><li>Collections with Underscore (or other) integration and assisted management of children. <a href="p_util.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_page mmods-fg " data-if-entity="799 chemdoc__link-entity-cur">util</a> <a href="Sqimitive/c_Base.html#Sqimitive-Base--iv_childEvents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_childEvents</a> <a href="Sqimitive/c_Core.html#Sqimitive-Core--ifautoOff" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">autoOff</a></li><li>Transparently ordered collections. <a href="Sqimitive/c_Ordered.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">Ordered</a> <a href="Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_repos" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_repos</a></li><li>Attributes with normalization, on-change notifications and batching. <a href="p_ov.html#-opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="797 chemdoc__link-entity-cur">opt</a> <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifchange_OPT" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">change_OPT</a> <a href="Sqimitive/c_Core.html#Sqimitive-Core--ifbatch" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">batch</a></li><li>Unserialization of data in arbitrary format. <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifassignChildren" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">assignChildren</a> <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifassignResp" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">assignResp</a></li><li>DOM integration for “views”. <a href="Sqimitive/c_jQuery.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">jQuery</a> <a href="Sqimitive/c_Base.html#Sqimitive-Base--ivelEvents" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">Base.elEvents</a></li><li>Fractal Promise on steroids. <a href="Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> <a href="Sqimitive/Async/c_Fetch.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="852 chemdoc__link-entity-cur">Fetch</a></li></ul><p>Sqimitive.js is under 20K (minified), sports documentation that is over 200 pages long (printed A4), needs no transpilers (plain pre-ES6 JavaScript, IE 11+) and depends only on a compatible utility library (NoDash <a href="https://squizzle.me/js/nodash/map.html#-" class="chemdoc__custom-link chemdoc__link-extchem chemdoc__link-extchem-no" target="_blank">no@</a> +16K, Underscore.js &gt;=1.9.0 <a href="https://underscorejs.org/" class="chemdoc__custom-link chemdoc__proto-un" target="_blank">un:</a> or LoDash) and, optionally, on jQuery <a href="https://api.jquery.com/" class="chemdoc__custom-link chemdoc__proto-jq" target="_blank">jq:</a> or Zepto (for <a href="Sqimitive/c_jQuery.html" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">Sqimitive\jQuery</a>).</p><p>And it’s in public domain (<a href="http://unlicense.org" class="chemdoc__custom-link chemdoc__proto-http" target="_blank">http://unlicense.org</a>).</p><p class="chemdoc__anchor-inclusion"><span>from <a href="Sqimitive/c_jQuery.html#-jqex" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="882 chemdoc__link-entity-cur">jqex</a></span></p><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">var Task = Sqimitive.jQuery.extend({
+  el: {tag: 'li'},
+
+  _opt: {
+    // Keep el appended to the parent's el.
+    attachPath: '.',
+    // Define the default attributes of Task:
+    caption: '',
+    done: false,
+  },
+
+  events: {
+    // Update the visual presentation whenever any _opt changes:
+    change: 'render',
+
+    render: function () {
+      this.el.text(this.get('caption'))
+        .toggleClass('done', this.get('done'))
+    },
+  },
+
+  elEvents: {
+    // Listen for double clicks on this.el to change the done state:
+    dblclick: function () {
+      this.set('done', !this.get('done'))
+    },
+  },
+})
+
+// Create a parent container for our to-do items (Task's) which
+// is placed into the DOM at $('#tasks'):
+var list = new Sqimitive.jQuery({el: '#tasks'})
+
+// Create a new item, add it to list's _children:
+list.nest( new Task({caption: 'Ready steady go!'}) )
+// ...append to list's el and render for the first time:
+  .attach().render()
+
+// Double click on Task's element in the window to change its
+// className.</code></pre></fieldset><h2 id="Addcf50c292" class="chemdoc__h2">Resources</h2><p><img src="data:image/gif;base64,R0lGODlhKQAQAIAAAP///8s5OCH5BAAAAAAALAAAAAApABAAAAJOjI+py+0Po5wK2GsP3np7kHygIY5BiYUXaaZst55jhri0fOf2bLK0roP9eKqhsCMkyopKnCf5WtZiwKfPKJW4KNxr97v9OkUMlPlcPosKADs" alt="npm"> <b>npm install sqimitive</b></p><ul><li>New to Sqimitive? Start with the overview: <a href="p_ov.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_page mmods-fg " data-if-entity="797 chemdoc__link-entity-cur">ov</a></li><li>Download for development: <a href="https://github.com/ProgerXP/Sqimitive/archive/master.zip" class="chemdoc__custom-link chemdoc__proto-https" target="_blank">https://github.com/ProgerXP/Sqimitive/archive/master.zip</a></li><li>Download for production (minified): <a href="https://raw.githubusercontent.com/ProgerXP/Sqimitive/master/sqimitive.min.js" class="chemdoc__custom-link chemdoc__proto-https" target="_blank">https://raw.githubusercontent.com/ProgerXP/Sqimitive/master/sqimitive.min.js</a></li><li>Check out the sample To-Do application: <a href="https://squizzle.me/js/sqimitive/demo/to-do.html" class="chemdoc__custom-link chemdoc__proto-https" target="_blank">https://squizzle.me/js/sqimitive/demo/to-do.html</a></li><li>Report issues: <a href="https://github.com/ProgerXP/Sqimitive/issues" class="chemdoc__custom-link chemdoc__proto-https" target="_blank">https://github.com/ProgerXP/Sqimitive/issues</a></li><li>Get the code on GitHub: <a href="https://github.com/ProgerXP/Sqimitive" class="chemdoc__custom-link chemdoc__proto-https" target="_blank">https://github.com/ProgerXP/Sqimitive</a></li></ul><p>If you spot a typo – select the fragment and press <b>Ctrl+Enter</b>. Help us keep this memo free of vexatious mistakes! Powered by <a href="https://github.com/ProgerXP/Orphus" class="chemdoc__custom-link chemdoc__proto-https" target="_blank">https://github.com/ProgerXP/Orphus</a>.</p><h2 id="A683563c566" class="chemdoc__h2">Basic code conventions</h2><ul><li><b>Protected fields begin with underscore (<code class="chemdoc__id">_</code>)</b> – such fields (data properties and methods) are meant to be read or written only by the class they are defined in, or by one of its subclasses. It’s bad practice to try to access them from an ancestor (not the descendant they’re defined in) or, mind you, from an unrelated class – this is only justified, if ever, by really severe optimizations (such as tons of <a href="Sqimitive/c_Base.html#Sqimitive-Base--iv_opt" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">Base._opt</a> calls bypassing <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifget" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">get()</a>).</li><li><b>Naming style: underscores separating camelCase</b> – when an identifier (<code>oneId</code>) needs to be combined with another (<code>twoId</code>) it becomes simply <code>oneId_twoId</code> instead of <code>oneIdTwoId</code>, <code>one_id_two_id</code> or something else dictated by “pretty printing” identifiers. For example, <a href="Sqimitive/c_Base.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">Base</a> fires events of form “<a href="Sqimitive/c_Base.html#Sqimitive-Base--ifchange_OPT" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">change_OPT</a>” so the event name used when <code class="chemdoc__id">attrName</code> option (<a href="Sqimitive/c_Base.html#Sqimitive-Base--iv_opt" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">Base._opt</a>) was changed is <code class="chemdoc__id">change_attrName</code>.</li><li><b>Semicolon-free zone</b> – JavaScript is one of those languages where operation separators are optional, much like in Lua. You just need to remember to put <code>;</code> before any operation beginning with <code>(</code> (which most of the time has to do with IIFE):<p><pre><code class="chemdoc__block prism language-javascript match-braces">foo = 123
+;(function () { ... })()
+  // without ; above is equivalent to 123(function () { {... })()</code></pre></p></li><li><b><code class="chemdoc__id">null</code> is <code class="chemdoc__id">undefined</code></b> – unless mentioned, these two values are used interchangeably: when testing, use <code>value == null</code> instead of <code>===</code>; when supplying, give any of the two. One case when <code class="chemdoc__id">undefined</code> is different are event handler results (see <a href="Sqimitive/c_Core.html#Sqimitive-Core--sffire" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="909 chemdoc__link-entity-cur">::fire()</a>).</li></ul><h2 id="-deps" class="chemdoc__h2 chemdoc__anchored">Customizing dependencies<a class="chemdoc__anchor chemdoc__header-anchor" href="#-deps">deps</a></h2><p>Sqimitive can be included using several methods as implemented by <code>umh.js</code>. Each method has its own way of overriding dependencies (which default to NoDash <a href="https://squizzle.me/js/nodash/map.html#-" class="chemdoc__custom-link chemdoc__link-extchem chemdoc__link-extchem-no" target="_blank">no@</a> and jQuery <a href="https://api.jquery.com/" class="chemdoc__custom-link chemdoc__proto-jq" target="_blank">jq:</a>). Alternatively, you can change the <code class="chemdoc__id">deps</code> variable in the source code but you’ll have to redo it on upgrade.</p><h3 id="A77a886e46e" class="chemdoc__h3">CommonJS/Node.js</h3><p>In npm 8.3+, put this into your project’s <code>package.json</code> before doing <code>npm install sqimitive</code> (<a href="https://github.com/npm/cli/issues/4909" class="chemdoc__custom-link chemdoc__proto-https" target="_blank">https://github.com/npm/cli/issues/4909</a>):
+<pre><code class="chemdoc__block prism language-javascript match-braces">"overrides": {
+  "sqimitive": {
+    "nodash": "npm:underscore",
+    "jquery": "npm:zepto"
+  }
+}</code></pre></p><h3 id="A89ce00af60" class="chemdoc__h3">AMD/Require.js</h3><p>Use <code class="chemdoc__id">map</code> and/or <code class="chemdoc__id">path</code> options (<a href="https://requirejs.org/docs/api.html#config" class="chemdoc__custom-link chemdoc__proto-https" target="_blank">https://requirejs.org/docs/api.html#config</a>):
+<pre><code class="chemdoc__block prism language-javascript match-braces">requirejs.config({
+  map: {
+    'sqimitive/main': {
+      'nodash/main': 'lodash'
+    },
+    'sqimitive/jquery': {
+      jquery: 'zepto'
+    }
+  },
+  paths: {
+    nodash: 'https://cdn.jsdelivr.net/npm/underscore@latest/underscore-umd-min.js'
+  }
+})</code></pre></p><h3 id="A5c3dc10dbf" class="chemdoc__h3">Plain <code>&lt;script&gt;</code></h3><p>Dependencies land in global <code class="chemdoc__id">window</code> so simply fetch the needed script before including Sqimitive:
+<pre><code class="chemdoc__block prism language-javascript match-braces">&lt;script src="https://cdn.jsdelivr.net/npm/underscore@latest/underscore-umd-min.js"&gt;&lt;/script&gt;
+&lt;script src="https://raw.githubusercontent.com/ProgerXP/Sqimitive/master/sqimitive.min.js"&gt;&lt;/script&gt;</code></pre></p>      </article>
+    
+    <div class="entity-info">
+      <p class="entity-info__file">
+        Defined in:
+        HELP.chem, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/HELP.chem#L81-L172" target="_blank">lines 81-172</a> (92 lines)      </p>
+    </div>
+  </div>
+
+
+<footer class="footer">
+      <span class="footer__group">
+      ⁂
+              <a href="https://squizzle.me/js/sqimitive/">
+            Sqimitive</a>    </span>
+    <span class="footer__group">
+    <a href="#">Scroll to top</a>
+  </span>
+  <span class="footer__group">
+    Generated by
+    <a href="http://squizzle.me/chem" target="_blank">Chem &amp; Chemdoc</a>
+  </span>
+  <span class="footer__group">
+    2022-12-25  </span>
+  <span class="footer__group">
+    Typo?
+    <a href="https://github.com/ProgerXP/Orphus" target="_blank">Ctrl+Enter</a>
+  </span>
+</footer>
+    <script src="scripts.js"></script>
+
+          <link rel="stylesheet" href="prism.css">
+      <script src="prism.js"></script>
+      <script>
+        Prism.plugins.customClass.prefix('prism__')
+      </script>
+    
+        <script src="entities.js"></script>
+  </body>
+</html>

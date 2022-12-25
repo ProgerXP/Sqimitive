@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html data-root="../" data-entity='{"type":"class","id":824,"name":"Sqimitive.Async","start":{"line":42,"column":2,"offset":1447},"end":{"line":791,"column":2,"offset":29866},"forced":true,"modifiers":[],"file":"async.js"}'>
+  <head>
+    <meta charset="utf-8">
+    <title>Async (in Sqimitive) – Sqimitive</title>
+    <link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <script>orphus = {action: 'https://proger.me/orphus.php'}</script>
+    <script src="https://proger.me/orphus.js"></script>
+
+    
+<nav class="qnbar">
+  <a href="#" class="qnbar__locate" title="Hotkey: Alt+E">&larr; Locate</a>
+  <a href="#">Top</a> of Sqimitive.Async  (<a href="?noframe" target="_blank">no frame</a>)
+          <a class="qnbar__section"
+       title=""
+       href="#Sqimitive-Async--ic">
+      Constants</a>
+          <a class="qnbar__section"
+       title=""
+       href="#Sqimitive-Async--iv">
+      Properties</a>
+          <a class="qnbar__section"
+       title=""
+       href="#Sqimitive-Async--if">
+      Methods</a>
+  </nav>
+
+  <div class="cp">
+    <h1 class="entity-header">
+      <span class="entity-header__type">
+        Class
+      </span>
+              <span class="entity-header__ns">
+          in
+          <a href="../ns_Sqimitive.html">Sqimitive</a>        </span>
+            <span class="entity-header__name">
+        Async      </span>
+    </h1>
+
+    <code class="code_block">class Sqimitive.Async
+    extends <a href="../Sqimitive/c_Base.html">Sqimitive.Base</a></code>
+
+    <div class="entity-info">
+      <div class="entity-info__synopsis fmt">
+        
+Asynchronous operation manager – a “promise” on steroids, with intuitive
+grouped handling of a large number of asynchron<span class="chemdoc__ellipsis">…</span>      </div>
+
+      <p class="entity-info__file">
+        Defined in:
+        async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L43-L43" target="_blank">line 43</a>      </p>
+
+          </div>
+
+          <fieldset class="cp-desc fmt">
+        <legend>
+          Description
+          (<a href="#Sqimitive-Async--de">skip</a>)
+        </legend>
+        <p>
+Asynchronous operation manager – a “promise” on steroids, with intuitive
+grouped handling of a large number of asynchronous processes.</p><p><a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> is “native” Sqimitive’s re-implementation of JavaScript’s
+<code class="chemdoc__id">Promise</code>. It provides a unified wrapper around asynchronous operations
+such as remote requests. Unlike <code class="chemdoc__id">Promise</code>, <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> may contain <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nest</a>’ed
+operations (the parent only completes when all children complete,
+recursively), allows the usual (<a href="../p_ov.html#-evt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="797 chemdoc__link-entity-cur">evt</a>) event listeners and can be
+<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifabort" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">abort()</a>’ed.</p><p><a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a>’s state is stored in the <code class="chemdoc__id">status</code> <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="824 chemdoc__link-entity-cur">_opt</a>’ion (<code class="chemdoc__id">true</code> when
+succeeded, <code class="chemdoc__id">false</code> if failed, <code class="chemdoc__id">null</code> if still incomplete). On change,
+<a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> fires <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">success</a> or <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">error</a> and, always, <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">complete</a>:</p><ul><li>Listeners can be prioritized relative to others (see <a href="../Sqimitive/c_Async.html#Sqimitive-Async--icMAX_PRIORITY" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_const mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">MAX_PRIORITY</a>).</li><li><a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifexception" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">exception</a>-s during an event handler do not mark <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> as failed
+(unlike with <code class="chemdoc__id">Promise</code>).</li><li>If <code class="chemdoc__id">status</code> changes during <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">error</a> or <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">success</a> then remaining handlers
+are skipped and handlers of the new <code class="chemdoc__id">status</code> (<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">success</a> or <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">error</a>) are
+called. <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">complete</a> is always triggered in the end, once <code class="chemdoc__id">status</code> stops
+changing.<p><pre><code class="chemdoc__block prism language-javascript match-braces">var async = new Sqimitive.Async
+
+async.whenSuccess(function () {
+  if (Math.random() &gt; 0.5) { async.set('status', false) }
+}, this, -1)
+
+// This one will run after the previous handler where we've given a
+// smaller priority (-1):
+async.whenSuccess(function () {
+  alert('You win!')
+})
+
+async.whenError(function () {
+  alert('No luck :&lt;')
+})
+
+async.set('status', true)
+  // will show either of the alert messages</code></pre></p></li></ul><p>Attention: <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifnest" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">Base.nest()</a> returns new child, not the parent. The following
+creates an <code class="chemdoc__id">Async</code> containing an <code class="chemdoc__id">Async</code> which in turn has another <code class="chemdoc__id">Async</code>
+inside, to which <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifwhenSuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">whenSuccess()</a> is attached:
+<pre><code class="chemdoc__block prism language-javascript match-braces">;(new Sqimitive.Async)
+  .nest(new Sqimitive.Async)
+  .nest(new Sqimitive.Async)
+  .whenSuccess(...)</code></pre></p><p>This most likely indicates an error and should be rewritten like so:
+<pre><code class="chemdoc__block prism language-javascript match-braces">var container = new Sqimitive.Async)
+container.nest(new Sqimitive.Async)
+container.nest(new Sqimitive.Async)
+container.whenSuccess(...)</code></pre></p><p>Nesting like that can be shortened if <code>Sqimitive.Async</code> is the default
+class (<a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_childClass" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">Base._childClass</a>) for <code class="chemdoc__id">container</code> (as it is by default):
+<pre><code class="chemdoc__block prism language-javascript match-braces">container.nest({})</code></pre></p><p>Other notes:</p><ul><li>Child <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a>-s may be <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nest</a>’ed at any time and their <code class="chemdoc__id">status</code> may be any
+(loading, failed or succeeded) – the parent’s <code class="chemdoc__id">status</code> will be updated
+accordingly and <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">success</a>/<a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">error</a>/<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">complete</a> may arise on it.</li><li>These three events are first fired on the <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> itself (distance 0),
+then on its immediate parent (1), then on that parent’s parent (2) and so
+on. In case of multiple parents of the same distance (one
+<a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_owning" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">Base._owning</a>, others not), events first occur on the one that had the
+child nested first, then second and so on.</li><li>The operation may start at any time: usually from <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifinit" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">Base.init()</a> if
+you’re subclassing <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a>, or by a method like <code>start()</code> called from the
+outside, or for “ad-hoc” <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a>-s – some time after <code class="chemdoc__id">new</code>.</li></ul><fieldset class="chemdoc__example"><legend>Example</legend>A subclass that wraps around JavaScript’s <code class="chemdoc__id">Image</code> (representing the
+<code>&lt;img&gt;</code> tag) for preloading graphical resources.
+<pre><code class="chemdoc__block prism language-javascript match-braces">var AsyncImage = Sqimitive.Async.extend({
+  _opt: {
+    src: null,   // relative to current location
+    img: null,   // JavaScript's Image
+  },
+
+  events: {
+    init: function () {
+      var img = new Image
+      img.onload  = () =&gt; this.set('status', true)
+      img.onerror = () =&gt; this.set('status', false)
+      this.set('img', img)
+      img.src = this.get('src')
+    },
+
+    // Stops image loading (if supported by the browser).
+    abort: function () {
+      this.img() &amp;&amp; (this.img().src = 'javascript:void 0')
+    },
+  },
+
+  img: function () {
+    return this.get('img')
+  },
+
+  width: function () {
+    return this.img() &amp;&amp; this.img().width
+  },
+
+  height: function () {
+    return this.img() &amp;&amp; this.img().height
+  },
+})</code></pre>
+Using <code class="chemdoc__id">AsyncImage</code> to load a single image:
+<pre><code class="chemdoc__block prism language-javascript match-braces">;(new AsyncImage({src: 'pic.jpg'})
+  .whenSuccess(async =&gt; alert(async.width()))
+
+// Similar to:
+var img = new Image
+img.src = 'pic.jpg'
+img.onload = () =&gt; alert(img.width)</code></pre>
+Loading multiple <code class="chemdoc__id">AsyncImage</code>-s:
+<pre><code class="chemdoc__block prism language-javascript match-braces">var container = new Sqimitive.Async
+container.nest(new AsyncImage({src: 'foo.png'}))
+container.nest(new AsyncImage({src: 'bar.bmp'}))
+container.whenSuccess(function () {
+  alert('Loaded ' + container.invoke('get', 'src').join())
+})
+container.whenError(function () {
+  // Since Async is the usual Sqimitive.Base, we have all the utility
+  // methods:
+  var failed = this.reject(a =&gt; a.isSuccessful())
+  alert('Failed to load: ' + failed.map(a =&gt; a.get('src')).join())
+})</code></pre>
+The above <code class="chemdoc__id">container</code> in turn could be part of another <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a>:
+<pre><code class="chemdoc__block prism language-javascript match-braces">var resourcePreloader = new Sqimitive.Async
+resourcePreloader.nest(imagePreloader)
+resourcePreloader.nest(dataPreloader)
+resourcePreloader.whenSuccess(() =&gt; game.start())</code></pre>
+…With <code class="chemdoc__id">dataPreloader</code> defined “ad-hoc” (without a specialized class):
+<pre><code class="chemdoc__block prism language-javascript match-braces">var dataPreloader = new Sqimitive.Async
+
+$.loadJSON('map.json', function (data) {
+  dataPreloader.set('data', data)
+  dataPreloader.set('status', true)
+})
+
+dataPreloader.whenSuccess(function () {
+  var data = dataPreloader.get('data')
+  // ...
+})</code></pre></fieldset><h2 id="Acf3f8e4c9f" class="chemdoc__h1">Event order and nesting</h2><p>Often you want to call <code>when...()</code> on a child being <code>nest()</code>’ed, such as
+when wrapping an <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a>. In this example API calls are delayed but the
+caller receives an <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> immediately. It might be tempting to write
+something like this:
+<pre><code class="chemdoc__block prism language-javascript match-braces">var queue = []
+var timer
+
+function callAPI(args) {
+  var result = new Sqimitive.Async
+  queue.push([args, result])
+
+  timer = timer || setTimeout(function () {
+    timer = null
+
+    for (var task; task = queue.shift(); ) {
+      task[1].nest(_callAPI(task[0]))
+        .whenSuccess(function () { task[1].result = this.result })
+    }
+  }, 100)
+
+  return result
+}
+
+function _callAPI(args) {
+  var internal = new Sqimitive.Async
+  _.ajax({
+    url: '/api',
+    data: _.toArray(args),
+    success: function (xhr) {
+      internal.result = xhr.response
+      internal.set('status', true)
+    },
+  })
+  return internal
+}</code></pre></p><p>The <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> returned to the caller is nested an internal <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> object
+returned by <code>_callAPI()</code>; when the latter succeeds or fails, the caller’s
+<a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> automatically finishes and <code>callAPI()</code> copies response data
+(<code class="chemdoc__id">result</code>) to the wrapper – but running into the same pitfall described in
+<a href="../Sqimitive/c_Async.html#Sqimitive-Async--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="824 chemdoc__link-entity-cur">_opt</a>.<code class="chemdoc__id">ignoreError</code>, namely that <code>whenSuccess()</code> is called after nesting,
+allowing the caller’s hooks to execute first.
+<pre><code class="chemdoc__block prism language-javascript match-braces">// wrapper is the result Async in callAPI().
+var wrapper = callAPI('foo')
+wrapper.whenSuccess(function () { console.log(this.result) })
+  // logs undefined because wrapper succeeds (internal Async is nested)
+  // before callAPI()'s whenSuccess() runs</code></pre></p>      </fieldset>
+      <a id="Sqimitive-Async--de"></a>
+    
+            <h2 id="Sqimitive-Async--ic"
+            class="cp-member__group-header">
+          Constants        </h2>
+        <dl>
+                      <dt id="Sqimitive-Async--icMAX_PRIORITY"
+                data-entity='{"type":"const","id":825,"name":"MAX_PRIORITY","start":{"line":265,"column":4,"offset":10003},"end":null,"forced":null,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>MAX_PRIORITY</b>
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>The maximum number (absolute, i.e. positive) accepted by <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifwhenComplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">whenComplete()</a>
+and others; out of range priority is clamped to the nearest value.</p><fieldset class="chemdoc__example"><legend>Example</legend>Use <code>-Infinity</code> and <code class="chemdoc__id">Infinity</code> to specify minimum and maximum priority.
+<pre><code class="chemdoc__block prism language-javascript match-braces">// This function is called before listeners to 'success' with a larger
+// priority (which is 0 by default).
+async.whenSuccess(function (async) { ... }, this, -Infinity)</code></pre></fieldset></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Async--icMAX_PRIORITY---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L266-L266" target="_blank">line 266</a>                                  &bull; <a href="#Sqimitive-Async--icMAX_PRIORITY---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">MAX_PRIORITY: 2,</code></pre>
+                          </dd>
+                  </dl>
+            <h2 id="Sqimitive-Async--iv"
+            class="cp-member__group-header">
+          Properties        </h2>
+        <dl>
+                      <dt id="Sqimitive-Async--iv_opt"
+                data-entity='{"type":"var","id":828,"name":"_opt","start":{"line":350,"column":4,"offset":13817},"end":{"line":354,"column":4,"offset":13904},"forced":null,"modifiers":["protected"],"file":"async.js"}'
+                class="cp-member__header">
+              <b>_opt</b>
+                          </dt>
+            <dd class="cp-member__info">
+                              <p class="cp-member__mods">
+                  Modifiers:
+                  protected                </p>
+                                            <div class="fmt"><p>New standard options (<a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_opt" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">Base._opt</a>):</p><table class="chemdoc__entity-table chemdoc__entity-args">
+<caption>Members</caption>
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><th rowspan="3">status</th><td>operation null not started or not finished</td><td rowspan="3" colspan="1"> Reflects both this instance’s own status and status of its children.<p>When an operation wrapped by this <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> finishes and assuming it has
+no <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_children" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_children</a>, <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifset" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">set()</a> <code class="chemdoc__id">status</code> to either <code class="chemdoc__id">true</code> (<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifisSuccessful" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">isSuccessful</a>) or
+<code class="chemdoc__id">false</code>. This instance will stop being <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifisLoading" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">isLoading()</a>; this should be a
+permanent condition – don’t change <code class="chemdoc__id">status</code> once it’s becomes
+non-<code class="chemdoc__id">null</code>, until you call <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifclear" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">clear()</a>.</p></td></tr><tr><td>
+true operation succeeded</td></tr><tr><td> false operation failed
+</td></tr><tr class="chemdoc__first"><th rowspan="1">ignoreError</th><td>bool </td><td rowspan="1" colspan="1"> If set, this instance will be considered succeeded
+by <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifisSuccessful" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">isSuccessful()</a> even if <code class="chemdoc__id">status</code> is <code class="chemdoc__id">false</code><p>Don’t change this value when this instance is no longer <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifisLoading" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">isLoading()</a>
+because the expected handlers won’t be called:
+<pre><code class="chemdoc__block prism language-javascript match-braces">async.set('status', false)
+async.whenSuccess(...)
+async.set('ignoreError', true)
+  // whenSuccess' func is not executed despire isSuccessful()
+  // returning true
+
+// Best practice is to give ignoreError to the constructor:
+var async = new Sqimitive.Async({ignoreError: true})
+// ...or to extend():
+var MyAsync = Sqimitive.Async.extend({
+  _opt: {ignoreError: true},
+})</code></pre></p><p>Remember that nesting an already failed <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> fails the parent
+immediately if there are no other <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifisLoading" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">isLoading</a> children or if
+<code class="chemdoc__id">immediateError</code> is set. Change <code class="chemdoc__id">ignoreError</code> before nesting:
+<pre><code class="chemdoc__block prism language-javascript match-braces">var parent = new Sqimitive.Async
+parent.nest( new Sqimitive.Async({status: false}) )
+  .set('ignoreError', true)
+// parent is !isSuccessful().
+parent.nest( (new Sqimitive.Async({status: false}))
+  .set('ignoreError', true) )
+// parent is isSuccessful(); observe the braces.</code></pre></p></td></tr><tr class="chemdoc__first"><th rowspan="1">immediateError</th><td>bool </td><td rowspan="1" colspan="1"> If set, this instance will be considered failed
+as soon as any child fails, even if there is an <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifisLoading" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">isLoading()</a> child.<p>This value affects the next child status check so it’s best changed when
+there are no children.</p><p>The default (disabled) is safe because it ensures completion of all
+children before completing the parent, avoiding any orphan processes.
+But it is often wasteful to wait when you already know the process in
+general has failed. Enabling <code class="chemdoc__id">immediateError</code> helps but it becomes your
+job to <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifabort" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">abort()</a> or <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifclear" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">clear()</a> all sub-tasks, and to ignore or otherwise
+handle events fired on sub-tasks after completion of the parent with
+<code class="chemdoc__id">immediateError</code>.</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var parent = new Sqimitive.Async
+parent.whenError(func)
+var loading = parent.nest(new Sqimitive.Async)
+  // parent.isLoading() == true
+loading.whenComplete(func2)
+parent.nest(new Sqimitive.Async({status: false}))
+  // parent.isLoading() == true
+loading.set('status', true)
+  // func2, then func called; loading.isLoading() == false
+
+var parent = new Sqimitive.Async({immediateError: true})
+parent.whenError(func)
+var loading = parent.nest(new Sqimitive.Async)
+  // parent.isLoading() == true
+loading.whenComplete(func2)
+loading.on('abort', () =&gt; loading.set('status', false))
+parent.nest(new Sqimitive.Async({status: false}))
+  // func called; loading.isLoading() == true
+parent.clear()
+  // func2 called; loading.isLoading() == false</code></pre></p></td></tr></table></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Async--iv_opt---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L351-L355" target="_blank">lines 351-355</a> (5 lines)                                  &bull; <a href="#Sqimitive-Async--iv_opt---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">_opt: {
+  status: null,
+  ignoreError: false,
+  immediateError: false,
+},</code></pre>
+                          </dd>
+                  </dl>
+            <h2 id="Sqimitive-Async--if"
+            class="cp-member__group-header">
+          Methods        </h2>
+        <dl>
+                      <dt id="Sqimitive-Async--ifabort"
+                data-entity='{"type":"func","id":851,"name":"abort","start":{"line":780,"column":4,"offset":29520},"end":{"line":789,"column":4,"offset":29774},"forced":true,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>abort</b>
+                              (
+                                  )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>
+Aborts the operation of this instance.</p><fieldset class="chemdoc__example"><legend>Example</legend><a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifabort" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">abort()</a> doesn’t affect own <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_children" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_children</a> – call <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifsink" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">sink()</a> or <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifclear" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">clear()</a> to
+abort everything recursively:
+<pre><code class="chemdoc__block prism language-javascript match-braces">async.sink('abort')</code></pre></fieldset><p>The default implementation does nothing (is a <a href="../Sqimitive/c_Core.html#Sqimitive-Core--sfstub" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="909 chemdoc__link-entity-cur">stub</a>).</p></div>
+                                          <p class="cp-member__file "
+                 id="Sqimitive-Async--ifabort---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L781-L781" target="_blank">line 781</a>                              </p>
+                          </dd>
+                      <dt id="Sqimitive-Async--ifclear"
+                data-entity='{"type":"func","id":843,"name":"clear","start":{"line":608,"column":4,"offset":22916},"end":{"line":614,"column":4,"offset":23143},"forced":null,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>clear</b>
+                              (
+                                  )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>Prepares this instance for new use.</p><p>It’s recommended to create a new <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> instance for every new batch of
+tasks to avoid induced effects. However, <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifclear" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">clear()</a> may improve
+performance when thousands of objects need to be created but some could
+be reused. <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifclear" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">clear()</a> can be also seen as “hard” <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifabort" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">abort()</a>.</p><p>Removes event listeners for <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">success</a>/<a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">error</a>/<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">complete</a> (but not for
+<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifexception" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">exception</a>), calls <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifabort" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">abort()</a> on self and on <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_children" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_children</a> (recursively),
+calls <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifremove" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">Base.remove()</a> on children if <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_owning" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_owning</a> or <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifunlist" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">unlist()</a> if not,
+and sets <code class="chemdoc__id">status</code> (<a href="../Sqimitive/c_Async.html#Sqimitive-Async--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="824 chemdoc__link-entity-cur">_opt</a>) to <code class="chemdoc__id">null</code> (<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifisLoading" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">isLoading()</a>).</p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Async--ifclear---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L609-L615" target="_blank">lines 609-615</a> (7 lines)                                  &bull; <a href="#Sqimitive-Async--ifclear---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">clear: function () {
+  _.forEach(['success', 'error', 'complete'], function (e) { this.off(e) }, this)
+  this.sink('abort', [], true)
+  this.forEach(this.unlist)
+  this.set('status', null)
+  return this
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Async--ifcomplete"
+                data-entity='{"type":"func","id":849,"name":"complete","start":{"line":735,"column":4,"offset":27558},"end":{"line":739,"column":4,"offset":27662},"forced":true,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>complete</b>
+                              (
+                  this                )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>Called when this instance stops being <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifisLoading" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">isLoading()</a>.</p><p class="chemdoc__anchor-inclusion"><span>from <a href="../Sqimitive/c_Async.html#-sec" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="824 chemdoc__link-entity-cur">sec</a></span></p><p><a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">success</a>, <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">error</a> and <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">complete</a> are called when this and nested
+operations have finished (resources loaded, etc.). Consider this analogy
+with exception handling:
+<pre><code class="chemdoc__block prism language-javascript match-braces">try {
+  ...                    // Async.success()
+} catch (exception) {
+  ...                    // Async.error()
+} finally {
+  ...                    // Async.complete()
+}</code></pre></p><p>But note that “real” exceptions thrown by listeners are handled by
+<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifexception" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">exception()</a> outside of the normal pipeline (<a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">error</a>-s are expected
+conditions, exceptions are not).</p><p>Each handler is called at most once as if it was bound with <a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifonce" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">once()</a>. If
+a handler changes the <code class="chemdoc__id">status</code> <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="824 chemdoc__link-entity-cur">_opt</a>, others are skipped and events are
+re-fired.</p><fieldset class="chemdoc__example"><legend>Example</legend>In most cases you need to use <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifwhenSuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">whenSuccess()</a>, <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifwhenError" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">whenError()</a> and
+<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifwhenComplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">whenComplete()</a> rather than subscribing via <a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">on()</a> because if the
+instance’s status changes between its construction and your subscription
+- your handler will not be called:
+<pre><code class="chemdoc__block prism language-javascript match-braces">var async = new MyAsync({...})
+// If async is already complete before we call on() - our handler will
+// not be triggered:
+async.on('success', function (async) { ... })
+// So you want to do this:
+async.whenSuccess(function (async) { ... })</code></pre></fieldset><p>The call order of handlers is deterministic (<a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a>’s <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nest()</a> acts as
+<a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">on()</a> because of <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_childEvents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_childEvents</a>/<a href="../Sqimitive/c_Core.html#Sqimitive-Core--if_forward" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="909 chemdoc__link-entity-cur">_forward()</a>) but it’s usually more
+convenient to use specific priority levels to not depend on the order of
+<a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nest()</a>/<a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">on()</a> calls: <code>on('success')</code> is guaranteed to be called after
+<code>success-3</code> but before <code>success2</code>.</p></div>
+                                          <p class="cp-member__file "
+                 id="Sqimitive-Async--ifcomplete---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L736-L736" target="_blank">line 736</a>                              </p>
+                          </dd>
+                      <dt id="Sqimitive-Async--ifdoneIfEmpty"
+                data-entity='{"type":"func","id":842,"name":"doneIfEmpty","start":{"line":590,"column":4,"offset":22123},"end":{"line":595,"column":4,"offset":22261},"forced":null,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>doneIfEmpty</b>
+                              (
+                                  )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>Sets the <code class="chemdoc__id">status</code> <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="824 chemdoc__link-entity-cur">_opt</a> to <code class="chemdoc__id">true</code> if have no <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_children" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_children</a> and is still
+<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifisLoading" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">isLoading()</a>.</p><table class="chemdoc__entity-table chemdoc__entity-type">
+<caption>Result Types</caption>
+<thead>
+  <tr>
+    
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><td>undefined if not empty or is not loading</td><td rowspan="2" colspan="1"></td></tr><tr><td> true</td></tr></table><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">_.each(filesToLoad, function (url) {
+  async.nest(new MyAsync({src: url}))
+})
+
+async.whenComplete(allLoaded)
+
+async.doneIfEmpty()
+  //=&gt; true
+  // if there were no filesToLoad then mark async as complete right
+  // away
+
+async.doneIfEmpty()
+  //=&gt; undefined - already complete, call ignored</code></pre></fieldset></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Async--ifdoneIfEmpty---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L591-L596" target="_blank">lines 591-596</a> (6 lines)                                  &bull; <a href="#Sqimitive-Async--ifdoneIfEmpty---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">doneIfEmpty: function () {
+  if (!this.length && this.isLoading()) {
+    this.set('status', true)
+    return true
+  }
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Async--iferror"
+                data-entity='{"type":"func","id":848,"name":"error","start":{"line":725,"column":4,"offset":27264},"end":{"line":732,"column":4,"offset":27513},"forced":true,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>error</b>
+                              (
+                  this                )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>Called when this instance or one of its children has failed.</p><p>By default, <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> doesn’t store any error information because it is
+operation-agnostic; you may use <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="824 chemdoc__link-entity-cur">_opt</a> for this.</p><p class="chemdoc__anchor-inclusion"><span>from <a href="../Sqimitive/c_Async.html#-sec" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="824 chemdoc__link-entity-cur">sec</a></span></p><p><a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">success</a>, <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">error</a> and <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">complete</a> are called when this and nested
+operations have finished (resources loaded, etc.). Consider this analogy
+with exception handling:
+<pre><code class="chemdoc__block prism language-javascript match-braces">try {
+  ...                    // Async.success()
+} catch (exception) {
+  ...                    // Async.error()
+} finally {
+  ...                    // Async.complete()
+}</code></pre></p><p>But note that “real” exceptions thrown by listeners are handled by
+<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifexception" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">exception()</a> outside of the normal pipeline (<a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">error</a>-s are expected
+conditions, exceptions are not).</p><p>Each handler is called at most once as if it was bound with <a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifonce" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">once()</a>. If
+a handler changes the <code class="chemdoc__id">status</code> <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="824 chemdoc__link-entity-cur">_opt</a>, others are skipped and events are
+re-fired.</p><fieldset class="chemdoc__example"><legend>Example</legend>In most cases you need to use <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifwhenSuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">whenSuccess()</a>, <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifwhenError" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">whenError()</a> and
+<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifwhenComplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">whenComplete()</a> rather than subscribing via <a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">on()</a> because if the
+instance’s status changes between its construction and your subscription
+- your handler will not be called:
+<pre><code class="chemdoc__block prism language-javascript match-braces">var async = new MyAsync({...})
+// If async is already complete before we call on() - our handler will
+// not be triggered:
+async.on('success', function (async) { ... })
+// So you want to do this:
+async.whenSuccess(function (async) { ... })</code></pre></fieldset><p>The call order of handlers is deterministic (<a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a>’s <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nest()</a> acts as
+<a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">on()</a> because of <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_childEvents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_childEvents</a>/<a href="../Sqimitive/c_Core.html#Sqimitive-Core--if_forward" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="909 chemdoc__link-entity-cur">_forward()</a>) but it’s usually more
+convenient to use specific priority levels to not depend on the order of
+<a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nest()</a>/<a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">on()</a> calls: <code>on('success')</code> is guaranteed to be called after
+<code>success-3</code> but before <code>success2</code>.</p></div>
+                                          <p class="cp-member__file "
+                 id="Sqimitive-Async--iferror---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L726-L726" target="_blank">line 726</a>                              </p>
+                          </dd>
+                      <dt id="Sqimitive-Async--ifexception"
+                data-entity='{"type":"func","id":850,"name":"exception","start":{"line":776,"column":4,"offset":29468},"end":{"line":778,"column":4,"offset":29512},"forced":null,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>exception</b>
+                              (
+                  e                )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>Called when an exception was thrown during <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">success</a>, <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">error</a> or
+<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">complete</a>.</p><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">async.on('exception', e =&gt; console.error(e.message))</code></pre></fieldset><p>In contrast with JavaScript’s <code class="chemdoc__id">Promise</code> an error in handling the
+“promise” (<a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a>) doesn’t mark that promise failed if its underlying
+action (e.g. an AJAX call) has succeeded.</p><p>If an exception is thrown during an <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">error</a> or <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">success</a> handlers then
+remaining handlers are skipped, <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">complete</a> is triggered and the exception
+is re-thrown. An exception during <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">complete</a> also skips remaining
+handlers of <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">complete</a> and is re-thrown unless there was an exception
+during <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">error</a> or <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">success</a>.</p><p>Other notes:</p><ul><li><a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifexception" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">exception</a>’s event listeners are not affected by <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifclear" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">clear()</a>.</li><li><a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> replaces the <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifexception" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">exception()</a> handler of its children so that the
+exception is thrown on the top-level <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> (whose <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_parent" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_parent</a> is not
+another <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a>).</li><li>The above also means that it’s enough to override just the top-level
+<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifexception" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">exception()</a> to affect the entire tree.</li><li>The usual events have “whenXXX()” (<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifwhenComplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">whenComplete()</a>, etc.) but there’s
+no “whenException()” because no info about already occurred errors is
+stored (like <code class="chemdoc__id">status</code> is stored in <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="824 chemdoc__link-entity-cur">_opt</a>). Only future exceptions can
+be listened to, with the usual <a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">on()</a>.</li><li>Unlike <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">success</a>/<a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">error</a>/<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">complete</a>, <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifexception" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">exception</a> doesn’t receive <code class="chemdoc__id">this</code>
+as an argument.</li><li><a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifexception" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">exception</a> isn’t called on request failure unless you throw an
+exception from <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">error</a> (because <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> doesn’t know about your
+operation’s details).</li><li>The default implementation throws the argument.</li></ul></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Async--ifexception---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L777-L779" target="_blank">lines 777-779</a> (3 lines)                                  &bull; <a href="#Sqimitive-Async--ifexception---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">exception: function (e) {
+  throw e
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Async--ifisLoading"
+                data-entity='{"type":"func","id":846,"name":"isLoading","start":{"line":675,"column":4,"offset":25252},"end":{"line":677,"column":4,"offset":25321},"forced":null,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>isLoading</b>
+                              (
+                                  )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><table class="chemdoc__entity-table chemdoc__entity-type">
+<caption>Result Types</caption>
+<thead>
+  <tr>
+    
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><td>true when still loading (<code class="chemdoc__id">status</code> <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="824 chemdoc__link-entity-cur">_opt</a> is <code class="chemdoc__id">null</code>)</td><td rowspan="2" colspan="1"></td></tr><tr><td>
+false when failed or succeeded (<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifisSuccessful" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">isSuccessful</a>)</td></tr></table></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Async--ifisLoading---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L676-L678" target="_blank">lines 676-678</a> (3 lines)                                  &bull; <a href="#Sqimitive-Async--ifisLoading---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">isLoading: function () {
+  return this.get('status') == null
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Async--ifisSuccessful"
+                data-entity='{"type":"func","id":845,"name":"isSuccessful","start":{"line":668,"column":4,"offset":24996},"end":{"line":671,"column":4,"offset":25126},"forced":null,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>isSuccessful</b>
+                              (
+                                  )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><table class="chemdoc__entity-table chemdoc__entity-type">
+<caption>Result Types</caption>
+<thead>
+  <tr>
+    
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><td>null when still <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifisLoading" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">isLoading()</a></td><td rowspan="3" colspan="1"></td></tr><tr><td> true if <code class="chemdoc__id">status</code> <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="824 chemdoc__link-entity-cur">_opt</a> is <code class="chemdoc__id">true</code> or
+<code class="chemdoc__id">ignoreError</code> <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="824 chemdoc__link-entity-cur">_opt</a> is set</td></tr><tr><td> false</td></tr></table><p><code class="chemdoc__id">ignoreError</code> affects all methods using <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifisSuccessful" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">isSuccessful()</a>, in particular
+<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifwhenSuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">whenSuccess()</a> and <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifwhenError" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">whenError()</a>:
+<pre><code class="chemdoc__block prism language-javascript match-braces">async.set('status', false)   // fail it
+async.isSuccessful()         //=&gt; false
+async.set('ignoreError', true)
+async.isSuccessful()         //=&gt; true
+async.whenSuccess(() =&gt; alert('fired!'))
+  // alerts</code></pre></p><p>However, changing <code class="chemdoc__id">ignoreError</code> on run-time is not recommended – see
+<a href="../Sqimitive/c_Async.html#Sqimitive-Async--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="824 chemdoc__link-entity-cur">_opt</a>.</p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Async--ifisSuccessful---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L669-L672" target="_blank">lines 669-672</a> (4 lines)                                  &bull; <a href="#Sqimitive-Async--ifisSuccessful---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">isSuccessful: function () {
+  var s = this.get('status')
+  return s == null ? null : !!(this.get('ignoreError') || s)
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Async--ifnestDoner"
+                data-entity='{"type":"func","id":844,"name":"nestDoner","start":{"line":642,"column":4,"offset":24071},"end":{"line":650,"column":4,"offset":24368},"forced":null,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>nestDoner</b>
+                              (
+                                  )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>Nests a new child and returns a function that sets the child’s <code class="chemdoc__id">status</code>
+to <code class="chemdoc__id">true</code>.</p><p>The returned function has an <code class="chemdoc__id">error</code> method that sets the child’s
+<code class="chemdoc__id">status</code> to <code class="chemdoc__id">false</code>.</p><fieldset class="chemdoc__example"><legend>Example</legend>Use <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifnestDoner" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">nestDoner()</a> to interface with callback-style functions:
+<pre><code class="chemdoc__block prism language-javascript match-braces">$('div').fadeOut(async.nestDoner())
+
+var done = async.nestDoner()
+fs.appendFile('foo.txt', 'Hello World!', function (err) {
+  err ? done.error() : done()
+})
+
+async.whenSuccess(function () {
+  var $ = require('jquery')
+  // ...
+})
+var done = async.nestDoner()
+require(['jquery'], done, done.error)</code></pre></fieldset><p><code class="chemdoc__id">status</code> is not changed after <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifabort" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">abort()</a> was called on the child (this
+usually happens because of <code>sink()</code> or <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifclear" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">clear()</a> on the parent since
+<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifnestDoner" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">nestDoner()</a> doesn’t return the child it creates).</p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Async--ifnestDoner---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L643-L651" target="_blank">lines 643-651</a> (9 lines)                                  &bull; <a href="#Sqimitive-Async--ifnestDoner---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">nestDoner: function () {
+  var child = this.nest({})
+  child.on('abort', function () { child = null })
+  function nestDoner_(error) {
+    child && child.set('status', error !== unique)
+  }
+  nestDoner_.error = function () { nestDoner_(unique) }
+  return nestDoner_
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Async--ifsuccess"
+                data-entity='{"type":"func","id":847,"name":"success","start":{"line":679,"column":4,"offset":25329},"end":{"line":722,"column":4,"offset":27183},"forced":true,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>success</b>
+                              (
+                  this                )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>Called when this instance and children have succeeded.</p><p><a id="-sec" class="chemdoc__anchor chemdoc__anchor_token" href="#-sec">sec</a><a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">success</a>, <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">error</a> and <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">complete</a> are called when this and nested
+operations have finished (resources loaded, etc.). Consider this analogy
+with exception handling:
+<pre><code class="chemdoc__block prism language-javascript match-braces">try {
+  ...                    // Async.success()
+} catch (exception) {
+  ...                    // Async.error()
+} finally {
+  ...                    // Async.complete()
+}</code></pre></p><p>But note that “real” exceptions thrown by listeners are handled by
+<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifexception" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">exception()</a> outside of the normal pipeline (<a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">error</a>-s are expected
+conditions, exceptions are not).</p><p>Each handler is called at most once as if it was bound with <a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifonce" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">once()</a>. If
+a handler changes the <code class="chemdoc__id">status</code> <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="824 chemdoc__link-entity-cur">_opt</a>, others are skipped and events are
+re-fired.</p><fieldset class="chemdoc__example"><legend>Example</legend>In most cases you need to use <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifwhenSuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">whenSuccess()</a>, <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifwhenError" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">whenError()</a> and
+<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifwhenComplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">whenComplete()</a> rather than subscribing via <a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">on()</a> because if the
+instance’s status changes between its construction and your subscription
+- your handler will not be called:
+<pre><code class="chemdoc__block prism language-javascript match-braces">var async = new MyAsync({...})
+// If async is already complete before we call on() - our handler will
+// not be triggered:
+async.on('success', function (async) { ... })
+// So you want to do this:
+async.whenSuccess(function (async) { ... })</code></pre></fieldset><p>The call order of handlers is deterministic (<a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a>’s <a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nest()</a> acts as
+<a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">on()</a> because of <a href="../Sqimitive/c_Base.html#Sqimitive-Base--iv_childEvents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_childEvents</a>/<a href="../Sqimitive/c_Core.html#Sqimitive-Core--if_forward" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="909 chemdoc__link-entity-cur">_forward()</a>) but it’s usually more
+convenient to use specific priority levels to not depend on the order of
+<a href="../Sqimitive/c_Base.html#Sqimitive-Base--ifnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nest()</a>/<a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">on()</a> calls: <code>on('success')</code> is guaranteed to be called after
+<code>success-3</code> but before <code>success2</code>.</p></div>
+                                          <p class="cp-member__file "
+                 id="Sqimitive-Async--ifsuccess---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L680-L680" target="_blank">line 680</a>                              </p>
+                          </dd>
+                      <dt id="Sqimitive-Async--iftoString"
+                data-entity='{"type":"func","id":834,"name":"toString","start":{"line":396,"column":6,"offset":15692},"end":{"line":408,"column":6,"offset":16060},"forced":true,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>toString</b>
+                              (
+                                  )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>
+Returns a debugger-friendly summary of this object:
+<pre><code class="chemdoc__block prism language-javascript match-braces">The.Class.Name [length] ~¹ STATUS²</code></pre></p><div class="chemdoc__indent"><p>¹ <code>~</code> is output if the <code class="chemdoc__id">ignoreError</code> <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iv_opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="824 chemdoc__link-entity-cur">_opt</a> is set.</p><p>² <code>STATUS</code> is either “LOADING”, “DONE” or “ERROR”</p></div><p>For example:
+<pre><code class="chemdoc__block prism language-javascript match-braces">AsyncImage [2]  DONE</code></pre></p></div>
+                                          <p class="cp-member__file "
+                 id="Sqimitive-Async--iftoString---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L397-L397" target="_blank">line 397</a>                              </p>
+                          </dd>
+                      <dt id="Sqimitive-Async--ifwhenComplete"
+                data-entity='{"type":"func","id":839,"name":"whenComplete","start":{"line":541,"column":4,"offset":20709},"end":{"line":543,"column":4,"offset":20834},"forced":null,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>whenComplete</b>
+                              (
+                  func, cx, priority                )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>Fire <code class="chemdoc__id">func</code> whenever this instance stops being <a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifisLoading" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">isLoading()</a> – see
+<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifcomplete" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">complete</a>.</p><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">$('#spinner').show()
+var async = new MyAsync({...})
+async.whenComplete(function (async) {
+  $('#spinner').hide()
+})
+
+// As if:
+$('#spinner').show()
+try {
+  do_async()
+} finally {
+  $('#spinner').hide()
+}</code></pre></fieldset><table class="chemdoc__entity-table chemdoc__entity-type">
+<caption>Result Types</caption>
+<thead>
+  <tr>
+    
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><td><a id="-completeDesc" class="chemdoc__anchor chemdoc__anchor_token" href="#-completeDesc">completeDesc</a>this</td><td rowspan="1" colspan="1"></td></tr></table><p>Unlike with a simple <code>on('event')</code> (<a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">on()</a>) <code class="chemdoc__id">func</code> gets called
+immediately if the condition is already met (then <code class="chemdoc__id">priority</code> is ignored).
+Otherwise, <code class="chemdoc__id">func</code> is executed before all handlers registered with a
+larger <code class="chemdoc__id">priority</code>, among (in any order) those with the same and after
+those with a lower. The value is clamped to the <a href="../Sqimitive/c_Async.html#Sqimitive-Async--icMAX_PRIORITY" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_const mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">MAX_PRIORITY</a> range. In
+any case, <code class="chemdoc__id">func</code> is given <code class="chemdoc__id">this</code> (the <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> instance).</p><p>Warning: the following is incorrect use because <code class="chemdoc__id">func</code> may be called
+immediately, before the result is assigned to <code class="chemdoc__id">req</code>:
+<pre><code class="chemdoc__block prism language-javascript match-braces">var req = (new Sqimitive.Async).whenComplete(function () {
+  // WRONG: req may be undefined:
+  req.foo()
+})
+
+// CORRECT: assign to the variable first:
+var req = new Sqimitive.Async
+req.whenComplete(function () { ... })
+
+// CORRECT: or use the passed "this":
+;(new Sqimitive.Async)
+  .whenComplete(function (req) { ... })</code></pre></p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Async--ifwhenComplete---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L542-L544" target="_blank">lines 542-544</a> (3 lines)                                  &bull; <a href="#Sqimitive-Async--ifwhenComplete---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">whenComplete: function (func, cx, priority) {
+  return this._when(func, cx, priority, !this.isLoading(), 'complete')
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Async--ifwhenError"
+                data-entity='{"type":"func","id":840,"name":"whenError","start":{"line":554,"column":4,"offset":21070},"end":{"line":556,"column":4,"offset":21200},"forced":null,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>whenError</b>
+                              (
+                  func, cx, priority                )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>Fire <code class="chemdoc__id">func</code> whenever this instance’s operation has failed – see <a href="../Sqimitive/c_Async.html#Sqimitive-Async--iferror" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">error</a>.</p><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">async.whenError(function (async) {
+  alert("Met an error :'(")
+})</code></pre></fieldset><p class="chemdoc__anchor-inclusion"><span>from <a href="../Sqimitive/c_Async.html#-completeDesc" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="824 chemdoc__link-entity-cur">completeDesc</a></span></p><table class="chemdoc__entity-table chemdoc__entity-type">
+<caption>Result Types</caption>
+<thead>
+  <tr>
+    
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><td>this</td><td rowspan="1" colspan="1"></td></tr></table><p>Unlike with a simple <code>on('event')</code> (<a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">on()</a>) <code class="chemdoc__id">func</code> gets called
+immediately if the condition is already met (then <code class="chemdoc__id">priority</code> is ignored).
+Otherwise, <code class="chemdoc__id">func</code> is executed before all handlers registered with a
+larger <code class="chemdoc__id">priority</code>, among (in any order) those with the same and after
+those with a lower. The value is clamped to the <a href="../Sqimitive/c_Async.html#Sqimitive-Async--icMAX_PRIORITY" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_const mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">MAX_PRIORITY</a> range. In
+any case, <code class="chemdoc__id">func</code> is given <code class="chemdoc__id">this</code> (the <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> instance).</p><p>Warning: the following is incorrect use because <code class="chemdoc__id">func</code> may be called
+immediately, before the result is assigned to <code class="chemdoc__id">req</code>:
+<pre><code class="chemdoc__block prism language-javascript match-braces">var req = (new Sqimitive.Async).whenComplete(function () {
+  // WRONG: req may be undefined:
+  req.foo()
+})
+
+// CORRECT: assign to the variable first:
+var req = new Sqimitive.Async
+req.whenComplete(function () { ... })
+
+// CORRECT: or use the passed "this":
+;(new Sqimitive.Async)
+  .whenComplete(function (req) { ... })</code></pre></p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Async--ifwhenError---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L555-L557" target="_blank">lines 555-557</a> (3 lines)                                  &bull; <a href="#Sqimitive-Async--ifwhenError---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">whenError: function (func, cx, priority) {
+  return this._when(func, cx, priority, this.isSuccessful() == false, 'error')
+},</code></pre>
+                          </dd>
+                      <dt id="Sqimitive-Async--ifwhenSuccess"
+                data-entity='{"type":"func","id":841,"name":"whenSuccess","start":{"line":566,"column":4,"offset":21393},"end":{"line":568,"column":4,"offset":21526},"forced":null,"modifiers":[],"file":"async.js"}'
+                class="cp-member__header">
+              <b>whenSuccess</b>
+                              (
+                  func, cx, priority                )
+                          </dt>
+            <dd class="cp-member__info">
+                                            <div class="fmt"><p>Fire <code class="chemdoc__id">func</code> whenever this instance’s operation has succeeded – see
+<a href="../Sqimitive/c_Async.html#Sqimitive-Async--ifsuccess" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">success</a>.</p><fieldset class="chemdoc__example"><legend>Example</legend><pre><code class="chemdoc__block prism language-javascript match-braces">async.whenSuccess(app.start)</code></pre></fieldset><p class="chemdoc__anchor-inclusion"><span>from <a href="../Sqimitive/c_Async.html#-completeDesc" class="chemdoc__link-entity chemdoc__anchor-link" data-if-entity="824 chemdoc__link-entity-cur">completeDesc</a></span></p><table class="chemdoc__entity-table chemdoc__entity-type">
+<caption>Result Types</caption>
+<thead>
+  <tr>
+    
+    <th>Types</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody><tr class="chemdoc__first"><td>this</td><td rowspan="1" colspan="1"></td></tr></table><p>Unlike with a simple <code>on('event')</code> (<a href="../Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">on()</a>) <code class="chemdoc__id">func</code> gets called
+immediately if the condition is already met (then <code class="chemdoc__id">priority</code> is ignored).
+Otherwise, <code class="chemdoc__id">func</code> is executed before all handlers registered with a
+larger <code class="chemdoc__id">priority</code>, among (in any order) those with the same and after
+those with a lower. The value is clamped to the <a href="../Sqimitive/c_Async.html#Sqimitive-Async--icMAX_PRIORITY" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_const mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">MAX_PRIORITY</a> range. In
+any case, <code class="chemdoc__id">func</code> is given <code class="chemdoc__id">this</code> (the <a href="../Sqimitive/c_Async.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="824 chemdoc__link-entity-cur">Async</a> instance).</p><p>Warning: the following is incorrect use because <code class="chemdoc__id">func</code> may be called
+immediately, before the result is assigned to <code class="chemdoc__id">req</code>:
+<pre><code class="chemdoc__block prism language-javascript match-braces">var req = (new Sqimitive.Async).whenComplete(function () {
+  // WRONG: req may be undefined:
+  req.foo()
+})
+
+// CORRECT: assign to the variable first:
+var req = new Sqimitive.Async
+req.whenComplete(function () { ... })
+
+// CORRECT: or use the passed "this":
+;(new Sqimitive.Async)
+  .whenComplete(function (req) { ... })</code></pre></p></div>
+                                          <p class="cp-member__file def-snip__hdr"
+                 id="Sqimitive-Async--ifwhenSuccess---code">
+                Defined in:
+                async.js, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/async.js#L567-L569" target="_blank">lines 567-569</a> (3 lines)                                  &bull; <a href="#Sqimitive-Async--ifwhenSuccess---code" class="def-snip__toggler">Show code</a>
+                              </p>
+                                              <pre class="def-snip__code"><code class="code_block prism language-javascript match-braces">whenSuccess: function (func, cx, priority) {
+  return this._when(func, cx, priority, this.isSuccessful() == true, 'success')
+},</code></pre>
+                          </dd>
+                  </dl>
+      </div>
+
+
+<footer class="footer">
+      <span class="footer__group">
+      ⁂
+              <a href="https://squizzle.me/js/sqimitive/">
+            Sqimitive</a>    </span>
+    <span class="footer__group">
+    <a href="#">Scroll to top</a>
+  </span>
+  <span class="footer__group">
+    Generated by
+    <a href="http://squizzle.me/chem" target="_blank">Chem &amp; Chemdoc</a>
+  </span>
+  <span class="footer__group">
+    2022-12-25  </span>
+  <span class="footer__group">
+    Typo?
+    <a href="https://github.com/ProgerXP/Orphus" target="_blank">Ctrl+Enter</a>
+  </span>
+</footer>
+    <script src="../scripts.js"></script>
+
+          <link rel="stylesheet" href="../prism.css">
+      <script src="../prism.js"></script>
+      <script>
+        Prism.plugins.customClass.prefix('prism__')
+      </script>
+    
+        <script src="../entities.js"></script>
+  </body>
+</html>

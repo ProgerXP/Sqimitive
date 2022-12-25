@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html data-root="" data-entity='{"type":"page","id":796,"name":"vsbb","start":{"line":172,"column":-1,"offset":7273},"end":{"line":649,"column":-1,"offset":29283},"forced":null,"modifiers":[],"file":"HELP.chem"}'>
+  <head>
+    <meta charset="utf-8">
+    <title>Comparing with Backbone – Sqimitive</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <script>orphus = {action: 'https://proger.me/orphus.php'}</script>
+    <script src="https://proger.me/orphus.js"></script>
+
+    
+<nav class="qnbar">
+  <a href="#" class="qnbar__locate" title="Hotkey: Alt+E">&larr; Locate</a>
+  <a href="#">Top</a> of Comparing with Backbone  (<a href="?noframe" target="_blank">no frame</a>)
+          <a class="qnbar__section"
+       title=""
+       href="#Aaafd43800c">
+      OOP that makes sense</a>
+          <a class="qnbar__section"
+       title="Built-in child nesting"
+       href="#Aad4c5b88a6">
+      Built-in child nest…</a>
+          <a class="qnbar__section"
+       title="Change-driven behaviour"
+       href="#A2c94c0d234">
+      Change-driven behav…</a>
+          <a class="qnbar__section"
+       title="Events do occur on events - no cheating"
+       href="#A0061398e6d">
+      Events do occur on …</a>
+          <a class="qnbar__section"
+       title="Cloned instance properties"
+       href="#A4eeeb34b33">
+      Cloned instance pro…</a>
+          <a class="qnbar__section"
+       title=""
+       href="#A5d42dd5278">
+      Backbonization</a>
+          <a class="qnbar__section"
+       title=""
+       href="#A0db377921f">
+      General</a>
+          <a class="qnbar__section"
+       title=""
+       href="#Ad15b505cce">
+      Collection</a>
+          <a class="qnbar__section"
+       title=""
+       href="#Aa559b87068">
+      Model</a>
+          <a class="qnbar__section"
+       title=""
+       href="#A4351cfebe4">
+      View</a>
+          <a class="qnbar__section"
+       title=""
+       href="#A85211868dc">
+      Babysitting Models</a>
+  </nav>
+
+  <div class="up">
+          <article class="fmt">
+        <h1 id="A3abef359b3" class="chemdoc__h1">Comparing with Backbone</h1><p>Sqimitive has been inspired by Backbone.js (<a href="https://backbonejs.org/" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:</a>) and was written as a solution to most annoying problems after working with Backbone for months in a production project. It avoids certain less used (read: project-specific) features while conceptually bringing the rest under one roof. In particular, Sqimitive:</p><ul><li>Removes somewhat artificial separation for Model, Collection and View classes providing a single unified “primitive” (the “sqimitive”). This way Views can use options (<a href="p_ov.html#-opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="797 chemdoc__link-entity-cur">opt</a> – attributes with on-change notifications, <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifchange_OPT" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">change_OPT</a>), Underscore.js helpers (<a href="p_util.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_page mmods-fg " data-if-entity="799 chemdoc__link-entity-cur">util</a>), object nesting (<a href="p_ov.html#-chld" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="797 chemdoc__link-entity-cur">chld</a> – just like Collections), jQuery/Zepto bindings (<code>this.el</code>, <a href="Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivelEvents" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">jQuery.elEvents</a>) and every other feature, shared by all, not imposed on any.</li><li>Greatly expands on the idea of events (<a href="p_ov.html#-evt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="797 chemdoc__link-entity-cur">evt</a>), making inheritance as sensible as possible given JavaScript’s idea of OOP and adding automatic event management for connected objects (e.g. elements of a collection – <a href="Sqimitive/c_Base.html#Sqimitive-Base--iv_childEvents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_childEvents</a>).</li><li>Removes server-side communication layer (<a href="https://backbonejs.org/#Model-sync" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Model-sync</a>) while keeping routines to smart-update object states (<a href="Sqimitive/c_Base.html#Sqimitive-Base--ifassignChildren" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">assignChildren()</a>, <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifassignResp" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">assignResp()</a>). Instead of overriding parts of the library (as it’s often done with Backbone) you implement them yourself just once given your unique project requirements.</li></ul><p>While different, Sqimitive will appear very familiar to Backbone users and being paradigm-free, it will even let you work the way you used with Backbone or another framework – in aspects you wish. You can create your own Model, Collection and View classes to follow MVC, use traditional <code class="chemdoc__id">__super__</code>-style inheritance, write your specific <code>sync()</code> routines and so on.</p><p>This section highlights most notable gaps present in Backbone and other frameworks. Strictly subjective!</p><h2 id="Aaafd43800c" class="chemdoc__h2">OOP that makes sense</h2><p>In Backbone and other JavaScript frameworks inheritance (overriding of parent properties and methods) is painful.</p><p><b>With properties</b>, if it’s a complex object that you would rather extend (append to) rather than replace entirely – as it is the case with <a href="https://backbonejs.org/#Model-attributes" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Model-attributes</a>, <a href="https://backbonejs.org/#Model-defaults" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Model-defaults</a>, <a href="https://backbonejs.org/#View-events" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:View-events</a> (DOM bindings) and others – you have to add them in the constructor because if you define such a property in the child class you will <b>entirely overwrite the inherited value</b>. Moreover, if at some point the base class that did not have that property decided to declare it – all its subclasses overwrite it without notice… Unless you remember to update them, which is an unnecessary cognitive burden.</p><p><b>With methods</b>, you have to hardcode reference to the base class – that’s not to mention the entire construct which is already ugly: <code>My.Class.__super__.baseMethod.apply(this, arguments)</code>. So if you later rename the base class or move this subclass under another parent, or rename the method, or just make a typo – the entire inheritance chain for this method is broken. You may or may not get an error, too.</p><p>This is the price for trying to push classic OOP into JavaScript prototype model.</p><p>Sqimitive solves both problems by using <a href="Sqimitive/c_Core.html#Sqimitive-Core--sv_mergeProps" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_static mmods-fg_protected" data-if-entity="909 chemdoc__link-entity-cur">_mergeProps</a> for listing which properties should be merged together on extension. For methods, there is a fantastic event-driven inheritance (<a href="p_ov.html#-evt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="797 chemdoc__link-entity-cur">evt</a>) that makes JavaScript OO coding a breeze. Any method can be turned into an event without altering the base class, it can be temporary (<a href="Sqimitive/c_Core.html#Sqimitive-Core--ifonce" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">once()</a>) and works for “traditional” events too, like <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifchange" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">change</a> notifications.</p><p>At the same time, the <code class="chemdoc__id">__super__</code> way of doing this is still available if you are feeling a bit masochistic.</p><p>Below is just one simple example. Look for more details at the mentioned sections.</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var MyBaseClass = Sqimitive.jQuery.extend({
+  complexProp: {
+    base: 123,
+  },
+
+  init: function () {
+    alert('I init()!')
+  },
+})
+
+// _mergeProps is a static property.
+MyBaseClass._mergeProps.push('complexProp')
+
+var MySubclass = MyBaseClass.extend({
+  complexProp: {
+    sub: 'foo',
+  },
+
+  events: {
+    init: function () {
+      alert('Now I init() too!')
+    },
+  },
+})
+
+var obj = new MySubclass
+  // 1. alert: I init()!
+  // 2. alert: Now I init() too!
+alert(obj.complexProp.base)
+  // alert: 123
+alert(obj.complexProp.sub)
+  // alert: foo</code></pre></p><h2 id="Aad4c5b88a6" class="chemdoc__h2">Built-in child nesting</h2><p>Backbone offers no nested views out of the box. There are plugins such as Babysitter (from Marionette.js, <a href="https://github.com/marionettejs/backbone.babysitter" class="chemdoc__custom-link chemdoc__proto-https" target="_blank">https://github.com/marionettejs/backbone.babysitter</a>) but they don’t provide a complete solution.</p><p>In Sqimitive, nested views are native. When used, they are automatically managed: elements and event listeners removed (<a href="Sqimitive/c_Core.html#Sqimitive-Core--ifautoOff" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">autoOff()</a>) when the corresponding view is removed, DOM events rebound (<a href="Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivelEvents" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">jQuery.elEvents</a>) and root element reinserted (<a href="Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">jQuery.attach()</a>) when root element is moved (e.g. on <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifrender" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">render()</a>), it is possible to filter (<a href="p_util.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_page mmods-fg " data-if-entity="799 chemdoc__link-entity-cur">util</a>) nested views using Underscore methods (just like filtering contents of <a href="https://backbonejs.org/#Collection" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Collection</a>s in Backbone), receive notifications about newly <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifnested" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nested</a>/<a href="Sqimitive/c_Base.html#Sqimitive-Base--ifunnested" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">unnested</a>/changed views, maintain sort order (<a href="Sqimitive/c_Ordered.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">Ordered</a>, <a href="Sqimitive/c_Ordered.html#Sqimitive-Ordered--if_repos" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="1033 chemdoc__link-entity-cur">_repos</a>) and so on.</p><p>No more need for <code>delegateEvents()</code>, <code>off(null, null, this)</code> or <code>return this</code> (when overriding <code>render()</code> thanks to <a href="Sqimitive/c_Core.html#-evtpf" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">evtpf</a>).</p><p>See more details and examples in the Views overview section (<a href="p_ov.html#-vw" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="797 chemdoc__link-entity-cur">vw</a>).</p><h2 id="A2c94c0d234" class="chemdoc__h2">Change-driven behaviour</h2><p>In Backbone and other frameworks, you have to track changes to your data and view states. Backbone eases this task by providing standard events like <code>change:attr</code> event for Models. However, this approach must be brought further to let us take full advantage of it.</p><p>In Sqimitive, you get a special object property – <a href="Sqimitive/c_Base.html#Sqimitive-Base--iv_opt" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">Base._opt</a> (“options”) – that is a pool of trackable states, similar to Backbone’s <a href="https://backbonejs.org/#Model-attributes" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Model-attributes</a>. Items in this pool are read with <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifget" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">get()</a> and written with <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifset" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">set()</a>. When a new and different value is written a bunch of events occurs; within their listeners you can cancel or normalize the change (<a href="Sqimitive/c_Base.html#Sqimitive-Base--ifnormalize_OPT" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">normalize_OPT()</a>) or perform an action (<a href="Sqimitive/c_Base.html#Sqimitive-Base--ifchange_OPT" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">change_OPT()</a> and <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifchange" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">change()</a>). Parent sqimitives can optionally forward their children events to themselves (<a href="Sqimitive/c_Base.html#Sqimitive-Base--iv_childEvents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_childEvents</a>).</p><p>This can be used to create event observation spots too. Suppose that you have an object that’s loading some data from the server. Since it’s asynchronous you don’t know when (or if) it will finish. Usually you would either create a callback property and call it or use a custom event (like jQuery and Backbone do) and trigger it once loading is done. In Sqimitive, you simply introduce some <code>_opt.loading</code>, set it to <code class="chemdoc__id">false</code> initially and once done – change to <code class="chemdoc__id">true</code>. Observers listen to the <code class="chemdoc__id">change_loading</code> event having the full set of event handling routines at their disposal (<a href="Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">on</a>, <a href="Sqimitive/c_Core.html#Sqimitive-Core--ifonce" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">once</a>, <a href="Sqimitive/c_Core.html#Sqimitive-Core--iffuse" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">fuse</a>, <a href="Sqimitive/c_Core.html#Sqimitive-Core--ifoff" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">off</a>, <a href="Sqimitive/c_Core.html#Sqimitive-Core--ifautoOff" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">autoOff</a>, <a href="Sqimitive/c_Core.html#Sqimitive-Core--iflogEvents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">logEvents</a>, etc.) instead of introducing <code>isLoading()</code>, <code>abortLoading()</code>, <code>onLoading()</code>, etc.</p><p>Thanks to the new option, this starts working the other way too: an external object can <code>set('loading', true)</code> to trigger data refresh on the object. Better still – the loading object itself can set this option to trigger its own loading routine – naturally, avoiding code duplication.</p><p>Moreover, since options are not accessed directly you can always listen for their access with <code class="chemdoc__id">get</code> or add custom behaviour with <code class="chemdoc__id">set</code>, disregarding the fact they are originally methods (<a href="Sqimitive/c_Base.html#Sqimitive-Base--ifget" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">get()</a>, <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifset" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">set()</a>). Lack of direct access to <a href="p_ov.html#-opt" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_anchor mmods-fg " data-if-entity="797 chemdoc__link-entity-cur">opt</a>’ions improves stability of the code base.</p><p>Given this mechanism you can significantly lower your <code>render()</code> and custom event rates while being much more aware of what has triggered the change at the same time, performing incremental (lightweight) updates. And since Models and Views are the same thing in Sqimitive these principles work universally for any kind of object you might have.</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var MyView = Sqimitive.jQuery.extend({
+  _opt: {
+    loading: false,
+    people: [],   // array of names.
+  },
+
+  // We will keep jqXHR object here to be able to abort the request.
+  _loadingXHR: null,
+
+  events: {
+    init: function () {
+      // Wait 300 msec and then start fetching server data.
+      _.delay(_.bind(this.set, this, 'loading', true), 300)
+    },
+
+    // Loading was either cancelled or started.
+    change_loading: function (value) {
+      // Update class name of our DOM element.
+      this.el.toggleClass('loading', value)
+      // Abort old request, if any.
+      this._loadingXHR &amp;&amp; this._loadingXHR.abort()
+
+      if (value) {
+        // Fetch the data, pass to _load().
+        this._loadingXHR = $.getJSON('api/get/some', _.bind(this._load, this))
+      }
+    },
+
+    // _opt.people changed - update names.
+    change_people: '_updatePeople',
+
+    render: function () {
+      // Retrieve all _opt to pass them to the template.
+      var vars = this.get()
+      // Overwrite with new HTML.
+      this.el.html(_.template($('#MyViewTemplate').text(), vars))
+      // Add peoples' names.
+      this._updatePeople()
+    },
+  },
+
+  _updatePeople: function () {
+    var el = this.$('.people').empty()
+
+    _.each(this.get('people'), function (name) {
+      $('&lt;em&gt;').text(name).appendTo(el)
+    })
+  },
+
+  _load: function (resp) {
+    // Do something with resp, then finally:
+    this.set('loading', false)
+  },
+})</code></pre></p><h2 id="A0061398e6d" class="chemdoc__h2">Events do occur on events – no cheating</h2><p>If you have used Backbone’s <code class="chemdoc__id">add</code>, <code class="chemdoc__id">remove</code> and <code class="chemdoc__id">change</code> events then you probably know that they do not occur… always. For example, if you <code>reset()</code> a Collection it won’t fire <code class="chemdoc__id">add</code> for new Models, <code class="chemdoc__id">remove</code> for gone or <code class="chemdoc__id">change</code> for existing Models that were updated.</p><p>This smells like an optimization – after all, firing hundreds of events when resetting a huge Collection might be slow. However, such cases are very rare and yet the existence of <code>reset()</code> makes it problematic to track the updates because often you will end up with your own routine bound to <code class="chemdoc__id">reset</code> as an event that will figure the difference between old Collection contents and new one.</p><p>This also happens with attribute normalization on Models that for some reason doesn’t occur when assigning an API response.</p><p>Sqimitive fires events when things change, period. In case you do have a performance-heavy object you can always implement your own, less “noisy” and more optimized update routines. However, 90% of the time you will rely on <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nest</a>, <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifunnested" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">unnested</a>, <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifchange" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">change</a> and others to keep you notified.</p><h2 id="A4eeeb34b33" class="chemdoc__h2">Cloned instance properties</h2><p>In JavaScript, when you create a prototype with properties having non-scalar values (like objects or arrays) what you actually create are <b>shared instance properties</b>. If at run-time you modify such a property (but not reassign it) this operation will affect all objects where that property was defined, unless its value was overwritten with a new object.</p><p>Backbone inherits this behaviour which most of the time leads to very confusing results (from the human’s perspective). Consider this snippet (<a href="http://jsfiddle.net/Proger/vwqk67h8/" class="chemdoc__custom-link chemdoc__proto-http" target="_blank">http://jsfiddle.net/Proger/vwqk67h8/</a>):</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var MyView = Backbone.View.extend({foo: []})
+var first = new MyView
+var second = new MyView
+first.foo.push(123)
+alert(second.foo[0])
+// alert: 123</code></pre></p><p>The only way around is to assign such properties in the constructor, which you should first override using the crazy <code>My.Class.__super__.baseMethod.apply(this, arguments)</code> construct. This gives your code -50 points in the ability to save kittens on this planet!</p><p>Sqimitive eliminates this problem by automatically deep cloning (<a href="Sqimitive/c_Core.html#Sqimitive-Core--sfdeepClone" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_static" data-if-entity="909 chemdoc__link-entity-cur">deepClone</a>) all complex values upon new object instantiation. Of course, sometimes this is not desired – for this you can always assign them in the constructor just like before or list them in <a href="Sqimitive/c_Core.html#Sqimitive-Core--sv_shareProps" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_static mmods-fg_protected" data-if-entity="909 chemdoc__link-entity-cur">_shareProps</a> to prevent automatic cloning.</p><h2 id="A5d42dd5278" class="chemdoc__h2">Backbonization</h2><p>The following tricks can be used to make Sqimitive’s API appear more like Backbone’s. It will not make it 100% identical so don’t use it in production as is – it’s intended to give you some pointers.</p><h3 id="A0db377921f" class="chemdoc__h3">General</h3><p>In Backbone, <a href="Sqimitive/c_Core.html#Sqimitive-Core--iv_cid" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="909 chemdoc__link-entity-cur">_cid</a> is named <a href="https://backbonejs.org/#Model-cid" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Model-cid</a>, <a href="Sqimitive/c_jQuery.html#Sqimitive-jQuery--ivel" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">jQuery.el</a> is <a href="https://backbonejs.org/#View-%24el" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:View-$el</a> with the <a href="https://backbonejs.org/#View-el" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:View-el</a> counterpart (native DOM node), <a href="Sqimitive/c_Core.html#Sqimitive-Core--iffire" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">fire()</a> is named <a href="https://backbonejs.org/#Events-trigger" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Events-trigger</a>(), <a href="https://backbonejs.org/#Events-listenTo" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Events-listenTo</a>() and <a href="https://backbonejs.org/#Events-stopListening" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Events-stopListening</a>() are <a href="Sqimitive/c_Core.html#Sqimitive-Core--ifautoOff" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">autoOff()</a>  flavours, <a href="https://backbonejs.org/#Model-toJSON" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Model-toJSON</a>() is basically <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifget" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">get()</a>, <a href="https://backbonejs.org/#Model-attributes" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Model-attributes</a> is the same as <a href="Sqimitive/c_Base.html#Sqimitive-Base--iv_opt" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">Base._opt</a>, <a href="https://backbonejs.org/#Model-defaults" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Model-defaults</a> are declaration-time <code class="chemdoc__id">_opt</code>.</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var BackboneBase = Sqimitive.Base.extend('BackboneBase', {
+  cid: null,    // alias to _cid; do not write to.
+
+  events: {
+    '-init': function () {
+      this.cid = this._cid
+    },
+
+    init: function () {
+      this._childClass = this._childClass || this.model   // used below.
+    },
+  },
+
+  trigger: function (event, arg_1) {
+    return this.fire(event, _.rest(arguments))
+  },
+
+  listenTo: function (sqim, event, func) {
+    this.autoOff(sqim, _.object([[event, func]]))
+    return this
+  },
+
+  stopListening: function (sqim, event, func) {
+    if (!arguments.length) {
+      return this.autoOff()
+    } else if (func || (sqim &amp;&amp; event)) {
+      throw new Error('Unsupported stopListening() call.')
+    } else {
+      return this.off(event || sqim)
+    }
+  },
+})</code></pre></p><h3 id="Ad15b505cce" class="chemdoc__h3">Collection</h3><p>Collections have <a href="https://backbonejs.org/#Collection-model" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Collection-model</a> (a class reference) which simply specifies <a href="Sqimitive/c_Base.html#Sqimitive-Base--iv_childClass" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_childClass</a>, <a href="https://backbonejs.org/#Collection-reset" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Collection-reset</a>() is alike to <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifassignChildren" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">assignChildren</a> (<code class="chemdoc__id">Collection</code>’s <a href="https://backbonejs.org/#Collection-set" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Collection-set</a>() is entirely different though), <a href="https://backbonejs.org/#Collection-push" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Collection-push</a>(), <a href="https://backbonejs.org/#Collection-pop" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Collection-pop</a>(), <a href="https://backbonejs.org/#Collection-shift" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Collection-shift</a>(), <a href="https://backbonejs.org/#Collection-unshift" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Collection-unshift</a>() are shortcuts for <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifnest" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">nest()</a> and the company of <a href="p_util.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_page mmods-fg " data-if-entity="799 chemdoc__link-entity-cur">util</a> (Sqimitive by default is not <a href="Sqimitive/c_Ordered.html" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_class mmods-fg " data-if-entity="1033 chemdoc__link-entity-cur">Ordered</a>), <a href="https://backbonejs.org/#Model-clone%28%29" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Model-clone()</a> is another shortcut for non-<a href="Sqimitive/c_Base.html#Sqimitive-Base--iv_owning" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_owning</a> lists. Models are keyed by their <a href="https://backbonejs.org/#Model-id" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Model-id</a> attribute value (or <a href="https://backbonejs.org/#Model-idAttribute" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Model-idAttribute</a>) which are like <a href="Sqimitive/c_Base.html#Sqimitive-Base--if_defaultKey" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_defaultKey()</a>.</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var BackboneCollection = BackboneBase.extend('BackboneCollection', {
+  model: null,  // alias to _childClass; do not write to.
+  el: null,
+  idAttribute: 'id',
+
+  events: {
+    '=assignChildren': function (sup, resp, options) {
+      options = _.extend(options || {}, {eqFunc: this.idAttribute})
+      return sup(this, [resp, options])
+    },
+  },
+
+  _defaultKey: function (model) {
+    return model.get(this.idAttribute)
+  },
+
+  reset: function (models, options) {
+    if (!arguments.length) {
+      this.each(this.unlist, this)
+    } else {
+      this.assignChildren(models, {
+        eqFunc: this.idAttribute || 'id',
+        keepMissing: !('remove' in options) || !options.remove,
+      })
+    }
+
+    return this
+  },
+
+  push: function (model) {
+    this.nest(model)
+  },
+
+  unshift: function (model) {
+    this.nest(model)
+  },
+
+  pop: function () {
+    var model = this.last()
+    model &amp;&amp; model.remove()
+    return model
+  },
+
+  shift: function () {
+    var model = this.first()
+    model &amp;&amp; model.remove()
+    return model
+  },
+
+  toJSON: function () {
+    return this.invoke('get')
+  },
+
+  clone: function () {
+    if (this._owning) {
+      throw new Error('clone() will clear the original collection.')
+    }
+
+    var copy = new this.constructor(this.get())
+    this.each(function (child, key) { copy.nest(key, child) })
+    return copy
+  },
+})</code></pre></p><h3 id="Aa559b87068" class="chemdoc__h3">Model</h3><p>Models’ <a href="https://backbonejs.org/#Model-escape" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Model-escape</a>() and <a href="https://backbonejs.org/#Model-has" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Model-has</a>() are shortcuts for <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifget" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">get()</a>. <a href="https://backbonejs.org/#Model-id" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:Model-id</a> option (“attribute”) is readable/writable as <code>get('id')</code>/<code>set('id', ...)</code> and also readable directly as <code>obj.id</code> (write attempts won’t be caught nor will they change the “real” <code class="chemdoc__id">id</code>).</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var BackboneModel = BackboneBase.extend('BackboneModel', {
+  attributes: {}, // alias to _opt; do not write to.
+  defaults: {},   // alias to declaration-time _opt; do not write to.
+  id: null,       // alias to get('id'); do not write to.
+
+  _opt: {
+    id: null,
+  },
+
+  events: {
+    '-init': function () {
+      this.defaults = Sqimitive.Core.deepClone(this._opt)
+    },
+
+    init: function () {
+      this.attributes = this._opt
+    },
+
+    change_id: function (id) { this.id = id },
+  },
+
+  toJSON: function () {
+    return this.get()
+  },
+
+  escape: function (opt) {
+    return _.escape(this.get(opt))
+  },
+
+  has: function (opt) {
+    return this.get(opt) != null    // undefined or null.
+  },
+})</code></pre></p><h3 id="A4351cfebe4" class="chemdoc__h3">View</h3><p>Views have <a href="https://backbonejs.org/#View-setElement" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:View-setElement</a>(), <a href="https://backbonejs.org/#View-delegateEvents" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:View-delegateEvents</a>() and <a href="https://backbonejs.org/#View-undelegateEvents" class="chemdoc__custom-link chemdoc__proto-bb" target="_blank">bb:View-undelegateEvents</a>() that are similar to <a href="Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">jQuery.attach()</a>.</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var BackboneView = BackboneBase.extend('BackboneView', {
+  el: null,     // el must remain a wrapped jQuery node in Sqimitive.
+  $el: null,    // alias to el; do not write to.
+
+  events: {
+    init: function () {
+      this.$el = this.el
+    },
+  },
+
+  setElement: function (el) {
+    this.undelegateEvents() // unnecessary since attach() does this already.
+    this.el = this.$el = el
+    return this.attach()    // only binds events if el has no parent.
+  },
+
+  delegateEvents: function (events) {
+    this.elEvents = events
+    return this.attach()    // only binds events if el has no parent.
+  },
+
+  undelegateEvents: function () {
+    this.el.off('.sqim-' + this._cid)
+  },
+})</code></pre></p><h3 id="A85211868dc" class="chemdoc__h3">Babysitting Models</h3><p>One of the most common problems when developing a complex client-side app is keeping track of multiple Models or of a Collection connected to a particular View. When a new Model appears you need to create and display a new nested View; when it’s removed – its View should go away; when Model attributes change the View should be updated (and this case is often but not always handled by that Model’s specific View).</p><p>On top of that, when parent View acquires another Collection it should properly detach itself from the previously assigned Collection, attach to the new object and repopulate itself.</p><p>Things get even more complex with asynchronous operations – sometimes the user gets ahead of his network packets and you don’t want the user interface to tangle up.</p><p>Sqimitive addresses all of these challenges:</p><ul><li>Attach/detach event handlers to the related Collection with <a href="Sqimitive/c_Core.html#Sqimitive-Core--ifautoOff" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">autoOff()</a> or <code>off(collection)</code> (<a href="Sqimitive/c_Core.html#Sqimitive-Core--ifoff" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">off</a>).</li><li>Keep that Collection as an option (<a href="Sqimitive/c_Base.html#Sqimitive-Base--iv_opt" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">Base._opt</a>) so once it changes you receive <code>change_collection(newCol, oldCol)</code> event (<a href="Sqimitive/c_Base.html#Sqimitive-Base--ifchange_OPT" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">change_OPT</a>).</li><li>Make sure only proper Collections are assigned by checking the value-to-be-set in <code>normalize_collection(newCol)</code> (<a href="Sqimitive/c_Base.html#Sqimitive-Base--ifnormalize_OPT" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">normalize_OPT</a>).</li><li>Listen to new Models with <a href="Sqimitive/c_Core.html#Sqimitive-Core--ifon" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="909 chemdoc__link-entity-cur">on</a> on <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifnestEx" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">Base.nestEx</a> (<code>on('+nestEx')</code>) and to gone Models on <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifunnested" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">unnested</a>.</li><li>Listen to changed Models via <a href="Sqimitive/c_Base.html#Sqimitive-Base--iv_childEvents" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="977 chemdoc__link-entity-cur">_childEvents</a>: set it to <code>['change']</code> and listen to <code>on('.change')</code>.</li><li>Automatically manage nested Views’ connections to DOM with <code class="chemdoc__id">attachPath</code> (<a href="Sqimitive/c_jQuery.html#Sqimitive-jQuery--iv_opt" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_var mmods-fg mmods-fg_protected" data-if-entity="882 chemdoc__link-entity-cur">jQuery._opt</a>) and <a href="Sqimitive/c_jQuery.html#Sqimitive-jQuery--ifattach" class="chemdoc__custom-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="882 chemdoc__link-entity-cur">jQuery.attach()</a>. Quite often there’s no need for <a href="Sqimitive/c_Base.html#Sqimitive-Base--ifrender" class="chemdoc__anchor-link chemdoc__link-entity member-fg member-fg_func mmods-fg " data-if-entity="977 chemdoc__link-entity-cur">render()</a> at all.</li></ul><p>Sample code below demonstrates this in practice. It’s a good idea to make a class handling this basic logic and reuse it throughout your project.</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var ParentView = Sqimitive.jQuery.extend({
+  _childClass: ChildView,
+
+  _opt: {
+    collection: null,   // Collection.Foo.
+  },
+
+  normalize_collection: function (newCol) {
+    if (!(newCol instanceof Collection.Foo)) {
+      throw new Error('Bad collection type.')
+    } else {
+      return newCol
+    }
+  },
+
+  change_collection: function (newCol, oldCol) {
+    // Unbind self from the old collection, if any.
+    oldCol &amp;&amp; oldCol.off(this)
+
+    // Clear existing nested Views, if any (this form only works if _owning).
+    this.invoke('remove')
+
+    // Set up the link to the new collection.
+    if (newCol) {
+      this.autoOff(newCol, {
+        nestEx: function (options) {
+          options.changed &amp;&amp; this._modelAdded(options.child)
+        },
+        unnested: '_modelRemoved',
+        // Requires that the collection declares _childEvents: ['change'].
+        '.change': '_modelChanged',
+      })
+
+      // Populate with the existing models.
+      newCol.each(this._modelAdded, this)
+    }
+  },
+
+  _modelAdded: function (model) {
+    // This is the place where a new View gets created, nested and linked to
+    // the model. First argument to nest() is view's parent key by which it
+    // can be retrieved later. Model's ID is usually unique so use it if you
+    // have one. If this key already existed then that View will be removed
+    // and replaced with the new View.
+    var view = this.nest(model.get('id'), new this._childClass({
+      model: model,
+      attachPath: '.models',
+    }))
+
+    // Append view.el to this.el.find('.models') and bind its DOM event
+    // listeners. This won't render() the View but it might listen to
+    // 'attach' and call render() automatically.
+    view.attach()
+    // ...If it doesn't auto-render - no big deal:
+    view.render()
+  },
+
+  _modelRemoved: function (model) {
+    var view = this.nested(model.get('id'))
+    if (view) {
+      // Removes view's DOM element from this.el and unnests view from this
+      // children. This essentially unbinds view's DOM listeners and its
+      // Sqimitive listeners on the parent (this).
+      view.remove()
+    } else {
+      console.warn('Removed a Model with no nested View.')
+    }
+  },
+
+  _modelChanged: function (model) {
+    // Update something when model's options change...
+  },
+})</code></pre></p><p>The above code can be used like this:</p><p><pre><code class="chemdoc__block prism language-javascript match-braces">var col = new Collection.Foo
+col.nest(new Model.Foo({id: 1}))
+
+new ParentView({collection: col, attachPath: 'body'})
+  // Gets created with one nested ChildView (existing Model in col).
+  // ParentView's el is appended to &lt;body&gt;.
+
+col.nest(new Model.Foo({id: 2}))
+  // New ChildView nested. Now col.length and ParentView's length are 2.
+
+col.nested(2).remove()
+  // Removed the just nested View after retrieving it by its key ("id" here).
+
+col.nested(1).set('smth', 'foo')
+  // The '.change' event got fired on ParentView.</code></pre></p>      </article>
+    
+    <div class="entity-info">
+      <p class="entity-info__file">
+        Defined in:
+        HELP.chem, <a href="https://github.com/ProgerXP/Sqimitive/blob/e3ca0da61659b8f47cfead401e705fef592f15b8/HELP.chem#L173-L650" target="_blank">lines 173-650</a> (478 lines)      </p>
+    </div>
+  </div>
+
+
+<footer class="footer">
+      <span class="footer__group">
+      ⁂
+              <a href="https://squizzle.me/js/sqimitive/">
+            Sqimitive</a>    </span>
+    <span class="footer__group">
+    <a href="#">Scroll to top</a>
+  </span>
+  <span class="footer__group">
+    Generated by
+    <a href="http://squizzle.me/chem" target="_blank">Chem &amp; Chemdoc</a>
+  </span>
+  <span class="footer__group">
+    2022-12-25  </span>
+  <span class="footer__group">
+    Typo?
+    <a href="https://github.com/ProgerXP/Orphus" target="_blank">Ctrl+Enter</a>
+  </span>
+</footer>
+    <script src="scripts.js"></script>
+
+          <link rel="stylesheet" href="prism.css">
+      <script src="prism.js"></script>
+      <script>
+        Prism.plugins.customClass.prefix('prism__')
+      </script>
+    
+        <script src="entities.js"></script>
+  </body>
+</html>

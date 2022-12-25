@@ -1,241 +1,442 @@
-/*! normalize.css v3.0.1 | MIT License | git.io/normalize */
-html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,strong{font-weight:bold}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-0.5em}sub{bottom:-0.25em}img{border:0}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}pre{overflow:auto}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{height:auto}input[type="search"]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid #c0c0c0;margin:0 2px;padding:.35em .625em .75em}legend{border:0;padding:0}textarea{overflow:auto}optgroup{font-weight:bold}table{border-collapse:collapse;border-spacing:0}td,th{padding:0}
+@charset "UTF-8";
+@import url(normalize.css);
 
-/***
-  Sqimitive page styles
- ***/
+* { box-sizing: border-box; }
+body { font-family: Gadugi, Segoe UI, sans-serif; background: #fff; }
+a:not(:hover) { text-decoration: none; }
+a:focus { outline: 1px dotted; }
+h1, h2 /*, h3, h4, h5, h6*/ { font-weight: normal; }
+h1, h2, h3, h4, h5, h6 { font-family: Georgia, Constantia, serif; }
 
-#orphusp .logo { float: right; }
-#orphusp .legend { font-weight: bold; }
-
-#orphusp .fragment {
-  font-family: sans-serif;
-  text-align: center;
-  background: white;
-  margin: 1em -1em;
-  padding: 0.5em 0;
+code.code_block,
+code.chemdoc__block {
+  padding: .4em .5em;
+  background: #f1f1f1;
+  line-height: 1.1em;
+  color: navy;
+  display: block;
+  white-space: pre-wrap;
+  /*border: 1px solid #e1e1e1;*/
 }
 
-#orphusp .hint { margin-bottom: 1em; }
-#orphusp form { padding: 0; margin: 0; border: 0 }
-#orphusp [type=text] { width: 100%; margin: 0.2em 0 1em; }
-#orphusp .buttons { text-align: center; }
-#orphusp .buttons input { cursor: pointer; }
-#orphusp [type=submit] { font-weight: bold; }
-
-body {
-  font-family: "Trebuchet MS",sans-serif;
-  margin: 0 1rem 0 22%;
-  font-size: 0.875rem;
-  line-height: 1.33em;
+code.prism {
+  color: black;
 }
 
-nav {
+.footer {
+  color: gray;
+  border-top: 1px solid #ddd;
+  //margin-top: 2em;
+  padding: .5em 1em .5em 4em;
+}
+
+.footer__group + * {
+  margin-left: 2em;
+}
+
+/* (u)ser(p)age, (n)ame(s)pace(p)age, (c)lass(p)age */
+.up, .nsp, .cp { margin: 1em; }
+.cp h1 { margin-top: -1rem; }
+
+/* (i)ndex (p)age */
+.ip { margin: 0 0 0 23%; /* .ip-nav width */ }
+
+.ip-nav {
   position: fixed;
   left: 0;
   top: 0;
-  width: 20%;
+  width: 23%;
   height: 100%;
   overflow: auto;
-  background: #fcfcfc;
+  background: #f1f1f1;
+  border-right: 3px double #E1E1E1;
+  padding: 1em;
+  line-height: 1.33em;
 }
 
-nav ol {
-  margin: 0.5em 0 0.5em 0.75em;
-  padding: 0;
-  list-style: none;
+.ip-nav .sch { margin-top: 0; }
+
+.ip-nav li:hover { list-style: circle; }
+.ip-nav__classes ul { padding: 0; margin: 0; list-style: none; }
+.ip-nav__classes > ul { margin: 1em 0; }
+.ip-nav__classes ul ul { padding-left: 1em; }
+.ip-nav__classes a { display: block; /* easier to click */ }
+.ip-nav__ns > a { font-weight: bold; }
+
+.ip-nav__ns > ul {
+  background: repeat-y .3em 0 url("data:image/gif;base64,R0lGODlhAQADAIABAKqqqv///yH5BAEAAAEALAAAAAABAAMAAAICRFIAOw==");
 }
 
-nav > ol {
-  margin: 1em 0.75em 1em;
+.ip-nav__ns > ul:hover {
+  background-image: url("data:image/gif;base64,R0lGODlhAQADAIABAAAA/////yH5BAEAAAEALAAAAAABAAMAAAICRFIAOw==");
 }
 
-nav > ol > li > a:first-child {
-  font-weight: bold;
+.ip-nav__self:before,
+.ip-nav__self:after {
+  color: silver;
 }
 
-nav ol + ol { margin-top: 1em; }
+.ip-nav__self:before { content: "("; }
+.ip-nav__self:after { content: ")"; }
+.ip-nav__item_cur { list-style: disc; color: red; }
 
-nav li li {
-  font-size: 0.9rem;
+.ip-frame {
+  border: 0;
+  position: fixed;
+  width: 77%;  /* 100% - .ip margin-left */
+  height: 100%;
 }
 
-nav > ol > li:nth-child(2) li { margin: 0; }
-
-nav a {
-  color: #104167;
-  text-decoration: none;
-  display: inline-block;
-}
-
-nav a:hover {
-  text-decoration: underline;
-}
-
-nav a.fl::first-letter {
-  color: red;
-  text-transform: uppercase;
-}
-
-nav .sort > a {
-  display: block;
-  height: 1.33em;   /* breaks height on columns output */
-}
-
-nav [type=checkbox] { margin: 0 0 0 0.3em; }
-
-nav [type=checkbox]:not(:checked) ~ ol li {
-  -webkit-column-width: 6em;
-  -moz-column-width: 6em;
-  column-width: 6em;
-}
-
-kbd {
-  background: #FFECC6;
-  color: black;
-  font-size: 0.86em;
-}
-
-#install {
-  font-weight: bold;
-}
-
-#install img {
-  margin: 0 0.25em 0 1em;
-  vertical-align: middle;
-}
-
-#install :first-child {
-  margin-left: 0;
-}
-
-.dl {
-  padding: 0.1px 1em;
-  background: #eaeaea;
-  margin: 1em -1rem 1em -0.75em;
-}
-
-.dl p:before {
-  content: "→ ";
+.ip-help {
+  font-size: .81em;
   color: gray;
+  text-align: right;
+  margin: 0 0 1em;
 }
 
-a.a {
-  visibility: hidden;
-  margin-left: 0.5em;
-}
+.ip-help > * { margin-right: .5em; }
+.sch_ready + .ip-help { margin-top: 2.5em; }
+.sch:not(.sch_ready) + .ip-help .ip-help__sch-hotkey { display: none; }
 
-:hover > a.a { visibility: visible; }
-
-h1, h2, h3, h4, h5, #book {
-  font-family: Georgia,"Palatino Linotype","Book Antiqua3",Palatino,"Garamond Premr Pro",Garamond,Baskerville,"Hoefler Text","Times New Roman",serif;
-  margin: 2em 0 1em 0;
-}
-
-h1 {
-  font-weight: normal;
-  line-height: 1.7em;
-  margin: 0.5em 0 1em;
-}
-
-@media (max-width: 1090px) {
-  h1 { font-size: 1.8em; }
-}
-
-h3 {
-  font-size: 1rem;
-}
-
-h4 {
-  color: #104167;
-}
-
-pre {
-  background: #f5f5f5;
-  font-size: 0.75rem;
-  max-height: 850px;
-  overflow: auto;
-  padding: 0.15em 0.3em 0.15em 1.05em;
-  margin-left: -0.75em;
-  margin-right: -1rem;
-}
-
-li {
-  margin-top: 0.3em;
-  margin-bottom: 0.3em;
-}
-
-.rareline > li {
-  margin-top: 0.5em;
-}
-
-dt {
-  font-weight: bold;
-}
-
-a:hover {
-  text-decoration: none;
-}
-
-@media not print {
-  article a[href^="http://"], article  a[href^="https://"], article  a[href^="ftp://"] {
-    background: no-repeat left 0.7em url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHpEAACAgwAA+ZkAAIWVAABxRQAA8D8AADkKAAAcINqeyMoAAACMSURBVHjaYmRgYGBo3ar0nwENMMIYrVuV/ntqdTEwMDAwbL9WxsAycasH18+/7y+4aJUyXHuxiUFLwo+BgYGBgenT1zeWv5lfqzIwMDBoSfgxbL9WBpFg4n63x1Ori+HKo50M26+VMVR732NkYGBgYPn4kuXXdoYytn9fhZz5uNVOMDDcY6j2vscIGADPGCtKIvYANgAAAABJRU5ErkJggg");
-    padding-left: 9px;
-  }
-}
-
-footer {
-  color: gray;
-  margin: 2em 0 0;
-}
-
-footer a { margin-left: 3em; }
-
-article {
-  max-width: 850px;
-}
-
-article a[href*="//underscorejs.org/"],
-article a[href^="#core"], article  a[href^="#sqimitive"] {
-  font-family: monospace;
-  font-size: 0.9em;
-}
-
-article a[href*="//underscorejs.org/"] {
-  text-decoration: none;
-  border-bottom: 1px dashed gray;
-  background: none;
-  padding: 0;
-}
-
-table {
-  border: 1px solid #ddd;
+.ua-bugs__bug {
+  background: #ece8c1;
+  font-size: 0.875em;
+  padding: .25em .5em;
   margin: 1em 0;
 }
 
-caption {
-  background: #f5f5f5;
-  padding: 0.3em;
+.ua-bugs__bug:not(.ua-bugs__bug_vis) { display: none; }
+
+.entity-header__name { display: block; font-size: 1.25em; }
+.entity-header__type { font-size: .5em; font-weight: bold; }
+.entity-header__ns { font-size: .5em; font-style: italic; }
+
+.cp-desc {
   border: 1px solid #ddd;
-  border-bottom: 0;
+  background: white;
+  //margin-left: 2em;
+  //border-radius: .3em;
+  //max-width: 40em;
 }
 
-th, td {
-  padding: 0.2em 0.4em;
-  vertical-align: top;
+.cp-desc > legend {
+  background: #eee;
+  //color: white;
+  padding: 0 .4em;
+  //border-radius: .3em;
+  font-size: .84em;
 }
 
-td > :last-child {
+/* no .chemdoc__entity-table :first-child because first child there is a text node,
+   not a paragraph so removing margin of :first-child removes margin between
+   the text and the paragraph (which is first ELEMENT child, not NODE child */
+.fmt.cp-desc > legend + *,
+.fmt.cp-desc > legend + * > :first-child,
+.fmt .chemdoc__example > legend + *,
+.fmt .chemdoc__example > legend + * > :first-child {
+  margin-top: 0;
+}
+
+.fmt .chemdoc__entity-table > tbody > tr > * > :last-child,
+.fmt.cp-desc > :last-child,
+.fmt.cp-desc > :last-child > :last-child,
+.fmt .chemdoc__example > :last-child,
+.fmt .chemdoc__example > :last-child > :last-child {
   margin-bottom: 0;
 }
 
-table pre {
-  margin-left: 0;
-  margin-right: 0;
+.cp > .cp-desc { margin-top: 2em; }
+
+.cp-member__header { font-size: 1.25em; }
+.cp-member__header:target:before, .fmt .chemdoc__anchored:target:before { content: "☞ "; color: red; }
+.cp-member__header:target { font-size: 1.5em; }
+.cp-member__info { margin: 1em 0; }
+.cp-member__info + dt { border-top: 1px solid #E1E1E1; padding-top: 1rem; }
+.entity-info__synopsis { margin: 1em 0; }
+.entity-info__file, .cp-member__mods, .cp-member__file, .fmt .chemdoc__anchor-addendum { color: gray; }
+
+.fmt { line-height: 1.33em; }
+
+.fmt .chemdoc__indent { margin-left: 2em; }
+.fmt code.chemdoc__block { margin: .5em 0; max-height: 90vh; overflow: auto; }
+.fmt code.chemdoc__id { font-weight: bold; font-family: inherit; }
+.fmt code:not(.chemdoc__block):not(.chemdoc__id),
+.fmt b code.chemdoc__id,
+.fmt h2 .chemdoc__id,
+.fmt h3 .chemdoc__id,
+.fmt h4 .chemdoc__id {
+  background: #fff3dd;
+}
+
+.fmt > ul { margin: 1em 0; }
+.fmt li { margin-top: .3em; }
+
+.fmt .chemdoc__anchor-link.chemdoc__bad,
+.fmt .chemdoc__custom-link.chemdoc__bad {
+  border-bottom: 3px solid;
+  color: red;
+  cursor: help;
+}
+
+.fmt .chemdoc__anchor-link:not(.chemdoc__link-entity):before,
+.fmt .chemdoc__anchor-link.chemdoc__link-entity.member-fg_page:before,
+.fmt .chemdoc__anchor-link.chemdoc__link-entity.member-fg_anchor:before {
+  content: "§";
+  color: silver;
+  //font-size: .75em;
+  //margin-left: .1em;
+  //vertical-align: top;
+}
+
+.fmt .chemdoc__anchor,
+.fmt .chemdoc__anchor-inclusion {
+  color: gray;
+  font-style: italic;
+  font-family: sans;
+  float: right;
+  margin: 0 0 1em 1em;
+}
+
+.fmt a.chemdoc__anchor {
+  //background: silver;
+  //color: white;
+  //padding: .3em .5em;
+  //border-radius: .3em;
+  //font-size: .75em;
+}
+
+//.fmt a.chemdoc__anchor { margin: 0 .25em; padding: 0 .25em; color: gray; }
+
+.fmt a.chemdoc__anchor:before { content: "§"; }
+
+.fmt a.chemdoc__anchor:target {
+  background: red;
+  color: white;
+  //padding: .3em .5em;
+  //border-radius: .2em;
+  //font-size: .75em;
+}
+
+/*
+.fmt .chemdoc__anchor:not(:target) {
+  position: absolute;
+  visibility: hidden;
+}
+*/
+
+.fmt .chemdoc__custom-link[class*="chemdoc__proto-"] {
+  background: no-repeat left 0.7em url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHpEAACAgwAA+ZkAAIWVAABxRQAA8D8AADkKAAAcINqeyMoAAACMSURBVHjaYmRgYGBo3ar0nwENMMIYrVuV/ntqdTEwMDAwbL9WxsAycasH18+/7y+4aJUyXHuxiUFLwo+BgYGBgenT1zeWv5lfqzIwMDBoSfgxbL9WBpFg4n63x1Ori+HKo50M26+VMVR732NkYGBgYPn4kuXXdoYytn9fhZz5uNVOMDDcY6j2vscIGADPGCtKIvYANgAAAABJRU5ErkJggg");
+  padding-left: 8px;
+}
+
+.cp-member__group-header,
+.ent-idx h2 {
+  border-bottom: 2px solid #e1e1e1;
+  padding-bottom: .1em;
+}
+
+.cp-member__group-header {
+  margin-top: 1.5em;
+}
+
+.def-snip__hdr:not(.def-snip__hdr_vis):not(:target) + .def-snip__code { display: none; }
+.def-snip__code { position: relative; }
+.def-snip__hdr_vis { color: red; }
+
+.def-snip__code:before {
+  content: " ";
+  position: absolute;
+  border: 2px solid red;
+  border-right: 0;
+  top: 0;
+  bottom: 0;
+  width: .25em;
+  margin: -2.5em 0 -.5em -.75em;
+}
+
+.fmt .chemdoc__entity-table {
+  margin: 1em 0;
+  min-width: 6em;    /* overly short tables wrap <caption> */
+}
+
+.fmt .chemdoc__entity-table > caption {
+  font-size: 0.84em;
+}
+
+.fmt .chemdoc__entity-table, .fmt .chemdoc__entity-table > * > tr > * {
+  border: 1px solid silver;
+  //border-bottom-width: 2px;
+  border-collapse: collapse;
+  vertical-align: top;
+  padding: .2em .4em;
+  font-weight: normal;
+}
+
+.fmt .chemdoc__entity-table > caption,
+.fmt .chemdoc__entity-table > * > tr > th {
+  background: #f1f1f1;
+}
+
+.fmt .chemdoc__entity-table > thead { display: none; }  /* looks better? */
+.fmt .chemdoc__entity-table > tbody > tr > th { text-align: left; }
+
+.fmt .chemdoc__entity-table > * > tr > th + td:first-letter,
+.fmt .chemdoc__entity-table > * > tr > td:first-child:first-letter {
+  color: red;
+}
+
+.fmt .chemdoc__entity-table > tbody > .chemdoc__first > :not([rowspan]) {
+  //border-bottom-width: 1px;
+}
+
+.fmt .chemdoc__entity-table > tbody > .chemdoc__first:first-child > *,
+.fmt .chemdoc__entity-table > tbody > .chemdoc__first + .chemdoc__first > * {
+  //border-bottom-width: 2px;
+}
+
+.fmt .chemdoc__entity-args > caption {
+  color: white;
+  background: teal;
+}
+
+.fmt .chemdoc__entity-args,
+.fmt .chemdoc__entity-args > caption {
+  outline: 1px solid teal;
+}
+
+.fmt .chemdoc__entity-args > tbody > tr > th { color: navy; }
+
+.fmt .chemdoc__entity-type > caption {
+  background: #e1e1e1;
+}
+
+.fmt .chemdoc__entity-type > caption {
+  border: 1px solid silver;
+  border-width: 1px 1px 0 1px;
+}
+
+.fmt .chemdoc__example {
+  border: 1px solid teal;
+  margin: 1em 0;
+}
+
+.fmt .chemdoc__example > legend {
+  background: teal;
+  color: white;
+  padding: 0 .4em;
+  font-size: .84em;
+}
+
+.fmt .chemdoc__link-entity.chemdoc__bad {
+  text-decoration: line-through;
+  text-decoration-color: red;
+}
+
+.ent-idx__cols { overflow: auto; }
+.ent-idx__col { float: left; width: 33.33%; }
+
+.ent-idx__col + * {
+  //border-left: 1px solid #e1e1e1;
+  //margin-left: .5em;
+  padding-left: 1em;
+}
+
+.ent-idx__col h3 { margin-top: 0; }
+
+/* fg - foreground. bg is possible in the future. */
+.member-fg_class { color: purple; }
+.member-fg_const { color: navy; }
+.member-fg_func { color: teal; }
+.member-fg_var { color: brown; }
+
+.mmods-fg_static:before {
+  vertical-align: top;
+  font-size: .75em;
+  line-height: 1em;
+  content: "# ";
+  color: orange;
+}
+
+.mmods-fg_constructor { font-weight: bold; }
+
+.member-fg_func:not(.chemdoc__link-entity):after {
+  content: "()";
+  color: silver;
+}
+
+/* (q)uick (n)aviation (bar) */
+.qnbar {
+  position: fixed;
+  z-index: 50;
+  bottom: 0;  /* positioning on top makes in-page (#anchor) navigation ugly */
+  width: 100%;
+  padding: .5em 1em;
+  //margin: -1em 0;
+  background: #f1f1f1;
+  border-top: 3px double #e1e1e1;
+  color: gray;
+}
+
+.qnbar__locate { display: none; margin-right: 1em; }
+.qnbar__section { margin-left: 1em; }
+/* This only works if .qnbar has just one line. Sadly there's no easy way to
+   make it work always (not with CSS; with JavaScript it requires listening
+   to onresize which I want to avoid right now in case a better way is found in
+   the future) */
+.qnbar ~ .footer { margin-bottom: 2em; }
+.qnbar_cur { font-weight: bold; }
+
+.sch {
+  position: fixed;
+  margin: 1em 0 0;
+  z-index: 100;
+}
+
+.sch__input {
+  width: 100%;
+  border: 3px double #ccc;
+  padding: .25em .5em .25em 25px;
+  outline: 0;   /* no, Chrome, thank you */
+  background: white no-repeat 5px center url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAArFJREFUeNqUU01IVGEUPe+9GcdRx18k0srKyKyQMtTMNEvCRbvatCja9WNlJLmJJMNt6KQW1CqkRVAEaZCDkVao2DgQFRKmoNQ4U+qkjs+ZeTPfu93Jft5UBF14fN+73HPuOZf7STBE+42bTboQFwgUD1rOSZIUlBXl6pmaEw34LYjo14+9td3t6O6mSFAlY0QCKjked5P9Wrv7bwRS9NJsb3XvLS/L2rKtEPZeLwYn/DDHKTCZJOxen4zjJRl47XKh78XAVN352uwYBc32tqbOzi5SNZ0O335PHc4ZGpsJ0SvPEvWML9D1oRmqc3goJIg6H3ZStN5IIIc1rX5PWQnaej04sDUNVRttmNMEpoMC8xEusCiwJphwd2QeFbtKoGmheqMNWejCkpyeAac7gO3ZCfCqAr6QjgUB+NnhkiwjOcmMUVVHSno6dKFbjAQmTgBCY88yBE/Ex539DF5icFCRkZgIhAVByOw3okHXdcQSkICICJjNCqYYqXLBYrQzg+OtPEjOa6woSDrC4QgTiBgCmXTS3B4vClea8eZTENOBqAX2zmqiYIvFBInPXKuOj14vq2FnRoJZn6/j2fMBHNpgZrAO9yJ3YpUsijsTVM7pYUJR3BKe9vVjk2XEFkPQam++PDo2Nv3WNYSafIE1VrahAYshYD5ASAmp2C9PwzXQD9+XORQfacXLluKfKyh9PwsuXmp4krsuJ3NncREyedrLayrh86wPg0NOfJjyoHJfFfLyCxDnd2LiUSOKzvZJkkFNwclTp2vT0tKO8luI+/EWSFL8a5VxW3h1NaxWG8pz5pG3ORWDd1pQei6WIBpZ/K2IWjPkomNXuq5UDCetKkJl6n1MJlQ+mBp1Hyyt7fmD4F+x415j9TCRBN4tOJyTx251jXT8D8E3EsP9Hc9J/SrAALenXlq1AZ12AAAAAElFTkSuQmCC");
+}
+
+.sch__input:focus { border-color: blue; }
+
+.sch-list {
+  width: 100%;
+  max-height: 70vh;
+  overflow: auto;
+  background: white;
+  border: 1px solid #00f;
+  margin: -1px 0 0;
+  padding: 0;
+  list-style: none;
+  /* Needs to be set for correct scroll calculation in scripts.js to make <li>.offsetParent = <ul> */
+  position: relative;
+}
+
+.sch_vis { box-shadow: 0 0 1em #0002; }
+.sch:not(.sch_vis) .sch-list, .sch-list:empty, .sch:not(.sch_vis) .sch__help { display: none; }
+.sch-list a { display: block; color: inherit; }
+.sch-list_in-last { color: gray; }
+.sch-list li { padding: .25em .5em; border: 1px solid transparent; }
+li.sch-list_cur { background: #f1f1f1; border-color: #E1E1E1; }
+.sch-list__type { font-family: sans; font-style: italic; margin: 0 0 0 .5em; }
+.sch-list__parent { font-size: 0.875em; }
+.sch-list mark { background: #fdd; color: red; padding: 0 .1em; }
+.sch-list_cur-file .sch-list__parent:before { content: "• "; color: red; }
+.chemdoc__link-entity-cur:not(.mmods-fg_static):before { content: "• "; color: red; }
+
+.sch__help {
+  background: white;
+  padding: .5em;
+  border: 1px dashed blue;
+  border-top: 0;
+  font-size: .875em;
 }
 
 /***
-  Orphos.ru
+  https://github.com/ProgerXP/Orphus
  ***/
 
 #orphusp {
@@ -247,91 +448,20 @@ table pre {
   z-index: 10000;
 }
 
-/***
-  Book Banner
- ***/
-
-#book {
-  position: relative;
-  font-style: italic;
-  overflow: hidden;
-  background: #d8d8d8;
-  padding: 0;
-  margin: 2em -1rem 0 -0.75em;
-  border-radius: 0 0 0 15px;
+#orphusp .fragment {
+  font-family: sans-serif;
+  text-align: center;
+  background: white;
+  margin: 1em -1em;
+  padding: 0.5em 0;
 }
 
-#btri { margin: 0 28px -0.8em; display: block; }
-#btri + * { page-break-before: always; }
+#orphusp .logo { float: right; }
+#orphusp .legend { font-weight: bold; }
+#orphusp .hint { margin-bottom: 1em; }
+#orphusp form { padding: 0; margin: 0; border: 0 }
+#orphusp [type=text] { width: 100%; margin: 0.2em 0 1em; }
+#orphusp .buttons { text-align: center; }
+#orphusp .buttons input { cursor: pointer; }
+#orphusp [type=submit] { font-weight: bold; }
 
-#book > * { display: block; float: left; }
-
-#blogo { margin-bottom: -25px; }
-
-#blogo + p {
-  margin-top: 29px;
-}
-
-#blogo + p b {
-  font-size: 1.75rem;
-  font-style: normal;
-}
-
-#blogo + p i {
-  display: block;
-  font-size: 1.375rem;
-  margin: 20px 0 0 40px;
-}
-
-#bmotto {
-  font-size: 1.125rem;
-  margin: 25px 0 0 50px;
-  line-height: 1.37em;
-}
-
-#bmotto small { display: block; margin: 6px 0 0; }
-
-#bcc {
-  float: right;
-  text-align: right;
-  margin: 10px;
-  font-size: 0.75rem;
-  line-height: 1.3em;
-}
-
-#bcc a {
-  display: block;
-  background: none;
-  padding: 0;
-  margin: 0 0 10px 0;
-}
-
-#history {
-  float: right;
-  margin: 1em -2rem 0 1em;
-  background: #f4f4f4;
-  width: 17em;
-  border-radius: 0 10px 0 10px;
-}
-
-legend { font-weight: bold; }
-
-/* Clearing #history pull. */
-#vs-backbone ~ h3 { clear: right; }
-
-/***
-  Printer Styles
- ***/
-
-@media print {
-  nav { display: none; }
-  body { margin: 0; }
-  h1 { font-size: 1.6em; }
-  pre { line-height: 1.2em; }
-  a, h4 { color: black; }
-  .token { color: black !important; }
-  #bmotto { margin-left: 20px; }
-  #btri { display: none; }
-  #bcc { margin-right: 16px; }
-  #history { margin-right: 0; }
-}
