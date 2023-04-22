@@ -955,8 +955,8 @@
       var res = func(options)
       if (typeof res.then == 'function') {
         res.then(function (resp) {
-          (resp.ok ? options.success : options.error)(resp, resp)
-        }, options.error.bind(null, null))
+          (resp.ok ? options.success : options.error).call(options.context, resp, resp)
+        }, options.error.bind(options.context, null))
       }
       return res
     },
